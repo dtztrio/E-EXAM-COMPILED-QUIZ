@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHY 103 · Practice &amp; Exam Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script>
+(function(){
+  try{
+    var theme = localStorage.getItem('dtz_theme') || 'dark';
+    var scale = localStorage.getItem('dtz_font_scale') || '1';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.style.setProperty('--font-scale', scale);
+  }catch(e){}
+})();
+</script>
+<style>
+:root {
+  --bg:#0a0c12; --surface:#0f1117; --surface2:#141820; --surface3:#1a2030;
+  --border:#1e2640; --border2:#26304e; --ink:#e2e8f6; --ink2:#94a3c0; --ink3:#4a5878;
+  --accent:#4f8ef7; --accent2:#7c6fff; --accent-dim:#0d1630; --accent-glow:rgba(79,142,247,.14);
+  --green:#34d399; --green-dim:#0a1e14; --red:#f87171; --red-dim:#1e0a0a; --purple:#a78bfa;
+  --bar-bg:rgba(10,12,18,.92); --font-scale:1;
+  --r:16px;
+}
+:root[data-theme="light"] {
+  --bg:#f4f6fc; --surface:#ffffff; --surface2:#eef1fb; --surface3:#e4e9f9;
+  --border:#dde3f3; --border2:#c7cafb; --ink:#131a2c; --ink2:#5b6478; --ink3:#8791a8;
+  --accent-dim:#e8edfd; --accent-glow:rgba(79,142,247,.08);
+  --green-dim:#e6f9f1; --red-dim:#fdecec;
+  --bar-bg:rgba(255,255,255,.9);
+}
+html{font-size:calc(16px * var(--font-scale, 1));}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Outfit',sans-serif;min-height:100vh;display:flex;flex-direction:column;
+  background-image:radial-gradient(ellipse 900px 600px at 10% 0%, rgba(79,142,247,.06) 0%, transparent 70%),
+  radial-gradient(ellipse 700px 500px at 90% 30%, rgba(124,111,255,.05) 0%, transparent 60%);
+  transition:background-color .2s ease, color .2s ease;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);
+  background:var(--bar-bg);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px;}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.brand-badge{background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;font-weight:800;font-size:.72rem;letter-spacing:2px;
+  padding:6px 14px;border-radius:50px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+.brand-sub{font-size:.7rem;color:var(--ink3);letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+#timer{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:600;color:var(--accent);background:var(--accent-dim);
+  border:1px solid rgba(79,142,247,.25);padding:7px 16px;border-radius:50px;letter-spacing:2px;min-width:96px;text-align:center;
+  display:flex;align-items:center;gap:8px;justify-content:center;}
+#timer.warn{color:var(--red);background:var(--red-dim);border-color:rgba(248,113,113,.3);animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+#soundToggle{width:38px;height:38px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);
+  color:var(--ink2);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;
+  transition:border-color .15s,color .15s,background .15s;flex-shrink:0;}
+#soundToggle:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+#soundToggle.muted{color:var(--ink3);}
+.hamburger{display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;cursor:pointer;padding:0;color:var(--ink);font-size:.95rem;transition:border-color .15s,color .15s;flex-shrink:0;}
+.hamburger:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+.hamburger .fa-xmark{display:none;} .hamburger[aria-expanded="true"] .fa-bars{display:none;} .hamburger[aria-expanded="true"] .fa-xmark{display:inline-block;}
+.mobile-nav{position:fixed;inset:0;z-index:99;background:transparent;opacity:0;pointer-events:none;transition:opacity .15s ease;}
+.mobile-nav.open{opacity:1;pointer-events:auto;}
+.mobile-nav-panel{position:absolute;top:70px;right:20px;width:250px;max-width:82vw;max-height:min(70vh,520px);background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:1px;transform:scale(.94) translateY(-8px);transform-origin:top right;opacity:0;transition:transform .16s ease,opacity .16s ease;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow-y:auto;}
+.mobile-nav.open .mobile-nav-panel{transform:scale(1) translateY(0);opacity:1;}
+.mobile-nav-panel a{display:flex;align-items:center;gap:12px;padding:11px 10px;font-size:.9rem;font-weight:600;color:var(--ink);text-decoration:none;border-radius:8px;}
+.mobile-nav-panel a:hover{background:var(--accent-glow);}
+.mobile-nav-panel a i{width:18px;text-align:center;color:var(--accent);font-size:.85rem;}
+.mobile-nav-panel a.active{color:var(--accent);background:var(--accent-dim);}
+.mobile-nav-panel .nav-group-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);padding:12px 10px 4px;}
+.mobile-nav-panel .nav-group-label:first-child{padding-top:6px;}
+main{flex:1;display:flex;justify-content:center;padding:0 16px 100px;}
+#homeScreen,#configScreen,#quizScreen,#resultScreen,#loadingScreen{width:100%;max-width:720px;}
+.hidden{display:none !important;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:32px 28px;margin-bottom:20px;}
+
+a {
+  text-decoration: none;
+}
+/* STATS BAR */
+#statsBar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;}
+.stat-chip{font-size:.78rem;color:var(--ink2);background:var(--surface2);border:1px solid var(--border);padding:8px 16px;
+  border-radius:50px;display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;}
+.stat-chip i{color:var(--accent);}
+.stat-chip strong{color:var(--ink);}
+
+/* HOME */
+.hero-wrap{padding:48px 0 8px;text-align:center;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
+  color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:500;margin-bottom:22px;background:var(--accent-dim);
+  border:1px solid rgba(79,142,247,.22);padding:7px 16px 7px 13px;border-radius:50px;}
+.hero-title{font-family:'Fraunces',serif;font-size:2.3rem;line-height:1.16;margin-bottom:16px;font-weight:600;letter-spacing:-.5px;}
+.hero-title span{color:var(--accent);font-style:italic;}
+.hero-desc{color:var(--ink2);font-size:.96rem;line-height:1.75;max-width:480px;margin:0 auto 34px;}
+
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:30px;}
+.mode-card{background:var(--surface2);border:1px solid var(--border2);border-radius:18px;padding:26px 22px;cursor:pointer;
+  transition:border-color .15s,transform .15s,background .15s;text-align:left;}
+.mode-card:hover{border-color:rgba(79,142,247,.4);transform:translateY(-3px);background:var(--surface3);}
+.mode-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:16px;}
+.mode-name{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;margin-bottom:8px;}
+.mode-desc{font-size:.85rem;color:var(--ink2);line-height:1.6;margin-bottom:14px;}
+.mode-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.mode-tag{font-size:.66rem;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+  padding:3px 9px;border-radius:20px;font-family:'JetBrains Mono',monospace;}
+
+.section-heading{display:flex;align-items:center;gap:12px;margin:36px 0 18px;}
+.section-heading-icon{width:34px;height:34px;border-radius:10px;background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+  display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.85rem;flex-shrink:0;}
+.section-heading-text{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;}
+.rules-list{display:grid;gap:8px;}
+.rule-item{display:flex;gap:14px;align-items:flex-start;font-size:.86rem;color:var(--ink2);line-height:1.55;padding:14px 16px;
+  background:var(--surface2);border:1px solid var(--border);border-radius:10px;}
+.rule-icon{width:30px;height:30px;border-radius:8px;flex-shrink:0;background:var(--accent-dim);border:1px solid rgba(79,142,247,.2);
+  display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.78rem;margin-top:1px;}
+.rule-text strong{color:var(--ink);}
+
+/* CONFIG SCREEN */
+.config-field{margin-bottom:22px;}
+.config-label{font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.config-label i{color:var(--accent);}
+.config-input-row{display:flex;align-items:center;gap:14px;}
+.config-slider{flex:1;-webkit-appearance:none;height:6px;border-radius:6px;background:var(--border2);outline:none;}
+.config-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+  background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;box-shadow:0 2px 8px rgba(79,142,247,.4);}
+.config-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;}
+.config-value{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);background:var(--accent-dim);
+  border:1px solid rgba(79,142,247,.25);padding:6px 14px;border-radius:10px;min-width:74px;text-align:center;font-size:.9rem;}
+.config-hint{font-size:.74rem;color:var(--ink3);margin-top:8px;}
+.topics-grid{display:flex;flex-wrap:wrap;gap:10px;}
+.topic-chip{display:flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--border2);
+  padding:10px 16px;border-radius:12px;cursor:pointer;font-size:.85rem;transition:border-color .15s,background .15s;}
+.topic-chip:hover{border-color:rgba(79,142,247,.4);}
+.topic-chip input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);
+  color:#fff;border:none;padding:14px 28px;border-radius:50px;font-weight:700;font-size:.95rem;cursor:pointer;
+  font-family:'Outfit',sans-serif;transition:transform .15s,box-shadow .15s,opacity .2s;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(79,142,247,.3);}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--border2);padding:12px 22px;border-radius:50px;
+  font-weight:600;font-size:.9rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:border-color .15s,background .15s;
+  display:inline-flex;align-items:center;gap:8px;}
+.btn-ghost:hover{background:var(--accent-glow);border-color:rgba(79,142,247,.35);}
+.btn-ghost:disabled{opacity:.35;cursor:not-allowed;}
+
+/* LOADING SCREEN */
+#loadingScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 0;text-align:center;}
+.loader-ring{width:56px;height:56px;border-radius:50%;border:4px solid var(--border2);border-top-color:var(--accent);
+  animation:spin .8s linear infinite;margin-bottom:24px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader-text{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--ink2);}
+.loader-sub{font-size:.78rem;color:var(--ink3);margin-top:8px;font-family:'JetBrains Mono',monospace;}
+
+/* QUIZ */
+#progressWrap{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;padding-top:24px;}
+.progress-bar-track{height:4px;background:var(--border);border-radius:4px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .3s;}
+.dots-group{display:flex;gap:5px;flex-wrap:wrap;}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .15s,transform .1s;}
+.dot:hover{transform:scale(1.35);}
+.dot.answered{background:rgba(79,142,247,.4);border:1px solid var(--accent);}
+.dot.current{background:var(--accent);box-shadow:0 0 0 3px rgba(79,142,247,.25);}
+.dot.correct{background:var(--green);}
+.dot.wrong{background:var(--red);}
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.q-section-tag{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;
+  font-weight:600;background:var(--accent-dim);padding:4px 10px;border-radius:20px;border:1px solid rgba(79,142,247,.2);}
+.q-counter{font-size:.78rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;}
+.q-text{font-size:1.1rem;line-height:1.65;margin:0 0 26px;font-family:'Fraunces',serif;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.opt{display:flex;align-items:flex-start;gap:14px;padding:15px 18px;border-radius:12px;border:1px solid var(--border2);
+  margin-bottom:10px;background:var(--surface2);cursor:pointer;transition:border-color .15s,background .15s,transform .1s;}
+.opt:hover{border-color:rgba(79,142,247,.35);background:var(--surface3);}
+.opt.locked{cursor:default;}
+.opt.selected{border-color:var(--accent);background:var(--accent-dim);}
+.opt.correct{border-color:var(--green);background:var(--green-dim);}
+.opt.wrong{border-color:var(--red);background:var(--red-dim);}
+.opt-letter{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;
+  justify-content:center;font-size:.75rem;font-weight:700;color:var(--ink3);flex-shrink:0;font-family:'JetBrains Mono',monospace;
+  transition:all .15s;margin-top:1px;}
+.opt.selected .opt-letter{background:var(--accent);color:#fff;border-color:var(--accent);}
+.opt.correct .opt-letter{background:var(--green);color:#fff;border-color:var(--green);}
+.opt.wrong .opt-letter{background:var(--red);color:#fff;border-color:var(--red);}
+.opt-text{font-size:.92rem;line-height:1.55;padding-top:3px;}
+.inline-explain{display:none;margin-top:6px;margin-bottom:14px;padding:16px 18px;background:rgba(79,142,247,.05);
+  border:1px solid rgba(79,142,247,.15);border-radius:10px;font-size:.85rem;line-height:1.7;color:var(--ink2);animation:fadeUp .2s ease;}
+.inline-explain.show{display:block;}
+.inline-explain .ie-label{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;
+  margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.inline-explain.right .ie-label{color:var(--green);}
+.inline-explain.wrong .ie-label{color:var(--red);}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;}
+.kbd-hint{text-align:center;font-size:.68rem;color:var(--ink3);margin-top:14px;font-family:'JetBrains Mono',monospace;}
+.kbd-hint kbd{background:var(--surface3);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;font-family:'JetBrains Mono',monospace;}
+
+/* FLOATING QUIZ TOOLS (calculator + pause) */
+#quizTools{position:fixed;right:20px;bottom:24px;display:flex;flex-direction:column;gap:12px;z-index:60;}
+.fab{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;border:none;
+  cursor:pointer;font-size:1.05rem;box-shadow:0 8px 24px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;
+  transition:transform .15s;}
+.fab:hover{transform:translateY(-3px) scale(1.04);}
+.fab.pause-fab{background:linear-gradient(135deg,#f59e0b,#f97316);}
+
+/* MODAL BASE */
+.modal-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.72);backdrop-filter:blur(6px);z-index:200;
+  display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-card{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:26px 24px;max-width:380px;
+  width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.modal-icon{width:52px;height:52px;border-radius:50%;background:var(--accent-dim);border:1px solid rgba(79,142,247,.25);
+  display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.3rem;margin:0 auto 16px;}
+.modal-icon.warn{background:var(--red-dim);border-color:rgba(248,113,113,.3);color:var(--red);}
+.modal-title{font-family:'Fraunces',serif;font-size:1.2rem;margin-bottom:10px;}
+.modal-text{font-size:.87rem;color:var(--ink2);line-height:1.6;margin-bottom:20px;}
+
+/* PAUSE OVERLAY */
+#pauseOverlay{position:fixed;inset:0;background:rgba(6,8,14,.85);backdrop-filter:blur(16px);z-index:150;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
+#pauseOverlay .modal-icon{width:64px;height:64px;font-size:1.6rem;margin-bottom:20px;}
+#pauseOverlay h2{font-family:'Fraunces',serif;font-size:1.6rem;margin-bottom:10px;}
+#pauseOverlay p{color:var(--ink2);font-size:.9rem;max-width:320px;margin-bottom:26px;line-height:1.6;}
+
+/* ══════════════ SCIENTIFIC CALCULATOR (draggable floating window) ══════════════ */
+.calc-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.55);backdrop-filter:blur(4px);z-index:180;}
+.calc-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:190;width:320px;max-width:92vw;
+  background:var(--surface);border:1px solid var(--border2);border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.55);overflow:hidden;}
+.calc-panel.dragged{transform:none;}
+.calc-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface2);
+  border-bottom:1px solid var(--border);cursor:grab;font-size:.8rem;font-weight:600;color:var(--ink2);user-select:none;gap:8px;}
+.calc-header:active{cursor:grabbing;}
+.calc-header-title{display:flex;align-items:center;gap:8px;}
+.calc-header-title i{color:var(--accent);}
+.calc-mode-toggle{display:flex;gap:4px;background:var(--surface3);border-radius:8px;padding:3px;}
+.calc-mode-btn{background:transparent;border:none;color:var(--ink3);font-size:.62rem;font-family:'JetBrains Mono',monospace;
+  padding:5px 9px;border-radius:6px;cursor:pointer;font-weight:700;letter-spacing:.5px;}
+.calc-mode-btn.active{background:var(--accent);color:#fff;}
+.calc-close-btn{background:none;border:none;color:var(--ink3);font-size:1rem;cursor:pointer;line-height:1;}
+.calc-display{padding:18px 16px 10px;text-align:right;}
+.calc-expr{font-size:.82rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;min-height:18px;overflow-x:auto;white-space:nowrap;}
+.calc-result{font-size:1.65rem;font-weight:700;color:var(--ink);font-family:'JetBrains Mono',monospace;margin-top:4px;
+  overflow-x:auto;white-space:nowrap;}
+.calc-result.err{color:var(--red);}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 16px 20px;}
+.calc-btn{background:var(--surface3);border:1px solid var(--border2);color:var(--ink);border-radius:10px;padding:12px 0;
+  font-size:.92rem;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:background .15s;}
+.calc-btn:hover{background:var(--border2);}
+.calc-btn.op{color:var(--accent);}
+.calc-btn.fn{color:var(--purple);font-size:.76rem;}
+.calc-btn.clear{color:var(--red);}
+.calc-btn.equals{background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;border:none;}
+
+/* RESULTS */
+.result-hero{text-align:center;padding:26px 0 22px;border-bottom:1px solid var(--border);margin-bottom:26px;}
+.result-ring{display:inline-flex;align-items:center;justify-content:center;width:124px;height:124px;border-radius:50%;
+  border:3px solid var(--accent);background:var(--accent-dim);margin-bottom:16px;}
+.result-score{font-family:'JetBrains Mono',monospace;font-size:2.3rem;font-weight:700;color:var(--accent);}
+.result-of{font-size:.8rem;color:var(--ink3);margin-top:2px;}
+.result-pct{font-family:'Fraunces',serif;font-size:1.5rem;margin-bottom:6px;}
+.result-msg{color:var(--ink2);font-size:.9rem;line-height:1.6;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.best-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;color:#facc15;background:rgba(250,204,21,.08);
+  border:1px solid rgba(250,204,21,.25);padding:4px 12px;border-radius:20px;margin-top:10px;font-family:'JetBrains Mono',monospace;}
+.breakdown-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:26px;}
+.bd-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.bd-name{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.bd-score{font-size:1.35rem;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.bd-total{font-size:.72rem;color:var(--ink3);}
+.review-section-title{font-family:'Fraunces',serif;font-size:1.1rem;border-bottom:1px solid var(--border);padding-bottom:12px;
+  margin:22px 0 16px;display:flex;align-items:center;gap:10px;}
+.review-item{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px;background:var(--surface2);}
+.review-item.right{border-left:3px solid var(--green);}
+.review-item.miss{border-left:3px solid var(--red);}
+.ri-q{font-size:.9rem;margin-bottom:10px;line-height:1.6;}
+.ri-section{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:5px;}
+.ri-ans{font-size:.83rem;margin-top:5px;display:flex;align-items:flex-start;gap:7px;}
+.ri-ans.right{color:var(--green);}
+.ri-ans.wrong{color:var(--red);}
+.ri-ans.correct-reveal{color:#2dd4bf;}
+.ri-exp{margin-top:10px;padding:12px 14px;background:rgba(79,142,247,.04);border:1px solid rgba(79,142,247,.12);
+  border-radius:9px;font-size:.82rem;line-height:1.65;color:var(--ink2);}
+
+footer{text-align:center;font-size:.7rem;color:var(--ink3);padding:18px;border-top:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+footer i{color:var(--accent);}
+
+@media(max-width:560px){
+  .card{padding:22px 16px;}
+  .mode-grid{grid-template-columns:1fr;}
+  .hero-title{font-size:1.8rem;}
+  .breakdown-grid{grid-template-columns:repeat(2,1fr);}
+  #quizTools{right:14px;bottom:18px;}
+}
+
+/* PRINT */
+@media print{
+  @page{ margin:14mm; }
+  *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
+  .topbar, footer, #quizTools, #homeBtn, #retryBtn, #printBtn, .kbd-hint, #statsBar,
+  #calcBackdrop, #calcPanel, #pauseOverlay, #leaveWarningModal, #resumeModal, #soundToggle, .hamburger, .mobile-nav { display:none !important; }
+  body{background:#fff;color:#000;}
+  main{padding:0;}
+  .card{border:1px solid #ccc;background:#fff;box-shadow:none;}
+  .bd-card, .review-item{background:#f6f6f6;border-color:#ddd;}
+  .ri-exp{background:#f0f4ff;border-color:#cfd9ff;color:#333;}
+  .result-hero, .bd-card, .review-item{ break-inside:avoid; page-break-inside:avoid; }
+  .review-item{ margin-bottom:14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <span class="brand-badge">PHY 103</span>
+    <div class="brand-sub"><i class="fa-solid fa-atom" style="margin-right:5px;"></i>Elasticity · Hydrostatics · Thermodynamics · Kinetic Theory</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div id="timer" class="hidden"><i class="fa-regular fa-clock"></i><span id="timerText">00:00</span></div>
+    <button id="soundToggle" title="Mute sounds" aria-label="Mute sounds" aria-pressed="false"></button>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
+      <i class="fa-solid fa-bars"></i>
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+</div>
+
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-panel">
+    <span class="nav-group-label">Navigate</span>
+    <a href="dashboard.html"><i class="fa-solid fa-house"></i>Home / Dashboard</a>
+    <a href="services.html"><i class="fa-solid fa-layer-group"></i>Services</a>
+    <a href="aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+    <span class="nav-group-label">DTZ TRIO</span>
+    <a href="about.html"><i class="fa-solid fa-users"></i>About Us</a>
+    <a href="social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+    <a href="contact.html"><i class="fa-solid fa-envelope"></i>Contact Us</a>
+    <span class="nav-group-label">Account</span>
+    <a href="settings.html"><i class="fa-solid fa-gear"></i>Settings</a>
+    <a href="help.html"><i class="fa-solid fa-circle-question"></i>Help &amp; FAQ</a>
+  </div>
+</div>
+
+<main>
+
+<!-- ══════ HOME SCREEN ══════ -->
+<div id="homeScreen">
+  <div class="hero-wrap">
+    <div class="hero-eyebrow"><i class="fa-solid fa-atom"></i> PHY 103 Practice Quiz</div>
+    <h1 class="hero-title">100 questions,<br><span>two ways to train.</span></h1>
+    <p class="hero-desc">Covering Elastic Properties, Hydrostatics, Thermodynamics, and Kinetic Theory — with full worked explanations for every question.</p>
+  </div>
+
+  <div id="statsBar" class="hidden"></div>
+
+  <div class="mode-grid">
+    <div class="mode-card" id="pickAuto">
+      <div class="mode-icon"><i class="fa-solid fa-gauge-high"></i></div>
+      <div class="mode-name">Automatic Timer</div>
+      <div class="mode-desc">All 100 questions, shuffled, with a timer the app sets for you. Get instant feedback the moment you answer, and pause any time you need a break.</div>
+      <div class="mode-tags">
+        <span class="mode-tag"><i class="fa-regular fa-clock"></i> Auto-set clock</span>
+        <span class="mode-tag"><i class="fa-solid fa-list-check"></i> 100 Qs</span>
+        <span class="mode-tag"><i class="fa-solid fa-pause"></i> Pausable</span>
+      </div>
+    </div>
+    <div class="mode-card" id="pickCustom">
+      <div class="mode-icon"><i class="fa-solid fa-sliders"></i></div>
+      <div class="mode-name">Custom Timer</div>
+      <div class="mode-desc">Pick your own topics, time limit, and question count. Answer everything first — no pausing, and no feedback until you submit.</div>
+      <div class="mode-tags">
+        <span class="mode-tag"><i class="fa-solid fa-sliders"></i> Custom setup</span>
+        <span class="mode-tag"><i class="fa-solid fa-ban"></i> No pausing</span>
+        <span class="mode-tag"><i class="fa-solid fa-flag-checkered"></i> Results at end</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-heading">
+    <div class="section-heading-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+    <div class="section-heading-text">How each mode works</div>
+  </div>
+  <div class="rules-list">
+    <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-gauge-high"></i></span>
+      <span class="rule-text"><strong>Automatic Timer</strong> runs all 100 questions with a clock the app manages for you. Tap an option and it's locked in immediately — correct turns green, wrong turns red, with a short explanation right away. Tap <strong>Pause</strong> any time to freeze the clock and blur the screen. You must answer at least <strong>30 questions</strong> before you can submit.</span></div>
+    <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-sliders"></i></span>
+      <span class="rule-text"><strong>Custom Timer</strong> lets you choose specific topics, your own time limit (up to 120 min), and how many questions to include. It cannot be paused — answers stay hidden until you submit, then you get a full score breakdown and review.</span></div>
+    <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-calculator"></i></span>
+      <span class="rule-text">A full <strong>scientific calculator</strong> — sin/cos/tan, log, ln, √, powers, π and e — is available as a draggable floating window in both modes.</span></div>
+    <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-shield-halved"></i></span>
+      <span class="rule-text">Your progress is <strong>auto-saved</strong> as you go, so a refresh won't lose your place. For fairness, switching away from the tab is tracked — leaving 3 times in one quiz resets it.</span></div>
+  </div>
+</div>
+
+<!-- ══════ CONFIG SCREEN (custom timer setup) ══════ -->
+<div id="configScreen" class="hidden">
+  <div class="section-heading" style="margin-top:36px;">
+    <div class="section-heading-icon"><i class="fa-solid fa-sliders"></i></div>
+    <div class="section-heading-text">Set up your Custom Timer exam</div>
+  </div>
+  <div class="card">
+    <div class="config-field">
+      <div class="config-label"><i class="fa-solid fa-layer-group"></i> Topics to include</div>
+      <div class="topics-grid" id="topicsWrap"></div>
+      <div class="config-hint" id="topicsHint">Select at least one topic.</div>
+    </div>
+    <div class="config-field">
+      <div class="config-label"><i class="fa-regular fa-clock"></i> Time limit (minutes)</div>
+      <div class="config-input-row">
+        <input type="range" id="timeSlider" class="config-slider" min="5" max="120" step="5" value="60">
+        <span class="config-value" id="timeValue">60</span>
+      </div>
+      <div class="config-hint">Maximum 120 minutes. This clock cannot be paused once the exam starts.</div>
+    </div>
+    <div class="config-field">
+      <div class="config-label"><i class="fa-solid fa-list-ol"></i> Number of questions</div>
+      <div class="config-input-row">
+        <input type="range" id="countSlider" class="config-slider" min="1" max="100" step="1" value="50">
+        <span class="config-value" id="countValue">50</span>
+      </div>
+      <div class="config-hint" id="countHint">Randomly picked from the selected topics.</div>
+    </div>
+    <div class="nav-row" style="margin-top:8px;">
+      <button class="btn-ghost" id="backToHomeFromConfig"><i class="fa-solid fa-arrow-left"></i> Back</button>
+      <button class="btn" id="startCustomBtn"><i class="fa-solid fa-play"></i> Start Custom Timer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ LOADING SCREEN ══════ -->
+<div id="loadingScreen" class="hidden">
+  <div class="loader-ring"></div>
+  <div class="loader-text">Preparing your questions…</div>
+  <div class="loader-sub">Shuffling &amp; randomizing options</div>
+</div>
+
+<!-- ══════ QUIZ SCREEN (shared) ══════ -->
+<div id="quizScreen" class="hidden">
+  <div id="progressWrap">
+    <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+    <div class="dots-group" id="dotsRow"></div>
+  </div>
+  <div class="card">
+    <div class="q-meta">
+      <span class="q-section-tag" id="sectionTag"></span>
+      <span class="q-counter" id="qCounter"></span>
+    </div>
+    <div class="q-text" id="qText"></div>
+    <div id="optsWrap"></div>
+    <div id="inlineExplain" class="inline-explain"></div>
+    <div class="nav-row">
+      <button class="btn-ghost" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+      <div style="display:flex;gap:8px;">
+        <button class="btn" id="nextBtn">Next <i class="fa-solid fa-arrow-right"></i></button>
+        <button class="btn hidden" id="finishBtn"><i class="fa-solid fa-check"></i> Submit Quiz</button>
+      </div>
+    </div>
+    <div class="kbd-hint">Keyboard: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate &nbsp;·&nbsp; <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to select</div>
+  </div>
+</div>
+
+<!-- ══════ RESULT SCREEN ══════ -->
+<div id="resultScreen" class="hidden">
+  <div class="card">
+    <div class="result-hero">
+      <div class="result-ring"><div><div class="result-score" id="resultScore">0</div><div class="result-of" id="resultOf">/ 100</div></div></div>
+      <div class="result-pct" id="resultPct"></div>
+      <div class="result-msg" id="resultMsg"></div>
+      <div id="bestBadge"></div>
+    </div>
+    <div class="breakdown-grid" id="breakdownGrid"></div>
+    <div class="review-section-title"><i class="fa-solid fa-magnifying-glass"></i> Question Review</div>
+    <div id="reviewList"></div>
+    <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;">
+      <button class="btn-ghost" id="homeBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-house"></i> Home</button>
+      <button class="btn-ghost" id="printBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+      <button class="btn" id="retryBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-rotate-right"></i> Retake</button>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- ══════ FLOATING QUIZ TOOLS ══════ -->
+<div id="quizTools" class="hidden">
+  <button class="fab pause-fab hidden" id="pauseBtn" title="Pause"><i class="fa-solid fa-pause"></i></button>
+  <button class="fab" id="calcFab" title="Calculator"><i class="fa-solid fa-calculator"></i></button>
+</div>
+
+<!-- ══════ SCIENTIFIC CALCULATOR (floating draggable window) ══════ -->
+<div id="calcBackdrop" class="calc-backdrop hidden"></div>
+<div id="calcPanel" class="calc-panel hidden">
+  <div id="calcHeader" class="calc-header">
+    <div class="calc-header-title"><i class="fa-solid fa-calculator"></i> Calculator</div>
+    <div class="calc-mode-toggle">
+      <button type="button" id="calcModeDeg" class="calc-mode-btn active">DEG</button>
+      <button type="button" id="calcModeRad" class="calc-mode-btn">RAD</button>
+    </div>
+    <button type="button" id="calcClose" class="calc-close-btn"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="calc-display">
+    <div id="calcExpr" class="calc-expr">&nbsp;</div>
+    <div id="calcResult" class="calc-result">0</div>
+  </div>
+  <div id="calcGrid" class="calc-grid"></div>
+</div>
+
+<!-- ══════ PAUSE OVERLAY (Automatic Timer only) ══════ -->
+<div id="pauseOverlay" class="hidden">
+  <div class="modal-icon"><i class="fa-solid fa-pause"></i></div>
+  <h2>Quiz Paused</h2>
+  <p>The clock is frozen and nothing on this screen is visible or clickable until you resume.</p>
+  <button class="btn" id="resumeFromPauseBtn"><i class="fa-solid fa-play"></i> Resume Quiz</button>
+</div>
+
+<!-- ══════ LEAVE-WARNING MODAL ══════ -->
+<div id="leaveWarningModal" class="modal-backdrop hidden">
+  <div class="modal-card">
+    <div class="modal-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <div class="modal-title">You left the quiz</div>
+    <div class="modal-text" id="leaveWarnText"></div>
+    <button class="btn" id="leaveWarnOk">Okay, continue</button>
+  </div>
+</div>
+
+<!-- ══════ RESUME AUTOSAVE MODAL ══════ -->
+<div id="resumeModal" class="modal-backdrop hidden">
+  <div class="modal-card">
+    <div class="modal-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+    <div class="modal-title">Resume your quiz?</div>
+    <div class="modal-text">We found a quiz in progress:<br><strong id="resumeInfo" style="color:var(--ink);"></strong></div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-ghost" id="resumeNo" style="flex:1;justify-content:center;">Discard</button>
+      <button class="btn" id="resumeYes" style="flex:1;justify-content:center;">Resume</button>
+    </div>
+  </div>
+</div>
+
+<footer><i class="fa-solid fa-atom"></i> PHY 103 &nbsp;·&nbsp; Elasticity, Hydrostatics, Thermodynamics &amp; Kinetic Theory Practice Quiz</footer>
+
+<script>
+/* ============================================================
+   HAMBURGER / MOBILE NAV
+   ============================================================ */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+function closeMobileNav(){mobileNav.classList.remove('open');hamburgerBtn.setAttribute('aria-expanded','false');}
+function toggleMobileNav(){const isOpen = mobileNav.classList.toggle('open');hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');}
+hamburgerBtn.addEventListener('click', toggleMobileNav);
+mobileNav.addEventListener('click', (e)=>{ if(e.target === mobileNav) closeMobileNav(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMobileNav(); });
+
+/* ============================================================
+   PHY 103 — 100-QUESTION BANK
+   sec: section label | q: question | opts: 4 options
+   ans: index (0-3) of correct option | ex: short explanation
+   ============================================================ */
+const QUESTIONS = [
+// ───────────────── MODULE 1 — ELASTICITY (theoretical) ─────────────────
+{sec:'Elasticity', q:"The property of a body to regain its original shape after a deforming force is removed is:", opts:["Plasticity","Elasticity","Viscosity","Rigidity"], ans:1, ex:"Elasticity is the property of a material that lets it return to its original shape once the deforming force is removed."},
+{sec:'Elasticity', q:'Which of the following describes a "perfectly plastic" body?', opts:["It returns to original shape instantly","It breaks immediately","It retains the deformed shape","It resists all deformation"], ans:2, ex:"A perfectly plastic body shows no tendency to recover — it stays permanently deformed once stressed."},
+{sec:'Elasticity', q:"Young's Modulus has the same physical dimension and SI unit as:", opts:["Force","Strain","Stress","Energy"], ans:2, ex:"Since strain is dimensionless, Young's Modulus (stress ÷ strain) carries the same units as stress — Pascals (N/m²)."},
+{sec:'Elasticity', q:"Strain is defined as the ratio of:", opts:["Force to Area","Stress to Modulus","Change in dimension to original dimension","Extension to Force"], ans:2, ex:"Strain = change in dimension ÷ original dimension; it is a dimensionless ratio."},
+{sec:'Elasticity', q:"Hooke's Law states that force is directly proportional to extension provided:", opts:["The material is heated","The elastic limit is not exceeded","The volume is constant","The material is brittle"], ans:1, ex:"Hooke's Law (F ∝ x) only holds within the elastic limit; beyond that the material deforms permanently."},
+{sec:'Elasticity', q:"The slope of a force-extension graph represents:", opts:["Young's Modulus","Stress","Force Constant (k)","Strain"], ans:2, ex:"Since F = kx, the gradient of a force vs extension graph gives the force constant k."},
+{sec:'Elasticity', q:"Which modulus describes the shape elasticity (rigidity) of a material?", opts:["Young's Modulus","Bulk Modulus","Shear Modulus","Poisson's Ratio"], ans:2, ex:"The Shear (rigidity) Modulus measures resistance to a change in shape at constant volume."},
+{sec:'Elasticity', q:"Substances that undergo significant plastic deformation before breaking are called:", opts:["Brittle","Elastic","Ductile","Rigid"], ans:2, ex:"Ductile materials stretch and deform plastically a great deal before fracturing (e.g. copper, gold)."},
+{sec:'Elasticity', q:"Poisson's Ratio is the ratio of:", opts:["Longitudinal strain to lateral strain","Lateral strain to longitudinal strain","Stress to Strain","Area to Length"], ans:1, ex:"Poisson's Ratio σ = lateral strain ÷ longitudinal strain, describing sideways contraction/expansion when a body is stretched or compressed."},
+{sec:'Elasticity', q:"The area under a stress-strain curve represents:", opts:["Total Force","Strain energy per unit volume","Young's Modulus","Total Extension"], ans:1, ex:"The area under a stress-strain graph equals the elastic strain energy stored per unit volume."},
+{sec:'Elasticity', q:"The reciprocal of Bulk Modulus is known as:", opts:["Rigidity","Elasticity","Compressibility","Tension"], ans:2, ex:"Compressibility = 1 ÷ Bulk Modulus, describing how easily a substance's volume changes under pressure."},
+
+// ───────────────── MODULE 1 — ELASTICITY (calculation) ─────────────────
+{sec:'Elasticity', q:"A metal wire 75 cm long and 0.130 cm in diameter stretches 0.035 cm when a load of 80 kg (g = 9.81 m/s²) is hung on it. Find the stress:", opts:["5.91 × 10⁸ Pa","1.59 × 10⁶ Pa","3.25 × 10⁷ Pa","4.80 × 10⁸ Pa"], ans:0, ex:"Stress = F/A = (80×9.81 N) ÷ (π×0.00065²m²) ≈ 5.91×10⁸ Pa."},
+{sec:'Elasticity', q:"For the 75 cm wire stretching by 0.035 cm, what is the tensile strain?", opts:["4.67 × 10⁻⁴","2.33 × 10⁻³","0.005","1.25 × 10⁻²"], ans:0, ex:"Strain = ΔL/L = 0.035 cm ÷ 75 cm ≈ 4.67×10⁻⁴."},
+{sec:'Elasticity', q:"A box-shaped object has a top area of 15 cm² and height 3 cm. When a shearing force of 0.50 N is applied, the upper surface displaces 4 mm. Calculate the shear modulus:", opts:["1.25 × 10³ Pa","2.50 × 10³ Pa","5.00 × 10⁴ Pa","3.33 × 10² Pa"], ans:1, ex:"G = (F/A) ÷ (Δx/h) = (0.5/1.5×10⁻³ Pa) ÷ (0.4/3) ≈ 2.50×10³ Pa."},
+{sec:'Elasticity', q:"How much work is required to extend a spring (k = 310 N/m) by 45 cm?", opts:["69.75 J","139.5 J","31.39 J","15.70 J"], ans:2, ex:"Elastic PE = ½kx² = ½×310×0.45² ≈ 31.39 J."},
+{sec:'Elasticity', q:"What force is needed to maintain this extension of 45 cm for the same spring (k = 310 N/m)?", opts:["139.5 N","68.8 N","310 N","279.0 N"], ans:0, ex:"F = kx = 310×0.45 = 139.5 N."},
+{sec:'Elasticity', q:"Find the force in a steel rod (A = 2 cm²) heated from 10°C to 100°C if restricted from expanding (E = 2×10¹¹ N/m², α = 12×10⁻⁶ K⁻¹):", opts:["21,600 N","43,200 N","12,000 N","86,400 N"], ans:1, ex:"F = EAαΔT = (2×10¹¹)(2×10⁻⁴)(12×10⁻⁶)(90) = 43,200 N."},
+{sec:'Elasticity', q:"Calculate energy stored in a wire stretched 2.5 mm by a 200 N load:", opts:["0.5 J","0.25 J","1.0 J","0.025 J"], ans:1, ex:"Energy stored = ½Fx = ½×200×0.0025 = 0.25 J."},
+{sec:'Elasticity', q:"Find strain energy per unit volume for stress 10⁸ N/m² and strain 0.001:", opts:["100,000 J/m³","50,000 J/m³","25,000 J/m³","1,000 J/m³"], ans:1, ex:"Energy/volume = ½ × stress × strain = ½×10⁸×0.001 = 50,000 J/m³."},
+{sec:'Elasticity', q:"A 4 m wire (A = 3×10⁻⁶ m², E = 2×10¹¹ N/m²) is stretched 1 mm. Work done is:", opts:["0.075 J","0.15 J","0.30 J","0.0375 J"], ans:0, ex:"Strain = 2.5×10⁻⁴, stress = E×strain = 5×10⁷ Pa, F = stress×A = 150 N, W = ½FΔL = 0.075 J."},
+{sec:'Elasticity', q:"Bulk Modulus of a liquid if 1 m³ decreases by 1 cm³ under 2×10⁶ Pa:", opts:["2 × 10⁹ Pa","2 × 10¹² Pa","2 × 10⁶ Pa","1 × 10¹⁰ Pa"], ans:1, ex:"Bulk Modulus = ΔP ÷ (ΔV/V) = (2×10⁶) ÷ (10⁻⁶) = 2×10¹² Pa."},
+{sec:'Elasticity', q:"Using E = 2×10¹¹ N/m² and σ = 0.3, find Shear Modulus (G) via E = 2G(1+σ):", opts:["1.3 × 10¹¹ N/m²","7.69 × 10¹⁰ N/m²","3.1 × 10¹¹ N/m²","5.5 × 10¹⁰ N/m²"], ans:1, ex:"G = E ÷ [2(1+σ)] = 2×10¹¹ ÷ 2.6 ≈ 7.69×10¹⁰ N/m²."},
+{sec:'Elasticity', q:"Find the fractional change in volume (ΔV/V) for a rod with longitudinal strain 4×10⁻³ and σ = 0.2:", opts:["1.2 × 10⁻³","2.4 × 10⁻³","4.0 × 10⁻³","0.8 × 10⁻³"], ans:1, ex:"ΔV/V = (1−2σ) × longitudinal strain = 0.6×4×10⁻³ = 2.4×10⁻³."},
+
+// ───────────────── MODULE 2 — HYDROSTATICS (theoretical) ─────────────────
+{sec:'Hydrostatics', q:"Surface tension is defined as force acting tangentially per unit:", opts:["Area","Volume","Length","Mass"], ans:2, ex:"Surface tension is force per unit length acting tangentially along a liquid surface."},
+{sec:'Hydrostatics', q:"Liquid drops are spherical because of the tendency to:", opts:["Increase surface energy","Minimize surface area","Resist gravity","Increase volume"], ans:1, ex:"A sphere has the least surface area for a given volume, minimizing surface energy."},
+{sec:'Hydrostatics', q:"If the angle of contact is acute (<90°), the liquid:", opts:["Does not wet glass","Wets the surface","Forms a convex meniscus","Stays flat"], ans:1, ex:"An acute contact angle means the liquid wets the surface, forming a concave meniscus."},
+{sec:'Hydrostatics', q:"The rise of kerosene in a wick is an application of:", opts:["Viscosity","Archimedes' Principle","Capillarity","Pascal's Law"], ans:2, ex:"Kerosene rising up a wick is capillary action drawing liquid up through narrow fibers."},
+{sec:'Hydrostatics', q:"Archimedes' Principle states upthrust equals the:", opts:["Mass of the object","Weight of the fluid displaced","Density of the fluid","Volume of the object"], ans:1, ex:"Archimedes' Principle: upthrust equals the weight of fluid displaced by the submerged object."},
+{sec:'Hydrostatics', q:"A floating body displaces its own:", opts:["Volume in fluid","Weight in fluid","Surface area in fluid","Density in fluid"], ans:1, ex:"A floating object displaces a weight of fluid equal to its own weight."},
+{sec:'Hydrostatics', q:"The joining together of molecules due to intermolecular forces (such as hydrogen bonding) is termed:", opts:["Viscosity","Association","Capillarity","Elasticity"], ans:1, ex:"Association describes molecules clumping together via intermolecular forces like hydrogen bonding."},
+{sec:'Hydrostatics', q:"Hydrostatic pressure at a depth h is given by:", opts:["P = F/A","P = hρg","P = Vρg","P = mg"], ans:1, ex:"Hydrostatic pressure increases linearly with depth: P = hρg."},
+{sec:'Hydrostatics', q:"Pascal's Principle states that pressure applied to an enclosed fluid is:", opts:["Lost over distance","Decreased with depth","Transmitted undiminished","Only felt at the bottom"], ans:2, ex:"Pascal's Principle: pressure applied anywhere in an enclosed fluid is transmitted equally in all directions."},
+{sec:'Hydrostatics', q:"A barometer is used to measure:", opts:["Gas pressure","Liquid density","Atmospheric pressure","Blood pressure"], ans:2, ex:"A barometer measures atmospheric (air) pressure, classically using a mercury column."},
+{sec:'Hydrostatics', q:'The "Torricellian vacuum" is found in a:', opts:["Siphon","Hydraulic press","Mercury barometer","U-tube"], ans:2, ex:"The empty space above the mercury column in a barometer is the Torricellian vacuum."},
+
+// ───────────────── MODULE 2 — HYDROSTATICS (calculation) ─────────────────
+{sec:'Hydrostatics', q:"A hot air balloon moving upwards has a total weight of 200 N and a volume of 20 m³. Taking air density as 1.2 kg/m³ and g = 9.81 m/s², what is the net upward force?", opts:["35.44 N","235.44 N","100.00 N","50.25 N"], ans:0, ex:"Net force = buoyancy − weight = (1.2×20×9.81) − 200 = 235.44 − 200 = 35.44 N upward."},
+{sec:'Hydrostatics', q:"Find surface tension force on a 5 cm needle in water (γ = 0.072 N/m):", opts:["0.0036 N","0.0072 N","0.0144 N","0.72 N"], ans:0, ex:"F = γL = 0.072 × 0.05 = 0.0036 N."},
+{sec:'Hydrostatics', q:"Calculate excess pressure in a soap bubble of radius 0.2 cm (γ = 25×10⁻³ N/m):", opts:["25 Pa","100 Pa","50 Pa","12.5 Pa"], ans:2, ex:"Soap bubbles have two surfaces: ΔP = 4γ/r = 4×0.025/0.002 = 50 Pa."},
+{sec:'Hydrostatics', q:"Find excess pressure in an air bubble (r = 0.5 mm) inside water (γ = 0.072 N/m):", opts:["288 Pa","144 Pa","576 Pa","72 Pa"], ans:0, ex:"An air bubble in liquid has one surface: ΔP = 2γ/r = 2×0.072/0.0005 = 288 Pa."},
+{sec:'Hydrostatics', q:"Find upthrust on a 0.5 m³ metal block in water (ρ = 1000 kg/m³, g = 10 m/s²):", opts:["500 N","5000 N","50,000 N","1000 N"], ans:1, ex:"Upthrust = ρVg = 1000×0.5×10 = 5000 N."},
+{sec:'Hydrostatics', q:"A 6500 N block (V = 0.25 m³) is submerged in liquid (ρ = 1100 kg/m³, g = 10 m/s²). Tension in supporting cable is:", opts:["2750 N","3750 N","9250 N","6500 N"], ans:1, ex:"Tension = Weight − Upthrust = 6500 − (1100×0.25×10) = 6500 − 2750 = 3750 N."},
+{sec:'Hydrostatics', q:"Relative Density of a solid weighing 10 N in air and 8 N in water is:", opts:["1.25","5.0","2.0","0.8"], ans:1, ex:"RD = weight in air ÷ (weight in air − weight in water) = 10 ÷ (10−8) = 5.0."},
+{sec:'Hydrostatics', q:"An iceberg (ρ = 900 kg/m³) floats in sea water (ρ = 1030 kg/m³). What percentage of its volume is submerged?", opts:["10%","87.4%","92%","50%"], ans:1, ex:"Fraction submerged = ρ_ice ÷ ρ_water = 900 ÷ 1030 ≈ 87.4%."},
+{sec:'Hydrostatics', q:"Pressure at the bottom of a 200 m deep dam (ρ = 1000 kg/m³, g = 10 m/s²):", opts:["2 × 10⁵ Pa","2 × 10⁶ Pa","2 × 10⁴ Pa","2 × 10⁷ Pa"], ans:1, ex:"P = hρg = 200×1000×10 = 2×10⁶ Pa."},
+{sec:'Hydrostatics', q:"Total pressure on a diver at 10 m depth (P_atm = 102,000 Pa, ρ_sea = 1050 kg/m³, g = 10 m/s²):", opts:["105,000 Pa","207,000 Pa","102,000 Pa","312,000 Pa"], ans:1, ex:"Total pressure = atmospheric + hρg = 102,000 + (10×1050×10) = 207,000 Pa."},
+{sec:'Hydrostatics', q:"Output force of a hydraulic press if 50 N is applied to 0.01 m² piston to move 1 m² piston:", opts:["500 N","5000 N","50,000 N","5 N"], ans:1, ex:"Hydraulic press: F₂ = F₁×(A₂/A₁) = 50×(1/0.01) = 5000 N."},
+
+// ───────────────── MODULE 3 — THERMODYNAMICS (theoretical) ─────────────────
+{sec:'Thermodynamics', q:"A system that exchanges neither mass nor energy with its surroundings is:", opts:["Open","Closed","Isolated","Diathermal"], ans:2, ex:"An isolated system exchanges neither matter nor energy with its surroundings."},
+{sec:'Thermodynamics', q:"A physical process in which no heat enters or leaves the system to/from surroundings is called:", opts:["Isothermal","Isobaric","Adiabatic","Isochoric"], ans:2, ex:"In an adiabatic process, no heat is transferred into or out of the system."},
+{sec:'Thermodynamics', q:"Thermal equilibrium is established when two systems have the same:", opts:["Pressure","Volume","Temperature","Internal Energy"], ans:2, ex:"Thermal equilibrium exists when two systems reach the same temperature and no net heat flows between them."},
+{sec:'Thermodynamics', q:"The Zeroth Law of Thermodynamics provides the basis for measuring:", opts:["Work","Heat","Temperature","Entropy"], ans:2, ex:"The Zeroth Law establishes temperature as a measurable, comparable quantity between systems."},
+{sec:'Thermodynamics', q:"A process occurring at constant pressure is called:", opts:["Isothermal","Isochoric","Isobaric","Adiabatic"], ans:2, ex:"Isobaric means the process occurs at constant pressure."},
+{sec:'Thermodynamics', q:'Internal energy (U) is a "state function" because it depends only on:', opts:["The path taken","Initial and final states","The speed of the process","External work"], ans:1, ex:"Internal energy is a state function — it depends only on the initial and final states, not the path."},
+{sec:'Thermodynamics', q:"The First Law of Thermodynamics is a statement of conservation of:", opts:["Momentum","Mass","Energy","Charge"], ans:2, ex:"The First Law of Thermodynamics is essentially conservation of energy applied to heat and work."},
+{sec:'Thermodynamics', q:"Mayer's Formula (Cp − Cv = R) applies to:", opts:["Liquids","Ideal gases","Solids","Real gases"], ans:1, ex:"Mayer's relation Cp − Cv = R is derived for and applies to ideal gases."},
+{sec:'Thermodynamics', q:"Enthalpy (H) is mathematically defined as:", opts:["U − PV","Q + W","U + PV","TS − PV"], ans:2, ex:"Enthalpy is defined as H = U + PV."},
+{sec:'Thermodynamics', q:'An "exothermic" reaction is one where enthalpy change (ΔH) is:', opts:["Zero","Positive","Negative","Infinite"], ans:2, ex:"An exothermic reaction releases heat, so its enthalpy change ΔH is negative."},
+
+// ───────────────── MODULE 3 — THERMODYNAMICS (calculation) ─────────────────
+{sec:'Thermodynamics', q:"Pressure change for copper if ΔT = 10 K, β = 5×10⁻⁵ K⁻¹, E_T = 1.3×10¹¹ Pa:", opts:["6.5 × 10⁵ Pa","6.5 × 10⁷ Pa","1.3 × 10⁶ Pa","5.0 × 10⁸ Pa"], ans:1, ex:"ΔP = βEΔT = (5×10⁻⁵)(1.3×10¹¹)(10) = 6.5×10⁷ Pa."},
+{sec:'Thermodynamics', q:"Moles of gas in 0.2 m³ at 5×10⁶ Pa and 300 K (R = 8.3 J/(mol·K)):", opts:["401.6","200.5","40.1","802.3"], ans:0, ex:"n = PV/RT = (5×10⁶×0.2) ÷ (8.3×300) ≈ 401.6 mol."},
+{sec:'Thermodynamics', q:"Work done expanding 2 moles at 273 K to 3 times its volume isothermally:", opts:["2500 J","5000 J","10,000 J","1500 J"], ans:1, ex:"W = nRT ln(V₂/V₁) = 2×8.3×273×ln(3) ≈ 5000 J."},
+{sec:'Thermodynamics', q:"Work done compressing gas isobarically at 2.6×10⁵ Pa from 0.05 m³ to 0.035 m³:", opts:["+3900 J","-3900 J","-1300 J","+1300 J"], ans:1, ex:"W = PΔV = 2.6×10⁵×(0.035−0.05) = −3900 J (negative because the gas is compressed)."},
+{sec:'Thermodynamics', q:"Temperature drop for 2 moles of gas doing 3900 J work during expansion (R = 8.3):", opts:["100 K","235 K","50 K","470 K"], ans:1, ex:"ΔT = W ÷ (nR) = 3900 ÷ (2×8.3) ≈ 235 K."},
+{sec:'Thermodynamics', q:"If a system absorbs 45 cal of heat and does 20 cal of work, ΔU is:", opts:["65 cal","25 cal","-25 cal","2.25 cal"], ans:1, ex:"ΔU = Q − W = 45 − 20 = 25 cal."},
+{sec:'Thermodynamics', q:"For ΔU = 25 cal, if the system absorbs 30 cal, work done is:", opts:["55 cal","5 cal","15 cal","10 cal"], ans:1, ex:"W = Q − ΔU = 30 − 25 = 5 cal."},
+{sec:'Thermodynamics', q:"ΔU for vaporizing 1 g water (L = 540 cal/g, Work = 40.3 cal):", opts:["580.3 cal","499.7 cal","540 cal","40.3 cal"], ans:1, ex:"ΔU = Q − W = 540 − 40.3 = 499.7 cal."},
+{sec:'Thermodynamics', q:"Find gas constant R if Cp = 28.8 and Cv = 20.5:", opts:["49.3","8.3","1.4","1.67"], ans:1, ex:"R = Cp − Cv = 28.8 − 20.5 = 8.3 J/(mol·K), matching the universal gas constant."},
+{sec:'Thermodynamics', q:"Find γ if Cp = 160 and R = 8.3:", opts:["1.40","1.05","1.67","1.25"], ans:1, ex:"Cv = Cp − R = 151.7, so γ = Cp/Cv = 160/151.7 ≈ 1.05."},
+{sec:'Thermodynamics', q:"Final temperature of air at 300 K if volume is halved adiabatically (γ = 1.4):", opts:["300 K","396 K","600 K","150 K"], ans:1, ex:"Adiabatic relation TV^(γ−1)=const gives T₂ = 300×2^0.4 ≈ 396 K."},
+{sec:'Thermodynamics', q:"Final pressure if volume is halved adiabatically from 1 atm (γ = 1.4):", opts:["2.0 atm","2.64 atm","1.4 atm","0.5 atm"], ans:1, ex:"Adiabatic relation PV^γ=const gives P₂ = 1×2^1.4 ≈ 2.64 atm."},
+{sec:'Thermodynamics', q:"Monatomic gas internal energy at 300 K (U = 1.5RT, R = 8.3):", opts:["2490 J","3735 J","1245 J","5000 J"], ans:1, ex:"U = 1.5×8.3×300 = 3735 J."},
+
+// ───────────────── MODULE 4 — KINETIC THEORY (theoretical) ─────────────────
+{sec:'Kinetic Theory', q:"Which kinetic theory assumption states gas molecules occupy negligible space?", opts:["Random motion","Point masses","Elastic spheres","No intermolecular forces"], ans:1, ex:"Kinetic theory treats gas molecules as point masses with negligible volume compared to the container."},
+{sec:'Kinetic Theory', q:"At absolute zero (0 K), molecular kinetic energy is:", opts:["Maximum","Infinite","Zero","Negative"], ans:2, ex:"Classically, molecular kinetic energy approaches zero as temperature approaches absolute zero."},
+{sec:'Kinetic Theory', q:"Temperature is a macroscopic measure of:", opts:["Molecular potential energy","Average translational kinetic energy","Total mass","Pressure"], ans:1, ex:"Temperature is a macroscopic measure of the average translational kinetic energy of gas molecules."},
+{sec:'Kinetic Theory', q:"At the same temperature, lighter gas molecules move:", opts:["Slower","At the same speed","Faster","Not at all"], ans:2, ex:"At equal temperature all gases share the same average KE, so lighter molecules must move faster to compensate for their smaller mass."},
+{sec:'Kinetic Theory', q:"Degrees of freedom for a monatomic gas molecule is:", opts:["1","3","5","6"], ans:1, ex:"A monatomic gas molecule (point mass) has 3 translational degrees of freedom only."},
+{sec:'Kinetic Theory', q:"A linear diatomic molecule (like O₂) has how many total degrees of freedom?", opts:["3","5","7","2"], ans:1, ex:"A linear diatomic molecule has 3 translational + 2 rotational degrees of freedom = 5 (ignoring vibration)."},
+{sec:'Kinetic Theory', q:"The principle of Equipartition of Energy assigns how much energy per degree of freedom?", opts:["RT","kBT","½ kBT","3/2 kBT"], ans:2, ex:"Equipartition assigns ½kBT of energy to each degree of freedom."},
+{sec:'Kinetic Theory', q:"Real gases deviate from ideal behavior most at:", opts:["High temperature, low pressure","Low temperature, high pressure","Standard temperature and pressure","Vacuum"], ans:1, ex:"Real gases deviate most from ideal behavior at low temperature and high pressure, where intermolecular forces and molecular volume matter most."},
+{sec:'Kinetic Theory', q:'Van der Waals constant "a" accounts for:', opts:["Molecular size","Intermolecular attraction","Molecular weight","Container shape"], ans:1, ex:"The 'a' term in the van der Waals equation corrects for attractive forces between molecules."},
+{sec:'Kinetic Theory', q:'Van der Waals constant "b" (co-volume) is how many times the actual molecular volume?', opts:["2","4","8","1"], ans:1, ex:"The excluded volume b works out to about 4 times the actual volume of the gas molecules."},
+{sec:'Kinetic Theory', q:"Critical temperature (Tc) is the temperature above which a gas:", opts:["Becomes a solid","Cannot be liquefied by pressure alone","Disappears","Freezes"], ans:1, ex:"Above the critical temperature, no amount of pressure alone can liquefy a gas."},
+
+// ───────────────── MODULE 4 — KINETIC THEORY (calculation) ─────────────────
+{sec:'Kinetic Theory', q:"Calculate the average kinetic energy of air molecules at 300 K (kB = 1.38×10⁻²³ J/K):", opts:["6.21 × 10⁻²¹ J","4.14 × 10⁻²¹ J","1.38 × 10⁻²³ J","8.30 × 10⁻²¹ J"], ans:0, ex:"Average KE = (3/2)kBT = 1.5×1.38×10⁻²³×300 ≈ 6.21×10⁻²¹ J."},
+{sec:'Kinetic Theory', q:"How many molecules are present in 5 kg of water (H₂O)? (M = 18 g/mol, NA = 6.022×10²³):", opts:["1.67 × 10²⁶","2.77 × 10²⁴","6.02 × 10²³","3.34 × 10²⁵"], ans:0, ex:"Moles = 5000 g ÷ 18 g/mol ≈ 277.8 mol; molecules = 277.8×6.022×10²³ ≈ 1.67×10²⁶."},
+{sec:'Kinetic Theory', q:"RMS speed for Helium (m = 6.67×10⁻²⁷ kg) at 300 K (kB = 1.38×10⁻²³ J/K):", opts:["485 m/s","1368 m/s","838 m/s","1000 m/s"], ans:1, ex:"v_rms = √(3kBT/m) = √(3×1.38×10⁻²³×300 ÷ 6.67×10⁻²⁷) ≈ 1368 m/s."},
+{sec:'Kinetic Theory', q:"At what temperature will Oxygen (M = 32 g/mol) have an RMS speed of 500 m/s? (R = 8.31 J/(mol·K)):", opts:["321 K","100 K","600 K","273 K"], ans:0, ex:"T = v²M ÷ 3R = 500²×0.032 ÷ (3×8.31) ≈ 321 K."},
+{sec:'Kinetic Theory', q:"Pressure exerted by 1 mole in a 10 m³ container, v_rms = 500 m/s, m = 5×10⁻²⁶ kg, NA = 6×10²³:", opts:["2.5 Pa","25 Pa","250 Pa","0.25 Pa"], ans:2, ex:"P = (1/3)(N/V)mv² = (1/3)(6×10²²)(5×10⁻²⁶)(500²) = 250 Pa."},
+{sec:'Kinetic Theory', q:"Number density (n) of Oxygen at 1 atm (1.013×10⁵ Pa) and 300 K:", opts:["2.45 × 10¹⁹ m⁻³","2.45 × 10²⁵ m⁻³","6.02 × 10²³ m⁻³","1.2 × 10²² m⁻³"], ans:1, ex:"n = P ÷ (kBT) = 1.013×10⁵ ÷ (1.38×10⁻²³×300) ≈ 2.45×10²⁵ m⁻³."},
+{sec:'Kinetic Theory', q:"Critical volume (Vc = 3b) if van der Waals constant b = 42.7×10⁻⁶ m³/mol:", opts:["14.2 × 10⁻⁶ m³","128.1 × 10⁻⁶ m³","42.7 × 10⁻⁶ m³","85.4 × 10⁻⁶ m³"], ans:1, ex:"Vc = 3b = 3×42.7×10⁻⁶ ≈ 128.1×10⁻⁶ m³."},
+{sec:'Kinetic Theory', q:"Critical pressure (pc) for a = 3.59×10⁻⁶, b = 42.7×10⁻⁶ (pc = a / 27b²):", opts:["50 atm","73 atm","113 atm","33 atm"], ans:1, ex:"pc = a ÷ (27b²) ≈ 73 atm using the given constants."},
+{sec:'Kinetic Theory', q:"Critical temperature (Tc) using a = 3.59×10⁻⁶, b = 42.7×10⁻⁶, R = 8.2×10⁻⁵:", opts:["155 K","304 K","405 K","5.2 K"], ans:1, ex:"Tc = 8a ÷ (27Rb) ≈ 304 K using the given constants."},
+{sec:'Kinetic Theory', q:"Calculate constant \"b\" if Tc = 5.3 K and pc = 2.25 atm (b = RTc / 8pc):", opts:["2.42 × 10⁻⁵","3.59 × 10⁻⁶","1.2 × 10⁻⁴","2.25 × 10⁻⁵"], ans:0, ex:"b = RTc ÷ 8pc = (8.2×10⁻⁵×5.3) ÷ (8×2.25) ≈ 2.42×10⁻⁵."},
+{sec:'Kinetic Theory', q:"Diameter of a Neon atom if b = 1.68×10⁻⁵ m³/mol (b = 2/3 NA π σ³):", opts:["0.12 nm","0.24 nm","0.48 nm","0.06 nm"], ans:1, ex:"Solving σ³ = 3b ÷ (2πNA) gives a molecular diameter of about 0.24 nm."},
+
+// ───────────────── FINAL COMPREHENSIVE MIX ─────────────────
+{sec:'Mixed', q:"The speed of sound in air at STP (γ = 1.4, ρ = 1.29 kg/m³) is approximately:", opts:["280 m/s","331 m/s","485 m/s","1500 m/s"], ans:1, ex:"v = √(γP/ρ) = √(1.4×1.013×10⁵ ÷ 1.29) ≈ 331 m/s."},
+{sec:'Mixed', q:"Which law relates temperature to internal thermal equilibrium across systems?", opts:["First Law","Zeroth Law","Second Law","Newton's Law"], ans:1, ex:"The Zeroth Law defines temperature as the quantity shared by systems in thermal equilibrium."},
+{sec:'Mixed', q:"Specific heat capacity is heat capacity per unit:", opts:["Mole","Volume","Kilogram","Pressure"], ans:2, ex:"Specific heat capacity is heat capacity measured per unit mass (kg)."},
+{sec:'Mixed', q:"For an ideal gas, internal energy depends solely on:", opts:["Volume","Pressure","Temperature","Shape"], ans:2, ex:"For an ideal gas, internal energy depends only on its temperature."},
+{sec:'Mixed', q:"A process governed by PV^γ = Constant is:", opts:["Isothermal","Isobaric","Adiabatic","Cyclic"], ans:2, ex:"PV^γ = constant is the defining relation of an adiabatic process."},
+{sec:'Mixed', q:"The standard SI unit of the molar gas constant R is:", opts:["J/K","J·mol/K","J/(mol·K)","Pa·m³"], ans:2, ex:"The molar gas constant R has SI units of J/(mol·K)."},
+{sec:'Mixed', q:"The ratio of adiabatic elasticity to isothermal elasticity of a gas is equal to:", opts:["1.0","γ","R","Cp"], ans:1, ex:"The ratio of adiabatic to isothermal elasticity of a gas equals γ (Cp/Cv)."},
+{sec:'Mixed', q:"If Cp/Cv = 1.67, the gas molecules are:", opts:["Diatomic","Monatomic","Polyatomic","Solid"], ans:1, ex:"γ ≈ 1.67 (5/3) is characteristic of monatomic gases; diatomic gases have γ ≈ 1.4."},
+{sec:'Mixed', q:"The work done in an isochoric process is always:", opts:["Maximum","Positive","Zero","Negative"], ans:2, ex:"In an isochoric (constant volume) process, ΔV = 0, so no work (W = PΔV) is done."},
+{sec:'Mixed', q:"Standard atmospheric pressure (1 atm) in Pascals is:", opts:["1.013 × 10⁵ Pa","1.013 × 10³ Pa","760 Pa","1.013 × 10⁷ Pa"], ans:0, ex:"Standard atmospheric pressure is defined as 1.013×10⁵ Pa (101.3 kPa)."}
+];
+
+const ALL_TOPICS = ['Elasticity','Hydrostatics','Thermodynamics','Kinetic Theory','Mixed'];
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function sectionIcon(sec){
+  return {Elasticity:'fa-arrows-left-right-to-line',Hydrostatics:'fa-droplet',Thermodynamics:'fa-fire',
+          'Kinetic Theory':'fa-atom',Mixed:'fa-shuffle'}[sec] || 'fa-circle';
+}
+function randomizeOptions(item){
+  const pairs = item.opts.map((o,idx)=>({o, correct: idx===item.ans}));
+  const shuffled = shuffle(pairs);
+  return {...item, opts: shuffled.map(p=>p.o), ans: shuffled.findIndex(p=>p.correct)};
+}
+
+/* ══════════════════════════════════════════
+   SOUND ENGINE — Web Audio API synth
+   Bell-like "tinnn" chime for correct answers,
+   metallic pitch-dropping "tunggg" thud for wrong answers.
+   No external audio files.
+   ══════════════════════════════════════════ */
+const SoundEngine = (function() {
+  const MUTE_KEY = 'phy103_muted_v1';
+  let ctx = null;
+  let muted = false;
+  try { muted = localStorage.getItem(MUTE_KEY) === '1'; } catch(e) {}
+
+  function getCtx() {
+    if (!ctx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      ctx = new AC();
+    }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+
+  function isMuted() { return muted; }
+  function setMuted(v) {
+    muted = v;
+    try { localStorage.setItem(MUTE_KEY, v ? '1' : '0'); } catch(e) {}
+  }
+
+  // Bell-like "tinnn" — a handful of inharmonic sine partials (like a real
+  // bell's overtone series) each with its own fast-attack/slow-decay envelope,
+  // layered together and run through a light shimmer of detune for warmth.
+  function playCorrect() {
+    if (muted) return;
+    const ac = getCtx();
+    if (!ac) return;
+    const now = ac.currentTime;
+    const master = ac.createGain();
+    master.gain.value = 0.5;
+    master.connect(ac.destination);
+
+    const fundamental = 880; // A5 — bright, bell-like
+    // Inharmonic partial ratios typical of bell timbre
+    const partials = [
+      { ratio: 1.00, gain: 0.55, decay: 0.9 },
+      { ratio: 2.01, gain: 0.30, decay: 0.7 },
+      { ratio: 2.76, gain: 0.20, decay: 0.55 },
+      { ratio: 4.18, gain: 0.14, decay: 0.4 },
+      { ratio: 5.43, gain: 0.08, decay: 0.3 },
+    ];
+
+    partials.forEach(p => {
+      const osc = ac.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = fundamental * p.ratio;
+      const g = ac.createGain();
+      g.gain.setValueAtTime(0, now);
+      g.gain.linearRampToValueAtTime(p.gain, now + 0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + p.decay);
+      osc.connect(g);
+      g.connect(master);
+      osc.start(now);
+      osc.stop(now + p.decay + 0.05);
+    });
+  }
+
+  // Heavy pitch-dropping metallic thud "tunggg" — a detuned pair of
+  // sawtooth oscillators sliding sharply downward in pitch, run through a
+  // lowpass filter that also sweeps down, giving a dull metallic clunk.
+  function playWrong() {
+    if (muted) return;
+    const ac = getCtx();
+    if (!ac) return;
+    const now = ac.currentTime;
+    const master = ac.createGain();
+    master.gain.value = 0.9;
+    master.connect(ac.destination);
+
+    const filter = ac.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(1200, now);
+    filter.frequency.exponentialRampToValueAtTime(120, now + 0.5);
+    filter.Q.value = 4;
+    filter.connect(master);
+
+    [1, 1.008].forEach((detune, idx) => {
+      const osc = ac.createOscillator();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(180 * detune, now);
+      osc.frequency.exponentialRampToValueAtTime(48 * detune, now + 0.55);
+      const g = ac.createGain();
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.linearRampToValueAtTime(idx === 0 ? 0.8 : 0.5, now + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+      osc.connect(g);
+      g.connect(filter);
+      osc.start(now);
+      osc.stop(now + 0.65);
+    });
+
+    // A short low sine "body" underneath for weight/heaviness
+    const body = ac.createOscillator();
+    body.type = 'sine';
+    body.frequency.setValueAtTime(90, now);
+    body.frequency.exponentialRampToValueAtTime(35, now + 0.4);
+    const bodyGain = ac.createGain();
+    bodyGain.gain.setValueAtTime(0.001, now);
+    bodyGain.gain.linearRampToValueAtTime(0.65, now + 0.01);
+    bodyGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+    body.connect(bodyGain);
+    bodyGain.connect(master);
+    body.start(now);
+    body.stop(now + 0.5);
+  }
+
+  return { playCorrect, playWrong, isMuted, setMuted };
+})();
+
+function refreshSoundToggleIcon() {
+  const btn = document.getElementById('soundToggle');
+  if (!btn) return;
+  const muted = SoundEngine.isMuted();
+  btn.classList.toggle('muted', muted);
+  btn.setAttribute('aria-pressed', String(muted));
+  btn.title = muted ? 'Unmute sounds' : 'Mute sounds';
+  btn.setAttribute('aria-label', btn.title);
+  btn.innerHTML = `<i class="fa-solid ${muted ? 'fa-volume-xmark' : 'fa-volume-high'}"></i>`;
+}
+document.getElementById('soundToggle').addEventListener('click', () => {
+  SoundEngine.setMuted(!SoundEngine.isMuted());
+  refreshSoundToggleIcon();
+});
+refreshSoundToggleIcon();
+
+/* ============================================================
+   STATE
+   mode: 'auto'   → Automatic Timer (app sets the clock, pausable, instant feedback)
+         'custom' → Custom Timer   (user sets everything, no pausing, feedback at end)
+   ============================================================ */
+let mode = null;
+let flatQ = [];
+let answers = [];
+let locked  = [];
+let current = 0;
+let timeLeft = 0;
+let timerID = null;
+let finished = false;
+let isPaused = false;
+let leaveCount = 0;
+
+const homeScreen   = document.getElementById('homeScreen');
+const configScreen = document.getElementById('configScreen');
+const loadingScreen= document.getElementById('loadingScreen');
+const quizScreen   = document.getElementById('quizScreen');
+const resultScreen = document.getElementById('resultScreen');
+const timerEl      = document.getElementById('timer');
+const quizTools    = document.getElementById('quizTools');
+const pauseBtn     = document.getElementById('pauseBtn');
+const pauseOverlay = document.getElementById('pauseOverlay');
+const leaveWarningModal = document.getElementById('leaveWarningModal');
+const resumeModal  = document.getElementById('resumeModal');
+
+/* ============================================================
+   STATS (localStorage — best score + attempts)
+   ============================================================ */
+const STATS_KEY = 'phy103_stats_v2';
+function loadStats(){
+  try{
+    const s = JSON.parse(localStorage.getItem(STATS_KEY));
+    if(s && s.auto && s.custom) return s;
+  }catch(e){}
+  return {auto:{best:0,attempts:0}, custom:{best:0,attempts:0}};
+}
+function saveStats(pct){
+  const s = loadStats();
+  const bucket = mode === 'custom' ? 'custom' : 'auto';
+  s[bucket].attempts++;
+  const isNewBest = pct > s[bucket].best;
+  if(isNewBest) s[bucket].best = pct;
+  try{ localStorage.setItem(STATS_KEY, JSON.stringify(s)); }catch(e){}
+  renderStatsBar();
+  return isNewBest;
+}
+function renderStatsBar(){
+  const s = loadStats();
+  const el = document.getElementById('statsBar');
+  const totalAttempts = s.auto.attempts + s.custom.attempts;
+  if(totalAttempts === 0){ el.classList.add('hidden'); return; }
+  el.classList.remove('hidden');
+  el.innerHTML = `
+    <div class="stat-chip"><i class="fa-solid fa-gauge-high"></i> Best Automatic <strong>${s.auto.best}%</strong></div>
+    <div class="stat-chip"><i class="fa-solid fa-sliders"></i> Best Custom <strong>${s.custom.best}%</strong></div>
+    <div class="stat-chip"><i class="fa-solid fa-chart-line"></i> Attempts <strong>${totalAttempts}</strong></div>
+  `;
+}
+
+/* ============================================================
+   AUTOSAVE (localStorage — resume mid-quiz)
+   ============================================================ */
+const AUTOSAVE_KEY = 'phy103_autosave_v2';
+function saveAutosave(){
+  if(finished){ clearAutosave(); return; }
+  if(!flatQ.length) return;
+  try{
+    localStorage.setItem(AUTOSAVE_KEY, JSON.stringify({mode, flatQ, answers, locked, current, timeLeft, leaveCount}));
+  }catch(e){}
+}
+function clearAutosave(){
+  try{ localStorage.removeItem(AUTOSAVE_KEY); }catch(e){}
+}
+function checkAutosaveOnLoad(){
+  let raw;
+  try{ raw = localStorage.getItem(AUTOSAVE_KEY); }catch(e){ raw = null; }
+  if(!raw) return;
+  let state;
+  try{ state = JSON.parse(raw); }catch(e){ return; }
+  if(!state || !state.flatQ || !state.flatQ.length) return;
+  document.getElementById('resumeInfo').textContent =
+    `${state.mode === 'custom' ? 'Custom Timer' : 'Automatic Timer'} — Question ${state.current+1} of ${state.flatQ.length}`;
+  resumeModal.classList.remove('hidden');
+  document.getElementById('resumeYes').onclick = () => {
+    mode = state.mode; flatQ = state.flatQ; answers = state.answers; locked = state.locked;
+    current = state.current; timeLeft = state.timeLeft || 0; leaveCount = state.leaveCount || 0;
+    finished = false; isPaused = false;
+    resumeModal.classList.add('hidden');
+    launchQuiz();
+  };
+  document.getElementById('resumeNo').onclick = () => {
+    clearAutosave();
+    resumeModal.classList.add('hidden');
+  };
+}
+
+/* ============================================================
+   HOME SCREEN NAV
+   ============================================================ */
+document.getElementById('pickAuto').addEventListener('click', () => beginLoading(startAuto));
+document.getElementById('pickCustom').addEventListener('click', () => {
+  homeScreen.classList.add('hidden');
+  configScreen.classList.remove('hidden');
+});
+document.getElementById('backToHomeFromConfig').addEventListener('click', () => {
+  configScreen.classList.add('hidden');
+  homeScreen.classList.remove('hidden');
+});
+
+/* ============================================================
+   LOADING TRANSITION
+   ============================================================ */
+function beginLoading(next){
+  homeScreen.classList.add('hidden');
+  configScreen.classList.add('hidden');
+  loadingScreen.classList.remove('hidden');
+  setTimeout(() => { loadingScreen.classList.add('hidden'); next(); }, 850);
+}
+
+/* ============================================================
+   CONFIG SCREEN — topics + sliders (Custom Timer)
+   ============================================================ */
+function buildTopicCheckboxes(){
+  const wrap = document.getElementById('topicsWrap');
+  wrap.innerHTML = '';
+  ALL_TOPICS.forEach(t => {
+    const label = document.createElement('label');
+    label.className = 'topic-chip';
+    label.innerHTML = `<input type="checkbox" value="${t}" checked> <span>${t}</span>`;
+    label.querySelector('input').addEventListener('change', updateTopicAvailability);
+    wrap.appendChild(label);
+  });
+}
+function getSelectedTopics(){
+  return [...document.querySelectorAll('#topicsWrap input:checked')].map(i => i.value);
+}
+function updateTopicAvailability(){
+  const selected = getSelectedTopics();
+  const available = QUESTIONS.filter(q => selected.includes(q.sec)).length;
+  const countSlider = document.getElementById('countSlider');
+  const countValue = document.getElementById('countValue');
+  const max = Math.max(available, selected.length ? 1 : 0);
+  countSlider.max = max || 1;
+  if(parseInt(countSlider.value,10) > max) countSlider.value = max || 1;
+  countValue.textContent = countSlider.value;
+  document.getElementById('countHint').textContent =
+    selected.length ? `${available} question${available===1?'':'s'} available across the selected topics.` : 'Select at least one topic first.';
+  document.getElementById('topicsHint').textContent =
+    selected.length ? `${selected.length} of ${ALL_TOPICS.length} topics selected.` : 'Select at least one topic.';
+  document.getElementById('startCustomBtn').disabled = selected.length === 0 || available === 0;
+}
+buildTopicCheckboxes();
+updateTopicAvailability();
+
+const timeSlider  = document.getElementById('timeSlider');
+const timeValue   = document.getElementById('timeValue');
+const countSlider = document.getElementById('countSlider');
+const countValue  = document.getElementById('countValue');
+timeSlider.addEventListener('input', () => timeValue.textContent = timeSlider.value);
+countSlider.addEventListener('input', () => countValue.textContent = countSlider.value);
+document.getElementById('startCustomBtn').addEventListener('click', () => {
+  const mins = Math.min(120, Math.max(1, parseInt(timeSlider.value, 10)));
+  const topics = getSelectedTopics();
+  const pool = QUESTIONS.filter(q => topics.includes(q.sec));
+  const count = Math.min(pool.length, Math.max(1, parseInt(countSlider.value, 10)));
+  if(!pool.length) return;
+  beginLoading(() => startCustom(mins, count, pool));
+});
+
+/* ============================================================
+   START MODES
+   ============================================================ */
+function startAuto(){
+  mode = 'auto';
+  flatQ = shuffle(QUESTIONS).map(randomizeOptions);
+  answers = new Array(flatQ.length).fill(null);
+  locked  = new Array(flatQ.length).fill(false);
+  current = 0; finished = false; isPaused = false; leaveCount = 0;
+  timeLeft = 80 * 60; // automatically set by the app
+  launchQuiz();
+}
+function startCustom(mins, count, pool){
+  mode = 'custom';
+  flatQ = shuffle(pool).slice(0, count).map(randomizeOptions);
+  answers = new Array(flatQ.length).fill(null);
+  locked  = new Array(flatQ.length).fill(false);
+  current = 0; finished = false; isPaused = false; leaveCount = 0;
+  timeLeft = mins * 60;
+  launchQuiz();
+}
+function launchQuiz(){
+  homeScreen.classList.add('hidden');
+  configScreen.classList.add('hidden');
+  loadingScreen.classList.add('hidden');
+  resultScreen.classList.add('hidden');
+  quizScreen.classList.remove('hidden');
+  quizTools.classList.remove('hidden');
+  pauseBtn.classList.toggle('hidden', mode !== 'auto');
+
+  timerEl.classList.remove('hidden');
+  clearInterval(timerID);
+  timerID = setInterval(tick, 1000);
+  updateTimerDisplay();
+
+  buildDots();
+  render(current);
+  saveAutosave();
+}
+
+/* ============================================================
+   TIMER (both modes — Automatic Timer can be paused, Custom cannot)
+   ============================================================ */
+function tick(){
+  timeLeft--;
+  if(timeLeft <= 0){
+    timeLeft = 0;
+    updateTimerDisplay();
+    clearInterval(timerID);
+    submitQuiz();
+    return;
+  }
+  updateTimerDisplay();
+  saveAutosave();
+}
+function updateTimerDisplay(){
+  const m = Math.floor(timeLeft/60).toString().padStart(2,'0');
+  const s = (timeLeft%60).toString().padStart(2,'0');
+  document.getElementById('timerText').textContent = `${m}:${s}`;
+  timerEl.classList.toggle('warn', timeLeft <= 300);
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+document.getElementById('backBtn').addEventListener('click', () => go(current-1));
+document.getElementById('nextBtn').addEventListener('click', () => go(current+1));
+document.getElementById('finishBtn').addEventListener('click', () => {
+  const answered = answers.filter(a => a !== null).length;
+  if(mode === 'auto'){
+    const MIN_REQUIRED = 30;
+    if(answered < MIN_REQUIRED){
+      alert(`You need to answer at least ${MIN_REQUIRED} questions before submitting. You've answered ${answered} so far — use the dots above or Back to fill in more.`);
+      return;
+    }
+  } else if(mode === 'custom'){
+    if(answered < flatQ.length){
+      if(!confirm(`You've answered ${answered} of ${flatQ.length} questions. Submit anyway?`)) return;
+    }
+  }
+  submitQuiz();
+});
+document.getElementById('retryBtn').addEventListener('click', () => {
+  if(mode === 'auto') beginLoading(startAuto);
+  else { resultScreen.classList.add('hidden'); homeScreen.classList.add('hidden'); configScreen.classList.remove('hidden'); }
+});
+document.getElementById('homeBtn').addEventListener('click', () => {
+  clearInterval(timerID);
+  resultScreen.classList.add('hidden');
+  quizTools.classList.add('hidden');
+  homeScreen.classList.remove('hidden');
+});
+
+function go(i){
+  if(isPaused) return;
+  if(i < 0 || i >= flatQ.length) return;
+  current = i;
+  render(i);
+  saveAutosave();
+}
+
+function render(i){
+  const item = flatQ[i];
+  document.getElementById('sectionTag').innerHTML = `<i class="fa-solid ${sectionIcon(item.sec)}"></i> ${item.sec}`;
+  document.getElementById('qCounter').textContent = `Question ${i+1} of ${flatQ.length}`;
+
+  const answeredCount = answers.filter(a => a !== null).length;
+  document.getElementById('progressFill').style.width = (answeredCount/flatQ.length*100) + '%';
+
+  document.getElementById('qText').textContent = item.q;
+
+  const ow = document.getElementById('optsWrap');
+  ow.innerHTML = '';
+  const ie = document.getElementById('inlineExplain');
+  ie.className = 'inline-explain';
+  ie.innerHTML = '';
+
+  const showFeedback = mode === 'auto' && locked[i];
+
+  item.opts.forEach((opt, oi) => {
+    const d = document.createElement('div');
+    let cls = 'opt';
+    if(showFeedback){
+      cls += ' locked';
+      if(oi === item.ans) cls += ' correct';
+      else if(oi === answers[i]) cls += ' wrong';
+    } else if(answers[i] === oi){
+      cls += ' selected';
+    }
+    d.className = cls;
+    d.innerHTML = `<span class="opt-letter">${String.fromCharCode(65+oi)}</span><span class="opt-text">${opt}</span>`;
+    d.addEventListener('click', () => selectOption(i, oi));
+    ow.appendChild(d);
+  });
+
+  if(showFeedback){
+    const isRight = answers[i] === item.ans;
+    ie.classList.add('show', isRight ? 'right' : 'wrong');
+    ie.innerHTML = `<div class="ie-label"><i class="fa-solid ${isRight ? 'fa-circle-check' : 'fa-circle-xmark'}"></i> ${isRight ? 'Correct!' : 'Not quite'}</div>${item.ex}`;
+  }
+
+  document.getElementById('backBtn').disabled = (i === 0);
+  const nb = document.getElementById('nextBtn');
+  const fb = document.getElementById('finishBtn');
+  if(i === flatQ.length - 1){ nb.classList.add('hidden'); fb.classList.remove('hidden'); }
+  else { nb.classList.remove('hidden'); fb.classList.add('hidden'); }
+
+  if(mode === 'auto'){
+    const MIN_REQUIRED = 30;
+    const needMore = MIN_REQUIRED - answeredCount;
+    if(needMore > 0){
+      fb.disabled = true;
+      fb.title = `Answer ${needMore} more question${needMore === 1 ? '' : 's'} to unlock submission (minimum ${MIN_REQUIRED}).`;
+    } else {
+      fb.disabled = false;
+      fb.title = '';
+    }
+  } else {
+    fb.disabled = false;
+    fb.title = '';
+  }
+
+  updateDots();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function selectOption(i, oi){
+  if(finished || isPaused) return;
+  if(mode === 'auto' && locked[i]) return;
+  answers[i] = oi;
+  if(mode === 'auto') {
+    locked[i] = true;
+    if(oi === flatQ[i].ans) SoundEngine.playCorrect();
+    else SoundEngine.playWrong();
+  }
+  render(i);
+  saveAutosave();
+}
+
+function buildDots(){
+  const row = document.getElementById('dotsRow');
+  row.innerHTML = '';
+  flatQ.forEach((item, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot'; d.id = 'dot-'+i; d.title = 'Q'+(i+1);
+    d.addEventListener('click', () => go(i));
+    row.appendChild(d);
+  });
+}
+function updateDots(){
+  flatQ.forEach((item, i) => {
+    const d = document.getElementById('dot-'+i);
+    if(!d) return;
+    d.classList.remove('answered','current','correct','wrong');
+    if(i === current) d.classList.add('current');
+    else if(mode === 'auto' && locked[i]){
+      d.classList.add(answers[i] === item.ans ? 'correct' : 'wrong');
+    } else if(answers[i] !== null){
+      d.classList.add('answered');
+    }
+  });
+}
+
+/* ============================================================
+   KEYBOARD
+   ============================================================ */
+document.addEventListener('keydown', e => {
+  if(quizScreen.classList.contains('hidden') || finished || isPaused) return;
+  if(e.key === 'ArrowRight') go(current+1);
+  if(e.key === 'ArrowLeft')  go(current-1);
+  if(['1','2','3','4'].includes(e.key)){
+    const oi = parseInt(e.key,10)-1;
+    if(flatQ[current] && flatQ[current].opts[oi] !== undefined) selectOption(current, oi);
+  }
+});
+
+/* ============================================================
+   PAUSE — Automatic Timer only. Freezes the clock and blurs the screen.
+   ============================================================ */
+pauseBtn.addEventListener('click', () => {
+  if(mode !== 'auto') return;
+  isPaused = true;
+  clearInterval(timerID);
+  pauseOverlay.classList.remove('hidden');
+});
+document.getElementById('resumeFromPauseBtn').addEventListener('click', () => {
+  isPaused = false;
+  pauseOverlay.classList.add('hidden');
+  if(mode === 'auto' && !finished){
+    clearInterval(timerID);
+    timerID = setInterval(tick, 1000);
+  }
+});
+
+/* ============================================================
+   ANTI-CHEAT — tab/page visibility tracking (both modes)
+   ============================================================ */
+document.addEventListener('visibilitychange', () => {
+  const quizActive = !quizScreen.classList.contains('hidden') && !finished;
+  if(document.hidden && quizActive && !isPaused){
+    leaveCount++;
+    if(leaveCount >= 3){
+      resetQuizInPlace();
+      alert('Your quiz has been reset after repeatedly leaving the page, to keep things fair.');
+    } else {
+      showLeaveWarning(3 - leaveCount);
+    }
+    saveAutosave();
+  }
+});
+function showLeaveWarning(remaining){
+  document.getElementById('leaveWarnText').textContent =
+    `You left the quiz screen. If you leave ${remaining} more time${remaining===1?'':'s'}, your quiz will automatically reset for fairness.`;
+  leaveWarningModal.classList.remove('hidden');
+}
+document.getElementById('leaveWarnOk').addEventListener('click', () => leaveWarningModal.classList.add('hidden'));
+function resetQuizInPlace(){
+  answers = new Array(flatQ.length).fill(null);
+  locked  = new Array(flatQ.length).fill(false);
+  current = 0;
+  leaveCount = 0;
+  render(0);
+  saveAutosave();
+}
+
+/* ============================================================
+   PRINT
+   ============================================================ */
+document.getElementById('printBtn').addEventListener('click', () => {
+  // Defensive: make sure no floating overlay (calculator, pause screen, modals)
+  // is left open, since a position:fixed panel on top of the page can make
+  // the printed/PDF output look blank or broken.
+  document.getElementById('calcBackdrop').classList.add('hidden');
+  document.getElementById('calcPanel').classList.add('hidden');
+  pauseOverlay.classList.add('hidden');
+  leaveWarningModal.classList.add('hidden');
+  resumeModal.classList.add('hidden');
+  // Let the DOM settle before invoking the native print dialog.
+  requestAnimationFrame(() => window.print());
+});
+
+/* ============================================================
+   SUBMIT / RESULTS
+   ============================================================ */
+function submitQuiz(){
+  if(finished) return;
+  finished = true;
+  clearInterval(timerID);
+  quizScreen.classList.add('hidden');
+  quizTools.classList.add('hidden');
+  timerEl.classList.add('hidden');
+  resultScreen.classList.remove('hidden');
+  clearAutosave();
+
+  let score = 0;
+  flatQ.forEach((item, i) => { if(answers[i] === item.ans) score++; });
+  const total = flatQ.length;
+  const pct = Math.round(score/total*100);
+  const isNewBest = saveStats(pct);
+
+  document.getElementById('resultScore').textContent = score;
+  document.getElementById('resultOf').textContent = '/ ' + total;
+  document.getElementById('resultPct').textContent = pct + '%';
+  document.getElementById('resultMsg').innerHTML =
+    pct >= 70 ? '<i class="fa-solid fa-trophy" style="color:var(--green);"></i> Excellent performance. Review each solution below to sharpen your technique.' :
+    pct >= 50 ? '<i class="fa-solid fa-arrow-trend-up" style="color:var(--accent);"></i> Good effort. Work through the explanations and retake soon.' :
+                '<i class="fa-solid fa-book" style="color:var(--purple);"></i> Keep at it — study every explanation below, then retake.';
+  document.getElementById('bestBadge').innerHTML = isNewBest
+    ? '<span class="best-badge"><i class="fa-solid fa-star"></i> New personal best!</span>' : '';
+
+  const sections = [...new Set(flatQ.map(q => q.sec))];
+  const bd = document.getElementById('breakdownGrid');
+  bd.innerHTML = '';
+  sections.forEach(sec => {
+    const idx = flatQ.map((f,i) => f.sec === sec ? i : -1).filter(x => x >= 0);
+    let sc = 0;
+    idx.forEach(i => { if(answers[i] === flatQ[i].ans) sc++; });
+    const c = document.createElement('div');
+    c.className = 'bd-card';
+    c.innerHTML = `<div class="bd-name"><i class="fa-solid ${sectionIcon(sec)}"></i> ${sec}</div><div><span class="bd-score">${sc}</span><span class="bd-total"> / ${idx.length}</span></div>`;
+    bd.appendChild(c);
+  });
+
+  const rl = document.getElementById('reviewList');
+  rl.innerHTML = '';
+  flatQ.forEach((item, i) => {
+    const isRight = answers[i] === item.ans;
+    const chosenText = answers[i] !== null ? item.opts[answers[i]] : 'No answer';
+    const corrText = item.opts[item.ans];
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (isRight ? 'right' : 'miss');
+    div.innerHTML = `
+      <div class="ri-section"><i class="fa-solid ${sectionIcon(item.sec)}"></i> ${item.sec}</div>
+      <div class="ri-q">${i+1}. ${item.q}</div>
+      <div class="ri-ans ${isRight ? 'right' : 'wrong'}"><i class="fa-solid ${isRight ? 'fa-circle-check' : 'fa-circle-xmark'}"></i> Your answer: ${chosenText}</div>
+      ${!isRight ? `<div class="ri-ans correct-reveal"><i class="fa-solid fa-circle-check"></i> Correct: ${corrText}</div>` : ''}
+      <div class="ri-exp">${item.ex}</div>
+    `;
+    rl.appendChild(div);
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ══════════════════════════════════════════
+   SCIENTIFIC CALCULATOR — draggable floating window
+   Available as a tool in both quiz modes.
+   ══════════════════════════════════════════ */
+(function() {
+  const fab      = document.getElementById('calcFab');
+  const backdrop = document.getElementById('calcBackdrop');
+  const panel    = document.getElementById('calcPanel');
+  const header   = document.getElementById('calcHeader');
+  const closeBtn = document.getElementById('calcClose');
+  const exprEl   = document.getElementById('calcExpr');
+  const resEl    = document.getElementById('calcResult');
+  const grid     = document.getElementById('calcGrid');
+  const modeDeg  = document.getElementById('calcModeDeg');
+  const modeRad  = document.getElementById('calcModeRad');
+
+  let expr = '';
+  let angleMode = 'deg';
+  let justEvaluated = false;
+
+  const BUTTONS = [
+    {label:'AC',  cls:'clear', act:'clear'},
+    {label:'DEL', cls:'clear', act:'del'},
+    {label:'%',   cls:'op',    act:'insert', val:'%'},
+    {label:'÷',   cls:'op',    act:'insert', val:'÷'},
+
+    {label:'sin', cls:'fn', act:'insert', val:'sin('},
+    {label:'cos', cls:'fn', act:'insert', val:'cos('},
+    {label:'tan', cls:'fn', act:'insert', val:'tan('},
+    {label:'×',   cls:'op', act:'insert', val:'×'},
+
+    {label:'log', cls:'fn', act:'insert', val:'log('},
+    {label:'ln',  cls:'fn', act:'insert', val:'ln('},
+    {label:'√',   cls:'fn', act:'insert', val:'√('},
+    {label:'−',   cls:'op', act:'insert', val:'−'},
+
+    {label:'π',   cls:'fn', act:'insert', val:'π'},
+    {label:'e',   cls:'fn', act:'insert', val:'e'},
+    {label:'^',   cls:'op', act:'insert', val:'^'},
+    {label:'+',   cls:'op', act:'insert', val:'+'},
+
+    {label:'7', act:'insert', val:'7'},
+    {label:'8', act:'insert', val:'8'},
+    {label:'9', act:'insert', val:'9'},
+    {label:'(', act:'insert', val:'('},
+
+    {label:'4', act:'insert', val:'4'},
+    {label:'5', act:'insert', val:'5'},
+    {label:'6', act:'insert', val:'6'},
+    {label:')', act:'insert', val:')'},
+
+    {label:'1',   act:'insert', val:'1'},
+    {label:'2',   act:'insert', val:'2'},
+    {label:'3',   act:'insert', val:'3'},
+    {label:'EXP', cls:'fn', act:'insert', val:'×10^'},
+
+    {label:'0',  act:'insert', val:'0'},
+    {label:'.',  act:'insert', val:'.'},
+    {label:'x²', cls:'fn', act:'insert', val:'^2'},
+    {label:'=',  cls:'equals', act:'eval'},
+  ];
+
+  BUTTONS.forEach(b => {
+    const btn = document.createElement('button');
+    btn.className = 'calc-btn' + (b.cls ? ' ' + b.cls : '');
+    btn.textContent = b.label;
+    btn.type = 'button';
+    btn.addEventListener('click', () => handleAction(b));
+    grid.appendChild(btn);
+  });
+
+  function handleAction(b) {
+    if (b.act === 'clear') {
+      expr = ''; justEvaluated = false; updateDisplay();
+      return;
+    }
+    if (b.act === 'del') {
+      expr = expr.slice(0, -1); justEvaluated = false; updateDisplay();
+      return;
+    }
+    if (b.act === 'insert') {
+      if (justEvaluated) {
+        if (/^[0-9.]$/.test(b.val) || b.val === '(' ) { expr = ''; }
+      }
+      justEvaluated = false;
+      expr += b.val;
+      updateDisplay();
+      return;
+    }
+    if (b.act === 'eval') {
+      evaluate();
+      return;
+    }
+  }
+
+  function updateDisplay() {
+    exprEl.textContent = expr || '\u00A0';
+    resEl.classList.remove('err');
+  }
+
+  function evaluate() {
+    if (!expr.trim()) return;
+    try {
+      const val = computeExpr(expr, angleMode);
+      if (val === null || Number.isNaN(val) || !Number.isFinite(val)) throw new Error('bad');
+      const display = formatResult(val);
+      const openCount  = (expr.match(/\(/g)  || []).length;
+      const closeCount = (expr.match(/\)/g) || []).length;
+      const shownExpr = openCount > closeCount ? expr + ')'.repeat(openCount - closeCount) : expr;
+      exprEl.textContent = shownExpr + ' =';
+      resEl.textContent = display;
+      resEl.classList.remove('err');
+      expr = display;
+      justEvaluated = true;
+    } catch (e) {
+      resEl.textContent = 'Error';
+      resEl.classList.add('err');
+      justEvaluated = false;
+    }
+  }
+
+  function formatResult(val) {
+    if (Math.abs(val) !== 0 && (Math.abs(val) < 1e-6 || Math.abs(val) >= 1e12)) {
+      return val.toExponential(6).replace(/e\+?(-?)(\d+)/, ' × 10^$1$2');
+    }
+    let s = parseFloat(val.toFixed(10)).toString();
+    return s;
+  }
+
+  // Tokenizer-based evaluator — a small recursive-descent parser so nested
+  // functions, negative numbers, and trig calls followed by ^ or EXP all
+  // parse correctly instead of relying on brittle string replacement.
+  function computeExpr(raw, mode) {
+    let s = raw;
+
+    const openCount  = (s.match(/\(/g)  || []).length;
+    const closeCount = (s.match(/\)/g) || []).length;
+    if (openCount > closeCount) s += ')'.repeat(openCount - closeCount);
+
+    s = s.replace(/×10\^/g, '*10^');
+
+    const sinT = mode === 'deg' ? (x => Math.sin(x * Math.PI / 180)) : Math.sin;
+    const cosT = mode === 'deg' ? (x => Math.cos(x * Math.PI / 180)) : Math.cos;
+    const tanT = mode === 'deg' ? (x => Math.tan(x * Math.PI / 180)) : Math.tan;
+
+    const FUNCS = {
+      'sin': sinT, 'cos': cosT, 'tan': tanT,
+      'log': Math.log10, 'ln': Math.log, '√': Math.sqrt, 'sqrt': Math.sqrt,
+    };
+    const CONSTS = { 'π': Math.PI, 'pi': Math.PI, 'e': Math.E };
+
+    const tokens = [];
+    let i = 0;
+    const isDigit = c => c >= '0' && c <= '9';
+    const isAlpha = c => /[a-zA-Zπ√]/.test(c);
+    while (i < s.length) {
+      const c = s[i];
+      if (c === ' ') { i++; continue; }
+      if (c === '×') { tokens.push({t:'op', v:'*'}); i++; continue; }
+      if (c === '÷') { tokens.push({t:'op', v:'/'}); i++; continue; }
+      if (c === '−') { tokens.push({t:'op', v:'-'}); i++; continue; }
+      if ('+-*/^(),%'.includes(c)) { tokens.push({t: c === '(' ? 'lp' : c === ')' ? 'rp' : 'op', v:c}); i++; continue; }
+      if (isDigit(c) || c === '.') {
+        let j = i;
+        while (j < s.length && (isDigit(s[j]) || s[j] === '.')) j++;
+        tokens.push({t:'num', v:parseFloat(s.slice(i,j))});
+        i = j; continue;
+      }
+      if (isAlpha(c)) {
+        let j = i;
+        while (j < s.length && isAlpha(s[j])) j++;
+        const word = s.slice(i,j);
+        if (FUNCS[word]) tokens.push({t:'func', v:word});
+        else if (CONSTS[word] !== undefined) tokens.push({t:'num', v:CONSTS[word]});
+        else throw new Error('unknown token: ' + word);
+        i = j; continue;
+      }
+      throw new Error('unexpected char: ' + c);
+    }
+
+    let pos = 0;
+    const peek = () => tokens[pos];
+    const next = () => tokens[pos++];
+
+    function parseExpression() { return parseAddSub(); }
+
+    function parseAddSub() {
+      let left = parseMulDiv();
+      while (peek() && peek().t === 'op' && (peek().v === '+' || peek().v === '-')) {
+        const op = next().v;
+        const right = parseMulDiv();
+        left = op === '+' ? left + right : left - right;
+      }
+      return left;
+    }
+
+    function parseMulDiv() {
+      let left = parseUnary();
+      while (peek() && peek().t === 'op' && (peek().v === '*' || peek().v === '/')) {
+        const op = next().v;
+        const right = parseUnary();
+        left = op === '*' ? left * right : left / right;
+      }
+      return left;
+    }
+
+    function parseUnary() {
+      if (peek() && peek().t === 'op' && peek().v === '-') { next(); return -parseUnary(); }
+      if (peek() && peek().t === 'op' && peek().v === '+') { next(); return parseUnary(); }
+      return parsePower();
+    }
+
+    function parsePower() {
+      let base = parsePostfix();
+      if (peek() && peek().t === 'op' && peek().v === '^') {
+        next();
+        const exp = parseUnary();
+        base = Math.pow(base, exp);
+      }
+      return base;
+    }
+
+    function parsePostfix() {
+      let val = parseAtom();
+      while (peek() && peek().t === 'op' && peek().v === '%') {
+        next();
+        val = val / 100;
+      }
+      return val;
+    }
+
+    function parseAtom() {
+      const tok = peek();
+      if (!tok) throw new Error('unexpected end');
+      if (tok.t === 'num') { next(); return tok.v; }
+      if (tok.t === 'func') {
+        next();
+        if (!peek() || peek().t !== 'lp') throw new Error('expected ( after function');
+        next();
+        const arg = parseExpression();
+        if (!peek() || peek().t !== 'rp') throw new Error('expected )');
+        next();
+        return FUNCS[tok.v](arg);
+      }
+      if (tok.t === 'lp') {
+        next();
+        const val = parseExpression();
+        if (!peek() || peek().t !== 'rp') throw new Error('expected )');
+        next();
+        return val;
+      }
+      throw new Error('unexpected token');
+    }
+
+    const result = parseExpression();
+    if (pos !== tokens.length) throw new Error('trailing tokens');
+    return result;
+  }
+
+  function openCalc() {
+    panel.classList.remove('hidden');
+    backdrop.classList.remove('hidden');
+  }
+  function closeCalc() {
+    panel.classList.add('hidden');
+    backdrop.classList.add('hidden');
+  }
+
+  fab.addEventListener('click', openCalc);
+  closeBtn.addEventListener('click', closeCalc);
+  backdrop.addEventListener('click', closeCalc);
+
+  modeDeg.addEventListener('click', () => {
+    angleMode = 'deg';
+    modeDeg.classList.add('active'); modeRad.classList.remove('active');
+  });
+  modeRad.addEventListener('click', () => {
+    angleMode = 'rad';
+    modeRad.classList.add('active'); modeDeg.classList.remove('active');
+  });
+
+  // Drag-to-move (floating window). Opens centered every time via CSS.
+  let dragging = false, dragOffX = 0, dragOffY = 0;
+
+  function startDrag(clientX, clientY) {
+    dragging = true;
+    const rect = panel.getBoundingClientRect();
+    panel.classList.add('dragged');
+    panel.style.left = rect.left + 'px';
+    panel.style.top = rect.top + 'px';
+    dragOffX = clientX - rect.left;
+    dragOffY = clientY - rect.top;
+    panel.style.transition = 'none';
+  }
+  function moveDrag(clientX, clientY) {
+    if (!dragging) return;
+    const pw = panel.offsetWidth, ph = panel.offsetHeight;
+    let nl = clientX - dragOffX;
+    let nt = clientY - dragOffY;
+    nl = Math.min(Math.max(nl, 4), window.innerWidth - pw - 4);
+    nt = Math.min(Math.max(nt, 4), window.innerHeight - ph - 4);
+    panel.style.left = nl + 'px';
+    panel.style.top = nt + 'px';
+  }
+  function endDrag() {
+    if (!dragging) return;
+    dragging = false;
+    panel.style.transition = '';
+  }
+
+  header.addEventListener('mousedown', e => { startDrag(e.clientX, e.clientY); e.preventDefault(); });
+  window.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
+  window.addEventListener('mouseup', endDrag);
+
+  header.addEventListener('touchstart', e => {
+    const t = e.touches[0];
+    startDrag(t.clientX, t.clientY);
+  }, {passive:true});
+  window.addEventListener('touchmove', e => {
+    if (!dragging) return;
+    const t = e.touches[0];
+    moveDrag(t.clientX, t.clientY);
+    e.preventDefault();
+  }, {passive:false});
+  window.addEventListener('touchend', endDrag);
+
+  window.addEventListener('resize', () => {
+    if (!panel.classList.contains('hidden') && panel.classList.contains('dragged')) {
+      const pw = panel.offsetWidth, ph = panel.offsetHeight;
+      const rect = panel.getBoundingClientRect();
+      const nl = Math.min(Math.max(rect.left, 4), window.innerWidth - pw - 4);
+      const nt = Math.min(Math.max(rect.top, 4), window.innerHeight - ph - 4);
+      panel.style.left = nl + 'px';
+      panel.style.top = nt + 'px';
+    }
+  });
+
+  updateDisplay();
+})();
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderStatsBar();
+checkAutosaveOnLoad();
+</script>
+</body>
+</html>
