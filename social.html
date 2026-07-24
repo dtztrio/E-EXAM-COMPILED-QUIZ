@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | DTZ TRIO</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-black: #050505;
+            --slate-card: #1e293b;
+            --greige-text: #e2e8f0;
+            --greige-accent: #94a3b8;
+            --pure-white: #ffffff;
+            --glow: rgba(148, 163, 184, 0.15);
+            
+            /* Brand Colors for Hover Effects */
+            --wa-color: #25D366;
+            --fb-color: #1877F2;
+            --tt-color: #ff0050;
+            --email-color: #ea4335;
+        }
+
+        *, *::before, *::after { 
+            box-sizing: border-box; 
+        }
+
+        body {
+            background-color: var(--bg-black); 
+            color: var(--greige-text);
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+            overflow-x: hidden;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            width: 100%; 
+            padding: 1.5rem 8%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            background: rgba(5, 5, 5, 0.9); 
+            backdrop-filter: blur(20px); 
+            border-bottom: 1px solid #1a1a1a;
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+            border-radius: 0px 0px 40px 40px;
+        }
+
+        .logo { 
+            font-weight: 800; 
+            font-size: 1.2rem; 
+            color: var(--pure-white); 
+            letter-spacing: -1px; 
+            text-decoration: none;
+        }
+        .logo span { color: var(--greige-accent); font-weight: 300; }
+        
+        .back-btn {
+            color: var(--greige-text);
+            text-decoration: none;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease;
+        }
+        .back-btn:hover { color: var(--pure-white); }
+
+        /* --- Main Content --- */
+        .app-wrapper { 
+            max-width: 900px; 
+            width: 90%; 
+            margin: 60px 0; 
+            text-align: center;
+        }
+
+        .header-text {
+            margin-bottom: 50px;
+        }
+        
+        .header-text h1 {
+            font-size: 2.5rem;
+            color: var(--pure-white);
+            margin-bottom: 10px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+        
+        .header-text p {
+            color: var(--greige-accent);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* --- Grid Layout for Cards --- */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        /* --- Contact Cards --- */
+        .contact-card {
+            background: var(--slate-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            z-index: 1;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s ease;
+        }
+
+        /* Prevent children inside <a> from blocking hover events */
+        .contact-card * {
+            pointer-events: none;
+        }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--greige-accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        /* Card Icons */
+        .icon-wrapper {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.03);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--greige-text);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: color 0.4s ease, border-color 0.4s ease, background 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .card-title {
+            color: var(--pure-white);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-desc {
+            color: var(--greige-accent);
+            font-size: 0.9rem;
+        }
+
+        /* --- Hover Animations --- */
+        .contact-card:hover {
+            transform: translateY(-8px);
+            background: #233145;
+        }
+
+        /* Individual Brand Hovers */
+        .card-email:hover::before { background: var(--email-color); transform: scaleX(1); }
+        .card-email:hover .icon-wrapper { color: var(--email-color); border-color: var(--email-color); background: rgba(234, 67, 53, 0.1); box-shadow: 0 0 20px rgba(234, 67, 53, 0.2); }
+
+        .card-tiktok:hover::before { background: var(--tt-color); transform: scaleX(1); }
+        .card-tiktok:hover .icon-wrapper { color: var(--tt-color); border-color: var(--tt-color); background: rgba(255, 0, 80, 0.1); box-shadow: 0 0 20px rgba(255, 0, 80, 0.2); }
+
+        .card-fb:hover::before { background: var(--fb-color); transform: scaleX(1); }
+        .card-fb:hover .icon-wrapper { color: var(--fb-color); border-color: var(--fb-color); background: rgba(24, 119, 242, 0.1); box-shadow: 0 0 20px rgba(24, 119, 242, 0.2); }
+
+        .card-wa-channel:hover::before, .card-wa-group:hover::before { background: var(--wa-color); transform: scaleX(1); }
+        .card-wa-channel:hover .icon-wrapper, .card-wa-group:hover .icon-wrapper { color: var(--wa-color); border-color: var(--wa-color); background: rgba(37, 211, 102, 0.1); box-shadow: 0 0 20px rgba(37, 211, 102, 0.2); }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 768px) {
+            .contact-grid { grid-template-columns: 1fr; }
+            .header-text h1 { font-size: 2rem; }
+            .app-wrapper { margin: 40px 0; }
+        }
+
+        footer { 
+            margin-top: auto;
+            padding: 50px 0; 
+            text-align: center; 
+            color: var(--greige-accent); 
+            font-size: 0.8rem; 
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="dashboard.html" class="logo">DTZ TRIO</a>
+        <a href="dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home Page</a>
+    </nav>
+
+    <div class="app-wrapper">
+        <div class="header-text">
+            <h1>Let's Connect</h1>
+            <p>Join the DTZ TRIO community across our platforms. Reach out, stay updated, and never miss an announcement.</p>
+        </div>
+
+        <div class="contact-grid">
+            
+            <a href="https://whatsapp.com/channel/0029Vb7UyiS8F2pHPr4zXb1d" target="_blank" rel="noopener noreferrer" class="contact-card card-wa-channel">
+                <div class="icon-wrapper">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <div class="card-title">Official Channel</div>
+                <div class="card-desc">Get our latest verified updates</div>
+            </a>
+
+            <a href="https://chat.whatsapp.com/IivQoADnmHa4WvhQ3Uh6f4" target="_blank" rel="noopener noreferrer" class="contact-card card-wa-group">
+                <div class="icon-wrapper">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="card-title">Community Group</div>
+                <div class="card-desc">Join the discussion (Backup)</div>
+            </a>
+
+            <a href="#" onclick="forceGmail(event)" class="contact-card card-email">
+                <div class="icon-wrapper">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="card-title">Official Email</div>
+                <div class="card-desc">dtztrio@gmail.com</div>
+            </a>
+
+            <a href="https://tiktok.com/@dtztrio" target="_blank" rel="noopener noreferrer" class="contact-card card-tiktok">
+                <div class="icon-wrapper">
+                    <i class="fab fa-tiktok"></i>
+                </div>
+                <div class="card-title">TikTok</div>
+                <div class="card-desc">Watch our latest videos</div>
+            </a>
+
+            <a href="https://www.facebook.com/profile.php?id=61589169136546" target="_blank" rel="noopener noreferrer" class="contact-card card-fb">
+                <div class="icon-wrapper">
+                    <i class="fab fa-facebook-f"></i>
+                </div>
+                <div class="card-title">Facebook Page</div>
+                <div class="card-desc">Follow us on Facebook</div>
+            </a>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 DTZ TRIO ALL RIGHTS RESERVED</p> 
+    </footer>
+
+    <script>
+        function forceGmail(event) {
+            event.preventDefault();
+            
+            const email = "dtztrio@gmail.com";
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            if (/android/i.test(userAgent)) {
+                window.location.href = `intent://${email}#Intent;scheme=mailto;package=com.google.android.gm;end;`;
+            } 
+            else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                window.location.href = `googlegmail://co?to=${email}`;
+                
+                setTimeout(function() {
+                    window.location.href = `mailto:${email}`;
+                }, 500);
+            } 
+            else {
+                window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}`, '_blank');
+            }
+        }
+    </script>
+</body>
+</html>
