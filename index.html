@@ -12,9 +12,6 @@
 <style>
   /* ============================================================
      DTZ TRIO design tokens
-     (near-black bg, blue → violet accent gradient for content
-     surfaces, serif display headline, monospace labels/stats,
-     quiet dark cards)
      ============================================================ */
   :root{
     --bg:#07080D;
@@ -68,9 +65,6 @@
     border-bottom:1px solid var(--border);
   }
 
-  /* Wordmark logo — flat, monospace, single accent colour.
-     Intentionally not a gradient/pill treatment so it reads
-     as a calm, professional mark rather than a button. */
   .brand{
     display:flex;align-items:center;gap:10px;
     text-decoration:none;min-width:0;flex:none;
@@ -165,7 +159,7 @@
   }
   .section-body{color:var(--text-muted);line-height:1.7;margin:0;font-size:.92rem;}
 
-  /* ---------- topic-card grid ("what's inside") ---------- */
+  /* ---------- topic-card grid ---------- */
   .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
   @media (max-width:760px){ .feature-grid{grid-template-columns:1fr;} }
   .feature-card{
@@ -187,7 +181,7 @@
     line-height:1.6;color:var(--text-muted);margin:0;
   }
 
-  /* ---------- mode cards (timer / no-timer) ---------- */
+  /* ---------- mode cards ---------- */
   .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
   @media (max-width:640px){ .mode-grid{grid-template-columns:1fr;} }
   .mode-card{
@@ -219,7 +213,7 @@
   .mode-list li i{color:var(--blue);font-size:.74rem;margin-top:4px;flex:none;}
   .mode-card.untimed .mode-list li i{color:var(--violet);}
 
-  /* ---------- step list ("how it works") ---------- */
+  /* ---------- step list ---------- */
   .step-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;}
   .step-list li{display:flex;gap:16px;padding:22px 0;border-top:1px solid var(--border);}
   .step-list li:last-child{border-bottom:1px solid var(--border);}
@@ -338,7 +332,6 @@
     .nav-links a{font-size:.68rem;}
   }
 
-  /* ---------- mobile tightening ---------- */
   @media (max-width:600px){
     main{padding:36px 16px 70px;}
     .page-wrap{gap:52px;}
@@ -357,7 +350,6 @@
     .nav-links a{font-size:.64rem;}
   }
 
-  /* ---------- small phones ---------- */
   @media (max-width:380px){
     .page-title{font-size:1.5rem;}
     .quiz-pill{font-size:.66rem;padding:9px 16px;}
@@ -489,8 +481,8 @@
       <li>
         <div class="step-num" aria-hidden="true">1</div>
         <div class="step-copy">
-          <strong><i class="fa-brands fa-telegram" aria-hidden="true"></i> Join the community</strong>
-          <span>Unlock the hub by joining our Telegram Channel and Group below — this is where new courses, corrections, and exam alerts get posted first.</span>
+          <strong><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Join the community</strong>
+          <span>Unlock the hub by joining our WhatsApp Channel and Group below — this is where new courses, corrections, and exam alerts get posted first.</span>
         </div>
       </li>
       <li>
@@ -525,12 +517,12 @@
 
     <div class="join-links">
       <a class="join-link" id="joinChannel" href="https://whatsapp.com/channel/0029Vb7UyiS8F2pHPr4zXb1d" target="_blank" rel="noopener">
-        <span class="icon" aria-hidden="true"><i class="fa-solid fa-bullhorn"></i></span>
+        <span class="icon" aria-hidden="true"><i class="fa-brands fa-whatsapp"></i></span>
         <span class="txt"><strong>Join our Channel</strong><span>Announcements &amp; alerts</span></span>
         <i class="fa-solid fa-arrow-up-right-from-square arrow" aria-hidden="true"></i>
       </a>
       <a class="join-link" id="joinGroup" href="https://chat.whatsapp.com/IivQoADnmHa4WvhQ3Uh6f4" target="_blank" rel="noopener">
-        <span class="icon" aria-hidden="true"><i class="fa-solid fa-comments"></i></span>
+        <span class="icon" aria-hidden="true"><i class="fa-brands fa-whatsapp"></i></span>
         <span class="txt"><strong>Join our Group</strong><span>Ask questions, get help</span></span>
         <i class="fa-solid fa-arrow-up-right-from-square arrow" aria-hidden="true"></i>
       </a>
@@ -553,8 +545,8 @@
 
 <footer>
   <div class="footer-socials">
-    <a href="https://whatsapp.com/channel/0029Vb7UyiS8F2pHPr4zXb1d" target="_blank" rel="noopener" aria-label="Telegram Channel"><i class="fa-brands fa-telegram" aria-hidden="true"></i></a>
-    <a href="https://chat.whatsapp.com/IivQoADnmHa4WvhQ3Uh6f4" target="_blank" rel="noopener" aria-label="Telegram Group"><i class="fa-solid fa-comments" aria-hidden="true"></i></a>
+    <a href="https://whatsapp.com/channel/0029Vb7UyiS8F2pHPr4zXb1d" target="_blank" rel="noopener" aria-label="WhatsApp Channel"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+    <a href="https://chat.whatsapp.com/IivQoADnmHa4WvhQ3Uh6f4" target="_blank" rel="noopener" aria-label="WhatsApp Group"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
   </div>
   <span>DTZ TRIO · Built by students, for students</span>
 </footer>
