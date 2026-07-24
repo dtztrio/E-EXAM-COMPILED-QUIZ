@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us · DTZ TRIO</title>
+<meta name="description" content="Meet the team behind DTZ TRIO and our mission to simplify student life.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script>
+(function(){
+  try{
+    var theme = localStorage.getItem('dtz_theme') || 'dark';
+    var scale = localStorage.getItem('dtz_font_scale') || '1';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.style.setProperty('--font-scale', scale);
+  }catch(e){}
+})();
+</script>
+
+<style>
+:root{
+  --bg:#0b1121; --panel:#0f1a2e; --panel2:#152240; --panel3:#1a2d52;
+  --ink:#eef2ff; --muted:#7b8cb0;
+  --accent:#6366f1; --accent2:#4338ca;
+  --accent-dim:#312e6e; --good:#3ddc97; --bad:#ff5d5d; --line:#1e3056; --radius:16px;
+  --accent-rgb:99,102,241; --good-rgb:61,220,151; --bad-rgb:255,93,93;
+  --bar-bg:rgba(11,17,33,0.88); --nav-link:#c8d4ee; --sub-ink:#c4d0e8; --dash-mid:rgba(21,34,64,.4);
+  --font-scale:1;
+  --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-display:'Sora',sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+  --shadow-md:0 8px 32px rgba(0,0,0,.35); --shadow-lg:0 10px 26px rgba(0,0,0,.35);
+  --transition-fast:.15s ease; --transition-base:.2s ease;
+  --focus-ring:0 0 0 3px rgba(var(--accent-rgb),.45);
+  --tiktok-pink:#ff0050; --wa-green:#25D366;
+}
+:root[data-theme="light"]{
+  --bg:#f4f6fc; --panel:#ffffff; --panel2:#eef1fb; --panel3:#e4e9f9;
+  --ink:#131a2c; --muted:#5b6478; --line:#dde3f3;
+  --accent-dim:#c7cafb; --bar-bg:rgba(255,255,255,0.85); --nav-link:#33405e; --sub-ink:#454f66;
+  --dash-mid:rgba(228,233,251,.55);
+  --shadow-md:0 8px 28px rgba(30,40,80,.10); --shadow-lg:0 10px 22px rgba(30,40,80,.12);
+}
+html{font-size:calc(16px * var(--font-scale, 1));}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:radial-gradient(ellipse 900px 600px at 20% -5%, rgba(67,56,202,.20) 0%, transparent 60%),
+    radial-gradient(ellipse 700px 500px at 90% 15%, rgba(99,102,241,.12) 0%, transparent 55%), var(--bg);
+  color:var(--ink); font-family:var(--font-body); min-height:100dvh;
+  display:flex; flex-direction:column; line-height:1.5; -webkit-font-smoothing:antialiased;
+  transition:background-color .2s ease, color .2s ease;
+}
+h1,h2,h3{font-family:var(--font-display);}
+a{color:inherit;} img,svg{max-width:100%;display:block;}
+a:focus-visible,button:focus-visible,.mobile-nav-panel a:focus-visible{outline:none;box-shadow:var(--focus-ring);}
+
+/* BRAND BAR & NAVIGATION */
+.brand-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;margin:14px 14px 0;border:1px solid var(--line);border-radius:18px;position:sticky;top:14px;background:var(--bar-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:var(--shadow-md);z-index:40;}
+.brand{display:flex;align-items:center;gap:16px;text-decoration:none;}
+.brand .logo-icon{width:40px;height:40px;flex-shrink:0;border-radius:10px;background:rgba(var(--accent-rgb),.14);border:1px solid var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.05rem;}
+.brand .logo-word{font-family:var(--font-mono);font-weight:700;font-size:1.05rem;letter-spacing:1px;text-transform:uppercase;}
+.brand .logo-word .dim{color:var(--ink);}
+.brand .logo-word .lit{color:var(--accent);}
+.brand .divider{width:1px;height:22px;background:var(--line);}
+.brand .tagline{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:600;}
+.brand .tagline i{font-size:.7rem;color:var(--accent);}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.nav-links{display:flex;align-items:center;gap:20px;}
+.nav-links a{display:flex;align-items:center;gap:7px;font-size:.85rem;font-weight:600;color:var(--nav-link);text-decoration:none;padding:6px 2px;border-bottom:2px solid transparent;transition:color var(--transition-fast),border-color var(--transition-fast);white-space:nowrap;}
+.nav-links a i{font-size:.8rem;color:var(--muted);transition:color var(--transition-fast);}
+.nav-links a:hover{color:var(--accent);} .nav-links a:hover i{color:var(--accent);}
+.nav-links a.active{color:var(--accent);border-color:var(--accent);} .nav-links a.active i{color:var(--accent);}
+.hamburger{display:none;align-items:center;justify-content:center;width:38px;height:38px;background:none;border:1px solid var(--line);border-radius:8px;cursor:pointer;padding:0;color:var(--ink);font-size:1rem;transition:border-color var(--transition-fast),color var(--transition-fast);}
+.hamburger:hover{border-color:var(--accent-dim);color:var(--accent);}
+.hamburger .fa-xmark{display:none;} .hamburger[aria-expanded="true"] .fa-bars{display:none;} .hamburger[aria-expanded="true"] .fa-xmark{display:inline-block;}
+
+/* MOBILE NAVIGATION OVERLAY */
+.mobile-nav{position:fixed;inset:0;z-index:39;background:transparent;opacity:0;pointer-events:none;transition:opacity .15s ease;}
+.mobile-nav.open{opacity:1;pointer-events:auto;}
+.mobile-nav-panel{position:absolute;top:78px;right:20px;width:250px;max-width:82vw;max-height:min(70vh,520px);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:1px;transform:scale(.94) translateY(-8px);transform-origin:top right;opacity:0;transition:transform .16s ease,opacity .16s ease;box-shadow:var(--shadow-md);overflow-y:auto;}
+.mobile-nav.open .mobile-nav-panel{transform:scale(1) translateY(0);opacity:1;}
+.mobile-nav-panel a{display:flex;align-items:center;gap:12px;padding:11px 10px;font-size:.9rem;font-weight:600;color:var(--ink);text-decoration:none;border-radius:8px;}
+.mobile-nav-panel a:hover{background:rgba(var(--accent-rgb),.1);}
+.mobile-nav-panel a i{width:18px;text-align:center;color:var(--accent);font-size:.85rem;}
+.mobile-nav-panel a.active{color:var(--accent);background:rgba(var(--accent-rgb),.12);}
+.mobile-nav-panel .nav-group-label{font-family:var(--font-mono);font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:12px 10px 4px;}
+.mobile-nav-panel .nav-group-label:first-child{padding-top:6px;}
+
+@media(max-width:760px){.nav-links{display:none;} .hamburger{display:flex;}}
+@media(max-width:560px){.brand .tagline{display:none;} .brand .divider{display:none;}}
+
+/* MAIN CONTENT AREA */
+main{flex:1;display:flex;justify-content:center;padding:28px 16px 110px;}
+.page-wrap{max-width:1050px;width:100%;}
+
+.page-head{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:var(--radius);padding:36px 34px;margin-bottom:28px;background:linear-gradient(150deg, rgba(99,102,241,.16), var(--dash-mid) 55%, var(--panel));}
+.page-eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);font-weight:700;display:flex;align-items:center;gap:8px;}
+.page-title{font-size:2rem;margin:12px 0 10px;line-height:1.2;font-weight:800;max-width:620px;}
+.page-sub{color:var(--sub-ink);font-size:1rem;line-height:1.7;max-width:620px;}
+
+/* TEAM GRID & CARDS */
+.team-container{display:grid;grid-template-columns:repeat(auto-fit, minmax(310px, 1fr));gap:20px;margin-bottom:20px;}
+
+.profile-card{
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:32px 26px;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  transition:border-color var(--transition-fast), transform var(--transition-fast), background var(--transition-fast);
+}
+.profile-card:hover{
+  border-color:var(--accent-dim);
+  transform:translateY(-3px);
+  background:var(--panel3);
+}
+
+.avatar{
+  width:96px; height:96px;
+  border-radius:50%;
+  background:rgba(var(--accent-rgb),.1);
+  border:2px solid var(--accent-dim);
+  margin:0 auto 20px auto;
+  overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+  transition:border-color var(--transition-fast), transform var(--transition-fast);
+}
+.avatar img{width:100%; height:100%; object-fit:cover; display:block;}
+.profile-card:hover .avatar{border-color:var(--accent); transform:scale(1.03);}
+
+.role-tag{
+  font-family:var(--font-mono);
+  font-size:.68rem;
+  font-weight:700;
+  color:var(--accent);
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  text-align:center;
+  margin-bottom:6px;
+}
+.profile-card h2{margin:0 0 4px 0; font-size:1.5rem; text-align:center; font-weight:700;}
+.real-name{font-size:.88rem; color:var(--muted); text-align:center; margin-bottom:20px; font-weight:500;}
+.bio-text{font-size:.88rem; line-height:1.65; color:var(--sub-ink); margin-bottom:26px; flex-grow:1;}
+
+/* ACTION BUTTONS */
+.action-buttons{display:flex; flex-direction:column; gap:10px; width:100%;}
+.contact-btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  font-family:var(--font-body); font-size:.82rem; font-weight:700;
+  padding:12px 18px; border-radius:10px;
+  border:1px solid var(--line);
+  background:rgba(var(--accent-rgb),.08);
+  color:var(--ink);
+  text-decoration:none;
+  cursor:pointer;
+  transition:all var(--transition-fast);
+}
+.contact-btn:hover{background:rgba(var(--accent-rgb),.2); border-color:var(--accent);}
+.contact-btn.btn-wa i{color:var(--wa-green);}
+.contact-btn.btn-tt i{color:var(--tiktok-pink);}
+
+footer{text-align:center; font-size:.72rem; color:var(--muted); padding:14px; letter-spacing:.5px;}
+
+@media(max-width:640px){
+  .page-head{padding:26px 22px;}
+  .page-title{font-size:1.5rem;}
+  .team-container{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- BRAND NAVIGATION BAR -->
+<div class="brand-bar">
+  <a class="brand" href="index.html">
+    <span class="logo-icon"><i class="fa-solid fa-graduation-cap"></i></span>
+    <span class="logo-word"><span class="dim">DTZ</span> <span class="lit">TRIO</span></span>
+    <span class="divider"></span>
+    <span class="tagline"><i class="fa-solid fa-wave-square"></i>Dashboard</span>
+  </a>
+  <div class="nav-right">
+    <nav class="nav-links">
+      <a href="index.html" class="active"><i class="fa-solid fa-house"></i>Home</a>
+   
+      <a href="aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+      <a href="about.html"><i class="fa-solid fa-users"></i>About Us</a>
+      <a href="social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+      <a href="set.html"><i class="fa-solid fa-gear"></i>Settings</a>
+    </nav>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
+      <i class="fa-solid fa-bars"></i>
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+</div>
+
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-panel">
+    <span class="nav-group-label">Navigate</span>
+    <a href="dashboard.html" class="active"><i class="fa-solid fa-house"></i>Home / Dashboard</a>
+    <a href="aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+    <span class="nav-group-label">DTZ TRIO</span>
+    <a href="about.html"><i class="fa-solid fa-users"></i>About Us</a>
+    <a href="social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+    <span class="nav-group-label">Account</span>
+    <a href="set.html"><i class="fa-solid fa-gear"></i>Settings</a>
+    <a href="help.html"><i class="fa-solid fa-circle-question"></i>Help &amp; FAQ</a>
+  </div>
+</div>
+
+
+<main>
+<div class="page-wrap">
+
+  <div class="page-head">
+    <span class="page-eyebrow"><i class="fa-solid fa-users"></i>Meet The Team</span>
+    <h1 class="page-title">The minds building digital tools for campus life.</h1>
+    <p class="page-sub">DTZ TRIO is a team of engineering students creating practical tech, clear learning platforms, and modern web solutions to simplify study routines for everyone.</p>
+  </div>
+
+  <div class="team-container">
+    <!-- Zemoya -->
+    <div class="profile-card">
+      <div class="avatar">
+        <img src="picture/Zemoya.jpg" alt="Zemoya">
+      </div>
+      <span class="role-tag">Lead Web Developer</span>
+      <h2>Zemoya</h2>
+      <div class="real-name">Ozemoya Ben</div>
+      <p class="bio-text">Zemoya is a Materials and Metallurgical Engineering student at FUTMINNA. He is a web developer and gamer who loves using code to solve real-world problems. As the Lead Web Developer of DTZ TRIO, he focuses on building the main structure of their web projects and creating helpful digital tools for students.</p>
+      
+      <div class="action-buttons">
+        <a href="https://wa.me/2348100055482" target="_blank" rel="noopener noreferrer" class="contact-btn btn-wa">
+          <i class="fa-brands fa-whatsapp"></i> Contact Me
+        </a>
+        <a href="https://www.tiktok.com/@ffzemoya" target="_blank" rel="noopener noreferrer" class="contact-btn btn-tt">
+          <i class="fa-brands fa-tiktok"></i> Follow on TikTok
+        </a>
+      </div>
+    </div>
+
+    <!-- Damopyper -->
+    <div class="profile-card">
+      <div class="avatar">
+        <img src="picture/DAMOPYPER.JPG" alt="Damopyper">
+      </div>
+      <span class="role-tag">Brand Architect & Influencer</span>
+      <h2>Damopyper</h2>
+      <div class="real-name">Damilola Fadokun</div>
+      <p class="bio-text">Damopyper is a Telecommunication Engineering student at FUTMINNA. He is a social influencer, gamer, and creative strategist who mixes design, tech, and education to solve everyday problems. As an Educational Strategist, he works to build platforms that make studying straightforward.</p>
+      
+      <div class="action-buttons">
+        <a href="https://wa.me/2349114108052" target="_blank" rel="noopener noreferrer" class="contact-btn btn-wa">
+          <i class="fa-brands fa-whatsapp"></i> Contact Me
+        </a>
+        <a href="https://www.tiktok.com/@damopyperr" target="_blank" rel="noopener noreferrer" class="contact-btn btn-tt">
+          <i class="fa-brands fa-tiktok"></i> Follow on TikTok
+        </a>
+      </div>
+    </div>
+
+    <!-- Tangential -->
+    <div class="profile-card">
+      <div class="avatar">
+        <img src="picture/Tangential.jpg" alt="Tangential">
+      </div>
+      <span class="role-tag">Researcher & Programmer</span>
+      <h2>Tangential</h2>
+      <div class="real-name">Emmanuel Omale</div>
+      <p class="bio-text">Tangential is an Electrical Electronics Engineering student at FUTMINNA. He is an avid researcher and programmer who loves turning code into functional applications. He enjoys teaching and building educational tools that give students confidence in their academics.</p>
+      
+      <div class="action-buttons">
+        <a href="https://wa.me/2349154532704" target="_blank" rel="noopener noreferrer" class="contact-btn btn-wa">
+          <i class="fa-brands fa-whatsapp"></i> Contact Me
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer>DTZ TRIO &middot; About Us</footer>
+
+<script>
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+function closeMobileNav(){mobileNav.classList.remove('open');hamburgerBtn.setAttribute('aria-expanded','false');}
+function toggleMobileNav(){const isOpen = mobileNav.classList.toggle('open');hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');}
+hamburgerBtn.addEventListener('click', toggleMobileNav);
+mobileNav.addEventListener('click', (e)=>{ if(e.target === mobileNav) closeMobileNav(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMobileNav(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DTZ TRIO Dashboard</title>
+<meta name="description" content="Pick a course and start a timed practice quiz.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Unbounded:wght@600;700;800&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script>
+(function(){
+  try{
+    var theme = localStorage.getItem('dtz_theme') || 'dark';
+    var scale = localStorage.getItem('dtz_font_scale') || '1';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.style.setProperty('--font-scale', scale);
+  }catch(e){}
+})();
+</script>
+
+<style>
+:root{
+  --bg:#0b1121; --panel:#0f1a2e; --panel2:#152240; --panel3:#1a2d52;
+  --ink:#eef2ff; --muted:#7b8cb0;
+  /* SIGNATURE COLOR — matched to the indigo/violet used across the rest of the site (e.g. the "tested properly." accent) */
+  --accent:#6366f1; --accent2:#4338ca;
+  --accent-dim:#312e6e; --good:#3ddc97; --bad:#ff5d5d; --line:#1e3056; --radius:16px;
+  --accent-rgb:99,102,241; --good-rgb:61,220,151;
+  --bar-bg:rgba(11,17,33,0.88); --nav-link:#c8d4ee; --sub-ink:#c4d0e8; --dash-mid:rgba(21,34,64,.4);
+  --font-scale:1;
+  --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-display:'Sora',sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+  --shadow-md:0 8px 32px rgba(0,0,0,.35); --shadow-lg:0 10px 26px rgba(0,0,0,.35);
+  --transition-fast:.15s ease; --transition-base:.2s ease;
+  --focus-ring:0 0 0 3px rgba(var(--accent-rgb),.45);
+}
+:root[data-theme="light"]{
+  --bg:#f4f6fc; --panel:#ffffff; --panel2:#eef1fb; --panel3:#e4e9f9;
+  --ink:#131a2c; --muted:#5b6478; --line:#dde3f3;
+  --accent-dim:#c7cafb; --bar-bg:rgba(255,255,255,0.85); --nav-link:#33405e; --sub-ink:#454f66;
+  --dash-mid:rgba(228,233,251,.55);
+  --shadow-md:0 8px 28px rgba(30,40,80,.10); --shadow-lg:0 10px 22px rgba(30,40,80,.12);
+}
+html{font-size:calc(16px * var(--font-scale, 1));}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:radial-gradient(ellipse 900px 600px at 20% -5%, rgba(67,56,202,.20) 0%, transparent 60%),
+    radial-gradient(ellipse 700px 500px at 90% 15%, rgba(99,102,241,.12) 0%, transparent 55%), var(--bg);
+  color:var(--ink); font-family:var(--font-body); min-height:100dvh;
+  display:flex; flex-direction:column; line-height:1.5; -webkit-font-smoothing:antialiased;
+  transition:background-color .2s ease, color .2s ease;
+}
+h1,h2,h3{font-family:var(--font-display);}
+a{color:inherit;} img,svg{max-width:100%;display:block;}
+a:focus-visible,button:focus-visible,.filter-chip:focus-visible,.course-card:focus-visible,.mobile-nav-panel a:focus-visible{outline:none;box-shadow:var(--focus-ring);}
+
+.brand-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;margin:14px 14px 0;border:1px solid var(--line);border-radius:18px;position:sticky;top:14px;background:var(--bar-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:var(--shadow-md);z-index:40;}
+.brand{display:flex;align-items:center;gap:16px;text-decoration:none;}
+.brand .logo-icon{width:40px;height:40px;flex-shrink:0;border-radius:10px;background:rgba(var(--accent-rgb),.14);border:1px solid var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.05rem;}
+.brand .logo-word{font-family:var(--font-mono);font-weight:700;font-size:1.05rem;letter-spacing:1px;text-transform:uppercase;}
+.brand .logo-word .dim{color:var(--ink);}
+.brand .logo-word .lit{color:var(--accent);}
+.brand .divider{width:1px;height:22px;background:var(--line);}
+.brand .tagline{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:600;}
+.brand .tagline i{font-size:.7rem;color:var(--accent);}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.nav-links{display:flex;align-items:center;gap:20px;}
+.nav-links a{display:flex;align-items:center;gap:7px;font-size:.85rem;font-weight:600;color:var(--nav-link);text-decoration:none;padding:6px 2px;border-bottom:2px solid transparent;transition:color var(--transition-fast),border-color var(--transition-fast);white-space:nowrap;}
+.nav-links a i{font-size:.8rem;color:var(--muted);transition:color var(--transition-fast);}
+.nav-links a:hover{color:var(--accent);} .nav-links a:hover i{color:var(--accent);}
+.nav-links a.active{color:var(--accent);border-color:var(--accent);} .nav-links a.active i{color:var(--accent);}
+.hamburger{display:none;align-items:center;justify-content:center;width:38px;height:38px;background:none;border:1px solid var(--line);border-radius:8px;cursor:pointer;padding:0;color:var(--ink);font-size:1rem;transition:border-color var(--transition-fast),color var(--transition-fast);}
+.hamburger:hover{border-color:var(--accent-dim);color:var(--accent);}
+.hamburger .fa-xmark{display:none;} .hamburger[aria-expanded="true"] .fa-bars{display:none;} .hamburger[aria-expanded="true"] .fa-xmark{display:inline-block;}
+.mobile-nav{position:fixed;inset:0;z-index:39;background:transparent;opacity:0;pointer-events:none;transition:opacity .15s ease;}
+.mobile-nav.open{opacity:1;pointer-events:auto;}
+.mobile-nav-panel{position:absolute;top:78px;right:20px;width:250px;max-width:82vw;max-height:min(70vh,520px);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:1px;transform:scale(.94) translateY(-8px);transform-origin:top right;opacity:0;transition:transform .16s ease,opacity .16s ease;box-shadow:var(--shadow-md);overflow-y:auto;}
+.mobile-nav.open .mobile-nav-panel{transform:scale(1) translateY(0);opacity:1;}
+.mobile-nav-panel a{display:flex;align-items:center;gap:12px;padding:11px 10px;font-size:.9rem;font-weight:600;color:var(--ink);text-decoration:none;border-radius:8px;}
+.mobile-nav-panel a:hover{background:rgba(var(--accent-rgb),.1);}
+.mobile-nav-panel a i{width:18px;text-align:center;color:var(--accent);font-size:.85rem;}
+.mobile-nav-panel a.active{color:var(--accent);background:rgba(var(--accent-rgb),.12);}
+.mobile-nav-panel .nav-group-label{font-family:var(--font-mono);font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:12px 10px 4px;}
+.mobile-nav-panel .nav-group-label:first-child{padding-top:6px;}
+@media(max-width:760px){.nav-links{display:none;} .hamburger{display:flex;}}
+@media(max-width:560px){.brand .tagline{display:none;} .brand .divider{display:none;}}
+
+main{flex:1;display:flex;justify-content:center;padding:28px 16px 110px;}
+.page-wrap.wide{max-width:1080px;width:100%;}
+
+.dash-head{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:var(--radius);padding:32px 30px;margin-bottom:24px;background:linear-gradient(150deg, rgba(99,102,241,.16), var(--dash-mid) 55%, var(--panel));}
+.dash-head::after{content:'';position:absolute;top:-40%;right:-10%;width:280px;height:280px;background:radial-gradient(circle, rgba(99,102,241,.24), transparent 70%);pointer-events:none;}
+.page-eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);font-weight:700;display:flex;align-items:center;gap:8px;}
+.page-title{font-size:1.9rem;margin:10px 0 10px;line-height:1.25;font-weight:800;}
+.page-sub{color:var(--sub-ink);font-size:.98rem;line-height:1.7;max-width:640px;}
+.dash-stats{display:flex;gap:28px;flex-wrap:wrap;margin-top:22px;padding-top:20px;border-top:1px solid var(--line);}
+.dash-stats .stat{display:flex;align-items:center;gap:12px;}
+.dash-stats .stat i{width:38px;height:38px;border-radius:10px;flex-shrink:0;background:rgba(var(--accent-rgb),.14);border:1px solid var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.dash-stats .stat .num{font-family:var(--font-display);font-size:1.15rem;font-weight:800;line-height:1.1;}
+.dash-stats .stat .label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;}
+
+.dash-toolbar{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 22px;}
+.filter-chip{display:flex;align-items:center;gap:7px;font-size:.76rem;font-weight:600;padding:7px 14px;border-radius:20px;border:1px solid var(--line);background:var(--panel2);color:var(--muted);cursor:pointer;transition:all var(--transition-fast);font-family:var(--font-mono);letter-spacing:.5px;}
+.filter-chip i{font-size:.75rem;}
+.filter-chip:hover{border-color:var(--accent-dim);color:var(--ink);}
+.filter-chip.active{background:rgba(var(--accent-rgb),.15);border-color:var(--accent);color:var(--accent);}
+
+.course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;}
+.course-card{position:relative;display:flex;flex-direction:column;gap:12px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:20px;text-decoration:none;color:var(--ink);transition:border-color var(--transition-fast),transform var(--transition-fast),box-shadow var(--transition-fast);overflow:hidden;}
+.course-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-accent,var(--accent));}
+.course-card.live:hover{border-color:var(--card-accent,var(--accent-dim));transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.course-card.locked{opacity:.55;cursor:not-allowed;}
+.course-card .c-top{display:flex;align-items:center;justify-content:space-between;}
+.course-card .c-glyph{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;background:var(--panel3);color:var(--card-accent,var(--accent));border:1px solid var(--accent-dim);}
+@supports (background:color-mix(in srgb, red 18%, transparent)){.course-card .c-glyph{background:color-mix(in srgb, var(--card-accent,var(--accent)) 18%, transparent);border-color:color-mix(in srgb, var(--card-accent,var(--accent)) 40%, transparent);}}
+.course-card .c-status{display:flex;align-items:center;gap:5px;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:4px 9px;border-radius:20px;flex-shrink:0;}
+.course-card.live .c-status{background:rgba(var(--good-rgb),.15);color:var(--good);}
+.course-card.locked .c-status{background:rgba(123,140,176,.15);color:var(--muted);}
+.course-card .c-code{font-size:.68rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:700;font-family:var(--font-mono);}
+.course-card .c-title{font-size:.94rem;font-weight:700;line-height:1.4;}
+.course-card .c-meta{display:flex;align-items:center;gap:7px;font-size:.78rem;color:var(--muted);margin-top:auto;padding-top:10px;border-top:1px solid var(--line);}
+.course-card .c-meta i{font-size:.72rem;color:var(--card-accent,var(--accent));}
+.course-card .c-arrow{position:absolute;bottom:18px;right:18px;font-size:.85rem;color:var(--muted);opacity:0;transform:translateX(-4px);transition:all var(--transition-fast);}
+.course-card.live:hover .c-arrow{opacity:1;transform:translateX(0);color:var(--card-accent,var(--accent));}
+.empty-state{grid-column:1/-1;text-align:center;padding:50px 20px;color:var(--muted);}
+.empty-state i{font-size:1.6rem;margin-bottom:10px;color:var(--accent-dim);}
+
+footer{text-align:center;font-size:.72rem;color:var(--muted);padding:14px;letter-spacing:.5px;}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important;}}
+@media(max-width:480px){.dash-head{padding:24px 20px;} .page-title{font-size:1.5rem;} .dash-stats{gap:20px;}}
+</style>
+</head>
+<body>
+
+<div class="brand-bar">
+  <a class="brand" href="index.html">
+    <span class="logo-icon"><i class="fa-solid fa-graduation-cap"></i></span>
+    <span class="logo-word"><span class="dim">DTZ</span> <span class="lit">TRIO</span></span>
+    <span class="divider"></span>
+    <span class="tagline"><i class="fa-solid fa-wave-square"></i>Dashboard</span>
+  </a>
+  <div class="nav-right">
+    <nav class="nav-links">
+      <a href="index.html" class="active"><i class="fa-solid fa-house"></i>Home</a>
+   
+      <a href="aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+      <a href="about.html"><i class="fa-solid fa-users"></i>About Us</a>
+      <a href="social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+      <a href="set.html"><i class="fa-solid fa-gear"></i>Settings</a>
+    </nav>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
+      <i class="fa-solid fa-bars"></i>
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+</div>
+
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-panel">
+    <span class="nav-group-label">Navigate</span>
+    <a href="dashboard.html" class="active"><i class="fa-solid fa-house"></i>Home / Dashboard</a>
+    <a href="aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+    <span class="nav-group-label">DTZ TRIO</span>
+    <a href="about.html"><i class="fa-solid fa-users"></i>About Us</a>
+    <a href="social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+    <span class="nav-group-label">Account</span>
+    <a href="set.html"><i class="fa-solid fa-gear"></i>Settings</a>
+    <a href="help.html"><i class="fa-solid fa-circle-question"></i>Help &amp; FAQ</a>
+  </div>
+</div>
+
+<main>
+<div class="page-wrap wide">
+  <div class="dash-head">
+    <span class="page-eyebrow"><i class="fa-solid fa-book-open"></i>Course Library</span>
+    <h1 class="page-title">Pick a course</h1>
+    <p class="page-sub">Choose a course below to jump into timed or untimed practice quizzes.</p>
+    <div class="dash-stats">
+      <div class="stat"><i class="fa-solid fa-circle-check"></i><div><div class="num" id="statLive">0</div><div class="label">Live Courses</div></div></div>
+      <div class="stat"><i class="fa-solid fa-clone"></i><div><div class="num" id="statCourses">0</div><div class="label">Total Courses</div></div></div>
+      <div class="stat"><i class="fa-solid fa-clipboard-question"></i><div><div class="num" id="statQuestions">0</div><div class="label">Practice Questions</div></div></div>
+    </div>
+  </div>
+  <div class="dash-toolbar" id="filterBar"></div>
+  <div class="course-grid" id="courseGrid"></div>
+</div>
+</main>
+
+<footer>DTZ TRIO &middot; Course Library</footer>
+
+<script>
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+function closeMobileNav(){mobileNav.classList.remove('open');hamburgerBtn.setAttribute('aria-expanded','false');}
+function toggleMobileNav(){const isOpen = mobileNav.classList.toggle('open');hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');}
+hamburgerBtn.addEventListener('click', toggleMobileNav);
+mobileNav.addEventListener('click', (e)=>{ if(e.target === mobileNav) closeMobileNav(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMobileNav(); });
+
+const catalogue = [
+  {code:"PHY103", title:"Elastic properties of materials, hydrostatics, buoyancy, pressure and thermodynamics.", accent:"#ffb454", icon:"fa-atom", count:100, live:true, href:"courses/PHY103.html"},
+  {code:"COS101", title:"Introduction to computer science, covering computing history, hardware and software basics, number systems and algorithmic problem-solving.", accent:"#22d3ee", icon:"fa-microchip", count:100, live:false, href:"courses/cos101.html"},
+  {code:"COS102", title:"Introduction to problem solving using flowcharts, pseudocode and structured programming logic.", accent:"#22d3ee", icon:"fa-code", count:100, live:false, href:"courses/cos102.html"},
+  {code:"BIO102", title:"General Biology II, covering plant and animal diversity, ecology and reproduction.", accent:"#9be15d", icon:"fa-dna", count:100, live:false, href:"courses/bio102.html"},
+  {code:"CHM102", title:"General Chemistry II, covering atomic structure, chemical bonding, states of matter and solutions.", accent:"#3ddc97", icon:"fa-flask", count:100, live:false, href:"courses/chm102.html"},
+  {code:"PHY102", title:"Electricity, magnetism, waves and an introduction to modern physics.", accent:"#ffb454", icon:"fa-bolt", count:100, live:false, href:"courses/phy102.html"},
+  {code:"PHY104", title:"Practical Physics I, covering mechanics and heat lab experiments.", accent:"#ffb454", icon:"fa-gauge-high", count:100, live:false, href:"courses/phy104.html"},
+  {code:"MTH102", title:"Calculus, covering limits, power, product, quotient, chain and implicit differentiation rules.", accent:"#4f9eff", icon:"fa-square-root-variable", count:100, live:false, href:"courses/mth102.html"},
+  {code:"STA122", title:"Probability I, covering set theory, counting methods and basic probability distributions.", accent:"#4f9eff", icon:"fa-dice", count:100, live:false, href:"courses/sta122.html"},
+  {code:"PHY108", title:"General Practical Physics, hands-on lab sessions covering core experiments.", accent:"#ffb454", icon:"fa-vial-circle-check", count:100, live:false, href:"courses/phy108.html"},
+  {code:"CHM108", title:"General Practical Chemistry, covering titration and qualitative/quantitative lab techniques.", accent:"#3ddc97", icon:"fa-flask-vial", count:100, live:false, href:"courses/chm108.html"},
+  {code:"BIO108", title:"General Practical Biology, covering microscopy, dissection and specimen classification.", accent:"#9be15d", icon:"fa-microscope", count:100, live:false, href:"courses/bio108.html"},
+  {code:"BOT102", title:"General Botany II, covering plant anatomy, physiology and classification.", accent:"#9be15d", icon:"fa-seedling", count:100, live:false, href:"courses/bot102.html"},
+  {code:"BOT121", title:"Plant diversity, covering algae, fungi, bryophytes and pteridophytes.", accent:"#9be15d", icon:"fa-leaf", count:100, live:false, href:"courses/bot121.html"},
+  {code:"MTH113", title:"Vectors, geometry and dynamics, covering motion, forces and coordinate geometry.", accent:"#4f9eff", icon:"fa-shapes", count:100, live:false, href:"courses/mth113.html"},
+  {code:"GST103", title:"Nigerian Peoples and Culture, covering history, government and societal values.", accent:"#a78bfa", icon:"fa-earth-africa", count:100, live:false, href:"courses/gst103.html"},
+  {code:"GET102", title:"Engineering drawing, covering orthographic projection, sectioning, dimensioning and technical sketching.", accent:"#ff8fab", icon:"fa-compass-drafting", count:100, live:false, href:"courses/get102.html"},
+  {code:"STA112", title:"Descriptive statistics, covering data collection, measures of central tendency and dispersion.", accent:"#4f9eff", icon:"fa-chart-simple", count:100, live:false, href:"courses/sta112.html"},
+  {code:"CYB121", title:"Introduction to cybersecurity, covering core concepts of information security, threats and defenses.", accent:"#22d3ee", icon:"fa-shield-halved", count:100, live:false, href:"courses/cyb121.html"},
+  {code:"STA111", title:"Probability for science students, covering combinatorics, probability rules and distributions.", accent:"#4f9eff", icon:"fa-chart-line", count:100, live:false, href:"courses/sta111.html"},
+  {code:"COS102", title:"Computer science practical, hands-on programming fundamentals and lab exercises.", accent:"#22d3ee", icon:"fa-terminal", count:100, live:false, href:"courses/cos182.html"},
+  {code:"SWE122", title:"Introduction to software engineering, covering the software development lifecycle and design principles.", accent:"#22d3ee", icon:"fa-diagram-project", count:100, live:false, href:"courses/swe122.html"},
+  {code:"TCH101", title:"Introduction to technology, covering foundational concepts spanning engineering and technical disciplines.", accent:"#ff8fab", icon:"fa-screwdriver-wrench", count:100, live:false, href:"courses/tch101.html"},
+  {code:"CEE102", title:"Introduction to civil and environmental engineering, covering surveying, materials and structures basics.", accent:"#ff8fab", icon:"fa-city", count:100, live:false, href:"courses/cee102.html"}
+];
+
+const courseCodes = ["All", ...catalogue.map(c=>c.code)];
+let activeFilter = "All";
+
+function renderFilters(){
+  const bar = document.getElementById('filterBar');
+  bar.innerHTML = '';
+  courseCodes.forEach(code=>{
+    const chip = document.createElement('button');
+    chip.className = 'filter-chip' + (code===activeFilter?' active':'');
+    chip.innerHTML = (code==="All" ? '<i class="fa-solid fa-grip"></i>' : '') + code;
+    chip.addEventListener('click', ()=>{activeFilter=code; renderFilters(); renderGrid();});
+    bar.appendChild(chip);
+  });
+}
+function renderStats(){
+  document.getElementById('statLive').textContent = catalogue.filter(c=>c.live).length;
+  document.getElementById('statCourses').textContent = catalogue.length;
+  document.getElementById('statQuestions').textContent = catalogue.reduce((sum,c)=>sum+c.count,0);
+}
+function renderGrid(){
+  const grid = document.getElementById('courseGrid');
+  grid.innerHTML = '';
+  const list = catalogue.filter(c => activeFilter==="All" || c.code===activeFilter);
+  if(list.length === 0){
+    grid.innerHTML = `<div class="empty-state"><i class="fa-solid fa-inbox"></i><div>No course matches this filter yet.</div></div>`;
+    return;
+  }
+  list.forEach(c=>{
+    const el = document.createElement(c.live ? 'a' : 'div');
+    if(c.live) el.href = c.href;
+    el.className = 'course-card ' + (c.live ? 'live' : 'locked');
+    el.style.setProperty('--card-accent', c.accent);
+    el.innerHTML = `
+      <div class="c-top">
+        <div class="c-glyph"><i class="fa-solid ${c.icon}"></i></div>
+        <span class="c-status"><i class="fa-solid ${c.live ? 'fa-circle-check' : 'fa-clock'}"></i>${c.live ? 'Live' : 'Coming Soon'}</span>
+      </div>
+      <div class="c-code">${c.code}</div>
+      <div class="c-title">${c.title}</div>
+      <div class="c-meta"><i class="fa-solid fa-clipboard-list"></i>${c.live ? c.count + ' timed questions' : 'Quiz in progress'}</div>
+      ${c.live ? '<i class="fa-solid fa-arrow-right c-arrow"></i>' : ''}
+    `;
+    grid.appendChild(el);
+  });
+}
+renderFilters();
+renderStats();
+renderGrid();
+</script>
+</body>
+</html>

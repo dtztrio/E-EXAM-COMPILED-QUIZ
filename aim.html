@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Aim · DTZ TRIO</title>
+<meta name="description" content="What DTZ TRIO is built to do, and the principles behind it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script>
+(function(){
+  try{
+    var theme = localStorage.getItem('dtz_theme') || 'dark';
+    var scale = localStorage.getItem('dtz_font_scale') || '1';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.style.setProperty('--font-scale', scale);
+  }catch(e){}
+})();
+</script>
+
+<style>
+:root{
+  --bg:#0b1121; --panel:#0f1a2e; --panel2:#152240; --panel3:#1a2d52;
+  --ink:#eef2ff; --muted:#7b8cb0;
+  --accent:#6366f1; --accent2:#4338ca;
+  --accent-dim:#312e6e; --good:#3ddc97; --bad:#ff5d5d; --line:#1e3056; --radius:16px;
+  --accent-rgb:99,102,241; --good-rgb:61,220,151; --bad-rgb:255,93,93;
+  --bar-bg:rgba(11,17,33,0.88); --nav-link:#c8d4ee; --sub-ink:#c4d0e8; --dash-mid:rgba(21,34,64,.4);
+  --font-scale:1;
+  --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-display:'Sora',sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+  --shadow-md:0 8px 32px rgba(0,0,0,.35); --shadow-lg:0 10px 26px rgba(0,0,0,.35);
+  --transition-fast:.15s ease; --transition-base:.2s ease;
+  --focus-ring:0 0 0 3px rgba(var(--accent-rgb),.45);
+}
+:root[data-theme="light"]{
+  --bg:#f4f6fc; --panel:#ffffff; --panel2:#eef1fb; --panel3:#e4e9f9;
+  --ink:#131a2c; --muted:#5b6478; --line:#dde3f3;
+  --accent-dim:#c7cafb; --bar-bg:rgba(255,255,255,0.85); --nav-link:#33405e; --sub-ink:#454f66;
+  --dash-mid:rgba(228,233,251,.55);
+  --shadow-md:0 8px 28px rgba(30,40,80,.10); --shadow-lg:0 10px 22px rgba(30,40,80,.12);
+}
+html{font-size:calc(16px * var(--font-scale, 1));}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:radial-gradient(ellipse 900px 600px at 20% -5%, rgba(67,56,202,.20) 0%, transparent 60%),
+    radial-gradient(ellipse 700px 500px at 90% 15%, rgba(99,102,241,.12) 0%, transparent 55%), var(--bg);
+  color:var(--ink); font-family:var(--font-body); min-height:100dvh;
+  display:flex; flex-direction:column; line-height:1.5; -webkit-font-smoothing:antialiased;
+  transition:background-color .2s ease, color .2s ease;
+}
+h1,h2,h3{font-family:var(--font-display);}
+a{color:inherit;} img,svg{max-width:100%;display:block;}
+a:focus-visible,button:focus-visible,.mobile-nav-panel a:focus-visible{outline:none;box-shadow:var(--focus-ring);}
+
+.brand-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;margin:14px 14px 0;border:1px solid var(--line);border-radius:18px;position:sticky;top:14px;background:var(--bar-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:var(--shadow-md);z-index:40;}
+.brand{display:flex;align-items:center;gap:16px;text-decoration:none;}
+.brand .logo-icon{width:40px;height:40px;flex-shrink:0;border-radius:10px;background:rgba(var(--accent-rgb),.14);border:1px solid var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.05rem;}
+.brand .logo-word{font-family:var(--font-mono);font-weight:700;font-size:1.05rem;letter-spacing:1px;text-transform:uppercase;}
+.brand .logo-word .dim{color:var(--ink);}
+.brand .logo-word .lit{color:var(--accent);}
+.brand .divider{width:1px;height:22px;background:var(--line);}
+.brand .tagline{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:600;}
+.brand .tagline i{font-size:.7rem;color:var(--accent);}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.nav-links{display:flex;align-items:center;gap:20px;}
+.nav-links a{display:flex;align-items:center;gap:7px;font-size:.85rem;font-weight:600;color:var(--nav-link);text-decoration:none;padding:6px 2px;border-bottom:2px solid transparent;transition:color var(--transition-fast),border-color var(--transition-fast);white-space:nowrap;}
+.nav-links a i{font-size:.8rem;color:var(--muted);transition:color var(--transition-fast);}
+.nav-links a:hover{color:var(--accent);} .nav-links a:hover i{color:var(--accent);}
+.nav-links a.active{color:var(--accent);border-color:var(--accent);} .nav-links a.active i{color:var(--accent);}
+.hamburger{display:none;align-items:center;justify-content:center;width:38px;height:38px;background:none;border:1px solid var(--line);border-radius:8px;cursor:pointer;padding:0;color:var(--ink);font-size:1rem;transition:border-color var(--transition-fast),color var(--transition-fast);}
+.hamburger:hover{border-color:var(--accent-dim);color:var(--accent);}
+.hamburger .fa-xmark{display:none;} .hamburger[aria-expanded="true"] .fa-bars{display:none;} .hamburger[aria-expanded="true"] .fa-xmark{display:inline-block;}
+.mobile-nav{position:fixed;inset:0;z-index:39;background:transparent;opacity:0;pointer-events:none;transition:opacity .15s ease;}
+.mobile-nav.open{opacity:1;pointer-events:auto;}
+.mobile-nav-panel{position:absolute;top:78px;right:20px;width:250px;max-width:82vw;max-height:min(70vh,520px);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:1px;transform:scale(.94) translateY(-8px);transform-origin:top right;opacity:0;transition:transform .16s ease,opacity .16s ease;box-shadow:var(--shadow-md);overflow-y:auto;}
+.mobile-nav.open .mobile-nav-panel{transform:scale(1) translateY(0);opacity:1;}
+.mobile-nav-panel a{display:flex;align-items:center;gap:12px;padding:11px 10px;font-size:.9rem;font-weight:600;color:var(--ink);text-decoration:none;border-radius:8px;}
+.mobile-nav-panel a:hover{background:rgba(var(--accent-rgb),.1);}
+.mobile-nav-panel a i{width:18px;text-align:center;color:var(--accent);font-size:.85rem;}
+.mobile-nav-panel a.active{color:var(--accent);background:rgba(var(--accent-rgb),.12);}
+.mobile-nav-panel .nav-group-label{font-family:var(--font-mono);font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:12px 10px 4px;}
+.mobile-nav-panel .nav-group-label:first-child{padding-top:6px;}
+@media(max-width:760px){.nav-links{display:none;} .hamburger{display:flex;}}
+@media(max-width:560px){.brand .tagline{display:none;} .brand .divider{display:none;}}
+
+main{flex:1;display:flex;justify-content:center;padding:28px 16px 110px;}
+.page-wrap{max-width:900px;width:100%;}
+
+.page-head{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:var(--radius);padding:36px 34px;margin-bottom:22px;background:linear-gradient(150deg, rgba(99,102,241,.16), var(--dash-mid) 55%, var(--panel));}
+.page-eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);font-weight:700;display:flex;align-items:center;gap:8px;}
+.page-title{font-size:2rem;margin:12px 0 10px;line-height:1.2;font-weight:800;max-width:620px;}
+.page-sub{color:var(--sub-ink);font-size:1rem;line-height:1.7;max-width:620px;}
+
+/* MISSION STATEMENT */
+.mission-card{border:1px solid var(--line);border-radius:14px;background:var(--panel2);padding:30px 32px;margin-bottom:18px;position:relative;}
+.mission-mark{position:absolute;top:22px;left:26px;font-size:2.2rem;color:var(--accent-dim);font-family:var(--font-display);line-height:1;}
+.mission-text{font-family:var(--font-display);font-size:1.28rem;font-weight:600;line-height:1.55;color:var(--ink);padding-left:8px;max-width:680px;}
+.mission-text .accent{color:var(--accent);}
+.mission-foot{display:flex;align-items:center;gap:10px;margin-top:18px;padding-top:18px;border-top:1px solid var(--line);}
+.mission-foot i{color:var(--accent);font-size:.9rem;}
+.mission-foot span{font-size:.82rem;color:var(--muted);}
+
+/* SECTION HEAD */
+.section-head{display:flex;align-items:center;gap:11px;margin:34px 0 16px;}
+.section-head i{width:34px;height:34px;flex-shrink:0;border-radius:9px;background:rgba(var(--accent-rgb),.14);border:1px solid var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:.9rem;}
+.section-head h2{font-size:1.15rem;margin:0;font-weight:700;}
+.section-head .section-count{margin-left:auto;font-family:var(--font-mono);font-size:.72rem;color:var(--muted);letter-spacing:1px;}
+
+/* PILLARS GRID */
+.pillars-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:8px;}
+.pillar-card{border:1px solid var(--line);border-radius:14px;background:var(--panel2);padding:22px 22px 24px;transition:border-color var(--transition-fast),transform var(--transition-fast),background var(--transition-fast);}
+.pillar-card:hover{border-color:var(--accent-dim);transform:translateY(-2px);background:var(--panel3);}
+.pillar-icon{width:42px;height:42px;border-radius:11px;background:rgba(var(--accent-rgb),.14);border:1px solid var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.05rem;margin-bottom:14px;}
+.pillar-name{font-family:var(--font-display);font-size:1.02rem;font-weight:700;margin-bottom:8px;}
+.pillar-desc{font-size:.85rem;color:var(--muted);line-height:1.65;}
+
+/* APPROACH LIST */
+.approach-list{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:14px;background:var(--panel2);overflow:hidden;}
+.approach-row{display:flex;gap:16px;align-items:flex-start;padding:20px 22px;border-top:1px solid var(--line);}
+.approach-row:first-child{border-top:none;}
+.approach-icon{width:38px;height:38px;flex-shrink:0;border-radius:10px;background:rgba(var(--accent-rgb),.14);border:1px solid var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:.92rem;margin-top:2px;}
+.approach-body .approach-title{font-weight:700;font-size:.92rem;margin-bottom:5px;}
+.approach-body .approach-desc{font-size:.83rem;color:var(--muted);line-height:1.65;}
+
+/* METRICS STRIP */
+.metrics-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:8px 0 8px;}
+.metric-card{border:1px solid var(--line);border-radius:14px;background:var(--panel2);padding:20px 18px;text-align:center;}
+.metric-num{font-family:var(--font-mono);font-weight:800;font-size:1.5rem;color:var(--accent);}
+.metric-label{font-size:.72rem;color:var(--muted);margin-top:6px;letter-spacing:.3px;line-height:1.5;}
+
+/* CTA */
+.cta-card{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;border:1px solid var(--accent-dim);border-radius:14px;background:linear-gradient(135deg, rgba(99,102,241,.14), rgba(67,56,202,.08));padding:26px 28px;margin-top:34px;}
+.cta-text h3{font-family:var(--font-display);font-size:1.15rem;font-weight:700;margin-bottom:6px;}
+.cta-text p{font-size:.85rem;color:var(--sub-ink);max-width:420px;line-height:1.6;}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-body);font-size:.86rem;font-weight:700;padding:12px 22px;border-radius:10px;border:1px solid var(--accent);background:rgba(var(--accent-rgb),.18);color:var(--accent);cursor:pointer;transition:all var(--transition-fast);white-space:nowrap;text-decoration:none;}
+.btn:hover{background:rgba(var(--accent-rgb),.28);}
+.btn i{font-size:.8rem;}
+
+footer{text-align:center;font-size:.72rem;color:var(--muted);padding:14px;letter-spacing:.5px;}
+
+@media(max-width:640px){
+  .page-head{padding:26px 22px;} .page-title{font-size:1.5rem;}
+  .pillars-grid{grid-template-columns:1fr;}
+  .metrics-strip{grid-template-columns:1fr;}
+  .mission-card{padding:26px 22px;} .mission-text{font-size:1.08rem;padding-left:0;}
+  .mission-mark{display:none;}
+  .cta-card{flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<div class="brand-bar">
+  <a class="brand" href="index.html">
+    <span class="logo-icon"><i class="fa-solid fa-graduation-cap"></i></span>
+    <span class="logo-word"><span class="dim">DTZ</span> <span class="lit">TRIO</span></span>
+    <span class="divider"></span>
+    <span class="tagline"><i class="fa-solid fa-wave-square"></i>Dashboard</span>
+  </a>
+  <div class="nav-right">
+    <nav class="nav-links">
+      <a href="index.html" class="active"><i class="fa-solid fa-house"></i>Home</a>
+   
+      <a href="aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+      <a href="about.html"><i class="fa-solid fa-users"></i>About Us</a>
+      <a href="social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+      <a href="set.html"><i class="fa-solid fa-gear"></i>Settings</a>
+    </nav>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
+      <i class="fa-solid fa-bars"></i>
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+</div>
+
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-panel">
+    <span class="nav-group-label">Navigate</span>
+    <a href="dashboard.html" class="active"><i class="fa-solid fa-house"></i>Home / Dashboard</a>
+    <a href="aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+    <span class="nav-group-label">DTZ TRIO</span>
+    <a href="about.html"><i class="fa-solid fa-users"></i>About Us</a>
+    <a href="social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+    <span class="nav-group-label">Account</span>
+    <a href="set.html"><i class="fa-solid fa-gear"></i>Settings</a>
+    <a href="help.html"><i class="fa-solid fa-circle-question"></i>Help &amp; FAQ</a>
+  </div>
+</div>
+
+<main>
+<div class="page-wrap">
+
+  <div class="page-head">
+    <span class="page-eyebrow"><i class="fa-solid fa-bullseye"></i>Our Aim</span>
+    <h1 class="page-title">Practice that actually tells you where you stand.</h1>
+    <p class="page-sub">DTZ TRIO exists to close the gap between studying a subject and knowing it cold. Every question, timer, and score on this site is built around one job: give you an honest, worked-through picture of your understanding not just a grade.</p>
+  </div>
+
+  <!-- MISSION -->
+  <div class="mission-card">
+    <div class="mission-mark"><i class="fa-solid fa-quote-left"></i></div>
+    <div class="mission-text">We believe the fastest way to learn a subject is to be tested on it properly, then shown <span class="accent">exactly</span> why each answer was right or wrong every time, not just when you fail.</div>
+    <div class="mission-foot"><i class="fa-solid fa-compass"></i><span>This is the standard every quiz, timer, and report on DTZ TRIO is measured against.</span></div>
+  </div>
+
+  <!-- PILLARS -->
+  <div class="section-head">
+    <i class="fa-solid fa-layer-group"></i>
+    <h2>What we stand for</h2>
+  </div>
+  <div class="pillars-grid">
+    <div class="pillar-card">
+      <div class="pillar-icon"><i class="fa-solid fa-book-open-reader"></i></div>
+      <div class="pillar-name">Full explanations, every time</div>
+      <div class="pillar-desc">A correct or incorrect answer without reasoning teaches nothing. Every question comes with a worked explanation, so a wrong answer becomes the moment you actually learn the concept.</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+      <div class="pillar-name">Honest scoring</div>
+      <div class="pillar-desc">No padded percentages or participation credit. Scores, section breakdowns, and history reflect what you actually answered, so your progress is something you can trust.</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon"><i class="fa-solid fa-stopwatch"></i></div>
+      <div class="pillar-name">Real exam conditions</div>
+      <div class="pillar-desc">Custom Timer mode removes feedback and pausing on purpose. Recall under time pressure, with no safety net, is the closest practice gets to the real thing.</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon"><i class="fa-solid fa-user-shield"></i></div>
+      <div class="pillar-name">Your data stays yours</div>
+      <div class="pillar-desc">Quiz history, theme, and preferences are stored on your device, not on a server. Nothing is sold, shared, or used to profile you.</div>
+    </div>
+  </div>
+
+  <!-- APPROACH -->
+  <div class="section-head">
+    <i class="fa-solid fa-diagram-project"></i>
+    <h2>How we build toward that</h2>
+  </div>
+  <div class="approach-list">
+    <div class="approach-row">
+      <div class="approach-icon"><i class="fa-solid fa-flask"></i></div>
+      <div class="approach-body">
+        <div class="approach-title">Questions written to be checked, not guessed</div>
+        <div class="approach-desc">Every item is drafted against a source calculation or definition first, so the explanation always exists before the question does not the other way around.</div>
+      </div>
+    </div>
+    <div class="approach-row">
+      <div class="approach-icon"><i class="fa-solid fa-shuffle"></i></div>
+      <div class="approach-body">
+        <div class="approach-title">Shuffled by design</div>
+        <div class="approach-desc">Question order and option order are randomized on every attempt, so retaking a quiz tests recall of the material, not memory of a sequence.</div>
+      </div>
+    </div>
+    <div class="approach-row">
+      <div class="approach-icon"><i class="fa-solid fa-gauge-high"></i></div>
+      <div class="approach-body">
+        <div class="approach-title">Two honest modes, not one soft one</div>
+        <div class="approach-desc">Automatic Timer builds familiarity with instant feedback. Custom Timer removes every crutch. Neither mode is padded to make you feel better than you are.</div>
+      </div>
+    </div>
+    <div class="approach-row">
+      <div class="approach-icon"><i class="fa-solid fa-arrows-rotate"></i></div>
+      <div class="approach-body">
+        <div class="approach-title">Built to be revised</div>
+        <div class="approach-desc">Question banks are treated as living material corrected, re-checked, and expanded as courses evolve, not shipped once and left alone.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- METRICS -->
+  <div class="section-head">
+    <i class="fa-solid fa-chart-line"></i>
+    <h2>What that looks like in practice</h2>
+  </div>
+  <div class="metrics-strip">
+    <div class="metric-card">
+      <div class="metric-num">100%</div>
+      <div class="metric-label">Questions ship with a full worked explanation</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-num">0</div>
+      <div class="metric-label">Quiz results ever leave your device</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-num">2</div>
+      <div class="metric-label">Practice modes, tuned for different stages of prep</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-card">
+    <div class="cta-text">
+      <h3>See where you actually stand</h3>
+      <p>Pick a course from the dashboard and start with Automatic Timer if you want feedback as you go, or Custom Timer if you're ready to simulate the real thing.</p>
+    </div>
+    <a class="btn" href="dashboard.html"><i class="fa-solid fa-arrow-right"></i>Go to Dashboard</a>
+  </div>
+
+</div>
+</main>
+
+<footer>DTZ TRIO &middot; Our Aim</footer>
+
+<script>
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+function closeMobileNav(){mobileNav.classList.remove('open');hamburgerBtn.setAttribute('aria-expanded','false');}
+function toggleMobileNav(){const isOpen = mobileNav.classList.toggle('open');hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');}
+hamburgerBtn.addEventListener('click', toggleMobileNav);
+mobileNav.addEventListener('click', (e)=>{ if(e.target === mobileNav) closeMobileNav(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMobileNav(); });
+</script>
+</body>
+</html>
