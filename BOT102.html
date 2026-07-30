@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOT102 · Introduction to Botany Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script>
+(function(){
+  try{
+    var theme = localStorage.getItem('dtz_theme') || 'dark';
+    var scale = localStorage.getItem('dtz_font_scale') || '1';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.style.setProperty('--font-scale', scale);
+  }catch(e){}
+})();
+</script>
+<style>
+:root {
+ --bg:#0a0c12; --surface:#0f1117; --surface2:#141820; --surface3:#1a2030;
+ --border:#1e2640; --border2:#26304e; --ink:#e2e8f6; --ink2:#94a3c0; --ink3:#4a5878;
+ --accent:#4f8ef7; --accent2:#7c6fff; --accent-dim:#0d1630; --accent-glow:rgba(79,142,247,.14);
+ --green:#34d399; --green-dim:#0a1e14; --red:#f87171; --red-dim:#1e0a0a; --purple:#a78bfa;
+ --bar-bg:rgba(10,12,18,.92); --font-scale:1;
+ --r:16px;
+}
+:root[data-theme="light"] {
+ --bg:#f4f6fc; --surface:#ffffff; --surface2:#eef1fb; --surface3:#e4e9f9;
+ --border:#dde3f3; --border2:#c7cafb; --ink:#131a2c; --ink2:#5b6478; --ink3:#8a93ab;
+ --accent-dim:#e3e6fd; --accent-glow:rgba(79,142,247,.10);
+ --green-dim:#e2f9ef; --red-dim:#fdeaea;
+ --bar-bg:rgba(255,255,255,.92);
+}
+html{font-size:calc(16px * var(--font-scale, 1));}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Outfit',sans-serif;min-height:100vh;display:flex;flex-direction:column;
+ background-image:radial-gradient(ellipse 900px 600px at 10% 0%, rgba(79,142,247,.06) 0%, transparent 70%),
+ radial-gradient(ellipse 700px 500px at 90% 30%, rgba(124,111,255,.05) 0%, transparent 60%);
+ transition:background-color .2s ease, color .2s ease;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);
+ background:var(--bar-bg);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px;}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.brand-badge{background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;font-weight:800;font-size:.72rem;letter-spacing:2px;
+ padding:6px 14px;border-radius:50px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+.brand-sub{font-size:.7rem;color:var(--ink3);letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+#timer{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:600;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:7px 16px;border-radius:50px;letter-spacing:2px;min-width:96px;text-align:center;
+ display:flex;align-items:center;gap:8px;justify-content:center;}
+#timer.warn{color:var(--red);background:var(--red-dim);border-color:rgba(248,113,113,.3);animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+#soundToggle{width:38px;height:38px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);
+ color:var(--ink2);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;
+ transition:border-color .15s,color .15s,background .15s;flex-shrink:0;}
+#soundToggle:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+#soundToggle.muted{color:var(--ink3);}
+.hamburger{display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;cursor:pointer;padding:0;color:var(--ink);font-size:.95rem;transition:border-color .15s,color .15s;flex-shrink:0;}
+.hamburger:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+.hamburger .fa-xmark{display:none;} .hamburger[aria-expanded="true"] .fa-bars{display:none;} .hamburger[aria-expanded="true"] .fa-xmark{display:inline-block;}
+.mobile-nav{position:fixed;inset:0;z-index:99;background:transparent;opacity:0;pointer-events:none;transition:opacity .15s ease;}
+.mobile-nav.open{opacity:1;pointer-events:auto;}
+.mobile-nav-panel{position:absolute;top:70px;right:20px;width:250px;max-width:82vw;max-height:min(70vh,520px);background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:1px;transform:scale(.94) translateY(-8px);transform-origin:top right;opacity:0;transition:transform .16s ease,opacity .16s ease;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow-y:auto;}
+.mobile-nav.open .mobile-nav-panel{transform:scale(1) translateY(0);opacity:1;}
+.mobile-nav-panel a{display:flex;align-items:center;gap:12px;padding:11px 10px;font-size:.9rem;font-weight:600;color:var(--ink);text-decoration:none;border-radius:8px;}
+.mobile-nav-panel a:hover{background:var(--accent-glow);}
+.mobile-nav-panel a i{width:18px;text-align:center;color:var(--accent);font-size:.85rem;}
+.mobile-nav-panel a.active{color:var(--accent);background:var(--accent-dim);}
+.mobile-nav-panel .nav-group-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);padding:12px 10px 4px;}
+.mobile-nav-panel .nav-group-label:first-child{padding-top:6px;}
+main{flex:1;display:flex;justify-content:center;padding:0 16px 100px;}
+#homeScreen,#configScreen,#quizScreen,#resultScreen,#loadingScreen{width:100%;max-width:720px;}
+.hidden{display:none !important;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:32px 28px;margin-bottom:20px;}
+
+a { text-decoration: none; }
+#statsBar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;}
+.stat-chip{font-size:.78rem;color:var(--ink2);background:var(--surface2);border:1px solid var(--border);padding:8px 16px;
+ border-radius:50px;display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;}
+.stat-chip i{color:var(--accent);}
+.stat-chip strong{color:var(--ink);}
+
+/* HOME */
+.hero-wrap{padding:48px 0 8px;text-align:center;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
+ color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:500;margin-bottom:22px;background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.22);padding:7px 16px 7px 13px;border-radius:50px;}
+.hero-title{font-family:'Fraunces',serif;font-size:2.3rem;line-height:1.16;margin-bottom:16px;font-weight:600;letter-spacing:-.5px;}
+.hero-title span{color:var(--accent);font-style:italic;}
+.hero-desc{color:var(--ink2);font-size:.96rem;line-height:1.75;max-width:480px;margin:0 auto 34px;}
+
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:30px;}
+.mode-card{background:var(--surface2);border:1px solid var(--border2);border-radius:18px;padding:26px 22px;cursor:pointer;
+ transition:border-color .15s,transform .15s,background .15s;text-align:left;}
+.mode-card:hover{border-color:rgba(79,142,247,.4);transform:translateY(-3px);background:var(--surface3);}
+.mode-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;
+ display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:16px;}
+.mode-name{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;margin-bottom:8px;}
+.mode-desc{font-size:.85rem;color:var(--ink2);line-height:1.6;margin-bottom:14px;}
+.mode-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.mode-tag{font-size:.66rem;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ padding:3px 9px;border-radius:20px;font-family:'JetBrains Mono',monospace;}
+
+.section-heading{display:flex;align-items:center;gap:12px;margin:36px 0 18px;}
+.section-heading-icon{width:34px;height:34px;border-radius:10px;background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.85rem;flex-shrink:0;}
+.section-heading-text{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;}
+.rules-list{display:grid;gap:8px;}
+.rule-item{display:flex;gap:14px;align-items:flex-start;font-size:.86rem;color:var(--ink2);line-height:1.55;padding:14px 16px;
+ background:var(--surface2);border:1px solid var(--border);border-radius:10px;}
+.rule-icon{width:30px;height:30px;border-radius:8px;flex-shrink:0;background:var(--accent-dim);border:1px solid rgba(79,142,247,.2);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.78rem;margin-top:1px;}
+.rule-text strong{color:var(--ink);}
+
+/* CONFIG SCREEN */
+.config-field{margin-bottom:22px;}
+.config-label{font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.config-label i{color:var(--accent);}
+.config-input-row{display:flex;align-items:center;gap:14px;}
+.config-slider{flex:1;-webkit-appearance:none;height:6px;border-radius:6px;background:var(--border2);outline:none;}
+.config-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;box-shadow:0 2px 8px rgba(79,142,247,.4);}
+.config-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;border:none;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;}
+.config-value{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:6px 14px;border-radius:10px;min-width:74px;text-align:center;font-size:.9rem;}
+.config-hint{font-size:.74rem;color:var(--ink3);margin-top:8px;}
+.topics-grid{display:flex;flex-wrap:wrap;gap:10px;}
+.topic-chip{display:flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--border2);
+ padding:10px 16px;border-radius:12px;cursor:pointer;font-size:.85rem;transition:border-color .15s,background .15s;}
+.topic-chip:hover{border-color:rgba(79,142,247,.4);}
+.topic-chip input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);
+ color:#fff;border:none;padding:14px 28px;border-radius:50px;font-weight:700;font-size:.95rem;cursor:pointer;
+ font-family:'Outfit',sans-serif;transition:transform .15s,box-shadow .15s,opacity .2s;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(79,142,247,.3);}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--border2);padding:12px 22px;border-radius:50px;
+ font-weight:600;font-size:.9rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:border-color .15s,background .15s;
+ display:inline-flex;align-items:center;gap:8px;}
+.btn-ghost:hover{background:var(--accent-glow);border-color:rgba(79,142,247,.35);}
+.btn-ghost:disabled{opacity:.35;cursor:not-allowed;}
+
+/* LOADING SCREEN */
+#loadingScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 0;text-align:center;}
+.loader-ring{width:56px;height:56px;border-radius:50%;border:4px solid var(--border2);border-top-color:var(--accent);
+ animation:spin .8s linear infinite;margin-bottom:24px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader-text{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--ink2);}
+.loader-sub{font-size:.78rem;color:var(--ink3);margin-top:8px;font-family:'JetBrains Mono',monospace;}
+
+/* QUIZ */
+#progressWrap{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;padding-top:24px;}
+.progress-bar-track{height:4px;background:var(--border);border-radius:4px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .3s;}
+.dots-group{display:flex;gap:5px;flex-wrap:wrap;}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .15s,transform .1s;}
+.dot:hover{transform:scale(1.35);}
+.dot.answered{background:rgba(79,142,247,.4);border:1px solid var(--accent);}
+.dot.current{background:var(--accent);box-shadow:0 0 0 3px rgba(79,142,247,.25);}
+.dot.correct{background:var(--green);}
+.dot.wrong{background:var(--red);}
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.q-section-tag{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;
+ font-weight:600;background:var(--accent-dim);padding:4px 10px;border-radius:20px;border:1px solid rgba(79,142,247,.2);}
+.q-counter{font-size:.78rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;}
+.q-text{font-size:1.1rem;line-height:1.65;margin:0 0 26px;font-family:'Fraunces',serif;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.opt{display:flex;align-items:flex-start;gap:14px;padding:15px 18px;border-radius:12px;border:1px solid var(--border2);
+ margin-bottom:10px;background:var(--surface2);cursor:pointer;transition:border-color .15s,background .15s,transform .1s;}
+.opt:hover{border-color:rgba(79,142,247,.35);background:var(--surface3);}
+.opt.locked{cursor:default;}
+.opt.selected{border-color:var(--accent);background:var(--accent-dim);}
+.opt.correct{border-color:var(--green);background:var(--green-dim);}
+.opt.wrong{border-color:var(--red);background:var(--red-dim);}
+.opt-letter{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;
+ justify-content:center;font-size:.75rem;font-weight:700;color:var(--ink3);flex-shrink:0;font-family:'JetBrains Mono',monospace;
+ transition:all .15s;margin-top:1px;}
+.opt.selected .opt-letter{background:var(--accent);color:#fff;border-color:var(--accent);}
+.opt.correct .opt-letter{background:var(--green);color:#fff;border-color:var(--green);}
+.opt.wrong .opt-letter{background:var(--red);color:#fff;border-color:var(--red);}
+.opt-text{font-size:.92rem;line-height:1.55;padding-top:3px;}
+.inline-explain{display:none;margin-top:6px;margin-bottom:14px;padding:16px 18px;background:rgba(79,142,247,.05);
+ border:1px solid rgba(79,142,247,.15);border-radius:10px;font-size:.85rem;line-height:1.7;color:var(--ink2);animation:fadeUp .2s ease;}
+.inline-explain.show{display:block;}
+.inline-explain .ie-label{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;
+ margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.inline-explain.right .ie-label{color:var(--green);}
+.inline-explain.wrong .ie-label{color:var(--red);}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;}
+.kbd-hint{text-align:center;font-size:.68rem;color:var(--ink3);margin-top:14px;font-family:'JetBrains Mono',monospace;}
+.kbd-hint kbd{background:var(--surface3);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;font-family:'JetBrains Mono',monospace;}
+
+#quizTools{position:fixed;right:20px;bottom:24px;display:flex;flex-direction:column;gap:12px;z-index:60;}
+.fab{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;border:none;
+ cursor:pointer;font-size:1.05rem;box-shadow:0 8px 24px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;
+ transition:transform .15s;}
+.fab:hover{transform:translateY(-3px) scale(1.04);}
+.fab.pause-fab{background:linear-gradient(135deg,#f59e0b,#f97316);}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.72);backdrop-filter:blur(6px);z-index:200;
+ display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-card{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:26px 24px;max-width:380px;
+ width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.modal-icon{width:52px;height:52px;border-radius:50%;background:var(--accent-dim);border:1px solid rgba(79,142,247,.25);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.3rem;margin:0 auto 16px;}
+.modal-icon.warn{background:var(--red-dim);border-color:rgba(248,113,113,.3);color:var(--red);}
+.modal-title{font-family:'Fraunces',serif;font-size:1.2rem;margin-bottom:10px;}
+.modal-text{font-size:.87rem;color:var(--ink2);line-height:1.6;margin-bottom:20px;}
+
+#pauseOverlay{position:fixed;inset:0;background:rgba(6,8,14,.85);backdrop-filter:blur(16px);z-index:150;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
+#pauseOverlay .modal-icon{width:64px;height:64px;font-size:1.6rem;margin-bottom:20px;}
+#pauseOverlay h2{font-family:'Fraunces',serif;font-size:1.6rem;margin-bottom:10px;}
+#pauseOverlay p{color:var(--ink2);font-size:.9rem;max-width:320px;margin-bottom:26px;line-height:1.6;}
+
+.result-hero{text-align:center;padding:26px 0 22px;border-bottom:1px solid var(--border);margin-bottom:26px;}
+.result-ring{display:inline-flex;align-items:center;justify-content:center;width:124px;height:124px;border-radius:50%;
+ border:3px solid var(--accent);background:var(--accent-dim);margin-bottom:16px;}
+.result-score{font-family:'JetBrains Mono',monospace;font-size:2.3rem;font-weight:700;color:var(--accent);}
+.result-of{font-size:.8rem;color:var(--ink3);margin-top:2px;}
+.result-pct{font-family:'Fraunces',serif;font-size:1.5rem;margin-bottom:6px;}
+.result-msg{color:var(--ink2);font-size:.9rem;line-height:1.6;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.best-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;color:#facc15;background:rgba(250,204,21,.08);
+ border:1px solid rgba(250,204,21,.25);padding:4px 12px;border-radius:20px;margin-top:10px;font-family:'JetBrains Mono',monospace;}
+.breakdown-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:26px;}
+.bd-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.bd-name{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.bd-score{font-size:1.35rem;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.bd-total{font-size:.72rem;color:var(--ink3);}
+.review-section-title{font-family:'Fraunces',serif;font-size:1.1rem;border-bottom:1px solid var(--border);padding-bottom:12px;
+ margin:22px 0 16px;display:flex;align-items:center;gap:10px;}
+.review-item{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px;background:var(--surface2);}
+.review-item.right{border-left:3px solid var(--green);}
+.review-item.miss{border-left:3px solid var(--red);}
+.ri-q{font-size:.9rem;margin-bottom:10px;line-height:1.6;}
+.ri-section{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:5px;}
+.ri-ans{font-size:.83rem;margin-top:5px;display:flex;align-items:flex-start;gap:7px;}
+.ri-ans.right{color:var(--green);}
+.ri-ans.wrong{color:var(--red);}
+.ri-ans.correct-reveal{color:#2dd4bf;}
+.ri-exp{margin-top:10px;padding:12px 14px;background:rgba(79,142,247,.04);border:1px solid rgba(79,142,247,.12);
+ border-radius:9px;font-size:.82rem;line-height:1.65;color:var(--ink2);}
+
+footer{text-align:center;font-size:.7rem;color:var(--ink3);padding:18px;border-top:1px solid var(--border);
+ font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+footer i{color:var(--accent);}
+
+@media(max-width:560px){
+ .card{padding:22px 16px;}
+ .mode-grid{grid-template-columns:1fr;}
+ .hero-title{font-size:1.8rem;}
+ .breakdown-grid{grid-template-columns:repeat(2,1fr);}
+ #quizTools{right:14px;bottom:18px;}
+}
+
+@media print{
+ @page{ margin:14mm; }
+ *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
+ .topbar, footer, #quizTools, #homeBtn, #retryBtn, #printBtn, .kbd-hint, #statsBar,
+ #pauseOverlay, #leaveWarningModal, #resumeModal, #soundToggle, .hamburger, .mobile-nav { display:none !important; }
+ body{background:#fff;color:#000;}
+ main{padding:0;}
+ .card{border:1px solid #ccc;background:#fff;box-shadow:none;}
+ .bd-card, .review-item{background:#f6f6f6;border-color:#ddd;}
+ .ri-exp{background:#f0f4ff;border-color:#cfd9ff;color:#333;}
+ .result-hero, .bd-card, .review-item{ break-inside:avoid; page-break-inside:avoid; }
+ .review-item{ margin-bottom:14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+ <div class="brand">
+ <span class="brand-badge">BOT102</span>
+ <div class="brand-sub"><i class="fa-solid fa-dna" style="margin-right:5px;"></i>Morphology of Flowering Plants — Root, Stem, Leaf, Flower &amp; Fruit</div>
+ </div>
+ <div style="display:flex;align-items:center;gap:10px;">
+ <div id="timer" class="hidden"><i class="fa-regular fa-clock"></i><span id="timerText">00:00</span></div>
+ <button id="soundToggle" title="Mute sounds" aria-label="Mute sounds" aria-pressed="false"></button>
+ <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
+ <i class="fa-solid fa-bars"></i>
+ <i class="fa-solid fa-xmark"></i>
+ </button>
+ </div>
+</div>
+
+<div class="mobile-nav" id="mobileNav">
+ <div class="mobile-nav-panel">
+ <span class="nav-group-label">Navigate</span>
+ <a href="../dashboard.html"><i class="fa-solid fa-house"></i>Home / Dashboard</a>
+ <a href="../aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+ <span class="nav-group-label">DTZ TRIO</span>
+ <a href="../about.html"><i class="fa-solid fa-users"></i>About Us</a>
+ <a href="../social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+ <span class="nav-group-label">Account</span>
+ <a href="../set.html"><i class="fa-solid fa-gear"></i>Settings</a>
+ <a href="../help.html"><i class="fa-solid fa-circle-question"></i>Help &amp; FAQ</a>
+ </div>
+</div>
+
+<main>
+
+<!-- HOME SCREEN -->
+<div id="homeScreen">
+ <div class="hero-wrap">
+ <div class="hero-eyebrow"><i class="fa-solid fa-seedling"></i> BOT102 Practice Quiz</div>
+ <h1 class="hero-title">100 questions,<br><span>two ways to train.</span></h1>
+ <p class="hero-desc">Covering Root, Stem, Leaf, Flower, and Fruit &amp; Seed morphology — with full worked explanations for every question.</p>
+ </div>
+
+ <div id="statsBar" class="hidden"></div>
+
+ <div class="mode-grid">
+ <div class="mode-card" id="pickAuto">
+ <div class="mode-icon"><i class="fa-solid fa-gauge-high"></i></div>
+ <div class="mode-name">Automatic Timer</div>
+ <div class="mode-desc">All 100 questions, shuffled, with a timer the app sets for you. Get instant feedback the moment you answer, and pause any time you need a break.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-regular fa-clock"></i> Auto-set clock</span>
+ <span class="mode-tag"><i class="fa-solid fa-list-check"></i> 100 Qs</span>
+ <span class="mode-tag"><i class="fa-solid fa-pause"></i> Pausable</span>
+ </div>
+ </div>
+ <div class="mode-card" id="pickCustom">
+ <div class="mode-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="mode-name">Custom Timer</div>
+ <div class="mode-desc">Pick your own topics, time limit, and question count. Answer everything first — no pausing, and no feedback until you submit.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-solid fa-sliders"></i> Custom setup</span>
+ <span class="mode-tag"><i class="fa-solid fa-ban"></i> No pausing</span>
+ <span class="mode-tag"><i class="fa-solid fa-flag-checkered"></i> Results at end</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="section-heading">
+ <div class="section-heading-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+ <div class="section-heading-text">How each mode works</div>
+ </div>
+ <div class="rules-list">
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-gauge-high"></i></span>
+ <span class="rule-text"><strong>Automatic Timer</strong> runs all 100 questions with a clock the app manages for you. Tap an option and it's locked in immediately — correct turns green, wrong turns red, with a short explanation right away. Tap <strong>Pause</strong> any time to freeze the clock and blur the screen. You must answer at least <strong>30 questions</strong> before you can submit.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-sliders"></i></span>
+ <span class="rule-text"><strong>Custom Timer</strong> lets you choose specific topics, your own time limit (up to 120 min), and how many questions to include. It cannot be paused — answers stay hidden until you submit, then you get a full score breakdown and review.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-shield-halved"></i></span>
+ <span class="rule-text">Your progress is <strong>auto-saved</strong> as you go, so a refresh won't lose your place. For fairness, switching away from the tab is tracked — leaving 3 times in one quiz resets it.</span></div>
+ </div>
+</div>
+
+<!-- CONFIG SCREEN -->
+<div id="configScreen" class="hidden">
+ <div class="section-heading" style="margin-top:36px;">
+ <div class="section-heading-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="section-heading-text">Set up your Custom Timer exam</div>
+ </div>
+ <div class="card">
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-layer-group"></i> Topics to include</div>
+ <div class="topics-grid" id="topicsWrap"></div>
+ <div class="config-hint" id="topicsHint">Select at least one topic.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-regular fa-clock"></i> Time limit (minutes)</div>
+ <div class="config-input-row">
+ <input type="range" id="timeSlider" class="config-slider" min="5" max="120" step="5" value="60">
+ <span class="config-value" id="timeValue">60</span>
+ </div>
+ <div class="config-hint">Maximum 120 minutes. This clock cannot be paused once the exam starts.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-list-ol"></i> Number of questions</div>
+ <div class="config-input-row">
+ <input type="range" id="countSlider" class="config-slider" min="1" max="100" step="1" value="50">
+ <span class="config-value" id="countValue">50</span>
+ </div>
+ <div class="config-hint" id="countHint">Randomly picked from the selected topics.</div>
+ </div>
+ <div class="nav-row" style="margin-top:8px;">
+ <button class="btn-ghost" id="backToHomeFromConfig"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <button class="btn" id="startCustomBtn"><i class="fa-solid fa-play"></i> Start Custom Timer</button>
+ </div>
+ </div>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" class="hidden">
+ <div class="loader-ring"></div>
+ <div class="loader-text">Preparing your questions…</div>
+ <div class="loader-sub">Shuffling &amp; randomizing options</div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="quizScreen" class="hidden">
+ <div id="progressWrap">
+ <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+ <div class="dots-group" id="dotsRow"></div>
+ </div>
+ <div class="card">
+ <div class="q-meta">
+ <span class="q-section-tag" id="sectionTag"></span>
+ <span class="q-counter" id="qCounter"></span>
+ </div>
+ <div class="q-text" id="qText"></div>
+ <div id="optsWrap"></div>
+ <div id="inlineExplain" class="inline-explain"></div>
+ <div class="nav-row">
+ <button class="btn-ghost" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <div style="display:flex;gap:8px;">
+ <button class="btn" id="nextBtn">Next <i class="fa-solid fa-arrow-right"></i></button>
+ <button class="btn hidden" id="finishBtn"><i class="fa-solid fa-check"></i> Submit Quiz</button>
+ </div>
+ </div>
+ <div class="kbd-hint">Keyboard: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate &nbsp;·&nbsp; <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to select</div>
+ </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="hidden">
+ <div class="card">
+ <div class="result-hero">
+ <div class="result-ring"><div><div class="result-score" id="resultScore">0</div><div class="result-of" id="resultOf">/ 100</div></div></div>
+ <div class="result-pct" id="resultPct"></div>
+ <div class="result-msg" id="resultMsg"></div>
+ <div id="bestBadge"></div>
+ </div>
+ <div class="breakdown-grid" id="breakdownGrid"></div>
+ <div class="review-section-title"><i class="fa-solid fa-magnifying-glass"></i> Question Review</div>
+ <div id="reviewList"></div>
+ <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;">
+ <button class="btn-ghost" id="homeBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-house"></i> Home</button>
+ <button class="btn-ghost" id="printBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+ <button class="btn" id="retryBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-rotate-right"></i> Retake</button>
+ </div>
+ </div>
+</div>
+
+</main>
+
+<!-- FLOATING QUIZ TOOLS -->
+<div id="quizTools" class="hidden">
+ <button class="fab pause-fab hidden" id="pauseBtn" title="Pause"><i class="fa-solid fa-pause"></i></button>
+</div>
+
+<!-- PAUSE OVERLAY -->
+<div id="pauseOverlay" class="hidden">
+ <div class="modal-icon"><i class="fa-solid fa-pause"></i></div>
+ <h2>Quiz Paused</h2>
+ <p>The clock is frozen and nothing on this screen is visible or clickable until you resume.</p>
+ <button class="btn" id="resumeFromPauseBtn"><i class="fa-solid fa-play"></i> Resume Quiz</button>
+</div>
+
+<!-- LEAVE-WARNING MODAL -->
+<div id="leaveWarningModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></div>
+ <div class="modal-title">You left the quiz</div>
+ <div class="modal-text" id="leaveWarnText"></div>
+ <button class="btn" id="leaveWarnOk">Okay, continue</button>
+ </div>
+</div>
+
+<!-- RESUME AUTOSAVE MODAL -->
+<div id="resumeModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+ <div class="modal-title">Resume your quiz?</div>
+ <div class="modal-text">We found a quiz in progress:<br><strong id="resumeInfo" style="color:var(--ink);"></strong></div>
+ <div style="display:flex;gap:10px;">
+ <button class="btn-ghost" id="resumeNo" style="flex:1;justify-content:center;">Discard</button>
+ <button class="btn" id="resumeYes" style="flex:1;justify-content:center;">Resume</button>
+ </div>
+ </div>
+</div>
+
+<footer><i class="fa-solid fa-seedling"></i> BOT102 &nbsp;·&nbsp; Introduction to Botany Practice Quiz</footer>
+
+<script>
+/* ============================================================
+ HAMBURGER / MOBILE NAV
+ ============================================================ */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+function closeMobileNav(){mobileNav.classList.remove('open');hamburgerBtn.setAttribute('aria-expanded','false');}
+function toggleMobileNav(){const isOpen = mobileNav.classList.toggle('open');hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');}
+hamburgerBtn.addEventListener('click', toggleMobileNav);
+mobileNav.addEventListener('click', (e)=>{ if(e.target === mobileNav) closeMobileNav(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMobileNav(); });
+
+/* ============================================================
+ BOT102 — 100-QUESTION BANK
+ ============================================================ */
+const QUESTIONS = [
+// UNIT 1: Root — General Characters & Regions (Questions 1-20)
+{sec:'Root: General Characters & Regions', q:"In angiosperms, the ovules are enclosed inside the:", opts:["Anther","Ovary","Stigma","Filament"], ans:1, ex:"Angiosperms are defined as the most evolved flowering and seed-bearing plants whose ovules are enclosed inside the ovary."},
+{sec:'Root: General Characters & Regions', q:"The size of angiosperms generally ranges from:", opts:["0.1 inch to 100 metres","1 metre to 10 metres","1 mm to 1 metre","10 metres to 1000 metres"], ans:0, ex:"Angiosperms show a huge size range, from tiny herbs about 0.1 inches to giant trees up to 100 metres tall."},
+{sec:'Root: General Characters & Regions', q:"Plants that grow on saline soils such as marshes are called:", opts:["Xerophytes","Hydrophytes","Halophytes","Epiphytes"], ans:2, ex:"Halophytes are plants adapted to grow in saline soils, such as those found in salt marshes."},
+{sec:'Root: General Characters & Regions', q:"Plants growing on other plants for support, without taking nutrients from them, are called:", opts:["Parasites","Epiphytes","Saprophytes","Halophytes"], ans:1, ex:"Epiphytes grow on other plants purely for physical support, unlike parasites which draw nourishment from a host."},
+{sec:'Root: General Characters & Regions', q:"Most angiosperms show which mode of nutrition?", opts:["Parasitic","Saprophytic","Autotrophic","Heterotrophic only"], ans:2, ex:"Most flowering plants are autotrophic, manufacturing their own food, though some saprophytes and parasites exist as exceptions."},
+{sec:'Root: General Characters & Regions', q:"The plant body of an angiosperm is divided into which main systems?", opts:["Root and shoot system","Flower and fruit system","Leaf and seed system","Stem and seed system"], ans:0, ex:"The body of a flowering plant is divided into the root system and the shoot system, with the shoot further bearing stem, leaves, and flowers."},
+{sec:'Root: General Characters & Regions', q:"The vegetative parts of a plant are concerned with nutrition and growth, and include:", opts:["Flower and fruit only","Root, stem, and leaves","Seed only","Flower only"], ans:1, ex:"Vegetative parts are those concerned with nutrition and growth of the plant — namely root, stem, and leaves."},
+{sec:'Root: General Characters & Regions', q:"The root system is best defined as:", opts:["The ascending axis of the plant body","The descending axis of the plant body which grows downwards into the soil","A modified leaf structure","The reproductive axis of the plant"], ans:1, ex:"The root system is the descending axis of the plant body that grows downward and is generally found underground."},
+{sec:'Root: General Characters & Regions', q:"With respect to gravity, roots normally show:", opts:["Negative geotropism","Positive geotropism","No response to gravity","Negative hydrotropism"], ans:1, ex:"Roots are positively geotropic, meaning they grow in the direction of gravity, downward into the soil."},
+{sec:'Root: General Characters & Regions', q:"Roots typically grow toward moisture in the soil, a response called:", opts:["Positive phototropism","Positive hydrotropism","Negative hydrotropism","Negative phototropism"], ans:1, ex:"Roots are positively hydrotropic, growing in the direction of available moisture in the soil."},
+{sec:'Root: General Characters & Regions', q:"Roots are described as homogenous because they:", opts:["Produce dissimilar organs like leaves and flowers","Produce similar organs (branches only)","Are always photosynthetic","Contain nodes and internodes"], ans:1, ex:"Roots are homogenous in nature — they produce only similar branch roots and are unable to produce dissimilar organs like leaves, and are also non-green and not differentiated into nodes and internodes."},
+{sec:'Root: General Characters & Regions', q:"Which region is located at the extreme tip of the root and protects the meristem?", opts:["Region of maturation","Region of elongation","Region of root cap","Region of cell division"], ans:2, ex:"The root cap is located at the tip of the root and protects the delicate meristematic tissue as the root pushes through soil."},
+{sec:'Root: General Characters & Regions', q:"Which substance does the root cap secrete to lubricate passage through soil?", opts:["Cellulose","Chlorophyll","Mucin/mucilage","Lignin"], ans:2, ex:"The root cap secretes mucin, a mucilage that lubricates the root's passage through soil and reduces friction."},
+{sec:'Root: General Characters & Regions', q:"The region of the root responsible for rapid cell division is called the:", opts:["Region of maturation","Region of meristem/cell division","Region of root hairs","Region of elongation"], ans:1, ex:"The region of cell division (meristem) is located just above the root cap and contains compactly arranged meristematic cells responsible for growth."},
+{sec:'Root: General Characters & Regions', q:"Which region of the root undergoes rapid enlargement and is responsible for the growth of the root in length?", opts:["Root cap","Region of meristematic activity","Region of elongation","Region of maturation"], ans:2, ex:"Cells in the region of elongation undergo rapid enlargement, and this is what accounts for the increase in length of the root."},
+{sec:'Root: General Characters & Regions', q:"Root hairs are formed in which region of the root?", opts:["Region of cell division","Region of elongation","Region of maturation/differentiation","Root cap"], ans:2, ex:"Root hairs, formed from piliferous/epiblema layer cells, develop in the region of maturation (differentiation)."},
+{sec:'Root: General Characters & Regions', q:"Root hairs are typically replaced every:", opts:["1-2 days","10-15 days","30-45 days","60-90 days"], ans:1, ex:"Root hairs remain in contact with soil and are replaced roughly every 10 to 15 days."},
+{sec:'Root: General Characters & Regions', q:"Which of the following is a function of root hairs?", opts:["Photosynthesis","Absorption of water and mineral salts, increasing surface area of absorption","Storage of pollen","Production of flowers"], ans:1, ex:"Root hairs greatly increase the root's surface area and are chiefly responsible for absorbing water and mineral salts from the soil."},
+{sec:'Root: General Characters & Regions', q:"During seed germination, the root develops from which embryonic part?", opts:["Plumule","Radicle","Cotyledon","Hypocotyl only"], ans:1, ex:"The root system develops from the radicle of the embryo, while the shoot system develops from the plumule."},
+{sec:'Root: General Characters & Regions', q:"Which of these is NOT a function of the root, according to its general functions?", opts:["Fixation/anchorage of plant in soil","Absorption of water and minerals","Conduction of water and minerals","Production of flowers"], ans:3, ex:"Roots perform fixation, absorption, conduction, and sometimes storage or special functions — but they do not produce flowers."},
+
+// UNIT 2: Root Types & Modifications (Questions 21-40)
+{sec:'Root Types & Modifications', q:"A tap root develops from which part of the embryo?", opts:["Plumule","Radicle","Cotyledon","Node of stem"], ans:1, ex:"The tap root develops directly from the radicle of the embryo and forms the primary descending root axis."},
+{sec:'Root Types & Modifications', q:"Adventitious roots develop from parts other than the radicle, such as:", opts:["Only from the primary root","Nodes or internodes of stem, or from leaves","Only from the seed coat","Only from the cotyledons"], ans:1, ex:"Adventitious roots are roots that develop from parts of the plant other than the radicle — commonly the base of stem, nodes, or leaves."},
+{sec:'Root Types & Modifications', q:"In monocotyledonous plants, the primary root is short-lived and is replaced by a large number of roots originating from the base of the stem. This constitutes the:", opts:["Tap root system","Fibrous root system","Adventitious root system","Prop root system"], ans:1, ex:"In monocots the short-lived primary root is replaced by numerous roots arising from the stem base, forming the fibrous root system."},
+{sec:'Root Types & Modifications', q:"Compared to adventitious/fibrous roots, tap roots generally show:", opts:["Shorter penetration depth in soil","Greater penetration depth in soil","No secondary roots","Horizontal growth only"], ans:1, ex:"Tap roots typically penetrate deeper into the soil than fibrous roots, which have a comparatively shallower spread."},
+{sec:'Root Types & Modifications', q:"Secondary roots in the tap root system grow:", opts:["Vertically downward like the primary root","Obliquely downward from the primary root","Only horizontally","Upward toward light"], ans:1, ex:"In the tap root system, the primary root grows vertically while secondary roots branch off and grow obliquely downward."},
+{sec:'Root Types & Modifications', q:"In the fibrous/adventitious root system, secondary roots typically grow:", opts:["Obliquely downward","Vertically upward","Vertically downward","Only sideways"], ans:2, ex:"In an adventitious/fibrous root system, secondary roots grow vertically downward, unlike the oblique growth seen in tap roots."},
+{sec:'Root Types & Modifications', q:"Which type of root is generally more highly branched?", opts:["Tap root","Adventitious/fibrous root","Neither branches","Both branch equally"], ans:0, ex:"The tap root system is typically highly branched, whereas the adventitious root system shows comparatively less branching."},
+{sec:'Root Types & Modifications', q:"A root that is swollen at the base and gradually tapers toward the apex is called a:", opts:["Fusiform root","Conical root","Napiform root","Tuberous root"], ans:1, ex:"A conical root, as seen in carrot (Daucus carota), is swollen at the base and gradually tapers toward the apex, like a cone."},
+{sec:'Root Types & Modifications', q:"A root swollen in the middle and tapering toward both the base and apex is called a:", opts:["Conical root","Fusiform root","Napiform root","Nodulose root"], ans:1, ex:"Fusiform roots, as seen in radish (Raphanus sativus), are swollen in the middle and taper towards the base and apex."},
+{sec:'Root Types & Modifications', q:"Which is an example of a napiform root, which is much swollen and almost spherical?", opts:["Carrot","Radish","Sweet Potato","Beet (Beta vulgaris)"], ans:3, ex:"Beet root is a classic napiform root, being much swollen and nearly spherical with an abruptly narrow tapering apex."},
+{sec:'Root Types & Modifications', q:"An adventitious root that becomes irregularly swollen due to food storage is called a:", opts:["Simple tuberous root","Fasciculated tuberous root","Nodulose root","Fusiform root"], ans:0, ex:"A simple tuberous root, as in sweet potato, is a single irregularly-shaped root arising from a stem node that swells with stored food."},
+{sec:'Root Types & Modifications', q:"A cluster of fleshy roots arising together from stem nodes, called fasciculated tuberous roots, is seen in:", opts:["Sweet Potato","Dahlia","Carrot","Radish"], ans:1, ex:"Dahlia shows fasciculated tuberous roots, where a cluster of roots arise together from the nodes of the stem."},
+{sec:'Root Types & Modifications', q:"Special underground roots that grow vertically upward out of waterlogged/saline soil to help in respiration are called:", opts:["Prop roots","Stilt roots","Pneumatophores/breathing roots","Climbing roots"], ans:2, ex:"Pneumatophores are breathing roots that grow upward as conical spikes out of the soil, allowing gas exchange in oxygen-deficient, waterlogged soils."},
+{sec:'Root Types & Modifications', q:"Pneumatophores are roots that grow vertically upwards to help get oxygen for respiration. In which plant are they found?", opts:["Banyan tree","Maize","Turnip","Rhizophora"], ans:3, ex:"Pneumatophores (breathing roots) grow vertically upward out of the soil to obtain oxygen for respiration, and are found in Rhizophora, a plant growing in saline, marshy habitats."},
+{sec:'Root Types & Modifications', q:"Roots that arise from horizontal branches of a tree, grow down vertically, and become thick pillar-like supports are called:", opts:["Prop roots","Stilt roots","Climbing roots","Epiphytic roots"], ans:0, ex:"Prop roots arise from horizontal branches and grow downward to act as pillars supporting heavy branches, as seen in the banyan tree."},
+{sec:'Root Types & Modifications', q:"Roots arising obliquely from the lower nodes of the stem to give extra mechanical support are called:", opts:["Prop roots","Stilt roots","Climbing roots","Suckling roots"], ans:1, ex:"Stilt roots arise obliquely from lower stem nodes and penetrate the soil, providing extra support, as seen in maize and sugarcane."},
+{sec:'Root Types & Modifications', q:"Roots that arise from stem nodes and help a plant attach to and climb up a support are called:", opts:["Stilt roots","Prop roots","Climbing roots","Pneumatophores"], ans:2, ex:"Climbing roots, seen in Piper betel (paan) and money plant/pothos, arise from nodes and attach the stem to bark or another support."},
+{sec:'Root Types & Modifications', q:"The spongy tissue in epiphytic/assimilatory roots that absorbs moisture from the atmosphere is called:", opts:["Aerenchyma","Velamen","Sclerenchyma","Mesophyll"], ans:1, ex:"Epiphytic roots, as in orchids like Vanda and Dendrobium, contain a spongy tissue called velamen that absorbs hygroscopic moisture from the air."},
+{sec:'Root Types & Modifications', q:"The specialized roots of parasitic plants that penetrate a host to absorb nourishment are called:", opts:["Pneumatophores","Haustoria/suckling roots","Stilt roots","Prop roots"], ans:1, ex:"Parasitic (haustorial/suckling) roots, as seen in Cuscuta (dodder), make connection with the host's vascular bundle to suck food and water."},
+{sec:'Root Types & Modifications', q:"Which of the following is an example of a plant with parasitic (haustorial) roots?", opts:["Rhizophora","Cuscuta (dodder)","Vanda","Banyan tree"], ans:1, ex:"Cuscuta, commonly called dodder, is a classic example of a parasitic plant with haustorial roots that connect to the host's vascular tissue."},
+
+// UNIT 3: Stem — Characters, Buds & Modifications (Questions 41-60)
+{sec:'Stem: Characters, Buds & Modifications', q:"The stem develops from which embryonic structure?", opts:["Radicle","Plumule/terminal apical bud","Cotyledon","Root cap"], ans:1, ex:"The stem is the ascending axis of the plant body that grows from the plumule (terminal/apical bud) of the embryo."},
+{sec:'Stem: Characters, Buds & Modifications', q:"With respect to gravity and light, a typical stem shows:", opts:["Negative geotropism and positive phototropism","Positive geotropism and negative phototropism","Negative geotropism and negative phototropism","Positive geotropism and positive phototropism"], ans:0, ex:"Unlike roots, stems are negatively geotropic (grow away from gravity) and positively phototropic (grow toward light)."},
+{sec:'Stem: Characters, Buds & Modifications', q:"Unlike the root, the stem is differentiated into:", opts:["Root cap and meristem only","Nodes and internodes","Cortex and epidermis only","Root hairs"], ans:1, ex:"A key distinguishing feature of the stem is that it is differentiated into nodes (where leaves/buds arise) and internodes (the region between two nodes)."},
+{sec:'Stem: Characters, Buds & Modifications', q:"A bud is best described as:", opts:["A swollen underground root","A compact condensed shoot with young, immature leaves overlapped by nodal region and containing meristematic tissue","A mature flower","A modified leaf for climbing"], ans:1, ex:"A bud is a compact shoot, condensed at the nodal region, containing meristematic tissue and young overlapping leaves."},
+{sec:'Stem: Characters, Buds & Modifications', q:"The bud located at the apex of the stem is called the:", opts:["Axillary/lateral bud","Apical/terminal bud","Adventitious bud","Floral bud"], ans:1, ex:"The apical or terminal bud is located at the very apex of the stem and develops into branches or leaves as the stem grows."},
+{sec:'Stem: Characters, Buds & Modifications', q:"A bud located at the axil of the stem is called the:", opts:["Apical bud","Adventitious bud","Axillary/lateral bud","Terminal bud"], ans:2, ex:"The axillary (lateral) bud develops at the axil of the stem, distinct from the apical bud found at the very tip."},
+{sec:'Stem: Characters, Buds & Modifications', q:"A bud that develops from roots or leaves (rather than at a typical node) is called a(n):", opts:["Vegetative bud","Floral bud","Adventitious bud","Terminal bud"], ans:2, ex:"An adventitious bud develops from root or leaf tissue rather than from the usual apical or axillary positions."},
+{sec:'Stem: Characters, Buds & Modifications', q:"A bud that eventually develops into a flower is classified as:", opts:["A vegetative/leaf bud","A floral/reproductive bud","An adventitious bud","A leaf bud only"], ans:1, ex:"Floral (reproductive) buds develop into flowers, in contrast to vegetative (leaf) buds which develop into branches and leaves."},
+{sec:'Stem: Characters, Buds & Modifications', q:"Which of the following is an underground stem modified to store food?", opts:["Sweet potato","Carrot","Ginger","Asparagus"], ans:2, ex:"Ginger is an underground stem (rhizome) modified to store food, distinguished from sweet potato and carrot, which are modified roots."},
+{sec:'Stem: Characters, Buds & Modifications', q:"Which is an example of a monopodial rhizome, which grows with the help of a terminal bud?", opts:["Ginger","Pteris","Onion","Potato"], ans:1, ex:"In a monopodial rhizome such as Pteris, growth occurs continuously through the terminal (apical) bud."},
+{sec:'Stem: Characters, Buds & Modifications', q:"A condensed underground stem with a compact disc-like base surrounded by concentric fleshy scale leaves is called a:", opts:["Rhizome","Bulb","Corm","Stem tuber"], ans:1, ex:"A bulb is a condensed stem with a compact disc-like structure, its outer scale leaves surrounding the axillary and apical bud, as seen in onion."},
+{sec:'Stem: Characters, Buds & Modifications', q:"A tunicated bulb, such as onion, differs from a scaly bulb, such as garlic, mainly because:", opts:["Its apical bud is surrounded by concentric rings of fleshy scale leaves, versus scales that only partially surround the bud","It lacks a stem disc","It has no scale leaves at all","It always grows above ground"], ans:0, ex:"In a tunicated bulb (onion) the apical bud is surrounded by concentric rings of fleshy scale leaves, whereas in a scaly bulb (garlic) scale leaves only partially surround the bud by their margins."},
+{sec:'Stem: Characters, Buds & Modifications', q:"A fleshy, stout, upright underground stem that grows vertically and bears axillary buds at the axils of scale leaves is called a:", opts:["Rhizome","Corm","Bulb","Runner"], ans:1, ex:"A corm is the condensed form of a rhizome that grows vertically, is fleshy and thick, and bears many axillary buds, as seen in Colocasia."},
+{sec:'Stem: Characters, Buds & Modifications', q:"The swollen tip of an underground branch of a stem, bearing nodes, scale leaves and axillary buds ('eyes'), is called a:", opts:["Stem tuber","Rhizome","Bulb","Corm"], ans:0, ex:"A stem tuber, as in potato (Solanum tuberosum), is the swollen apex of an underground stem branch; its 'eyes' are axillary buds."},
+{sec:'Stem: Characters, Buds & Modifications', q:"An underground runner that grows horizontally for some distance and then comes obliquely above soil to form new shoots is called a:", opts:["Sucker","Stolon","Offset","Rhizome"], ans:1, ex:"A stolon is an underground runner which grows horizontally, then comes obliquely above the soil surface to produce a new shoot, as in mint."},
+{sec:'Stem: Characters, Buds & Modifications', q:"A prostrate horizontal branch that arises from the axillary bud of a stem, grows above the soil, and roots at nodes is called a:", opts:["Runner","Stolon","Sucker","Offset"], ans:0, ex:"A runner is a horizontal, above-ground stem branch that arises from an axillary bud and roots at its nodes, as in lawn grass (Cynodon dactylon)."},
+{sec:'Stem: Characters, Buds & Modifications', q:"A short, shorter, and thicker sub-aerial stem modification with only one internode, typically found in aquatic plants, is called a(n):", opts:["Runner","Stolon","Offset","Sucker"], ans:2, ex:"An offset is a shorter, thicker runner having only one internode, forming new shoots and roots — commonly seen in aquatic plants like Pistia and Eichhornia."},
+{sec:'Stem: Characters, Buds & Modifications', q:"An underground horizontal branch arising from the axillary bud of the underground stem part, coming obliquely above soil, is called a:", opts:["Runner","Sucker","Stolon","Offset"], ans:1, ex:"A sucker is an underground branch arising from an axillary bud that comes obliquely above the soil, forming a new shoot, as in mint/chrysanthemum."},
+{sec:'Stem: Characters, Buds & Modifications', q:"Stem tendrils, which are slender and spirally coiled to help plants climb, develop from:", opts:["Terminal buds","Axillary buds","Leaf bases","Adventitious roots"], ans:1, ex:"Stem tendrils are slender, spirally coiled structures that develop from axillary buds, helping weak-stemmed plants like grapevine climb."},
+{sec:'Stem: Characters, Buds & Modifications', q:"A green, flattened, fleshy stem modification with unlimited growth that performs photosynthesis, with leaves reduced to spines, is called a:", opts:["Cladode","Phylloclade","Stem tendril","Stem thorn"], ans:1, ex:"A phylloclade is a thick, fleshy, green stem modified to take over photosynthesis while the leaves are reduced to spines, as seen in Opuntia (prickly pear)."},
+
+// UNIT 4: Leaf — Structure, Types, Venation & Modifications (Questions 61-80)
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"The leaf is a dorsoventrally compressed, expanded green lateral appendage that develops at the:", opts:["Root tip","Nodes of the stem or its phyllopodium","Internode only","Fruit"], ans:1, ex:"The leaf is a green lateral appendage that develops at the nodes of the stem, arising from a structure sometimes called a phyllopodium."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"In which group of plants does the leaf base expand into a sheath covering the stem partially or wholly?", opts:["Dicotyledons","Leguminous plants","Monocotyledons","Aquatic plants"], ans:2, ex:"In monocotyledons, the leaf base expands into a sheath that partially or wholly covers the stem."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"Stipules, found as a pair of lateral appendages at the leaf base, function mainly to:", opts:["Conduct water to the stem","Provide protection to the bud","Carry out photosynthesis exclusively","Store starch"], ans:1, ex:"Stipules are lateral appendages present at the leaf base that help protect the young bud."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"A leaf attached to the stem by a stalk called the petiole is described as a:", opts:["Sessile leaf","Petiolate leaf","Ex-stipulate leaf","Non-petiolate leaf"], ans:1, ex:"A petiolate leaf is one that possesses a petiole, the stalk connecting the leaf base to the lamina."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"A leaf attached directly to the stem without a petiole is called a:", opts:["Petiolate leaf","Sessile/non-petiolate leaf","Stipulate leaf","Ex-stipulate leaf"], ans:1, ex:"A sessile (non-petiolate) leaf is a leaf that lacks a petiole and is attached directly at the leaf base."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"The petiole assists a leaf mainly by:", opts:["Producing pollen","Helping the lamina to twist towards sunlight and conducting water/minerals","Storing seeds","Absorbing water from soil"], ans:1, ex:"The petiole is the stalk of the leaf that helps orient the lamina towards sunlight and also helps conduct water and minerals."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"When the veinlets form a network in the lamina of a leaf, the venation is termed as:", opts:["Parallel venation","Reticulate venation","Pinnate venation","Palmate venation"], ans:1, ex:"When the veinlets of a leaf form a network, the venation is termed reticulate venation, characteristic of dicot leaves."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"Parallel venation, where veins run parallel to each other, is characteristic of:", opts:["Dicot plants","Monocot plants","Gymnosperms only","Algae"], ans:1, ex:"Parallel venation, in which the veins run parallel to one another, is the characteristic venation pattern of monocot plants."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"A leaf with a single, undivided lamina is called a:", opts:["Compound leaf","Simple leaf","Pinnate leaf","Palmate leaf"], ans:1, ex:"A simple leaf has a single leaf blade (lamina) that is not divided into separate leaflets."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"A leaf is considered a \"compound leaf\" when:", opts:["The lamina is entire.","The incisions of the lamina do not touch the midrib.","The incisions of the lamina reach up to the midrib, breaking it into leaflets.","The petiole expands and synthesises food."], ans:2, ex:"A leaf is compound when the incisions of the lamina reach up to the midrib, breaking the lamina into a number of separate leaflets."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"A pinnately compound leaf with a single pair of leaflets arranged along the rachis is called:", opts:["Unipinnate","Bipinnate","Tripinnate","Decompound"], ans:0, ex:"A unipinnate compound leaf, as seen in Neem, has leaflets arranged singly along a common rachis (midrib)."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"A pinnately compound leaf in which the rachis itself branches to bear leaflets, as seen in Gulmohar, is called:", opts:["Unipinnate","Bipinnate","Decompound","Trifoliate"], ans:1, ex:"A bipinnate compound leaf, as seen in Gulmohar, has a rachis that branches further, each secondary rachis bearing its own leaflets."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"A palmately compound leaf in which all leaflets attach to a common point at the tip of the petiole is best exemplified by:", opts:["Neem (unipinnate)","Silk cotton (palmately compound)","Gulmohar (bipinnate)","Drumstick (tripinnate)"], ans:1, ex:"In palmately compound leaves such as silk cotton, all the leaflets attach to a single common point at the tip of the petiole."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"A palmately compound leaf bearing exactly three leaflets, as seen in Wood apple, is called:", opts:["Unifoliate","Bifoliate","Trifoliate","Quadrifoliate"], ans:2, ex:"A trifoliate leaf is a palmately compound leaf with three leaflets attached to a common point, as seen in Wood apple."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"When axillary or apical buds of a leaf modify into a thin, wiry, coiled structure to aid climbing, it is called a:", opts:["Leaf spine","Leaf tendril","Phyllode","Leaf hook"], ans:1, ex:"Leaf tendrils, as seen in pea (terminal leaflet) and Gloriosa (leaf apex), are thin, coiled leaf modifications that help weak-stemmed plants climb."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"When an entire leaf is modified into a hard, pointed structure that reduces water loss through transpiration, it is called a:", opts:["Leaf tendril","Phyllode","Leaf spine","Leaf hook"], ans:2, ex:"Leaf spines, seen in plants like Ziziphus and Agave, are hard, pointed structures formed by modification of the entire leaf, mainly to reduce transpiration."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"The modification of a petiole into a flat, green, photosynthetic structure in place of the lamina is called a:", opts:["Phyllode","Leaf hook","Leaf tendril","Cladode"], ans:0, ex:"A phyllode is a petiole modified into a flat, green structure that carries out photosynthesis and helps reduce transpiration, as seen in Acacia auriculiformis."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"Terminal leaflets modified into curved, pointed structures that help a plant climb and gain support are called:", opts:["Leaf spines","Leaf hooks","Phyllodes","Cladodes"], ans:1, ex:"Leaf hooks, as seen in Bignonia, are terminal leaflets modified into curved, pointed structures that help the plant climb."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"Which plant exhibits a whorled phyllotaxy, where more than two leaves arise at a node?", opts:["Mustard","Calotropis","Guava","Alstonia"], ans:3, ex:"In whorled phyllotaxy, more than two leaves arise at a node and form a whorl, as seen in Alstonia."},
+{sec:'Leaf: Structure, Types, Venation & Modifications', q:"Which structures on the leaf surface are the minute pores responsible for transpiration and gas exchange?", opts:["Trichomes","Stomata","Lenticels","Hydathodes"], ans:1, ex:"Stomata are minute openings/pores present on the leaf surface (mainly ventral and dorsal epidermis) that help in transpiration and gas exchange."},
+
+// UNIT 5: Flower, Fruit & Seed (Questions 81-100)
+{sec:'Flower, Fruit & Seed', q:"In a cymose inflorescence, the main axis:", opts:["Continues to grow indefinitely.","Terminates in a flower, limiting its growth.","Bears flowers in an acropetal succession.","Bears flowers laterally without a terminal flower."], ans:1, ex:"In a cymose inflorescence, the main axis terminates in a flower, so its growth is limited, and flowers are borne in a basipetal order."},
+{sec:'Flower, Fruit & Seed', q:"What is a fruit called if it is formed without the fertilisation of the ovary?", opts:["Endospermous fruit","Parthenocarpic fruit","Drupe","Legume"], ans:1, ex:"A fruit that develops without fertilisation of the ovary is called a parthenocarpic fruit, and it is generally seedless."},
+{sec:'Flower, Fruit & Seed', q:"Mango and coconut are examples of which type of fruit?", opts:["Berry","Capsule","Drupe","Replum"], ans:2, ex:"Mango and coconut are both examples of a drupe, a fruit with a hard, stony endocarp surrounding the seed."},
+{sec:'Flower, Fruit & Seed', q:"In a dicotyledonous seed, what is the scar on the seed coat through which the developing seeds were attached to the fruit?", opts:["Micropyle","Plumule","Radicle","Hilum"], ans:3, ex:"The hilum is the scar on the seed coat marking the point where the developing seed was attached to the fruit by a stalk (funicle)."},
+{sec:'Flower, Fruit & Seed', q:"When stamens are attached to the perianth, as seen in lily, they are called:", opts:["Epipetalous","Polyandrous","Epiphyllous","Monoadelphous"], ans:2, ex:"Stamens attached to the perianth (tepals), as seen in lily, are described as epiphyllous."},
+{sec:'Flower, Fruit & Seed', q:"In monocotyledonous seeds, the outer covering of the endosperm separates the embryo by a proteinous layer called the:", opts:["Aleurone layer","Scutellum","Coleoptile","Coleorhiza"], ans:0, ex:"In monocot seeds, the aleurone layer is the outer proteinous covering of the endosperm that separates it from the embryo."},
+{sec:'Flower, Fruit & Seed', q:"Which plant family is commonly referred to as the 'potato family'?", opts:["Fabaceae","Solanaceae","Liliaceae","Papilionoideae"], ans:1, ex:"Solanaceae, which includes potato, tomato, and brinjal, is commonly known as the potato family."},
+{sec:'Flower, Fruit & Seed', q:"A type of placentation in which ovules develop along the fused margins of a unilocular ovary, as in Pea, is called:", opts:["Axile placentation","Marginal placentation","Parietal placentation","Basal placentation"], ans:1, ex:"Marginal placentation, seen in Pea, occurs when ovules are produced at the fused margins of a unilocular ovary."},
+{sec:'Flower, Fruit & Seed', q:"When the placenta is axial and the ovules are attached to it in a multilocular ovary, the placentation is known as:", opts:["Marginal","Axile","Parietal","Free Central"], ans:1, ex:"In axile placentation, the placenta is axial and the ovules are attached to it in a multilocular ovary, as seen in China Rose and tomato."},
+{sec:'Flower, Fruit & Seed', q:"A type of placentation in which the ovules develop on the inner wall of a unilocular ovary of a syncarpous gynoecium is called:", opts:["Parietal placentation","Basal placentation","Free central placentation","Axile placentation"], ans:0, ex:"Parietal placentation occurs when ovules are produced on the inner wall of a unilocular ovary formed from a multicarpellary syncarpous gynoecium."},
+{sec:'Flower, Fruit & Seed', q:"A type of placentation in which a single ovule is produced at the base of a unilocular ovary, as in Sunflower, is called:", opts:["Axile placentation","Basal placentation","Marginal placentation","Free central placentation"], ans:1, ex:"Basal placentation, as seen in Sunflower, involves a single ovule attached at the base of a unilocular ovary."},
+{sec:'Flower, Fruit & Seed', q:"The mode of arrangement of sepals and petals in a flower bud is called:", opts:["Placentation","Aestivation","Phyllotaxy","Venation"], ans:1, ex:"Aestivation describes how sepals and petals are arranged relative to each other in the floral bud."},
+{sec:'Flower, Fruit & Seed', q:"An aestivation type in which sepal/petal margins lie close to each other but do not overlap, as in Datura and Calotropis, is called:", opts:["Twisted/contorted","Valvate","Imbricate","Vexillary"], ans:1, ex:"In valvate aestivation, the margins of sepals or petals just touch one another without overlapping, as seen in Datura and Calotropis."},
+{sec:'Flower, Fruit & Seed', q:"An aestivation type in which one margin of each sepal/petal overlaps the adjacent one and the other margin is overlapped, as in Cotton and China Rose, is called:", opts:["Valvate","Twisted/contorted","Imbricate","Vexillary"], ans:1, ex:"Twisted (contorted) aestivation involves each member overlapping one neighbor while being overlapped by the other, as in Cotton and China Rose."},
+{sec:'Flower, Fruit & Seed', q:"An aestivation type in which only one member is completely external, one is completely internal, and the rest overlap partially, is called:", opts:["Valvate","Contorted","Imbricate","Vexillary"], ans:2, ex:"Imbricate aestivation, seen in Cassia and Bauhinia, has one member fully external, one fully internal, and the remaining members overlapping partly."},
+{sec:'Flower, Fruit & Seed', q:"Which type of aestivation features a large petal (standard) overlapping two lateral petals (wings), which in turn overlap two smallest anterior petals (keel)?", opts:["Valvate","Twisted","Imbricate","Vexillary"], ans:3, ex:"Vexillary (papilionaceous) aestivation features a large standard petal overlapping two wing petals, which overlap the two smallest anterior keel petals, as in Pea."},
+{sec:'Flower, Fruit & Seed', q:"A flower that can be divided into two equal halves along any vertical plane, such as Mustard or China Rose, is described as:", opts:["Zygomorphic/irregular","Actinomorphic/regular","Asymmetrical","Both zygomorphic and asymmetrical"], ans:1, ex:"Actinomorphic (regular/radially symmetrical) flowers can be divided into two identical halves along any plane passing through the center, as in mustard and China rose."},
+{sec:'Flower, Fruit & Seed', q:"A flower that can be divided into two similar halves only in one particular vertical plane is called:", opts:["Actinomorphic","Zygomorphic","Asymmetric","Radial"], ans:1, ex:"A zygomorphic flower can be divided into two similar halves only along one particular vertical plane, as seen in Pea and Ocimum."},
+{sec:'Flower, Fruit & Seed', q:"In a hypogynous flower, the gynoecium occupies the highest position while other parts are situated below it. The ovary in such flowers is said to be:", opts:["Superior","Inferior","Half-inferior","Perigynous"], ans:0, ex:"In hypogynous flowers, the gynoecium sits at the highest position with other whorls below it, so the ovary is described as superior, as in Mustard."},
+{sec:'Flower, Fruit & Seed', q:"When the thalamus grows upward and completely encloses the ovary, making it inferior, as in Sunflower, the condition is called:", opts:["Hypogyny","Perigyny","Epigyny","Neither perigyny nor epigyny"], ans:2, ex:"In epigyny, the thalamus grows upward and completely encloses the ovary, making the ovary inferior, as seen in Sunflower and Guava."}
+];
+
+const ALL_TOPICS = [
+ 'Root: General Characters & Regions',
+ 'Root Types & Modifications',
+ 'Stem: Characters, Buds & Modifications',
+ 'Leaf: Structure, Types, Venation & Modifications',
+ 'Flower, Fruit & Seed'
+];
+
+/* ============================================================
+ STORAGE KEYS (persistent artifact storage, not localStorage)
+ ============================================================ */
+const MUTE_KEY = 'bot102-muted';
+const BEST_SCORE_KEY = 'bot102-best-score';
+const STORAGE_KEY = 'bot102-quiz-state';
+
+/* ============================================================
+ HELPERS
+ ============================================================ */
+
+/* Records this attempt into the same localStorage list the Settings
+   page (set.html) reads for Quiz History / Reset Progress / PDF export. */
+function saveResultToHistory(course, score, total){
+ try{
+  const raw = localStorage.getItem('dtz_quiz_results');
+  const list = raw ? JSON.parse(raw) : [];
+  list.push({ course, score, total, date: new Date().toISOString() });
+  localStorage.setItem('dtz_quiz_results', JSON.stringify(list));
+ }catch(e){ /* storage unavailable — silently skip, quiz still works */ }
+}
+
+function shuffle(arr){
+ const a=[...arr];
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+ return a;
+}
+function sectionIcon(sec){
+ return {
+  'Microbiology: Bacteria, Fungi & Viruses':'fa-bacterium',
+  'Identification Techniques & Viral Classification':'fa-magnifying-glass',
+  'Plant & Animal Adaptations':'fa-paw',
+  'Animal Physiology: Nutrition, Respiration & Reproduction':'fa-lungs',
+  'Plant Physiology, Growth & Ecology':'fa-seedling'
+ }[sec] || 'fa-dna';
+}
+function randomizeOptions(item){
+ const pairs = item.opts.map((o,idx)=>({o, correct: idx===item.ans}));
+ const shuffled = shuffle(pairs);
+ return {...item, opts: shuffled.map(p=>p.o), ans: shuffled.findIndex(p=>p.correct)};
+}
+
+/* Safely read a value from persistent storage. Returns null if the key
+   doesn't exist or storage is unavailable, instead of throwing. */
+async function storageGet(key) {
+ try {
+  const result = await window.storage.get(key, false);
+  return result ? result.value : null;
+ } catch (e) {
+  return null;
+ }
+}
+async function storageSet(key, value) {
+ try {
+  await window.storage.set(key, value, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+async function storageDelete(key) {
+ try {
+  await window.storage.delete(key, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+
+/* SOUND ENGINE */
+const SoundEngine = (function() {
+ let ctx = null;
+ let muted = false;
+
+ async function init() {
+  const v = await storageGet(MUTE_KEY);
+  muted = v === '1';
+  return muted;
+ }
+
+ function getCtx() {
+ if (!ctx) {
+ const AC = window.AudioContext || window.webkitAudioContext;
+ if (!AC) return null;
+ ctx = new AC();
+ }
+ if (ctx.state === 'suspended') ctx.resume();
+ return ctx;
+ }
+
+ function isMuted() { return muted; }
+ async function setMuted(v) {
+ muted = v;
+ await storageSet(MUTE_KEY, v ? '1' : '0');
+ }
+
+ function playCorrect() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc1 = c.createOscillator();
+ const osc2 = c.createOscillator();
+ const gain = c.createGain();
+
+ osc1.type = 'sine'; osc1.frequency.setValueAtTime(880, t);
+ osc2.type = 'sine'; osc2.frequency.setValueAtTime(1760, t);
+
+ gain.gain.setValueAtTime(0.2, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+
+ osc1.connect(gain); osc2.connect(gain);
+ gain.connect(c.destination);
+
+ osc1.start(t); osc2.start(t);
+ osc1.stop(t + 0.6); osc2.stop(t + 0.6);
+ }
+
+ function playWrong() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc = c.createOscillator();
+ const gain = c.createGain();
+
+ osc.type = 'sawtooth';
+ osc.frequency.setValueAtTime(160, t);
+ osc.frequency.exponentialRampToValueAtTime(60, t + 0.35);
+
+ gain.gain.setValueAtTime(0.25, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+
+ osc.connect(gain);
+ gain.connect(c.destination);
+
+ osc.start(t);
+ osc.stop(t + 0.35);
+ }
+
+ return { init, isMuted, setMuted, playCorrect, playWrong };
+})();
+
+/* APP STATE */
+let quizMode = 'auto'; // 'auto' or 'custom'
+let activeQuestions = [];
+let userAnswers = []; // array of selected option indices
+let currentQ = 0;
+let timeRemaining = 0;
+let timerInterval = null;
+let isPaused = false;
+let leaveCount = 0;
+
+// DOM Elements
+const homeScreen = document.getElementById('homeScreen');
+const configScreen = document.getElementById('configScreen');
+const loadingScreen = document.getElementById('loadingScreen');
+const quizScreen = document.getElementById('quizScreen');
+const resultScreen = document.getElementById('resultScreen');
+
+const pickAuto = document.getElementById('pickAuto');
+const pickCustom = document.getElementById('pickCustom');
+const backToHomeFromConfig = document.getElementById('backToHomeFromConfig');
+const startCustomBtn = document.getElementById('startCustomBtn');
+
+const topicsWrap = document.getElementById('topicsWrap');
+const timeSlider = document.getElementById('timeSlider');
+const timeValue = document.getElementById('timeValue');
+const countSlider = document.getElementById('countSlider');
+const countValue = document.getElementById('countValue');
+
+const timerBox = document.getElementById('timer');
+const timerText = document.getElementById('timerText');
+const soundToggle = document.getElementById('soundToggle');
+
+const progressFill = document.getElementById('progressFill');
+const dotsRow = document.getElementById('dotsRow');
+const sectionTag = document.getElementById('sectionTag');
+const qCounter = document.getElementById('qCounter');
+const qText = document.getElementById('qText');
+const optsWrap = document.getElementById('optsWrap');
+const inlineExplain = document.getElementById('inlineExplain');
+
+const backBtn = document.getElementById('backBtn');
+const nextBtn = document.getElementById('nextBtn');
+const finishBtn = document.getElementById('finishBtn');
+
+const quizTools = document.getElementById('quizTools');
+const pauseBtn = document.getElementById('pauseBtn');
+const pauseOverlay = document.getElementById('pauseOverlay');
+const resumeFromPauseBtn = document.getElementById('resumeFromPauseBtn');
+
+const resumeModal = document.getElementById('resumeModal');
+const resumeInfo = document.getElementById('resumeInfo');
+const resumeYes = document.getElementById('resumeYes');
+const resumeNo = document.getElementById('resumeNo');
+
+const leaveWarningModal = document.getElementById('leaveWarningModal');
+const leaveWarnText = document.getElementById('leaveWarnText');
+const leaveWarnOk = document.getElementById('leaveWarnOk');
+
+const statsBar = document.getElementById('statsBar');
+
+/* INIT */
+window.addEventListener('load', async () => {
+ await SoundEngine.init();
+ updateSoundToggleUI();
+ setupConfigTopics();
+ await checkSavedState();
+ await updateHomeStats();
+});
+
+function updateSoundToggleUI() {
+ const muted = SoundEngine.isMuted();
+ soundToggle.classList.toggle('muted', muted);
+ soundToggle.setAttribute('aria-pressed', muted ? 'true' : 'false');
+ soundToggle.innerHTML = muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+}
+soundToggle.addEventListener('click', async () => {
+ await SoundEngine.setMuted(!SoundEngine.isMuted());
+ updateSoundToggleUI();
+});
+
+async function updateHomeStats() {
+ const best = await storageGet(BEST_SCORE_KEY);
+ if (best) {
+  statsBar.classList.remove('hidden');
+  statsBar.innerHTML = `<div class="stat-chip"><i class="fa-solid fa-trophy"></i> Best Score: <strong>${best}%</strong></div>`;
+ } else {
+  statsBar.classList.add('hidden');
+  statsBar.innerHTML = '';
+ }
+}
+
+/* CONFIG TOPICS BUILD */
+function setupConfigTopics() {
+ topicsWrap.innerHTML = '';
+ ALL_TOPICS.forEach((t) => {
+  const label = document.createElement('label');
+  label.className = 'topic-chip';
+  label.innerHTML = `<input type="checkbox" value="${t}" checked> <span><i class="fa-solid ${sectionIcon(t)}"></i> ${t}</span>`;
+  topicsWrap.appendChild(label);
+ });
+}
+
+timeSlider.addEventListener('input', () => { timeValue.textContent = timeSlider.value; });
+countSlider.addEventListener('input', () => { countValue.textContent = countSlider.value; });
+
+/* MODE SELECTION */
+pickAuto.addEventListener('click', () => {
+ startQuiz('auto', ALL_TOPICS, 60, QUESTIONS.length);
+});
+pickCustom.addEventListener('click', () => {
+ homeScreen.classList.add('hidden');
+ configScreen.classList.remove('hidden');
+});
+backToHomeFromConfig.addEventListener('click', () => {
+ configScreen.classList.add('hidden');
+ homeScreen.classList.remove('hidden');
+});
+
+startCustomBtn.addEventListener('click', () => {
+ const selectedTopics = Array.from(topicsWrap.querySelectorAll('input:checked')).map(i => i.value);
+ if (selectedTopics.length === 0) {
+  alert('Please select at least one topic.');
+  return;
+ }
+ const mins = parseInt(timeSlider.value, 10);
+ const count = parseInt(countSlider.value, 10);
+ configScreen.classList.add('hidden');
+ startQuiz('custom', selectedTopics, mins, count);
+});
+
+/* START QUIZ */
+function startQuiz(mode, topics, minutes, count) {
+ quizMode = mode;
+ showScreen(loadingScreen);
+ setTimeout(() => {
+  let filtered = QUESTIONS.filter(q => topics.includes(q.sec));
+  if (filtered.length === 0) filtered = [...QUESTIONS];
+  filtered = shuffle(filtered).map(randomizeOptions);
+  if (count < filtered.length) {
+   filtered = filtered.slice(0, count);
+  }
+  activeQuestions = filtered;
+  userAnswers = new Array(activeQuestions.length).fill(null);
+  currentQ = 0;
+  timeRemaining = minutes * 60;
+  isPaused = false;
+  leaveCount = 0;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') {
+   pauseBtn.classList.remove('hidden');
+  } else {
+   pauseBtn.classList.add('hidden');
+  }
+  timerBox.classList.remove('hidden');
+
+  startTimer();
+  renderQuestion();
+  saveState();
+ }, 600);
+}
+
+function showScreen(sc) {
+ [homeScreen, configScreen, loadingScreen, quizScreen, resultScreen].forEach(s => s.classList.add('hidden'));
+ sc.classList.remove('hidden');
+ if (sc === quizScreen) {
+  closeMobileNav();
+  hamburgerBtn.classList.add('hidden');
+ } else {
+  hamburgerBtn.classList.remove('hidden');
+ }
+}
+
+/* TIMER */
+function startTimer() {
+ clearInterval(timerInterval);
+ updateTimerDisplay();
+ timerInterval = setInterval(() => {
+  if (!isPaused) {
+   timeRemaining--;
+   updateTimerDisplay();
+   if (timeRemaining <= 0) {
+    clearInterval(timerInterval);
+    alert('Time is up! Submitting your answers.');
+    finishQuiz();
+   }
+  }
+ }, 1000);
+}
+
+function updateTimerDisplay() {
+ const m = Math.floor(Math.max(0, timeRemaining) / 60);
+ const s = Math.max(0, timeRemaining) % 60;
+ timerText.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+ if (timeRemaining < 300) {
+  timerBox.classList.add('warn');
+ } else {
+  timerBox.classList.remove('warn');
+ }
+}
+
+/* PAUSE ENGINE */
+pauseBtn.addEventListener('click', togglePause);
+resumeFromPauseBtn.addEventListener('click', togglePause);
+
+function togglePause() {
+ if (quizMode !== 'auto') return;
+ isPaused = !isPaused;
+ if (isPaused) {
+  pauseOverlay.classList.remove('hidden');
+ } else {
+  pauseOverlay.classList.add('hidden');
+ }
+}
+
+/* RENDER QUESTION */
+function renderQuestion() {
+ const q = activeQuestions[currentQ];
+ sectionTag.innerHTML = `<i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec}`;
+ qCounter.textContent = `Question ${currentQ + 1} of ${activeQuestions.length}`;
+ qText.textContent = q.q;
+
+ optsWrap.innerHTML = '';
+ inlineExplain.className = 'inline-explain';
+ inlineExplain.innerHTML = '';
+
+ const answered = userAnswers[currentQ] !== null;
+
+ q.opts.forEach((optStr, idx) => {
+  const optDiv = document.createElement('div');
+  optDiv.className = 'opt';
+  const letter = String.fromCharCode(65 + idx);
+
+  if (answered) {
+   optDiv.classList.add('locked');
+   if (quizMode === 'auto') {
+    if (idx === q.ans) optDiv.classList.add('correct');
+    if (userAnswers[currentQ] === idx && idx !== q.ans) optDiv.classList.add('wrong');
+   } else {
+    if (userAnswers[currentQ] === idx) optDiv.classList.add('selected');
+   }
+  }
+
+  optDiv.innerHTML = `<div class="opt-letter">${letter}</div><div class="opt-text">${optStr}</div>`;
+  optDiv.addEventListener('click', () => handleSelectOption(idx));
+  optsWrap.appendChild(optDiv);
+ });
+
+ if (answered && quizMode === 'auto') {
+  const isRight = userAnswers[currentQ] === q.ans;
+  inlineExplain.classList.add('show', isRight ? 'right' : 'wrong');
+  inlineExplain.innerHTML = `
+   <div class="ie-label">${isRight ? '<i class="fa-solid fa-circle-check"></i> Correct!' : '<i class="fa-solid fa-circle-xmark"></i> Incorrect'}</div>
+   <div>${q.ex}</div>
+  `;
+ }
+
+ // Navigation buttons state
+ backBtn.disabled = currentQ === 0;
+ if (currentQ === activeQuestions.length - 1) {
+  nextBtn.classList.add('hidden');
+  finishBtn.classList.remove('hidden');
+ } else {
+  nextBtn.classList.remove('hidden');
+  finishBtn.classList.add('hidden');
+ }
+
+ renderProgress();
+}
+
+function renderProgress() {
+ const pct = ((currentQ + 1) / activeQuestions.length) * 100;
+ progressFill.style.width = `${pct}%`;
+
+ dotsRow.innerHTML = '';
+ activeQuestions.forEach((q, idx) => {
+  const dot = document.createElement('div');
+  dot.className = 'dot';
+  if (idx === currentQ) dot.classList.add('current');
+
+  if (userAnswers[idx] !== null) {
+   if (quizMode === 'auto') {
+    if (userAnswers[idx] === q.ans) dot.classList.add('correct');
+    else dot.classList.add('wrong');
+   } else {
+    dot.classList.add('answered');
+   }
+  }
+  dot.addEventListener('click', () => {
+   currentQ = idx;
+   renderQuestion();
+  });
+  dotsRow.appendChild(dot);
+ });
+}
+
+/* OPTION SELECTION */
+function handleSelectOption(idx) {
+ if (userAnswers[currentQ] !== null && quizMode === 'auto') return; // locked in auto mode once picked
+
+ const prevAns = userAnswers[currentQ];
+ userAnswers[currentQ] = idx;
+
+ if (quizMode === 'auto' && prevAns === null) {
+  if (idx === activeQuestions[currentQ].ans) {
+   SoundEngine.playCorrect();
+  } else {
+   SoundEngine.playWrong();
+  }
+ }
+
+ renderQuestion();
+ saveState();
+}
+
+nextBtn.addEventListener('click', () => {
+ if (currentQ < activeQuestions.length - 1) {
+  currentQ++;
+  renderQuestion();
+ }
+});
+backBtn.addEventListener('click', () => {
+ if (currentQ > 0) {
+  currentQ--;
+  renderQuestion();
+ }
+});
+finishBtn.addEventListener('click', () => {
+ const answeredCount = userAnswers.filter(a => a !== null).length;
+ if (quizMode === 'auto' && answeredCount < Math.min(30, activeQuestions.length)) {
+  alert(`Please answer at least ${Math.min(30, activeQuestions.length)} questions before submitting.`);
+  return;
+ }
+ if (confirm('Are you sure you want to submit your quiz?')) {
+  finishQuiz();
+ }
+});
+
+/* KEYBOARD NAVIGATION */
+document.addEventListener('keydown', (e) => {
+ if (quizScreen.classList.contains('hidden')) return;
+ if (e.key === 'ArrowLeft' && currentQ > 0) {
+  currentQ--; renderQuestion();
+ } else if (e.key === 'ArrowRight' && currentQ < activeQuestions.length - 1) {
+  currentQ++; renderQuestion();
+ } else if (['1','2','3','4'].includes(e.key)) {
+  const idx = parseInt(e.key, 10) - 1;
+  if (idx < activeQuestions[currentQ].opts.length) {
+   handleSelectOption(idx);
+  }
+ }
+});
+
+/* FINISH QUIZ */
+function finishQuiz() {
+ clearInterval(timerInterval);
+ clearSavedState();
+ quizTools.classList.add('hidden');
+ timerBox.classList.add('hidden');
+
+ let correctCount = 0;
+ const breakdown = {};
+
+ activeQuestions.forEach((q, i) => {
+  if (!breakdown[q.sec]) breakdown[q.sec] = { correct: 0, total: 0 };
+  breakdown[q.sec].total++;
+
+  if (userAnswers[i] === q.ans) {
+   correctCount++;
+   breakdown[q.sec].correct++;
+  }
+ });
+
+ const total = activeQuestions.length;
+ const pct = Math.round((correctCount / total) * 100);
+
+ document.getElementById('resultScore').textContent = correctCount;
+ document.getElementById('resultOf').textContent = `/ ${total}`;
+ document.getElementById('resultPct').textContent = `${pct}% Overall Score`;
+
+ let msg = '';
+ if (pct >= 80) msg = '<i class="fa-solid fa-award" style="color:#facc15;"></i> Excellent Mastery! Outstanding Performance.';
+ else if (pct >= 60) msg = '<i class="fa-solid fa-thumbs-up" style="color:var(--accent);"></i> Good Job! Keep reviewing difficult topics.';
+ else msg = '<i class="fa-solid fa-book-open" style="color:var(--red);"></i> Keep Practicing! Review the explanations below.';
+ document.getElementById('resultMsg').innerHTML = msg;
+
+ saveResultToHistory('BOT102', correctCount, total);
+
+ document.getElementById('bestBadge').innerHTML = '';
+ (async () => {
+  const oldBestRaw = await storageGet(BEST_SCORE_KEY);
+  const oldBest = oldBestRaw ? parseInt(oldBestRaw, 10) : 0;
+  if (pct > oldBest) {
+   await storageSet(BEST_SCORE_KEY, String(pct));
+   document.getElementById('bestBadge').innerHTML = `<div class="best-badge"><i class="fa-solid fa-star"></i> New Personal Best!</div>`;
+  }
+ })();
+
+ // Render breakdown grid
+ const breakdownGrid = document.getElementById('breakdownGrid');
+ breakdownGrid.innerHTML = '';
+ Object.keys(breakdown).forEach(sec => {
+  const item = breakdown[sec];
+  const bdCard = document.createElement('div');
+  bdCard.className = 'bd-card';
+  bdCard.innerHTML = `
+   <div class="bd-name"><i class="fa-solid ${sectionIcon(sec)}"></i> ${sec}</div>
+   <div class="bd-score">${item.correct} <span class="bd-total">/ ${item.total}</span></div>
+  `;
+  breakdownGrid.appendChild(bdCard);
+ });
+
+ // Render question review list
+ const reviewList = document.getElementById('reviewList');
+ reviewList.innerHTML = '';
+ activeQuestions.forEach((q, i) => {
+  const uAns = userAnswers[i];
+  const isRight = uAns === q.ans;
+  const revItem = document.createElement('div');
+  revItem.className = `review-item ${isRight ? 'right' : 'miss'}`;
+
+  const uAnsText = uAns !== null ? `${String.fromCharCode(65 + uAns)}) ${q.opts[uAns]}` : 'Not Answered';
+  const cAnsText = `${String.fromCharCode(65 + q.ans)}) ${q.opts[q.ans]}`;
+
+  revItem.innerHTML = `
+   <div class="ri-section"><i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec} · Q${i + 1}</div>
+   <div class="ri-q"><strong>${q.q}</strong></div>
+   <div class="ri-ans ${isRight ? 'right' : 'wrong'}">
+    <i class="fa-solid ${isRight ? 'fa-check' : 'fa-xmark'}"></i>
+    <span><strong>Your Answer:</strong> ${uAnsText}</span>
+   </div>
+   ${!isRight ? `<div class="ri-ans correct-reveal"><i class="fa-solid fa-bullseye"></i> <span><strong>Correct Answer:</strong> ${cAnsText}</span></div>` : ''}
+   <div class="ri-exp"><strong>Explanation:</strong> ${q.ex}</div>
+  `;
+  reviewList.appendChild(revItem);
+ });
+
+ showScreen(resultScreen);
+ updateHomeStats();
+}
+
+document.getElementById('homeBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('retryBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+/* AUTOSAVE ENGINE (persistent artifact storage) */
+function saveState() {
+ const state = { quizMode, activeQuestions, userAnswers, currentQ, timeRemaining };
+ storageSet(STORAGE_KEY, JSON.stringify(state));
+}
+
+function clearSavedState() {
+ storageDelete(STORAGE_KEY);
+}
+
+async function checkSavedState() {
+ const raw = await storageGet(STORAGE_KEY);
+ if (!raw) return;
+ let data;
+ try {
+  data = JSON.parse(raw);
+ } catch (e) {
+  return;
+ }
+ if (!data || !data.activeQuestions || data.activeQuestions.length === 0) return;
+
+ resumeInfo.textContent = `${data.activeQuestions.length} Questions (${data.quizMode.toUpperCase()} Mode)`;
+ resumeModal.classList.remove('hidden');
+
+ resumeYes.onclick = () => {
+  resumeModal.classList.add('hidden');
+  quizMode = data.quizMode;
+  activeQuestions = data.activeQuestions;
+  userAnswers = data.userAnswers;
+  currentQ = data.currentQ;
+  timeRemaining = data.timeRemaining;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') pauseBtn.classList.remove('hidden'); else pauseBtn.classList.add('hidden');
+  timerBox.classList.remove('hidden');
+  startTimer();
+  renderQuestion();
+ };
+
+ resumeNo.onclick = () => {
+  resumeModal.classList.add('hidden');
+  clearSavedState();
+ };
+}
+
+/* TAB SWITCH GUARDRAIL */
+document.addEventListener('visibilitychange', () => {
+ if (!quizScreen.classList.contains('hidden') && document.hidden) {
+  leaveCount++;
+  if (leaveCount >= 3) {
+   alert('You have left the quiz tab 3 times. The quiz will now reset.');
+   clearSavedState();
+   location.reload();
+  } else {
+   leaveWarnText.textContent = `You switched away from the quiz tab. Warning ${leaveCount} of 3. Leaving 3 times will reset your quiz.`;
+   leaveWarningModal.classList.remove('hidden');
+  }
+ }
+});
+leaveWarnOk.addEventListener('click', () => leaveWarningModal.classList.add('hidden'));
+
+/* SCIENTIFIC CALCULATOR ENGINE */
+(function setupCalculator(){
+ const calcFab = document.getElementById('calcFab');
+ const calcBackdrop = document.getElementById('calcBackdrop');
+ const calcPanel = document.getElementById('calcPanel');
+ const calcClose = document.getElementById('calcClose');
+ const calcExpr = document.getElementById('calcExpr');
+ const calcResult = document.getElementById('calcResult');
+ const calcGrid = document.getElementById('calcGrid');
+ const calcHeader = document.getElementById('calcHeader');
+ const calcModeDeg = document.getElementById('calcModeDeg');
+ const calcModeRad = document.getElementById('calcModeRad');
+
+ let expr = '';
+ let isRad = false;
+
+ calcFab.addEventListener('click', () => {
+  calcBackdrop.classList.remove('hidden');
+  calcPanel.classList.remove('hidden');
+ });
+ calcClose.addEventListener('click', closeCalc);
+ calcBackdrop.addEventListener('click', closeCalc);
+
+ function closeCalc(){
+  calcBackdrop.classList.add('hidden');
+  calcPanel.classList.add('hidden');
+ }
+
+ calcModeDeg.addEventListener('click', () => {
+  isRad = false;
+  calcModeDeg.classList.add('active'); calcModeRad.classList.remove('active');
+ });
+ calcModeRad.addEventListener('click', () => {
+  isRad = true;
+  calcModeRad.classList.add('active'); calcModeDeg.classList.remove('active');
+ });
+
+ const buttons = [
+  { label: 'C', cls: 'clear', action: 'clear' },
+  { label: '(', cls: 'op', action: 'append', val: '(' },
+  { label: ')', cls: 'op', action: 'append', val: ')' },
+  { label: '÷', cls: 'op', action: 'append', val: '/' },
+
+  { label: 'sin', cls: 'fn', action: 'fn', fn: 'sin' },
+  { label: '7', action: 'append', val: '7' },
+  { label: '8', action: 'append', val: '8' },
+  { label: '9', action: 'append', val: '9' },
+
+  { label: 'cos', cls: 'fn', action: 'fn', fn: 'cos' },
+  { label: '4', action: 'append', val: '4' },
+  { label: '5', action: 'append', val: '5' },
+  { label: '6', action: 'append', val: '6' },
+
+  { label: 'tan', cls: 'fn', action: 'fn', fn: 'tan' },
+  { label: '1', action: 'append', val: '1' },
+  { label: '2', action: 'append', val: '2' },
+  { label: '3', action: 'append', val: '3' },
+
+  { label: '√', cls: 'fn', action: 'fn', fn: 'sqrt' },
+  { label: '0', action: 'append', val: '0' },
+  { label: '.', action: 'append', val: '.' },
+  { label: '×', cls: 'op', action: 'append', val: '*' },
+
+  { label: 'ln', cls: 'fn', action: 'fn', fn: 'ln' },
+  { label: 'log', cls: 'fn', action: 'fn', fn: 'log10' },
+  { label: '^', cls: 'op', action: 'append', val: '**' },
+  { label: '-', cls: 'op', action: 'append', val: '-' },
+
+  { label: 'π', cls: 'fn', action: 'append', val: 'π' },
+  { label: 'e', cls: 'fn', action: 'append', val: 'e' },
+  { label: '+', cls: 'op', action: 'append', val: '+' },
+  { label: '=', cls: 'equals', action: 'calc' }
+ ];
+
+ calcGrid.innerHTML = '';
+ buttons.forEach(b => {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = `calc-btn ${b.cls || ''}`;
+  btn.textContent = b.label;
+  btn.addEventListener('click', () => handleCalc(b));
+  calcGrid.appendChild(btn);
+ });
+
+ function handleCalc(b) {
+  if (b.action === 'clear') {
+   expr = '';
+   calcExpr.innerHTML = '&nbsp;';
+   calcResult.textContent = '0';
+   calcResult.classList.remove('err');
+  } else if (b.action === 'append') {
+   expr += b.val;
+   calcExpr.textContent = expr;
+  } else if (b.action === 'fn') {
+   expr += `${b.fn}(`;
+   calcExpr.textContent = expr;
+  } else if (b.action === 'calc') {
+   try {
+    // Substitute π and standalone "e" for the constants passed into the
+    // evaluator scope. Using named helper functions (rather than a
+    // regex-based degree/radian post-process) avoids breaking on nested
+    // parentheses, e.g. sin(sqrt(4)).
+    let safeExpr = expr.replace(/π/g, 'PI').replace(/\be\b/g, 'E');
+
+    // Auto-close any open parentheses (e.g. "sin(30" -> "sin(30)") so
+    // pressing "=" works without manually typing the closing bracket.
+    const openCount = (safeExpr.match(/\(/g) || []).length;
+    const closeCount = (safeExpr.match(/\)/g) || []).length;
+    if (openCount > closeCount) {
+     safeExpr += ')'.repeat(openCount - closeCount);
+    }
+
+    const sinFn = x => isRad ? Math.sin(x) : Math.sin(x * Math.PI / 180);
+    const cosFn = x => isRad ? Math.cos(x) : Math.cos(x * Math.PI / 180);
+    const tanFn = x => isRad ? Math.tan(x) : Math.tan(x * Math.PI / 180);
+
+    const evaluator = new Function(
+     'sin', 'cos', 'tan', 'sqrt', 'ln', 'log10', 'PI', 'E',
+     `"use strict"; return (${safeExpr});`
+    );
+    const res = evaluator(sinFn, cosFn, tanFn, Math.sqrt, Math.log, Math.log10, Math.PI, Math.E);
+
+    calcResult.textContent = Number.isFinite(res) ? +res.toFixed(6) : 'Error';
+    calcResult.classList.remove('err');
+   } catch(e) {
+    calcResult.textContent = 'Error';
+    calcResult.classList.add('err');
+   }
+  }
+ }
+
+ // Draggable window logic
+ let isDragging = false, startX, startY, initialX, initialY;
+ calcHeader.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  calcPanel.classList.add('dragged');
+  startX = e.clientX; startY = e.clientY;
+  const rect = calcPanel.getBoundingClientRect();
+  initialX = rect.left; initialY = rect.top;
+ });
+ document.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  const dx = e.clientX - startX;
+  const dy = e.clientY - startY;
+  calcPanel.style.left = `${initialX + dx}px`;
+  calcPanel.style.top = `${initialY + dy}px`;
+ });
+ document.addEventListener('mouseup', () => isDragging = false);
+})();
+</script>
+</body>
+</html>
