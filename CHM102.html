@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHM102 · Organic Chemistry Practice Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+ --bg:#0a0c12; --surface:#0f1117; --surface2:#141820; --surface3:#1a2030;
+ --border:#1e2640; --border2:#26304e; --ink:#e2e8f6; --ink2:#94a3c0; --ink3:#4a5878;
+ --accent:#4f8ef7; --accent2:#7c6fff; --accent-dim:#0d1630; --accent-glow:rgba(79,142,247,.14);
+ --green:#34d399; --green-dim:#0a1e14; --red:#f87171; --red-dim:#1e0a0a; --purple:#a78bfa;
+ --bar-bg:rgba(10,12,18,.92); --font-scale:1;
+ --r:16px;
+}
+html{font-size:calc(16px * var(--font-scale, 1));}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+sub,sup{line-height:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Outfit',sans-serif;min-height:100vh;display:flex;flex-direction:column;
+ background-image:radial-gradient(ellipse 900px 600px at 10% 0%, rgba(79,142,247,.06) 0%, transparent 70%),
+ radial-gradient(ellipse 700px 500px at 90% 30%, rgba(124,111,255,.05) 0%, transparent 60%);
+ transition:background-color .2s ease, color .2s ease;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);
+ background:var(--bar-bg);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px;}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.brand-badge{background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;font-weight:800;font-size:.72rem;letter-spacing:2px;
+ padding:6px 14px;border-radius:50px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+.brand-sub{font-size:.7rem;color:var(--ink3);letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+#timer{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:600;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:7px 16px;border-radius:50px;letter-spacing:2px;min-width:96px;text-align:center;
+ display:flex;align-items:center;gap:8px;justify-content:center;}
+#timer.warn{color:var(--red);background:var(--red-dim);border-color:rgba(248,113,113,.3);animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+#soundToggle{width:38px;height:38px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);
+ color:var(--ink2);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;
+ transition:border-color .15s,color .15s,background .15s;flex-shrink:0;}
+#soundToggle:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+#soundToggle.muted{color:var(--ink3);}
+.hamburger{display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;cursor:pointer;padding:0;color:var(--ink);font-size:.95rem;transition:border-color .15s,color .15s;flex-shrink:0;}
+.hamburger:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+.hamburger .fa-xmark{display:none;} .hamburger[aria-expanded="true"] .fa-bars{display:none;} .hamburger[aria-expanded="true"] .fa-xmark{display:inline-block;}
+.mobile-nav{position:fixed;inset:0;z-index:99;background:transparent;opacity:0;pointer-events:none;transition:opacity .15s ease;}
+.mobile-nav.open{opacity:1;pointer-events:auto;}
+.mobile-nav-panel{position:absolute;top:70px;right:20px;width:250px;max-width:82vw;max-height:min(70vh,520px);background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:1px;transform:scale(.94) translateY(-8px);transform-origin:top right;opacity:0;transition:transform .16s ease,opacity .16s ease;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow-y:auto;}
+.mobile-nav.open .mobile-nav-panel{transform:scale(1) translateY(0);opacity:1;}
+.mobile-nav-panel a{display:flex;align-items:center;gap:12px;padding:11px 10px;font-size:.9rem;font-weight:600;color:var(--ink);text-decoration:none;border-radius:8px;}
+.mobile-nav-panel a:hover{background:var(--accent-glow);}
+.mobile-nav-panel a i{width:18px;text-align:center;color:var(--accent);font-size:.85rem;}
+.mobile-nav-panel a.active{color:var(--accent);background:var(--accent-dim);}
+.mobile-nav-panel .nav-group-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);padding:12px 10px 4px;}
+.mobile-nav-panel .nav-group-label:first-child{padding-top:6px;}
+main{flex:1;display:flex;justify-content:center;padding:0 16px 100px;}
+#homeScreen,#configScreen,#quizScreen,#resultScreen,#loadingScreen{width:100%;max-width:720px;}
+.hidden{display:none !important;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:32px 28px;margin-bottom:20px;}
+
+a { text-decoration: none; }
+#statsBar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;}
+.stat-chip{font-size:.78rem;color:var(--ink2);background:var(--surface2);border:1px solid var(--border);padding:8px 16px;
+ border-radius:50px;display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;}
+.stat-chip i{color:var(--accent);}
+.stat-chip strong{color:var(--ink);}
+
+/* HOME */
+.hero-wrap{padding:48px 0 8px;text-align:center;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
+ color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:500;margin-bottom:22px;background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.22);padding:7px 16px 7px 13px;border-radius:50px;}
+.hero-title{font-family:'Fraunces',serif;font-size:2.3rem;line-height:1.16;margin-bottom:16px;font-weight:600;letter-spacing:-.5px;}
+.hero-title span{color:var(--accent);font-style:italic;}
+.hero-desc{color:var(--ink2);font-size:.96rem;line-height:1.75;max-width:480px;margin:0 auto 34px;}
+
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:30px;}
+.mode-card{background:var(--surface2);border:1px solid var(--border2);border-radius:18px;padding:26px 22px;cursor:pointer;
+ transition:border-color .15s,transform .15s,background .15s;text-align:left;}
+.mode-card:hover{border-color:rgba(79,142,247,.4);transform:translateY(-3px);background:var(--surface3);}
+.mode-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;
+ display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:16px;}
+.mode-name{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;margin-bottom:8px;}
+.mode-desc{font-size:.85rem;color:var(--ink2);line-height:1.6;margin-bottom:14px;}
+.mode-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.mode-tag{font-size:.66rem;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ padding:3px 9px;border-radius:20px;font-family:'JetBrains Mono',monospace;}
+
+.section-heading{display:flex;align-items:center;gap:12px;margin:36px 0 18px;}
+.section-heading-icon{width:34px;height:34px;border-radius:10px;background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.85rem;flex-shrink:0;}
+.section-heading-text{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;}
+.rules-list{display:grid;gap:8px;}
+.rule-item{display:flex;gap:14px;align-items:flex-start;font-size:.86rem;color:var(--ink2);line-height:1.55;padding:14px 16px;
+ background:var(--surface2);border:1px solid var(--border);border-radius:10px;}
+.rule-icon{width:30px;height:30px;border-radius:8px;flex-shrink:0;background:var(--accent-dim);border:1px solid rgba(79,142,247,.2);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.78rem;margin-top:1px;}
+.rule-text strong{color:var(--ink);}
+
+/* CONFIG SCREEN */
+.config-field{margin-bottom:22px;}
+.config-label{font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.config-label i{color:var(--accent);}
+.config-input-row{display:flex;align-items:center;gap:14px;}
+.config-slider{flex:1;-webkit-appearance:none;height:6px;border-radius:6px;background:var(--border2);outline:none;}
+.config-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;box-shadow:0 2px 8px rgba(79,142,247,.4);}
+.config-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;border:none;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;}
+.config-value{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:6px 14px;border-radius:10px;min-width:74px;text-align:center;font-size:.9rem;}
+.config-hint{font-size:.74rem;color:var(--ink3);margin-top:8px;}
+.topics-grid{display:flex;flex-wrap:wrap;gap:10px;}
+.topic-chip{display:flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--border2);
+ padding:10px 16px;border-radius:12px;cursor:pointer;font-size:.85rem;transition:border-color .15s,background .15s;}
+.topic-chip:hover{border-color:rgba(79,142,247,.4);}
+.topic-chip input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);
+ color:#fff;border:none;padding:14px 28px;border-radius:50px;font-weight:700;font-size:.95rem;cursor:pointer;
+ font-family:'Outfit',sans-serif;transition:transform .15s,box-shadow .15s,opacity .2s;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(79,142,247,.3);}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--border2);padding:12px 22px;border-radius:50px;
+ font-weight:600;font-size:.9rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:border-color .15s,background .15s;
+ display:inline-flex;align-items:center;gap:8px;}
+.btn-ghost:hover{background:var(--accent-glow);border-color:rgba(79,142,247,.35);}
+.btn-ghost:disabled{opacity:.35;cursor:not-allowed;}
+
+/* LOADING SCREEN */
+#loadingScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 0;text-align:center;}
+.loader-ring{width:56px;height:56px;border-radius:50%;border:4px solid var(--border2);border-top-color:var(--accent);
+ animation:spin .8s linear infinite;margin-bottom:24px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader-text{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--ink2);}
+.loader-sub{font-size:.78rem;color:var(--ink3);margin-top:8px;font-family:'JetBrains Mono',monospace;}
+
+/* QUIZ */
+#progressWrap{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;padding-top:24px;}
+.progress-bar-track{height:4px;background:var(--border);border-radius:4px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .3s;}
+.dots-group{display:flex;gap:5px;flex-wrap:wrap;}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .15s,transform .1s;}
+.dot:hover{transform:scale(1.35);}
+.dot.answered{background:rgba(79,142,247,.4);border:1px solid var(--accent);}
+.dot.current{background:var(--accent);box-shadow:0 0 0 3px rgba(79,142,247,.25);}
+.dot.correct{background:var(--green);}
+.dot.wrong{background:var(--red);}
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.q-section-tag{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;
+ font-weight:600;background:var(--accent-dim);padding:4px 10px;border-radius:20px;border:1px solid rgba(79,142,247,.2);}
+.q-counter{font-size:.78rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;}
+.q-text{font-size:1.1rem;line-height:1.65;margin:0 0 26px;font-family:'Fraunces',serif;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.opt{display:flex;align-items:flex-start;gap:14px;padding:15px 18px;border-radius:12px;border:1px solid var(--border2);
+ margin-bottom:10px;background:var(--surface2);cursor:pointer;transition:border-color .15s,background .15s,transform .1s;}
+.opt:hover{border-color:rgba(79,142,247,.35);background:var(--surface3);}
+.opt.locked{cursor:default;}
+.opt.selected{border-color:var(--accent);background:var(--accent-dim);}
+.opt.correct{border-color:var(--green);background:var(--green-dim);}
+.opt.wrong{border-color:var(--red);background:var(--red-dim);}
+.opt-letter{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;
+ justify-content:center;font-size:.75rem;font-weight:700;color:var(--ink3);flex-shrink:0;font-family:'JetBrains Mono',monospace;
+ transition:all .15s;margin-top:1px;}
+.opt.selected .opt-letter{background:var(--accent);color:#fff;border-color:var(--accent);}
+.opt.correct .opt-letter{background:var(--green);color:#fff;border-color:var(--green);}
+.opt.wrong .opt-letter{background:var(--red);color:#fff;border-color:var(--red);}
+.opt-text{font-size:.92rem;line-height:1.55;padding-top:3px;}
+.inline-explain{display:none;margin-top:6px;margin-bottom:14px;padding:16px 18px;background:rgba(79,142,247,.05);
+ border:1px solid rgba(79,142,247,.15);border-radius:10px;font-size:.85rem;line-height:1.7;color:var(--ink2);animation:fadeUp .2s ease;}
+.inline-explain.show{display:block;}
+.inline-explain .ie-label{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;
+ margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.inline-explain.right .ie-label{color:var(--green);}
+.inline-explain.wrong .ie-label{color:var(--red);}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;}
+.kbd-hint{text-align:center;font-size:.68rem;color:var(--ink3);margin-top:14px;font-family:'JetBrains Mono',monospace;}
+.kbd-hint kbd{background:var(--surface3);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;font-family:'JetBrains Mono',monospace;}
+
+#quizTools{position:fixed;right:20px;bottom:24px;display:flex;flex-direction:column;gap:12px;z-index:60;}
+.fab{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;border:none;
+ cursor:pointer;font-size:1.05rem;box-shadow:0 8px 24px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;
+ transition:transform .15s;}
+.fab:hover{transform:translateY(-3px) scale(1.04);}
+.fab.pause-fab{background:linear-gradient(135deg,#f59e0b,#f97316);}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.72);backdrop-filter:blur(6px);z-index:200;
+ display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-card{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:26px 24px;max-width:380px;
+ width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.modal-icon{width:52px;height:52px;border-radius:50%;background:var(--accent-dim);border:1px solid rgba(79,142,247,.25);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.3rem;margin:0 auto 16px;}
+.modal-icon.warn{background:var(--red-dim);border-color:rgba(248,113,113,.3);color:var(--red);}
+.modal-title{font-family:'Fraunces',serif;font-size:1.2rem;margin-bottom:10px;}
+.modal-text{font-size:.87rem;color:var(--ink2);line-height:1.6;margin-bottom:20px;}
+
+#pauseOverlay{position:fixed;inset:0;background:rgba(6,8,14,.85);backdrop-filter:blur(16px);z-index:150;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
+#pauseOverlay .modal-icon{width:64px;height:64px;font-size:1.6rem;margin-bottom:20px;}
+#pauseOverlay h2{font-family:'Fraunces',serif;font-size:1.6rem;margin-bottom:10px;}
+#pauseOverlay p{color:var(--ink2);font-size:.9rem;max-width:320px;margin-bottom:26px;line-height:1.6;}
+
+.result-hero{text-align:center;padding:26px 0 22px;border-bottom:1px solid var(--border);margin-bottom:26px;}
+.result-ring{display:inline-flex;align-items:center;justify-content:center;width:124px;height:124px;border-radius:50%;
+ border:3px solid var(--accent);background:var(--accent-dim);margin-bottom:16px;}
+.result-score{font-family:'JetBrains Mono',monospace;font-size:2.3rem;font-weight:700;color:var(--accent);}
+.result-of{font-size:.8rem;color:var(--ink3);margin-top:2px;}
+.result-pct{font-family:'Fraunces',serif;font-size:1.5rem;margin-bottom:6px;}
+.result-msg{color:var(--ink2);font-size:.9rem;line-height:1.6;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.best-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;color:#facc15;background:rgba(250,204,21,.08);
+ border:1px solid rgba(250,204,21,.25);padding:4px 12px;border-radius:20px;margin-top:10px;font-family:'JetBrains Mono',monospace;}
+.breakdown-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:26px;}
+.bd-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.bd-name{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.bd-score{font-size:1.35rem;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.bd-total{font-size:.72rem;color:var(--ink3);}
+.review-section-title{font-family:'Fraunces',serif;font-size:1.1rem;border-bottom:1px solid var(--border);padding-bottom:12px;
+ margin:22px 0 16px;display:flex;align-items:center;gap:10px;}
+.review-item{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px;background:var(--surface2);}
+.review-item.right{border-left:3px solid var(--green);}
+.review-item.miss{border-left:3px solid var(--red);}
+.ri-q{font-size:.9rem;margin-bottom:10px;line-height:1.6;}
+.ri-section{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:5px;}
+.ri-ans{font-size:.83rem;margin-top:5px;display:flex;align-items:flex-start;gap:7px;}
+.ri-ans.right{color:var(--green);}
+.ri-ans.wrong{color:var(--red);}
+.ri-ans.correct-reveal{color:#2dd4bf;}
+.ri-exp{margin-top:10px;padding:12px 14px;background:rgba(79,142,247,.04);border:1px solid rgba(79,142,247,.12);
+ border-radius:9px;font-size:.82rem;line-height:1.65;color:var(--ink2);}
+
+footer{text-align:center;font-size:.7rem;color:var(--ink3);padding:18px;border-top:1px solid var(--border);
+ font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+footer i{color:var(--accent);}
+
+@media(max-width:560px){
+ .card{padding:22px 16px;}
+ .mode-grid{grid-template-columns:1fr;}
+ .hero-title{font-size:1.8rem;}
+ .breakdown-grid{grid-template-columns:repeat(2,1fr);}
+ #quizTools{right:14px;bottom:18px;}
+}
+
+@media print{
+ @page{ margin:14mm; }
+ *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
+ .topbar, footer, #quizTools, #homeBtn, #retryBtn, #printBtn, .kbd-hint, #statsBar,
+ #pauseOverlay, #leaveWarningModal, #resumeModal, #soundToggle, .hamburger, .mobile-nav { display:none !important; }
+ body{background:#fff;color:#000;}
+ main{padding:0;}
+ .card{border:1px solid #ccc;background:#fff;box-shadow:none;}
+ .bd-card, .review-item{background:#f6f6f6;border-color:#ddd;}
+ .ri-exp{background:#f0f4ff;border-color:#cfd9ff;color:#333;}
+ .result-hero, .bd-card, .review-item{ break-inside:avoid; page-break-inside:avoid; }
+ .review-item{ margin-bottom:14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+ <div class="brand">
+ <span class="brand-badge">CHM102</span>
+ <div class="brand-sub"><i class="fa-solid fa-flask-vial" style="margin-right:5px;"></i>Organic Chemistry · History · Bonding · Nomenclature · Functional Groups</div>
+ </div>
+ <div style="display:flex;align-items:center;gap:10px;">
+ <div id="timer" class="hidden"><i class="fa-regular fa-clock"></i><span id="timerText">00:00</span></div>
+ <button id="soundToggle" title="Mute sounds" aria-label="Mute sounds" aria-pressed="false"></button>
+ <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
+ <i class="fa-solid fa-bars"></i>
+ <i class="fa-solid fa-xmark"></i>
+ </button>
+ </div>
+</div>
+
+<div class="mobile-nav" id="mobileNav">
+ <div class="mobile-nav-panel">
+ <span class="nav-group-label">Navigate</span>
+ <a href="../dashboard.html"><i class="fa-solid fa-house"></i>Home / Dashboard</a>
+ <a href="../aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+ <span class="nav-group-label">DTZ TRIO</span>
+ <a href="../about.html"><i class="fa-solid fa-users"></i>About Us</a>
+ <a href="../social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+ <span class="nav-group-label">Account</span>
+ <a href="../set.html"><i class="fa-solid fa-gear"></i>Settings</a>
+ <a href="../help.html"><i class="fa-solid fa-circle-question"></i>Help &amp; FAQ</a>
+ </div>
+</div>
+
+<main>
+
+<!-- HOME SCREEN -->
+<div id="homeScreen">
+ <div class="hero-wrap">
+ <div class="hero-eyebrow"><i class="fa-solid fa-flask-vial"></i> CHM102 Practice Quiz</div>
+ <h1 class="hero-title">100 questions,<br><span>two ways to train.</span></h1>
+ <p class="hero-desc">Covering the History, Bonding, Nomenclature, and Functional Group chemistry of CHM 102/121 — with full worked explanations for every question.</p>
+ </div>
+
+ <div id="statsBar" class="hidden"></div>
+
+ <div class="mode-grid">
+ <div class="mode-card" id="pickAuto">
+ <div class="mode-icon"><i class="fa-solid fa-gauge-high"></i></div>
+ <div class="mode-name">Automatic Timer</div>
+ <div class="mode-desc">All 100 questions, shuffled, with a timer the app sets for you. Get instant feedback the moment you answer, and pause any time you need a break.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-regular fa-clock"></i> Auto-set clock</span>
+ <span class="mode-tag"><i class="fa-solid fa-list-check"></i> 100 Qs</span>
+ <span class="mode-tag"><i class="fa-solid fa-pause"></i> Pausable</span>
+ </div>
+ </div>
+ <div class="mode-card" id="pickCustom">
+ <div class="mode-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="mode-name">Custom Timer</div>
+ <div class="mode-desc">Pick your own topics, time limit, and question count. Answer everything first — no pausing, and no feedback until you submit.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-solid fa-sliders"></i> Custom setup</span>
+ <span class="mode-tag"><i class="fa-solid fa-ban"></i> No pausing</span>
+ <span class="mode-tag"><i class="fa-solid fa-flag-checkered"></i> Results at end</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="section-heading">
+ <div class="section-heading-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+ <div class="section-heading-text">How each mode works</div>
+ </div>
+ <div class="rules-list">
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-gauge-high"></i></span>
+ <span class="rule-text"><strong>Automatic Timer</strong> runs all 100 questions with a clock the app manages for you. Tap an option and it's locked in immediately — correct turns green, wrong turns red, with a short explanation right away. Tap <strong>Pause</strong> any time to freeze the clock and blur the screen. You must answer at least <strong>30 questions</strong> before you can submit.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-sliders"></i></span>
+ <span class="rule-text"><strong>Custom Timer</strong> lets you choose specific topics, your own time limit (up to 120 min), and how many questions to include. It cannot be paused — answers stay hidden until you submit, then you get a full score breakdown and review.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-superscript"></i></span>
+ <span class="rule-text">Every chemical formula, hybridization state, and compound name is properly typeset with <strong>subscripts and superscripts</strong> (for example C<sub>6</sub>H<sub>12</sub>O<sub>6</sub> or sp<sup>3</sup>) so nothing is left ambiguous.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-shield-halved"></i></span>
+ <span class="rule-text">Your progress is <strong>auto-saved</strong> as you go, so a refresh won't lose your place. For fairness, switching away from the tab is tracked — leaving 3 times in one quiz resets it.</span></div>
+ </div>
+</div>
+
+<!-- CONFIG SCREEN -->
+<div id="configScreen" class="hidden">
+ <div class="section-heading" style="margin-top:36px;">
+ <div class="section-heading-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="section-heading-text">Set up your Custom Timer exam</div>
+ </div>
+ <div class="card">
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-layer-group"></i> Topics to include</div>
+ <div class="topics-grid" id="topicsWrap"></div>
+ <div class="config-hint" id="topicsHint">Select at least one topic.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-regular fa-clock"></i> Time limit (minutes)</div>
+ <div class="config-input-row">
+ <input type="range" id="timeSlider" class="config-slider" min="5" max="120" step="5" value="60">
+ <span class="config-value" id="timeValue">60</span>
+ </div>
+ <div class="config-hint">Maximum 120 minutes. This clock cannot be paused once the exam starts.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-list-ol"></i> Number of questions</div>
+ <div class="config-input-row">
+ <input type="range" id="countSlider" class="config-slider" min="1" max="100" step="1" value="50">
+ <span class="config-value" id="countValue">50</span>
+ </div>
+ <div class="config-hint" id="countHint">Randomly picked from the selected topics.</div>
+ </div>
+ <div class="nav-row" style="margin-top:8px;">
+ <button class="btn-ghost" id="backToHomeFromConfig"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <button class="btn" id="startCustomBtn"><i class="fa-solid fa-play"></i> Start Custom Timer</button>
+ </div>
+ </div>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" class="hidden">
+ <div class="loader-ring"></div>
+ <div class="loader-text">Preparing your questions…</div>
+ <div class="loader-sub">Shuffling &amp; randomizing options</div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="quizScreen" class="hidden">
+ <div id="progressWrap">
+ <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+ <div class="dots-group" id="dotsRow"></div>
+ </div>
+ <div class="card">
+ <div class="q-meta">
+ <span class="q-section-tag" id="sectionTag"></span>
+ <span class="q-counter" id="qCounter"></span>
+ </div>
+ <div class="q-text" id="qText"></div>
+ <div id="optsWrap"></div>
+ <div id="inlineExplain" class="inline-explain"></div>
+ <div class="nav-row">
+ <button class="btn-ghost" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <div style="display:flex;gap:8px;">
+ <button class="btn" id="nextBtn">Next <i class="fa-solid fa-arrow-right"></i></button>
+ <button class="btn hidden" id="finishBtn"><i class="fa-solid fa-check"></i> Submit Quiz</button>
+ </div>
+ </div>
+ <div class="kbd-hint">Keyboard: &larr; &rarr; to navigate &nbsp;·&nbsp; 1 2 3 4 to select</div>
+ </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="hidden">
+ <div class="card">
+ <div class="result-hero">
+ <div class="result-ring"><div><div class="result-score" id="resultScore">0</div><div class="result-of" id="resultOf">/ 100</div></div></div>
+ <div class="result-pct" id="resultPct"></div>
+ <div class="result-msg" id="resultMsg"></div>
+ <div id="bestBadge"></div>
+ </div>
+ <div class="breakdown-grid" id="breakdownGrid"></div>
+ <div class="review-section-title"><i class="fa-solid fa-magnifying-glass"></i> Question Review</div>
+ <div id="reviewList"></div>
+ <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;">
+ <button class="btn-ghost" id="homeBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-house"></i> Home</button>
+ <button class="btn-ghost" id="printBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+ <button class="btn" id="retryBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-rotate-right"></i> Retake</button>
+ </div>
+ </div>
+</div>
+
+</main>
+
+<!-- FLOATING QUIZ TOOLS -->
+<div id="quizTools" class="hidden">
+ <button class="fab pause-fab hidden" id="pauseBtn" title="Pause"><i class="fa-solid fa-pause"></i></button>
+</div>
+
+<!-- PAUSE OVERLAY -->
+<div id="pauseOverlay" class="hidden">
+ <div class="modal-icon"><i class="fa-solid fa-pause"></i></div>
+ <h2>Quiz Paused</h2>
+ <p>The clock is frozen and nothing on this screen is visible or clickable until you resume.</p>
+ <button class="btn" id="resumeFromPauseBtn"><i class="fa-solid fa-play"></i> Resume Quiz</button>
+</div>
+
+<!-- LEAVE-WARNING MODAL -->
+<div id="leaveWarningModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></div>
+ <div class="modal-title">You left the quiz</div>
+ <div class="modal-text" id="leaveWarnText"></div>
+ <button class="btn" id="leaveWarnOk">Okay, continue</button>
+ </div>
+</div>
+
+<!-- RESUME AUTOSAVE MODAL -->
+<div id="resumeModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+ <div class="modal-title">Resume your quiz?</div>
+ <div class="modal-text">We found a quiz in progress:<br><strong id="resumeInfo" style="color:var(--ink);"></strong></div>
+ <div style="display:flex;gap:10px;">
+ <button class="btn-ghost" id="resumeNo" style="flex:1;justify-content:center;">Discard</button>
+ <button class="btn" id="resumeYes" style="flex:1;justify-content:center;">Resume</button>
+ </div>
+ </div>
+</div>
+
+<footer><i class="fa-solid fa-flask-vial"></i> CHM102 &nbsp;·&nbsp; Organic Chemistry Practice Quiz — History, Bonding, Nomenclature &amp; Functional Groups</footer>
+
+<script>
+/* ============================================================
+ HAMBURGER / MOBILE NAV
+ ============================================================ */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+function closeMobileNav(){mobileNav.classList.remove('open');hamburgerBtn.setAttribute('aria-expanded','false');}
+function toggleMobileNav(){const isOpen = mobileNav.classList.toggle('open');hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');}
+hamburgerBtn.addEventListener('click', toggleMobileNav);
+mobileNav.addEventListener('click', (e)=>{ if(e.target === mobileNav) closeMobileNav(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMobileNav(); });
+
+/* ============================================================
+ CHM102 — 100-QUESTION BANK
+ (History & Discovery · Carbon Allotropes · Bonding & Hybridization ·
+ Purification & Analysis · Isomerism · IUPAC Nomenclature · Alkanes ·
+ Alkenes · Alkynes · Aromatic Compounds · Alkyl Halides ·
+ Alcohols & Phenols · Carbonyl Compounds · Carboxylic Acids)
+
+ NOTE ON FORMATTING: every chemical formula, hybridization state, and
+ IUPAC-style locant that needs a subscript or superscript is written
+ directly with real <sub>/<sup> tags below (e.g. "CH<sub>4</sub>N<sub>2</sub>O",
+ "sp<sup>3</sup>"). Question/option/explanation strings are inserted via
+ innerHTML, so these tags render as true subscripts/superscripts rather
+ than plain-text digits — no LaTeX, no unicode look-alike glyphs.
+ ============================================================ */
+const QUESTIONS = [
+// HISTORY AND DISCOVERY (1-7)
+{sec:'History and Discovery', q:"Who proposed the Vital Force Theory in 1815?", opts:["J.J. Berzelius","Friedrich Wöhler","August Kekulé","Robert Curl"], ans:0, ex:"J.J. Berzelius introduced the Vital Force Theory in 1815, proposing that organic compounds could only be produced by living organisms through a special 'vital force.'"},
+{sec:'History and Discovery', q:"The Vital Force Theory was disproved by the laboratory synthesis of:", opts:["Urea","Benzene","Methane","Ethanol"], ans:0, ex:"Friedrich Wöhler's synthesis of urea, an organic compound, from an inorganic salt showed that living organisms are not required to make organic matter, disproving the Vital Force Theory."},
+{sec:'History and Discovery', q:"In what year did Friedrich Wöhler synthesize urea from an inorganic salt?", opts:["1828","1815","1850","1900"], ans:0, ex:"Wöhler carried out this landmark synthesis in 1828, converting ammonium cyanate into urea."},
+{sec:'History and Discovery', q:"What is the molecular formula of urea?", opts:["CH<sub>4</sub>N<sub>2</sub>O","C<sub>2</sub>H<sub>6</sub>NO","CH<sub>2</sub>N<sub>2</sub>O<sub>2</sub>","NH<sub>4</sub>OCN"], ans:0, ex:"Urea has the molecular formula CH<sub>4</sub>N<sub>2</sub>O — a carbonyl group flanked by two amine groups."},
+{sec:'History and Discovery', q:"The acronym 'PSPR' in organic chemistry stands for:", opts:["Properties, Structure, Preparation, Reaction","Physical, Structure, Preparation, Reaction","Properties, Synthesis, Position, Reactivity","Pressure, Speed, Purity, Ratio"], ans:0, ex:"PSPR summarizes the standard framework for studying any organic compound: its Properties, Structure, Preparation, and Reactions."},
+{sec:'History and Discovery', q:"Which of the following carbon-containing compounds is classified as inorganic?", opts:["CO<sub>2</sub>","CH<sub>4</sub>","C<sub>2</sub>H<sub>5</sub>OH","CH<sub>3</sub>COOH"], ans:0, ex:"Although it contains carbon, carbon dioxide (along with a few other simple compounds like carbonates and cyanides) is conventionally classified as inorganic rather than organic."},
+{sec:'History and Discovery', q:"Urea was synthesized in the lab starting from:", opts:["Ammonium cyanate","Sodium chloride","Potassium carbonate","Calcium carbide"], ans:0, ex:"Wöhler heated ammonium cyanate, an inorganic salt, and obtained urea, an organic compound, as the product."},
+
+// CARBON ALLOTROPES (8-12)
+{sec:'Carbon Allotropes', q:"Which allotrope of carbon is often called a 'Buckminster ball'?", opts:["Fullerene (C<sub>60</sub>)","Diamond","Graphite","Nanotube"], ans:0, ex:"Fullerene, C<sub>60</sub>, is a hollow, spherical cage of 60 carbon atoms nicknamed the 'buckyball' after architect Buckminster Fuller, whose geodesic domes it resembles."},
+{sec:'Carbon Allotropes', q:"What is considered the 'fourth allotrope' of carbon?", opts:["Fullerene","Graphene","Coal","Carbon black"], ans:0, ex:"Alongside diamond, graphite, and amorphous carbon, fullerene was identified as a distinct, newly discovered fourth allotrope of carbon."},
+{sec:'Carbon Allotropes', q:"Fullerenes are unique among carbon allotropes because they are:", opts:["Soluble in organic solvents like CS<sub>2</sub>","Harder than diamond","Better conductors than copper","Only found in living organisms"], ans:0, ex:"Unlike diamond and graphite, fullerenes dissolve in organic solvents such as carbon disulfide (CS<sub>2</sub>), reflecting their discrete, molecular structure rather than an extended lattice."},
+{sec:'Carbon Allotropes', q:"Which nanostructures are derived from fullerenes?", opts:["Nanotubes and nanowires","Nanobots","Microchips","Polymers"], ans:0, ex:"Rolling or extending the fullerene structure gives rise to related carbon nanostructures such as nanotubes and nanowires."},
+{sec:'Carbon Allotropes', q:"Who were the Nobel Prize winners for the discovery of fullerenes?", opts:["Curl, Kroto, and Smalley","Berzelius, Wöhler, and Kekulé","Watson, Crick, and Franklin","Boyle, Charles, and Dalton"], ans:0, ex:"Robert Curl, Harold Kroto, and Richard Smalley shared the 1996 Nobel Prize in Chemistry for discovering fullerenes."},
+
+// BONDING AND HYBRIDIZATION (13-23)
+{sec:'Bonding and Hybridization', q:"The ability of carbon atoms to bond with each other to form long chains is called:", opts:["Catenation","Hybridization","Isomerism","Polymerization"], ans:0, ex:"Catenation is carbon's characteristic ability to link with other carbon atoms, building extended chains, branches, and rings."},
+{sec:'Bonding and Hybridization', q:"What is the bond angle in an sp<sup>3</sup> hybridized carbon atom?", opts:["109.5°","90°","120°","180°"], ans:0, ex:"An sp<sup>3</sup> carbon has four equivalent hybrid orbitals arranged tetrahedrally, giving a bond angle of 109.5°."},
+{sec:'Bonding and Hybridization', q:"What is the shape of an sp<sup>2</sup> hybridized carbon molecule?", opts:["Trigonal planar","Tetrahedral","Linear","Octahedral"], ans:0, ex:"sp<sup>2</sup> hybridization produces three hybrid orbitals arranged in a plane at 120° to each other, giving a trigonal planar shape, as seen in alkenes."},
+{sec:'Bonding and Hybridization', q:"Carbon-carbon triple bonds (C≡C) involve which hybridization?", opts:["sp","sp<sup>3</sup>","sp<sup>2</sup>","dsp<sup>2</sup>"], ans:0, ex:"A triple bond forms between two sp-hybridized carbons, each contributing one sigma bond plus two unhybridized p orbitals that form two pi bonds."},
+{sec:'Bonding and Hybridization', q:"Which of the following bonds is the strongest?", opts:["C≡C","C–C","C=C","All are equal"], ans:0, ex:"Bond strength increases with bond order, so the carbon-carbon triple bond (C≡C) is the strongest of the three, followed by the double bond, then the single bond."},
+{sec:'Bonding and Hybridization', q:"Which of the following has the longest bond length?", opts:["C–C","C=C","C≡C","C–H"], ans:0, ex:"Bond length decreases as bond order increases, so the single C–C bond is the longest of the three."},
+{sec:'Bonding and Hybridization', q:"A sigma (σ) bond is formed by which type of orbital overlap?", opts:["Head-on overlap","Sideways overlap","Parallel overlap","No overlap"], ans:0, ex:"Sigma bonds arise from the direct, head-on (end-to-end) overlap of atomic orbitals along the bond axis."},
+{sec:'Bonding and Hybridization', q:"How many valence electrons does a carbon atom have?", opts:["4","2","6","8"], ans:0, ex:"Carbon's electron configuration is 1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>2</sup>, giving it 4 valence electrons available for bonding."},
+{sec:'Bonding and Hybridization', q:"In a double bond (C=C), how many sigma and pi bonds are present?", opts:["1 sigma, 1 pi","2 sigma","2 pi","1 sigma, 2 pi"], ans:0, ex:"A double bond consists of one sigma bond (head-on overlap) and one pi bond (sideways overlap of unhybridized p orbitals)."},
+{sec:'Bonding and Hybridization', q:"What is the percentage of s-character in an sp hybridization?", opts:["50%","25%","33.3%","75%"], ans:0, ex:"sp hybridization mixes one s and one p orbital equally, giving each hybrid orbital 50% s-character."},
+{sec:'Bonding and Hybridization', q:"Which orbital of carbon is NOT involved in sp<sup>3</sup> hybridization?", opts:["1s","2s","2p<sub>x</sub>","2p<sub>z</sub>"], ans:0, ex:"sp<sup>3</sup> hybridization combines the 2s orbital with all three 2p orbitals (2p<sub>x</sub>, 2p<sub>y</sub>, 2p<sub>z</sub>); the inner 1s orbital is a core orbital and takes no part in hybridization."},
+
+// PURIFICATION AND ANALYSIS (24-31)
+{sec:'Purification and Analysis', q:"Which physical property is most commonly used to test the purity of a solid organic compound?", opts:["Melting point","Boiling point","Density","Solubility"], ans:0, ex:"A sharp, well-defined melting point that matches the literature value is the standard, quick check of a solid compound's purity."},
+{sec:'Purification and Analysis', q:"How do impurities affect the melting point of a substance?", opts:["Lower and broaden the melting point","Raise the melting point","No effect","Make it melt faster without changing the temperature"], ans:0, ex:"Impurities disrupt the regular crystal lattice, which typically lowers the melting point and widens the melting range."},
+{sec:'Purification and Analysis', q:"The process of determining which specific elements are present in a compound is called:", opts:["Qualitative analysis","Quantitative analysis","Functional group analysis","Refinement"], ans:0, ex:"Qualitative analysis identifies which elements are present in a sample; quantitative analysis goes further to determine how much of each is present."},
+{sec:'Purification and Analysis', q:"What reagent is used to detect Carbon and Hydrogen by oxidation?", opts:["Copper(II) oxide (CuO)","Silver nitrate","Sodium hydroxide","Hydrochloric acid"], ans:0, ex:"Heating a compound with copper(II) oxide oxidizes its carbon to CO<sub>2</sub> (detected by lime water turning milky) and its hydrogen to H<sub>2</sub>O (detected by anhydrous copper sulfate turning blue), confirming both elements."},
+{sec:'Purification and Analysis', q:"In qualitative analysis, a white precipitate with silver nitrate indicates the presence of:", opts:["Chlorine","Bromine","Iodine","Nitrogen"], ans:0, ex:"Silver nitrate gives a white precipitate with chloride ions, a pale yellow precipitate with bromide, and a yellow precipitate with iodide, so a white precipitate points to chlorine."},
+{sec:'Purification and Analysis', q:"A compound has 85.7% C and 14.3% H. Its empirical formula is:", opts:["CH<sub>2</sub>","CH","CH<sub>3</sub>","C<sub>2</sub>H<sub>5</sub>"], ans:0, ex:"Dividing each percentage by its atomic mass gives roughly 7.14 mol C and 14.3 mol H. Simplifying this 1 : 2 ratio gives the empirical formula CH<sub>2</sub>."},
+{sec:'Purification and Analysis', q:"If the empirical formula is CH<sub>2</sub> and the molar mass is 42 g/mol, the molecular formula is:", opts:["C<sub>3</sub>H<sub>6</sub>","C<sub>2</sub>H<sub>4</sub>","C<sub>4</sub>H<sub>8</sub>","C<sub>3</sub>H<sub>8</sub>"], ans:0, ex:"The empirical formula mass of CH<sub>2</sub> is 14 g/mol. Since 42 ÷ 14 = 3, the molecular formula is three times the empirical formula: C<sub>3</sub>H<sub>6</sub>."},
+{sec:'Purification and Analysis', q:"Which technique is used to separate components of crude oil?", opts:["Fractional distillation (Refining)","Filtration","Crystallization","Solvent extraction"], ans:0, ex:"Crude oil is a mixture of hydrocarbons with different boiling points, so fractional distillation separates it into fractions such as petrol, kerosene, and diesel."},
+
+// ISOMERISM (32-36)
+{sec:'Isomerism', q:"Isomerism that arises due to different functional groups is called:", opts:["Functional isomerism","Chain isomerism","Position isomerism","Geometrical isomerism"], ans:0, ex:"Functional isomers share the same molecular formula but belong to different classes of compound because they contain different functional groups — for example, an alcohol and an ether with the same formula."},
+{sec:'Isomerism', q:"At which carbon number does isomerism begin for alkanes?", opts:["C<sub>4</sub>","C<sub>2</sub>","C<sub>3</sub>","C<sub>5</sub>"], ans:0, ex:"Methane, ethane, and propane each have only one possible structure, but butane (C<sub>4</sub>H<sub>10</sub>) can exist as n-butane or isobutane, so structural isomerism starts at four carbons."},
+{sec:'Isomerism', q:"How many structural isomers does Pentane (C<sub>5</sub>H<sub>12</sub>) have?", opts:["3","2","5","9"], ans:0, ex:"Pentane has three structural isomers: n-pentane, isopentane (2-methylbutane), and neopentane (2,2-dimethylpropane)."},
+{sec:'Isomerism', q:"Compounds with the same molecular formula but different structural arrangements are:", opts:["Isomers","Isotopes","Homologues","Allotropes"], ans:0, ex:"Isomers share an identical molecular formula but differ in how their atoms are connected or arranged in space."},
+{sec:'Isomerism', q:"Cis-trans isomerism is a type of:", opts:["Stereoisomerism","Structural isomerism","Chain isomerism","Functional isomerism"], ans:0, ex:"Cis-trans (geometric) isomerism is a form of stereoisomerism: atoms are connected in the same order but differ in their spatial arrangement around a double bond or ring."},
+
+// IUPAC NOMENCLATURE (37-41)
+{sec:'IUPAC Nomenclature', q:"In an IUPAC name, the suffix usually indicates the:", opts:["Principal functional group","Branches","Number of carbons","Position of substituents"], ans:0, ex:"The suffix attached to the parent name (such as -ol, -one, or -oic acid) identifies the compound's principal, or most senior, functional group."},
+{sec:'IUPAC Nomenclature', q:"What is the IUPAC name for 'iso-butane'?", opts:["2-methylpropane","2-methylbutane","But-2-ene","Cyclobutane"], ans:0, ex:"Isobutane's longest chain is propane with a methyl branch on the middle carbon, giving the systematic name 2-methylpropane."},
+{sec:'IUPAC Nomenclature', q:"A carbon atom attached to three other carbon atoms is classified as:", opts:["Tertiary","Primary","Secondary","Quaternary"], ans:0, ex:"A tertiary carbon is bonded to exactly three other carbon atoms; one bonded to four carbons is quaternary, to two is secondary, and to one is primary."},
+{sec:'IUPAC Nomenclature', q:"Which type of formula uses only lines and vertices to represent carbons and hydrogens?", opts:["Bold-line/Skeletal formula","Dash formula","Condensed formula","Lewis formula"], ans:0, ex:"A skeletal (bond-line) formula shows the carbon skeleton as a zig-zag of lines, with carbon and hydrogen atoms implied at each vertex and line end rather than written out."},
+{sec:'IUPAC Nomenclature', q:"Identify the main (parent) name in '2,2-dimethylpentane':", opts:["Pentane","Methyl","-ane","Dimethyl"], ans:0, ex:"The parent name, pentane, identifies the longest continuous carbon chain (5 carbons); '2,2-dimethyl' is a locant-prefix describing the two methyl substituents."},
+
+// ALKANES (42-50)
+{sec:'Alkanes', q:"What is the general formula for open-chain alkanes?", opts:["C<sub>n</sub>H<sub>2n+2</sub>","C<sub>n</sub>H<sub>2n</sub>","C<sub>n</sub>H<sub>2n-2</sub>","C<sub>n</sub>H<sub>n</sub>"], ans:0, ex:"Open-chain (acyclic) alkanes are saturated hydrocarbons that follow the general formula C<sub>n</sub>H<sub>2n+2</sub>."},
+{sec:'Alkanes', q:"What is the primary source of alkanes?", opts:["Crude oil and natural gas","Coal","Living plants","Ocean water"], ans:0, ex:"Alkanes are obtained mainly from petroleum (crude oil) and natural gas deposits."},
+{sec:'Alkanes', q:"Which group of organic compounds is the least dense?", opts:["Alkanes","Alcohols","Alkyl halides","Carboxylic acids"], ans:0, ex:"Alkanes are non-polar hydrocarbons with weak intermolecular forces, making them the least dense of the compound classes listed; most float on water."},
+{sec:'Alkanes', q:"What are the first four members of the alkane series at room temperature?", opts:["Gases","Solids","Liquids","Plasma"], ans:0, ex:"Methane, ethane, propane, and butane (C<sub>1</sub>–C<sub>4</sub>) are all gases at room temperature; the next several members are liquids, and heavier alkanes are solids."},
+{sec:'Alkanes', q:"Methane reacts with chlorine in the presence of UV light to form chloromethane. This is a:", opts:["Substitution reaction","Addition reaction","Elimination reaction","Oxidation reaction"], ans:0, ex:"A hydrogen atom on methane is replaced by a chlorine atom, which is characteristic of a free-radical substitution reaction."},
+{sec:'Alkanes', q:"Complete combustion of an alkane always produces:", opts:["CO<sub>2</sub> and H<sub>2</sub>O","CO and H<sub>2</sub>","C and H<sub>2</sub>O","CH<sub>3</sub>OH"], ans:0, ex:"With sufficient oxygen, alkanes burn completely to give carbon dioxide and water; limited oxygen instead gives incomplete combustion products such as CO or soot."},
+{sec:'Alkanes', q:"The IUPAC name for (CH<sub>3</sub>)<sub>2</sub>CHCH<sub>2</sub>CH<sub>3</sub> is:", opts:["2-methylbutane","Isopentane","2,2-dimethylpropane","Pentane"], ans:0, ex:"The longest chain here has four carbons (butane) with a methyl branch on carbon 2, giving the systematic name 2-methylbutane (its common name is isopentane)."},
+{sec:'Alkanes', q:"Alkanes are generally insoluble in water because they are:", opts:["Non-polar","Highly polar","Ionic","Very reactive"], ans:0, ex:"Water is polar while alkanes are non-polar hydrocarbons, so following the 'like dissolves like' principle, alkanes mix poorly with water."},
+{sec:'Alkanes', q:"How many primary carbons are in n-butane (CH<sub>3</sub>-CH<sub>2</sub>-CH<sub>2</sub>-CH<sub>3</sub>)?", opts:["2","1","3","4"], ans:0, ex:"The two terminal (end) carbons are each bonded to only one other carbon, making them primary; the two middle carbons are secondary."},
+
+// ALKENES (51-59)
+{sec:'Alkenes', q:"What is the old name for the alkene homologous series?", opts:["Olefins","Paraffins","Acetylenes","Arenes"], ans:0, ex:"Alkenes were historically called olefins, a name derived from their ability to form oily products when reacted with halogens."},
+{sec:'Alkenes', q:"What is the general formula for open-chain alkenes?", opts:["C<sub>n</sub>H<sub>2n</sub>","C<sub>n</sub>H<sub>2n+2</sub>","C<sub>n</sub>H<sub>2n-2</sub>","C<sub>n</sub>H<sub>2n-4</sub>"], ans:0, ex:"Alkenes contain one carbon-carbon double bond, giving them two fewer hydrogens than the corresponding alkane, so their general formula is C<sub>n</sub>H<sub>2n</sub>."},
+{sec:'Alkenes', q:"According to Markovnikov's rule, in the addition of HX to an unsymmetrical alkene, X attaches to:", opts:["The more substituted carbon (fewer hydrogens)","The carbon with more hydrogens","The terminal carbon always","Both carbons equally"], ans:0, ex:"Markovnikov's rule states that hydrogen adds to the carbon already bearing more hydrogens, while the halogen (X) adds to the more substituted carbon, via the more stable carbocation intermediate."},
+{sec:'Alkenes', q:"The hydration of propene (addition of water) yields which major product?", opts:["Propan-2-ol","Propan-1-ol","Propane","Cyclopropanol"], ans:0, ex:"Following Markovnikov's rule, the OH group adds to the more substituted (middle) carbon of propene, giving propan-2-ol as the major product."},
+{sec:'Alkenes', q:"Which reaction is used to locate the position of double bonds in a molecule?", opts:["Ozonolysis","Hydrogenation","Combustion","Halogenation"], ans:0, ex:"Ozonolysis cleaves the double bond, and the resulting carbonyl fragments reveal exactly where the double bond was located in the original molecule."},
+{sec:'Alkenes', q:"What is the product of the ozonolysis of ethene (followed by Zn/H<sub>2</sub>O workup)?", opts:["Methanal (2 molecules)","Ethanal","Propanone","Methanol"], ans:0, ex:"Ozonolysis cleaves the C=C bond of ethene, and the reductive workup converts each carbon into a carbonyl group, giving two molecules of methanal (formaldehyde)."},
+{sec:'Alkenes', q:"The catalytic hydrogenation of ethene produces:", opts:["Ethane","Ethyne","Ethanol","Polyethene"], ans:0, ex:"Adding H<sub>2</sub> across the double bond of ethene, using a metal catalyst, saturates it to give ethane."},
+{sec:'Alkenes', q:"Which reagent is used to test for unsaturation (double bonds)?", opts:["Bromine water (reddish-brown color disappears)","Lime water","Tollen's reagent","Fehling's solution"], ans:0, ex:"Alkenes decolorize reddish-brown bromine water as the bromine adds across the double bond — a classic test for unsaturation."},
+{sec:'Alkenes', q:"Alkenes exhibit geometric isomerism because of:", opts:["Restricted rotation about the C=C bond","Free rotation about the C–C bond","The presence of a triple bond","Hydrogen bonding"], ans:0, ex:"The pi bond of a C=C double bond prevents free rotation, locking substituents into fixed cis or trans spatial arrangements."},
+
+// ALKYNES (60-65)
+{sec:'Alkynes', q:"What is the general formula for the alkyne series?", opts:["C<sub>n</sub>H<sub>2n-2</sub>","C<sub>n</sub>H<sub>2n+2</sub>","C<sub>n</sub>H<sub>2n</sub>","C<sub>n</sub>H<sub>2n+1</sub>"], ans:0, ex:"Alkynes contain a carbon-carbon triple bond, giving them four fewer hydrogens than the corresponding alkane, so their general formula is C<sub>n</sub>H<sub>2n-2</sub>."},
+{sec:'Alkynes', q:"Which of the following is a terminal alkyne?", opts:["Propyne (propine)","But-2-yne","Pent-2-yne","Hex-3-yne"], ans:0, ex:"A terminal alkyne has its triple bond at the end of the chain, with an acetylenic hydrogen. Propyne (HC≡C-CH<sub>3</sub>) fits this description, while the others have internal triple bonds."},
+{sec:'Alkynes', q:"The acidity of terminal alkynes is due to the presence of:", opts:["Acetylenic hydrogen","Sigma bonds","Pi bonds","Triple bond only"], ans:0, ex:"The hydrogen attached directly to the sp-hybridized carbon of a terminal alkyne (the acetylenic hydrogen) is weakly acidic and can be removed by strong bases."},
+{sec:'Alkynes', q:"When ethyne reacts with water in the presence of HgSO<sub>4</sub>/H<sub>2</sub>SO<sub>4</sub>, the final stable product is:", opts:["Ethanal (acetaldehyde)","Ethene","Ethanol","Ethanoic acid"], ans:0, ex:"Mercury-catalyzed hydration of ethyne first forms an unstable enol, which tautomerizes to the stable carbonyl compound ethanal."},
+{sec:'Alkynes', q:"The ozonolysis of pent-2-yne produces:", opts:["Propanoic acid and ethanoic acid","Propanal and ethanal","Pentan-2-one","Formic acid"], ans:0, ex:"Ozonolysis cleaves the triple bond of pent-2-yne completely, oxidizing each fragment all the way to a carboxylic acid — giving propanoic acid and ethanoic acid."},
+{sec:'Alkynes', q:"Reaction of ethyne with excess bromine (Br<sub>2</sub>) yields:", opts:["1,1,2,2-tetrabromoethane","1,2-dibromoethene","Bromoethane","Ethyl bromide"], ans:0, ex:"With excess bromine, both pi bonds of the triple bond are saturated by addition, giving the fully brominated product 1,1,2,2-tetrabromoethane."},
+
+// AROMATIC COMPOUNDS (66-73)
+{sec:'Aromatic Compounds', q:"Who proposed the hexagonal ring structure for benzene?", opts:["August Kekulé","J.J. Berzelius","Friedrich Wöhler","Robert Curl"], ans:0, ex:"August Kekulé proposed benzene's cyclic, hexagonal ring structure with alternating double bonds."},
+{sec:'Aromatic Compounds', q:"Benzene typically undergoes which type of reaction?", opts:["Electrophilic substitution","Nucleophilic addition","Free-radical addition","Elimination"], ans:0, ex:"Benzene's stable, delocalized pi system favors reactions that preserve its aromaticity, so it undergoes electrophilic substitution rather than addition."},
+{sec:'Aromatic Compounds', q:"The process of introducing a nitro group (–NO<sub>2</sub>) into benzene is called:", opts:["Nitration","Halogenation","Sulphonation","Alkylation"], ans:0, ex:"Nitration replaces a hydrogen on the benzene ring with a nitro group, typically using a mixture of concentrated nitric and sulfuric acids."},
+{sec:'Aromatic Compounds', q:"Which catalyst is required for Friedel-Crafts alkylation?", opts:["AlCl<sub>3</sub> (anhydrous)","Nickel","Platinum","H<sub>2</sub>SO<sub>4</sub>"], ans:0, ex:"Friedel-Crafts alkylation requires a Lewis acid catalyst, most commonly anhydrous aluminum chloride (AlCl<sub>3</sub>), to generate the electrophilic carbocation."},
+{sec:'Aromatic Compounds', q:"In benzene nomenclature, substituents at positions 1 and 3 are referred to as:", opts:["Meta","Ortho","Para","Geminal"], ans:0, ex:"Substituents on adjacent carbons (1,2) are ortho, on carbons one apart (1,3) are meta, and directly opposite (1,4) are para."},
+{sec:'Aromatic Compounds', q:"What is the common name for hydroxybenzene?", opts:["Phenol","Toluene","Aniline","Benzyl alcohol"], ans:0, ex:"Hydroxybenzene — a benzene ring with an –OH group attached directly to it — is commonly known as phenol."},
+{sec:'Aromatic Compounds', q:"Ozonolysis of one molecule of benzene yields three molecules of:", opts:["Glyoxal (ethanedial)","Formaldehyde","Formic acid","Carbon dioxide"], ans:0, ex:"Ozonolysis cleaves all three double bonds of benzene's ring, producing three molecules of glyoxal (ethanedial, OHC–CHO)."},
+{sec:'Aromatic Compounds', q:"1,4-dinitrobenzene is also known as:", opts:["Para-dinitrobenzene","Ortho-dinitrobenzene","Meta-dinitrobenzene","Toluene"], ans:0, ex:"Substituents at the 1 and 4 positions of a benzene ring sit in the para relationship, so 1,4-dinitrobenzene is also called para-dinitrobenzene."},
+
+// ALKYL HALIDES (74-78)
+{sec:'Alkyl Halides', q:"What is the general formula for alkyl halides?", opts:["R-X (where X is a halogen)","R-OH","R-CHO","R-CN"], ans:0, ex:"Alkyl halides consist of an alkyl group (R) bonded to a halogen atom (X = F, Cl, Br, or I), giving the general formula R-X."},
+{sec:'Alkyl Halides', q:"Alkyl halides are polar because of the:", opts:["Carbon-halogen bond","Carbon-hydrogen bond","Carbon-carbon bond","Carbon-oxygen bond"], ans:0, ex:"Halogens are more electronegative than carbon, so the carbon-halogen bond is polarized, giving alkyl halides their characteristic polarity."},
+{sec:'Alkyl Halides', q:"A Grignard reagent has the general formula:", opts:["R-MgX","R-X","R-Li","R-OH"], ans:0, ex:"Grignard reagents form when an alkyl halide reacts with magnesium metal in dry ether, giving the general formula R-MgX."},
+{sec:'Alkyl Halides', q:"Classify (CH<sub>3</sub>)<sub>3</sub>CCl:", opts:["Tertiary alkyl halide","Primary alkyl halide","Secondary alkyl halide","Aromatic halide"], ans:0, ex:"The carbon bearing the chlorine in (CH<sub>3</sub>)<sub>3</sub>CCl is attached to three other carbon (methyl) groups, making it a tertiary alkyl halide."},
+{sec:'Alkyl Halides', q:"Which of the following has the highest boiling point?", opts:["CCl<sub>4</sub>","CH<sub>3</sub>Cl","CH<sub>2</sub>Cl<sub>2</sub>","CHCl<sub>3</sub>"], ans:0, ex:"Boiling point tends to rise with molecular weight and increasing van der Waals forces, so CCl<sub>4</sub>, with four chlorine atoms, has the highest boiling point of this series."},
+
+// ALCOHOLS AND PHENOLS (79-86)
+{sec:'Alcohols and Phenols', q:"What is the functional group of the alcohol series?", opts:["–OH","–COOH","–CHO","–CO–"], ans:0, ex:"Alcohols are defined by the hydroxyl functional group, –OH, attached to a saturated carbon."},
+{sec:'Alcohols and Phenols', q:"Alcohols with two hydroxyl (–OH) groups are called:", opts:["Dihydric","Monohydric","Polyhydric","Trihydric"], ans:0, ex:"Alcohols are classified by how many –OH groups they carry: one (monohydric), two (dihydric), or three or more (polyhydric/trihydric)."},
+{sec:'Alcohols and Phenols', q:"Primary alcohols are oxidized to form:", opts:["Alkanals (aldehydes)","Ketones","Alkanes","Ethers"], ans:0, ex:"Mild oxidation of a primary alcohol removes two hydrogens to give an aldehyde; further oxidation would take it on to a carboxylic acid."},
+{sec:'Alcohols and Phenols', q:"Which reagent is used in the Lucas test?", opts:["HCl/ZnCl<sub>2</sub>","Iodine/NaOH","KMnO<sub>4</sub>/H<sub>2</sub>SO<sub>4</sub>","Fehling's solution"], ans:0, ex:"The Lucas test uses a mixture of concentrated hydrochloric acid and zinc chloride to distinguish primary, secondary, and tertiary alcohols by how quickly each reacts."},
+{sec:'Alcohols and Phenols', q:"A tertiary alcohol reacts with Lucas reagent:", opts:["Instantly","Only on heating","After 5 minutes","Not at all"], ans:0, ex:"Tertiary alcohols form the most stable carbocation, so they react with the Lucas reagent immediately, producing a cloudy alkyl chloride layer right away."},
+{sec:'Alcohols and Phenols', q:"Which test is used to detect the CH<sub>3</sub>-CH(OH)- group in alcohols?", opts:["Iodoform test","Lucas test","Silver mirror test","Benedict's test"], ans:0, ex:"The iodoform test detects alcohols containing the CH<sub>3</sub>-CH(OH)- group (or compounds that can be oxidized to it), producing a characteristic yellow precipitate of triiodomethane (CHI<sub>3</sub>)."},
+{sec:'Alcohols and Phenols', q:"Phenols are more ______ than ethanol.", opts:["Acidic","Basic","Reactive to oxidation","Saturated"], ans:0, ex:"The benzene ring stabilizes phenol's conjugate base (the phenoxide ion) through resonance, making phenol considerably more acidic than an ordinary alcohol like ethanol."},
+{sec:'Alcohols and Phenols', q:"The dehydration of ethanol with conc. H<sub>2</sub>SO<sub>4</sub> at 170°C produces:", opts:["Ethene","Ethane","Diethyl ether","Ethanal"], ans:0, ex:"At the higher temperature of 170°C, concentrated sulfuric acid promotes intramolecular dehydration of ethanol, eliminating water to form ethene."},
+
+// CARBONYL COMPOUNDS (87-93)
+{sec:'Carbonyl Compounds', q:"The functional group present in both aldehydes and ketones is the:", opts:["Carbonyl group (C=O)","Carboxyl group","Hydroxyl group","Alkoxy group"], ans:0, ex:"Aldehydes and ketones both share the carbonyl group — a carbon double-bonded to oxygen — differing only in what else is attached to that carbon."},
+{sec:'Carbonyl Compounds', q:"What is the IUPAC name for acetone?", opts:["Propanone","Ethanal","Butanone","Methanal"], ans:0, ex:"Acetone, the simplest ketone, has the systematic IUPAC name propanone."},
+{sec:'Carbonyl Compounds', q:"Aldehydes reduce Tollens' reagent to form:", opts:["A silver mirror","A red precipitate","A yellow precipitate","A green solution"], ans:0, ex:"Aldehydes reduce the diamminesilver(I) complex in Tollens' reagent to metallic silver, which deposits as a shiny 'silver mirror' on the test tube."},
+{sec:'Carbonyl Compounds', q:"Reduction of an alkanal (aldehyde) produces a:", opts:["Primary alcohol","Secondary alcohol","Tertiary alcohol","Carboxylic acid"], ans:0, ex:"Adding hydrogen to the carbonyl carbon of an aldehyde converts it into a primary alcohol."},
+{sec:'Carbonyl Compounds', q:"What is the shape of the carbonyl group?", opts:["Trigonal planar","Linear","Tetrahedral","Pyramidal"], ans:0, ex:"The carbonyl carbon is sp<sup>2</sup>-hybridized, giving the C=O group and its attached substituents a trigonal planar geometry."},
+{sec:'Carbonyl Compounds', q:"Ketones do NOT react with which of the following?", opts:["Fehling's solution","Grignard reagent","HCN","NaBH<sub>4</sub>"], ans:0, ex:"Fehling's solution oxidizes aldehydes, giving a brick-red precipitate, but does not react with ketones, since ketones lack the easily oxidized carbonyl hydrogen."},
+{sec:'Carbonyl Compounds', q:"Which carbonyl compound gives a yellow precipitate with I<sub>2</sub>/NaOH?", opts:["Propanone (and other methyl ketones)","Methanal","Pentan-3-one","Benzaldehyde"], ans:0, ex:"The iodoform test is positive for methyl ketones like propanone, which contain a CH<sub>3</sub>-CO- group, giving a yellow precipitate of triiodomethane."},
+
+// CARBOXYLIC ACIDS (94-100)
+{sec:'Carboxylic Acids', q:"The functional group of organic acids is:", opts:["–COOH","–CHO","–OH","–COOR"], ans:0, ex:"Carboxylic acids are defined by the carboxyl functional group, –COOH."},
+{sec:'Carboxylic Acids', q:"The common name for methanoic acid is:", opts:["Formic acid","Acetic acid","Butyric acid","Propionic acid"], ans:0, ex:"Methanoic acid, the simplest carboxylic acid (HCOOH), is commonly known as formic acid."},
+{sec:'Carboxylic Acids', q:"The reaction between an organic acid and an alcohol is called:", opts:["Esterification","Saponification","Hydrogenation","Hydration"], ans:0, ex:"Esterification is the acid-catalyzed reaction of a carboxylic acid with an alcohol to form an ester and water."},
+{sec:'Carboxylic Acids', q:"Reduction of a carboxylic acid with LiAlH<sub>4</sub> yields a:", opts:["Primary alcohol","Secondary alcohol","Aldehyde","Ketone"], ans:0, ex:"Lithium aluminum hydride is a strong reducing agent that fully reduces a carboxylic acid all the way to a primary alcohol."},
+{sec:'Carboxylic Acids', q:"Salts of carboxylic acids are named with the suffix:", opts:["-oate","-ol","-one","-al"], ans:0, ex:"Carboxylate salts are named by replacing '-ic acid' with '-oate' — for example, sodium ethanoate from ethanoic acid."},
+{sec:'Carboxylic Acids', q:"Which is the correct order of acidity?", opts:["Carboxylic acid > Phenol > Ethanol","Ethanol > Phenol > Carboxylic acid","Phenol > Ethanol > Carboxylic acid","All are equally acidic"], ans:0, ex:"Carboxylic acids are the most acidic because their conjugate base is stabilized by resonance across two oxygens; phenol is next, with weaker resonance stabilization of the phenoxide ion; simple alcohols like ethanol are the least acidic of the three."},
+{sec:'Carboxylic Acids', q:"The reaction that removes CO<sub>2</sub> from a carboxylic acid to form an alkane is:", opts:["Decarboxylation","Esterification","Ozonolysis","Hydration"], ans:0, ex:"Decarboxylation removes a carboxyl group as carbon dioxide, typically converting a carboxylate salt into a hydrocarbon."}
+];
+
+const ALL_TOPICS = [
+ 'History and Discovery',
+ 'Carbon Allotropes',
+ 'Bonding and Hybridization',
+ 'Purification and Analysis',
+ 'Isomerism',
+ 'IUPAC Nomenclature',
+ 'Alkanes',
+ 'Alkenes',
+ 'Alkynes',
+ 'Aromatic Compounds',
+ 'Alkyl Halides',
+ 'Alcohols and Phenols',
+ 'Carbonyl Compounds',
+ 'Carboxylic Acids'
+];
+
+/* ============================================================
+ STORAGE KEYS (persistent artifact storage, not localStorage)
+ ============================================================ */
+const MUTE_KEY = 'chm102-muted';
+const BEST_SCORE_KEY = 'chm102-best-score';
+const STORAGE_KEY = 'chm102-quiz-state';
+
+/* ============================================================
+ HELPERS
+ ============================================================ */
+function shuffle(arr){
+ const a=[...arr];
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+ return a;
+}
+
+/* renderChem(): every formula/hybridization string in QUESTIONS is already
+   written with real <sub>/<sup> tags, and is inserted via innerHTML, so
+   no text transformation is needed here — this just guards against
+   null/undefined before it hits innerHTML. */
+function renderChem(str) {
+ return str == null ? '' : str;
+}
+
+function sectionIcon(sec){
+ return {
+  'History and Discovery':'fa-book-open',
+  'Carbon Allotropes':'fa-circle-nodes',
+  'Bonding and Hybridization':'fa-atom',
+  'Purification and Analysis':'fa-filter',
+  'Isomerism':'fa-shuffle',
+  'IUPAC Nomenclature':'fa-tag',
+  'Alkanes':'fa-link',
+  'Alkenes':'fa-bolt',
+  'Alkynes':'fa-grip-lines',
+  'Aromatic Compounds':'fa-ring',
+  'Alkyl Halides':'fa-flask',
+  'Alcohols and Phenols':'fa-droplet',
+  'Carbonyl Compounds':'fa-circle-dot',
+  'Carboxylic Acids':'fa-vial'
+ }[sec] || 'fa-flask-vial';
+}
+function randomizeOptions(item){
+ const pairs = item.opts.map((o,idx)=>({o, correct: idx===item.ans}));
+ const shuffled = shuffle(pairs);
+ return {...item, opts: shuffled.map(p=>p.o), ans: shuffled.findIndex(p=>p.correct)};
+}
+
+/* Safely read a value from persistent storage. Returns null if the key
+   doesn't exist or storage is unavailable, instead of throwing. */
+async function storageGet(key) {
+ try {
+  const result = await window.storage.get(key, false);
+  return result ? result.value : null;
+ } catch (e) {
+  return null;
+ }
+}
+async function storageSet(key, value) {
+ try {
+  await window.storage.set(key, value, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+async function storageDelete(key) {
+ try {
+  await window.storage.delete(key, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+
+/* SOUND ENGINE */
+const SoundEngine = (function() {
+ let ctx = null;
+ let muted = false;
+
+ async function init() {
+  const v = await storageGet(MUTE_KEY);
+  muted = v === '1';
+  return muted;
+ }
+
+ function getCtx() {
+ if (!ctx) {
+ const AC = window.AudioContext || window.webkitAudioContext;
+ if (!AC) return null;
+ ctx = new AC();
+ }
+ if (ctx.state === 'suspended') ctx.resume();
+ return ctx;
+ }
+
+ function isMuted() { return muted; }
+ async function setMuted(v) {
+ muted = v;
+ await storageSet(MUTE_KEY, v ? '1' : '0');
+ }
+
+ function playCorrect() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc1 = c.createOscillator();
+ const osc2 = c.createOscillator();
+ const gain = c.createGain();
+
+ osc1.type = 'sine'; osc1.frequency.setValueAtTime(880, t);
+ osc2.type = 'sine'; osc2.frequency.setValueAtTime(1760, t);
+
+ gain.gain.setValueAtTime(0.2, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+
+ osc1.connect(gain); osc2.connect(gain);
+ gain.connect(c.destination);
+
+ osc1.start(t); osc2.start(t);
+ osc1.stop(t + 0.6); osc2.stop(t + 0.6);
+ }
+
+ function playWrong() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc = c.createOscillator();
+ const gain = c.createGain();
+
+ osc.type = 'sawtooth';
+ osc.frequency.setValueAtTime(160, t);
+ osc.frequency.exponentialRampToValueAtTime(60, t + 0.35);
+
+ gain.gain.setValueAtTime(0.25, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+
+ osc.connect(gain);
+ gain.connect(c.destination);
+
+ osc.start(t);
+ osc.stop(t + 0.35);
+ }
+
+ return { init, isMuted, setMuted, playCorrect, playWrong };
+})();
+
+/* APP STATE */
+let quizMode = 'auto'; // 'auto' or 'custom'
+let activeQuestions = [];
+let userAnswers = []; // array of selected option indices
+let currentQ = 0;
+let timeRemaining = 0;
+let timerInterval = null;
+let isPaused = false;
+let leaveCount = 0;
+
+// DOM Elements
+const homeScreen = document.getElementById('homeScreen');
+const configScreen = document.getElementById('configScreen');
+const loadingScreen = document.getElementById('loadingScreen');
+const quizScreen = document.getElementById('quizScreen');
+const resultScreen = document.getElementById('resultScreen');
+
+const pickAuto = document.getElementById('pickAuto');
+const pickCustom = document.getElementById('pickCustom');
+const backToHomeFromConfig = document.getElementById('backToHomeFromConfig');
+const startCustomBtn = document.getElementById('startCustomBtn');
+
+const topicsWrap = document.getElementById('topicsWrap');
+const timeSlider = document.getElementById('timeSlider');
+const timeValue = document.getElementById('timeValue');
+const countSlider = document.getElementById('countSlider');
+const countValue = document.getElementById('countValue');
+
+const timerBox = document.getElementById('timer');
+const timerText = document.getElementById('timerText');
+const soundToggle = document.getElementById('soundToggle');
+
+const progressFill = document.getElementById('progressFill');
+const dotsRow = document.getElementById('dotsRow');
+const sectionTag = document.getElementById('sectionTag');
+const qCounter = document.getElementById('qCounter');
+const qText = document.getElementById('qText');
+const optsWrap = document.getElementById('optsWrap');
+const inlineExplain = document.getElementById('inlineExplain');
+
+const backBtn = document.getElementById('backBtn');
+const nextBtn = document.getElementById('nextBtn');
+const finishBtn = document.getElementById('finishBtn');
+
+const quizTools = document.getElementById('quizTools');
+const pauseBtn = document.getElementById('pauseBtn');
+const pauseOverlay = document.getElementById('pauseOverlay');
+const resumeFromPauseBtn = document.getElementById('resumeFromPauseBtn');
+
+const resumeModal = document.getElementById('resumeModal');
+const resumeInfo = document.getElementById('resumeInfo');
+const resumeYes = document.getElementById('resumeYes');
+const resumeNo = document.getElementById('resumeNo');
+
+const leaveWarningModal = document.getElementById('leaveWarningModal');
+const leaveWarnText = document.getElementById('leaveWarnText');
+const leaveWarnOk = document.getElementById('leaveWarnOk');
+
+const statsBar = document.getElementById('statsBar');
+
+/* INIT */
+window.addEventListener('load', async () => {
+ await SoundEngine.init();
+ updateSoundToggleUI();
+ setupConfigTopics();
+ await checkSavedState();
+ await updateHomeStats();
+});
+
+function updateSoundToggleUI() {
+ const muted = SoundEngine.isMuted();
+ soundToggle.classList.toggle('muted', muted);
+ soundToggle.setAttribute('aria-pressed', muted ? 'true' : 'false');
+ soundToggle.innerHTML = muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+}
+soundToggle.addEventListener('click', async () => {
+ await SoundEngine.setMuted(!SoundEngine.isMuted());
+ updateSoundToggleUI();
+});
+
+async function updateHomeStats() {
+ const best = await storageGet(BEST_SCORE_KEY);
+ if (best) {
+  statsBar.classList.remove('hidden');
+  statsBar.innerHTML = `<div class="stat-chip"><i class="fa-solid fa-trophy"></i> Best Score: <strong>${best}%</strong></div>`;
+ } else {
+  statsBar.classList.add('hidden');
+  statsBar.innerHTML = '';
+ }
+}
+
+/* CONFIG TOPICS BUILD */
+function setupConfigTopics() {
+ topicsWrap.innerHTML = '';
+ ALL_TOPICS.forEach((t) => {
+  const label = document.createElement('label');
+  label.className = 'topic-chip';
+  label.innerHTML = `<input type="checkbox" value="${t}" checked> <span><i class="fa-solid ${sectionIcon(t)}"></i> ${t}</span>`;
+  topicsWrap.appendChild(label);
+ });
+}
+
+timeSlider.addEventListener('input', () => { timeValue.textContent = timeSlider.value; });
+countSlider.addEventListener('input', () => { countValue.textContent = countSlider.value; });
+
+/* MODE SELECTION */
+pickAuto.addEventListener('click', () => {
+ startQuiz('auto', ALL_TOPICS, 60, QUESTIONS.length);
+});
+pickCustom.addEventListener('click', () => {
+ homeScreen.classList.add('hidden');
+ configScreen.classList.remove('hidden');
+});
+backToHomeFromConfig.addEventListener('click', () => {
+ configScreen.classList.add('hidden');
+ homeScreen.classList.remove('hidden');
+});
+
+startCustomBtn.addEventListener('click', () => {
+ const selectedTopics = Array.from(topicsWrap.querySelectorAll('input:checked')).map(i => i.value);
+ if (selectedTopics.length === 0) {
+  alert('Please select at least one topic.');
+  return;
+ }
+ const mins = parseInt(timeSlider.value, 10);
+ const count = parseInt(countSlider.value, 10);
+ configScreen.classList.add('hidden');
+ startQuiz('custom', selectedTopics, mins, count);
+});
+
+/* START QUIZ */
+function startQuiz(mode, topics, minutes, count) {
+ quizMode = mode;
+ showScreen(loadingScreen);
+ setTimeout(() => {
+  let filtered = QUESTIONS.filter(q => topics.includes(q.sec));
+  if (filtered.length === 0) filtered = [...QUESTIONS];
+  filtered = shuffle(filtered).map(randomizeOptions);
+  if (count < filtered.length) {
+   filtered = filtered.slice(0, count);
+  }
+  activeQuestions = filtered;
+  userAnswers = new Array(activeQuestions.length).fill(null);
+  currentQ = 0;
+  timeRemaining = minutes * 60;
+  isPaused = false;
+  leaveCount = 0;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') {
+   pauseBtn.classList.remove('hidden');
+  } else {
+   pauseBtn.classList.add('hidden');
+  }
+  timerBox.classList.remove('hidden');
+
+  startTimer();
+  renderQuestion();
+  saveState();
+ }, 600);
+}
+
+function showScreen(sc) {
+ [homeScreen, configScreen, loadingScreen, quizScreen, resultScreen].forEach(s => s.classList.add('hidden'));
+ sc.classList.remove('hidden');
+ if (sc === quizScreen) {
+  closeMobileNav();
+  hamburgerBtn.classList.add('hidden');
+ } else {
+  hamburgerBtn.classList.remove('hidden');
+ }
+}
+
+/* TIMER */
+function startTimer() {
+ clearInterval(timerInterval);
+ updateTimerDisplay();
+ timerInterval = setInterval(() => {
+  if (!isPaused) {
+   timeRemaining--;
+   updateTimerDisplay();
+   if (timeRemaining <= 0) {
+    clearInterval(timerInterval);
+    alert('Time is up! Submitting your answers.');
+    finishQuiz();
+   }
+  }
+ }, 1000);
+}
+
+function updateTimerDisplay() {
+ const m = Math.floor(Math.max(0, timeRemaining) / 60);
+ const s = Math.max(0, timeRemaining) % 60;
+ timerText.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+ if (timeRemaining < 300) {
+  timerBox.classList.add('warn');
+ } else {
+  timerBox.classList.remove('warn');
+ }
+}
+
+/* PAUSE ENGINE */
+pauseBtn.addEventListener('click', togglePause);
+resumeFromPauseBtn.addEventListener('click', togglePause);
+
+function togglePause() {
+ if (quizMode !== 'auto') return;
+ isPaused = !isPaused;
+ if (isPaused) {
+  pauseOverlay.classList.remove('hidden');
+ } else {
+  pauseOverlay.classList.add('hidden');
+ }
+}
+
+/* RENDER QUESTION */
+function renderQuestion() {
+ const q = activeQuestions[currentQ];
+ sectionTag.innerHTML = `<i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec}`;
+ qCounter.textContent = `Question ${currentQ + 1} of ${activeQuestions.length}`;
+ qText.innerHTML = renderChem(q.q);
+
+ optsWrap.innerHTML = '';
+ inlineExplain.className = 'inline-explain';
+ inlineExplain.innerHTML = '';
+
+ const answered = userAnswers[currentQ] !== null;
+
+ q.opts.forEach((optStr, idx) => {
+  const optDiv = document.createElement('div');
+  optDiv.className = 'opt';
+  const letter = String.fromCharCode(65 + idx);
+
+  if (answered) {
+   optDiv.classList.add('locked');
+   if (quizMode === 'auto') {
+    if (idx === q.ans) optDiv.classList.add('correct');
+    if (userAnswers[currentQ] === idx && idx !== q.ans) optDiv.classList.add('wrong');
+   } else {
+    if (userAnswers[currentQ] === idx) optDiv.classList.add('selected');
+   }
+  }
+
+  optDiv.innerHTML = `<div class="opt-letter">${letter}</div><div class="opt-text">${renderChem(optStr)}</div>`;
+  optDiv.addEventListener('click', () => handleSelectOption(idx));
+  optsWrap.appendChild(optDiv);
+ });
+
+ if (answered && quizMode === 'auto') {
+  const isRight = userAnswers[currentQ] === q.ans;
+  inlineExplain.classList.add('show', isRight ? 'right' : 'wrong');
+  inlineExplain.innerHTML = `
+   <div class="ie-label">${isRight ? '<i class="fa-solid fa-circle-check"></i> Correct!' : '<i class="fa-solid fa-circle-xmark"></i> Incorrect'}</div>
+   <div>${renderChem(q.ex)}</div>
+  `;
+ }
+
+ // Navigation buttons state
+ backBtn.disabled = currentQ === 0;
+ if (currentQ === activeQuestions.length - 1) {
+  nextBtn.classList.add('hidden');
+  finishBtn.classList.remove('hidden');
+ } else {
+  nextBtn.classList.remove('hidden');
+  finishBtn.classList.add('hidden');
+ }
+
+ renderProgress();
+}
+
+function renderProgress() {
+ const pct = ((currentQ + 1) / activeQuestions.length) * 100;
+ progressFill.style.width = `${pct}%`;
+
+ dotsRow.innerHTML = '';
+ activeQuestions.forEach((q, idx) => {
+  const dot = document.createElement('div');
+  dot.className = 'dot';
+  if (idx === currentQ) dot.classList.add('current');
+
+  if (userAnswers[idx] !== null) {
+   if (quizMode === 'auto') {
+    if (userAnswers[idx] === q.ans) dot.classList.add('correct');
+    else dot.classList.add('wrong');
+   } else {
+    dot.classList.add('answered');
+   }
+  }
+  dot.addEventListener('click', () => {
+   currentQ = idx;
+   renderQuestion();
+  });
+  dotsRow.appendChild(dot);
+ });
+}
+
+/* OPTION SELECTION */
+function handleSelectOption(idx) {
+ if (userAnswers[currentQ] !== null && quizMode === 'auto') return; // locked in auto mode once picked
+
+ const prevAns = userAnswers[currentQ];
+ userAnswers[currentQ] = idx;
+
+ if (quizMode === 'auto' && prevAns === null) {
+  if (idx === activeQuestions[currentQ].ans) {
+   SoundEngine.playCorrect();
+  } else {
+   SoundEngine.playWrong();
+  }
+ }
+
+ renderQuestion();
+ saveState();
+}
+
+nextBtn.addEventListener('click', () => {
+ if (currentQ < activeQuestions.length - 1) {
+  currentQ++;
+  renderQuestion();
+ }
+});
+backBtn.addEventListener('click', () => {
+ if (currentQ > 0) {
+  currentQ--;
+  renderQuestion();
+ }
+});
+finishBtn.addEventListener('click', () => {
+ const answeredCount = userAnswers.filter(a => a !== null).length;
+ if (quizMode === 'auto' && answeredCount < Math.min(30, activeQuestions.length)) {
+  alert(`Please answer at least ${Math.min(30, activeQuestions.length)} questions before submitting.`);
+  return;
+ }
+ if (confirm('Are you sure you want to submit your quiz?')) {
+  finishQuiz();
+ }
+});
+
+/* KEYBOARD NAVIGATION */
+document.addEventListener('keydown', (e) => {
+ if (quizScreen.classList.contains('hidden')) return;
+ if (e.key === 'ArrowLeft' && currentQ > 0) {
+  currentQ--; renderQuestion();
+ } else if (e.key === 'ArrowRight' && currentQ < activeQuestions.length - 1) {
+  currentQ++; renderQuestion();
+ } else if (['1','2','3','4'].includes(e.key)) {
+  const idx = parseInt(e.key, 10) - 1;
+  if (idx < activeQuestions[currentQ].opts.length) {
+   handleSelectOption(idx);
+  }
+ }
+});
+
+/* FINISH QUIZ */
+function finishQuiz() {
+ clearInterval(timerInterval);
+ clearSavedState();
+ quizTools.classList.add('hidden');
+ timerBox.classList.add('hidden');
+
+ let correctCount = 0;
+ const breakdown = {};
+
+ activeQuestions.forEach((q, i) => {
+  if (!breakdown[q.sec]) breakdown[q.sec] = { correct: 0, total: 0 };
+  breakdown[q.sec].total++;
+
+  if (userAnswers[i] === q.ans) {
+   correctCount++;
+   breakdown[q.sec].correct++;
+  }
+ });
+
+ const total = activeQuestions.length;
+ const pct = Math.round((correctCount / total) * 100);
+
+ document.getElementById('resultScore').textContent = correctCount;
+ document.getElementById('resultOf').textContent = `/ ${total}`;
+ document.getElementById('resultPct').textContent = `${pct}% Overall Score`;
+
+ let msg = '';
+ if (pct >= 80) msg = '<i class="fa-solid fa-award" style="color:#facc15;"></i> Excellent Mastery! Outstanding Performance.';
+ else if (pct >= 60) msg = '<i class="fa-solid fa-thumbs-up" style="color:var(--accent);"></i> Good Job! Keep reviewing difficult topics.';
+ else msg = '<i class="fa-solid fa-book-open" style="color:var(--red);"></i> Keep Practicing! Review the explanations below.';
+ document.getElementById('resultMsg').innerHTML = msg;
+
+ document.getElementById('bestBadge').innerHTML = '';
+ (async () => {
+  const oldBestRaw = await storageGet(BEST_SCORE_KEY);
+  const oldBest = oldBestRaw ? parseInt(oldBestRaw, 10) : 0;
+  if (pct > oldBest) {
+   await storageSet(BEST_SCORE_KEY, String(pct));
+   document.getElementById('bestBadge').innerHTML = `<div class="best-badge"><i class="fa-solid fa-star"></i> New Personal Best!</div>`;
+  }
+ })();
+
+ // Render breakdown grid
+ const breakdownGrid = document.getElementById('breakdownGrid');
+ breakdownGrid.innerHTML = '';
+ Object.keys(breakdown).forEach(sec => {
+  const item = breakdown[sec];
+  const bdCard = document.createElement('div');
+  bdCard.className = 'bd-card';
+  bdCard.innerHTML = `
+   <div class="bd-name"><i class="fa-solid ${sectionIcon(sec)}"></i> ${sec}</div>
+   <div class="bd-score">${item.correct} <span class="bd-total">/ ${item.total}</span></div>
+  `;
+  breakdownGrid.appendChild(bdCard);
+ });
+
+ // Render question review list
+ const reviewList = document.getElementById('reviewList');
+ reviewList.innerHTML = '';
+ activeQuestions.forEach((q, i) => {
+  const uAns = userAnswers[i];
+  const isRight = uAns === q.ans;
+  const revItem = document.createElement('div');
+  revItem.className = `review-item ${isRight ? 'right' : 'miss'}`;
+
+  const uAnsText = uAns !== null ? `${String.fromCharCode(65 + uAns)}) ${renderChem(q.opts[uAns])}` : 'Not Answered';
+  const cAnsText = `${String.fromCharCode(65 + q.ans)}) ${renderChem(q.opts[q.ans])}`;
+
+  revItem.innerHTML = `
+   <div class="ri-section"><i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec} · Q${i + 1}</div>
+   <div class="ri-q"><strong>${renderChem(q.q)}</strong></div>
+   <div class="ri-ans ${isRight ? 'right' : 'wrong'}">
+    <i class="fa-solid ${isRight ? 'fa-check' : 'fa-xmark'}"></i>
+    <span><strong>Your Answer:</strong> ${uAnsText}</span>
+   </div>
+   ${!isRight ? `<div class="ri-ans correct-reveal"><i class="fa-solid fa-bullseye"></i> <span><strong>Correct Answer:</strong> ${cAnsText}</span></div>` : ''}
+   <div class="ri-exp"><strong>Explanation:</strong> ${renderChem(q.ex)}</div>
+  `;
+  reviewList.appendChild(revItem);
+ });
+
+ showScreen(resultScreen);
+ updateHomeStats();
+}
+
+document.getElementById('homeBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('retryBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+/* AUTOSAVE ENGINE (persistent artifact storage) */
+function saveState() {
+ const state = { quizMode, activeQuestions, userAnswers, currentQ, timeRemaining };
+ storageSet(STORAGE_KEY, JSON.stringify(state));
+}
+
+function clearSavedState() {
+ storageDelete(STORAGE_KEY);
+}
+
+async function checkSavedState() {
+ const raw = await storageGet(STORAGE_KEY);
+ if (!raw) return;
+ let data;
+ try {
+  data = JSON.parse(raw);
+ } catch (e) {
+  return;
+ }
+ if (!data || !data.activeQuestions || data.activeQuestions.length === 0) return;
+
+ resumeInfo.textContent = `${data.activeQuestions.length} Questions (${data.quizMode.toUpperCase()} Mode)`;
+ resumeModal.classList.remove('hidden');
+
+ resumeYes.onclick = () => {
+  resumeModal.classList.add('hidden');
+  quizMode = data.quizMode;
+  activeQuestions = data.activeQuestions;
+  userAnswers = data.userAnswers;
+  currentQ = data.currentQ;
+  timeRemaining = data.timeRemaining;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') pauseBtn.classList.remove('hidden'); else pauseBtn.classList.add('hidden');
+  timerBox.classList.remove('hidden');
+  startTimer();
+  renderQuestion();
+ };
+
+ resumeNo.onclick = () => {
+  resumeModal.classList.add('hidden');
+  clearSavedState();
+ };
+}
+
+/* TAB SWITCH GUARDRAIL */
+document.addEventListener('visibilitychange', () => {
+ if (!quizScreen.classList.contains('hidden') && document.hidden) {
+  leaveCount++;
+  if (leaveCount >= 3) {
+   alert('You have left the quiz tab 3 times. The quiz will now reset.');
+   clearSavedState();
+   location.reload();
+  } else {
+   leaveWarnText.textContent = `You switched away from the quiz tab. Warning ${leaveCount} of 3. Leaving 3 times will reset your quiz.`;
+   leaveWarningModal.classList.remove('hidden');
+  }
+ }
+});
+leaveWarnOk.addEventListener('click', () => leaveWarningModal.classList.add('hidden'));
+</script>
+</body>
+</html>
