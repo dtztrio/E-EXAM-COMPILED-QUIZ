@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SWE122 · Computer Hardware Systems Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script>
+(function(){
+  try{
+    var theme = localStorage.getItem('dtz_theme') || 'dark';
+    var scale = localStorage.getItem('dtz_font_scale') || '1';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.style.setProperty('--font-scale', scale);
+  }catch(e){}
+})();
+</script>
+<style>
+:root {
+ --bg:#0a0c12; --surface:#0f1117; --surface2:#141820; --surface3:#1a2030;
+ --border:#1e2640; --border2:#26304e; --ink:#e2e8f6; --ink2:#94a3c0; --ink3:#4a5878;
+ --accent:#4f8ef7; --accent2:#7c6fff; --accent-dim:#0d1630; --accent-glow:rgba(79,142,247,.14);
+ --green:#34d399; --green-dim:#0a1e14; --red:#f87171; --red-dim:#1e0a0a; --purple:#a78bfa;
+ --bar-bg:rgba(10,12,18,.92); --font-scale:1;
+ --r:16px;
+}
+:root[data-theme="light"] {
+ --bg:#f4f6fc; --surface:#ffffff; --surface2:#eef1fb; --surface3:#e4e9f9;
+ --border:#dde3f3; --border2:#c7cafb; --ink:#131a2c; --ink2:#5b6478; --ink3:#8a93ab;
+ --accent-dim:#e3e6fd; --accent-glow:rgba(79,142,247,.10);
+ --green-dim:#e2f9ef; --red-dim:#fdeaea;
+ --bar-bg:rgba(255,255,255,.92);
+}
+html{font-size:calc(16px * var(--font-scale, 1));}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Outfit',sans-serif;min-height:100vh;display:flex;flex-direction:column;
+ background-image:radial-gradient(ellipse 900px 600px at 10% 0%, rgba(79,142,247,.06) 0%, transparent 70%),
+ radial-gradient(ellipse 700px 500px at 90% 30%, rgba(124,111,255,.05) 0%, transparent 60%);
+ transition:background-color .2s ease, color .2s ease;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);
+ background:var(--bar-bg);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px;}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.brand-badge{background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;font-weight:800;font-size:.72rem;letter-spacing:2px;
+ padding:6px 14px;border-radius:50px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+.brand-sub{font-size:.7rem;color:var(--ink3);letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+#timer{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:600;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:7px 16px;border-radius:50px;letter-spacing:2px;min-width:96px;text-align:center;
+ display:flex;align-items:center;gap:8px;justify-content:center;}
+#timer.warn{color:var(--red);background:var(--red-dim);border-color:rgba(248,113,113,.3);animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+#soundToggle{width:38px;height:38px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);
+ color:var(--ink2);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;
+ transition:border-color .15s,color .15s,background .15s;flex-shrink:0;}
+#soundToggle:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+#soundToggle.muted{color:var(--ink3);}
+.hamburger{display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;cursor:pointer;padding:0;color:var(--ink);font-size:.95rem;transition:border-color .15s,color .15s;flex-shrink:0;}
+.hamburger:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+.hamburger .fa-xmark{display:none;} .hamburger[aria-expanded="true"] .fa-bars{display:none;} .hamburger[aria-expanded="true"] .fa-xmark{display:inline-block;}
+.mobile-nav{position:fixed;inset:0;z-index:99;background:transparent;opacity:0;pointer-events:none;transition:opacity .15s ease;}
+.mobile-nav.open{opacity:1;pointer-events:auto;}
+.mobile-nav-panel{position:absolute;top:70px;right:20px;width:250px;max-width:82vw;max-height:min(70vh,520px);background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:1px;transform:scale(.94) translateY(-8px);transform-origin:top right;opacity:0;transition:transform .16s ease,opacity .16s ease;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow-y:auto;}
+.mobile-nav.open .mobile-nav-panel{transform:scale(1) translateY(0);opacity:1;}
+.mobile-nav-panel a{display:flex;align-items:center;gap:12px;padding:11px 10px;font-size:.9rem;font-weight:600;color:var(--ink);text-decoration:none;border-radius:8px;}
+.mobile-nav-panel a:hover{background:var(--accent-glow);}
+.mobile-nav-panel a i{width:18px;text-align:center;color:var(--accent);font-size:.85rem;}
+.mobile-nav-panel a.active{color:var(--accent);background:var(--accent-dim);}
+.mobile-nav-panel .nav-group-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);padding:12px 10px 4px;}
+.mobile-nav-panel .nav-group-label:first-child{padding-top:6px;}
+main{flex:1;display:flex;justify-content:center;padding:0 16px 100px;}
+#homeScreen,#configScreen,#quizScreen,#resultScreen,#loadingScreen{width:100%;max-width:720px;}
+.hidden{display:none !important;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:32px 28px;margin-bottom:20px;}
+
+a { text-decoration: none; }
+#statsBar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;}
+.stat-chip{font-size:.78rem;color:var(--ink2);background:var(--surface2);border:1px solid var(--border);padding:8px 16px;
+ border-radius:50px;display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;}
+.stat-chip i{color:var(--accent);}
+.stat-chip strong{color:var(--ink);}
+
+/* HOME */
+.hero-wrap{padding:48px 0 8px;text-align:center;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
+ color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:500;margin-bottom:22px;background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.22);padding:7px 16px 7px 13px;border-radius:50px;}
+.hero-title{font-family:'Fraunces',serif;font-size:2.3rem;line-height:1.16;margin-bottom:16px;font-weight:600;letter-spacing:-.5px;}
+.hero-title span{color:var(--accent);font-style:italic;}
+.hero-desc{color:var(--ink2);font-size:.96rem;line-height:1.75;max-width:480px;margin:0 auto 34px;}
+
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:30px;}
+.mode-card{background:var(--surface2);border:1px solid var(--border2);border-radius:18px;padding:26px 22px;cursor:pointer;
+ transition:border-color .15s,transform .15s,background .15s;text-align:left;}
+.mode-card:hover{border-color:rgba(79,142,247,.4);transform:translateY(-3px);background:var(--surface3);}
+.mode-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;
+ display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:16px;}
+.mode-name{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;margin-bottom:8px;}
+.mode-desc{font-size:.85rem;color:var(--ink2);line-height:1.6;margin-bottom:14px;}
+.mode-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.mode-tag{font-size:.66rem;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ padding:3px 9px;border-radius:20px;font-family:'JetBrains Mono',monospace;}
+
+.section-heading{display:flex;align-items:center;gap:12px;margin:36px 0 18px;}
+.section-heading-icon{width:34px;height:34px;border-radius:10px;background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.85rem;flex-shrink:0;}
+.section-heading-text{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;}
+.rules-list{display:grid;gap:8px;}
+.rule-item{display:flex;gap:14px;align-items:flex-start;font-size:.86rem;color:var(--ink2);line-height:1.55;padding:14px 16px;
+ background:var(--surface2);border:1px solid var(--border);border-radius:10px;}
+.rule-icon{width:30px;height:30px;border-radius:8px;flex-shrink:0;background:var(--accent-dim);border:1px solid rgba(79,142,247,.2);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.78rem;margin-top:1px;}
+.rule-text strong{color:var(--ink);}
+
+/* CONFIG SCREEN */
+.config-field{margin-bottom:22px;}
+.config-label{font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.config-label i{color:var(--accent);}
+.config-input-row{display:flex;align-items:center;gap:14px;}
+.config-slider{flex:1;-webkit-appearance:none;height:6px;border-radius:6px;background:var(--border2);outline:none;}
+.config-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;box-shadow:0 2px 8px rgba(79,142,247,.4);}
+.config-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;border:none;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;}
+.config-value{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:6px 14px;border-radius:10px;min-width:74px;text-align:center;font-size:.9rem;}
+.config-hint{font-size:.74rem;color:var(--ink3);margin-top:8px;}
+.topics-grid{display:flex;flex-wrap:wrap;gap:10px;}
+.topic-chip{display:flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--border2);
+ padding:10px 16px;border-radius:12px;cursor:pointer;font-size:.85rem;transition:border-color .15s,background .15s;}
+.topic-chip:hover{border-color:rgba(79,142,247,.4);}
+.topic-chip input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);
+ color:#fff;border:none;padding:14px 28px;border-radius:50px;font-weight:700;font-size:.95rem;cursor:pointer;
+ font-family:'Outfit',sans-serif;transition:transform .15s,box-shadow .15s,opacity .2s;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(79,142,247,.3);}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--border2);padding:12px 22px;border-radius:50px;
+ font-weight:600;font-size:.9rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:border-color .15s,background .15s;
+ display:inline-flex;align-items:center;gap:8px;}
+.btn-ghost:hover{background:var(--accent-glow);border-color:rgba(79,142,247,.35);}
+.btn-ghost:disabled{opacity:.35;cursor:not-allowed;}
+
+/* LOADING SCREEN */
+#loadingScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 0;text-align:center;}
+.loader-ring{width:56px;height:56px;border-radius:50%;border:4px solid var(--border2);border-top-color:var(--accent);
+ animation:spin .8s linear infinite;margin-bottom:24px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader-text{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--ink2);}
+.loader-sub{font-size:.78rem;color:var(--ink3);margin-top:8px;font-family:'JetBrains Mono',monospace;}
+
+/* QUIZ */
+#progressWrap{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;padding-top:24px;}
+.progress-bar-track{height:4px;background:var(--border);border-radius:4px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .3s;}
+.dots-group{display:flex;gap:5px;flex-wrap:wrap;}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .15s,transform .1s;}
+.dot:hover{transform:scale(1.35);}
+.dot.answered{background:rgba(79,142,247,.4);border:1px solid var(--accent);}
+.dot.current{background:var(--accent);box-shadow:0 0 0 3px rgba(79,142,247,.25);}
+.dot.correct{background:var(--green);}
+.dot.wrong{background:var(--red);}
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.q-section-tag{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;
+ font-weight:600;background:var(--accent-dim);padding:4px 10px;border-radius:20px;border:1px solid rgba(79,142,247,.2);}
+.q-counter{font-size:.78rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;}
+.q-text{font-size:1.1rem;line-height:1.65;margin:0 0 26px;font-family:'Fraunces',serif;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.opt{display:flex;align-items:flex-start;gap:14px;padding:15px 18px;border-radius:12px;border:1px solid var(--border2);
+ margin-bottom:10px;background:var(--surface2);cursor:pointer;transition:border-color .15s,background .15s,transform .1s;}
+.opt:hover{border-color:rgba(79,142,247,.35);background:var(--surface3);}
+.opt.locked{cursor:default;}
+.opt.selected{border-color:var(--accent);background:var(--accent-dim);}
+.opt.correct{border-color:var(--green);background:var(--green-dim);}
+.opt.wrong{border-color:var(--red);background:var(--red-dim);}
+.opt-letter{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;
+ justify-content:center;font-size:.75rem;font-weight:700;color:var(--ink3);flex-shrink:0;font-family:'JetBrains Mono',monospace;
+ transition:all .15s;margin-top:1px;}
+.opt.selected .opt-letter{background:var(--accent);color:#fff;border-color:var(--accent);}
+.opt.correct .opt-letter{background:var(--green);color:#fff;border-color:var(--green);}
+.opt.wrong .opt-letter{background:var(--red);color:#fff;border-color:var(--red);}
+.opt-text{font-size:.92rem;line-height:1.55;padding-top:3px;}
+.inline-explain{display:none;margin-top:6px;margin-bottom:14px;padding:16px 18px;background:rgba(79,142,247,.05);
+ border:1px solid rgba(79,142,247,.15);border-radius:10px;font-size:.85rem;line-height:1.7;color:var(--ink2);animation:fadeUp .2s ease;}
+.inline-explain.show{display:block;}
+.inline-explain .ie-label{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;
+ margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.inline-explain.right .ie-label{color:var(--green);}
+.inline-explain.wrong .ie-label{color:var(--red);}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;}
+.kbd-hint{text-align:center;font-size:.68rem;color:var(--ink3);margin-top:14px;font-family:'JetBrains Mono',monospace;}
+.kbd-hint kbd{background:var(--surface3);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;font-family:'JetBrains Mono',monospace;}
+
+#quizTools{position:fixed;right:20px;bottom:24px;display:flex;flex-direction:column;gap:12px;z-index:60;}
+.fab{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;border:none;
+ cursor:pointer;font-size:1.05rem;box-shadow:0 8px 24px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;
+ transition:transform .15s;}
+.fab:hover{transform:translateY(-3px) scale(1.04);}
+.fab.pause-fab{background:linear-gradient(135deg,#f59e0b,#f97316);}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.72);backdrop-filter:blur(6px);z-index:200;
+ display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-card{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:26px 24px;max-width:380px;
+ width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.modal-icon{width:52px;height:52px;border-radius:50%;background:var(--accent-dim);border:1px solid rgba(79,142,247,.25);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.3rem;margin:0 auto 16px;}
+.modal-icon.warn{background:var(--red-dim);border-color:rgba(248,113,113,.3);color:var(--red);}
+.modal-title{font-family:'Fraunces',serif;font-size:1.2rem;margin-bottom:10px;}
+.modal-text{font-size:.87rem;color:var(--ink2);line-height:1.6;margin-bottom:20px;}
+
+#pauseOverlay{position:fixed;inset:0;background:rgba(6,8,14,.85);backdrop-filter:blur(16px);z-index:150;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
+#pauseOverlay .modal-icon{width:64px;height:64px;font-size:1.6rem;margin-bottom:20px;}
+#pauseOverlay h2{font-family:'Fraunces',serif;font-size:1.6rem;margin-bottom:10px;}
+#pauseOverlay p{color:var(--ink2);font-size:.9rem;max-width:320px;margin-bottom:26px;line-height:1.6;}
+
+.calc-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.55);backdrop-filter:blur(4px);z-index:180;}
+.calc-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:190;width:320px;max-width:92vw;
+ background:var(--surface);border:1px solid var(--border2);border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.55);overflow:hidden;}
+.calc-panel.dragged{transform:none;}
+.calc-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface2);
+ border-bottom:1px solid var(--border);cursor:grab;font-size:.8rem;font-weight:600;color:var(--ink2);user-select:none;gap:8px;}
+.calc-header:active{cursor:grabbing;}
+.calc-header-title{display:flex;align-items:center;gap:8px;}
+.calc-header-title i{color:var(--accent);}
+.calc-mode-toggle{display:flex;gap:4px;background:var(--surface3);border-radius:8px;padding:3px;}
+.calc-mode-btn{background:transparent;border:none;color:var(--ink3);font-size:.62rem;font-family:'JetBrains Mono',monospace;
+ padding:5px 9px;border-radius:6px;cursor:pointer;font-weight:700;letter-spacing:.5px;}
+.calc-mode-btn.active{background:var(--accent);color:#fff;}
+.calc-close-btn{background:none;border:none;color:var(--ink3);font-size:1rem;cursor:pointer;line-height:1;}
+.calc-display{padding:18px 16px 10px;text-align:right;}
+.calc-expr{font-size:.82rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;min-height:18px;overflow-x:auto;white-space:nowrap;}
+.calc-result{font-size:1.65rem;font-weight:700;color:var(--ink);font-family:'JetBrains Mono',monospace;margin-top:4px;
+ overflow-x:auto;white-space:nowrap;}
+.calc-result.err{color:var(--red);}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 16px 20px;}
+.calc-btn{background:var(--surface3);border:1px solid var(--border2);color:var(--ink);border-radius:10px;padding:12px 0;
+ font-size:.92rem;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:background .15s;}
+.calc-btn:hover{background:var(--border2);}
+.calc-btn.op{color:var(--accent);}
+.calc-btn.fn{color:var(--purple);font-size:.76rem;}
+.calc-btn.clear{color:var(--red);}
+.calc-btn.equals{background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;border:none;}
+
+.result-hero{text-align:center;padding:26px 0 22px;border-bottom:1px solid var(--border);margin-bottom:26px;}
+.result-ring{display:inline-flex;align-items:center;justify-content:center;width:124px;height:124px;border-radius:50%;
+ border:3px solid var(--accent);background:var(--accent-dim);margin-bottom:16px;}
+.result-score{font-family:'JetBrains Mono',monospace;font-size:2.3rem;font-weight:700;color:var(--accent);}
+.result-of{font-size:.8rem;color:var(--ink3);margin-top:2px;}
+.result-pct{font-family:'Fraunces',serif;font-size:1.5rem;margin-bottom:6px;}
+.result-msg{color:var(--ink2);font-size:.9rem;line-height:1.6;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.best-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;color:#facc15;background:rgba(250,204,21,.08);
+ border:1px solid rgba(250,204,21,.25);padding:4px 12px;border-radius:20px;margin-top:10px;font-family:'JetBrains Mono',monospace;}
+.breakdown-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:26px;}
+.bd-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.bd-name{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.bd-score{font-size:1.35rem;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.bd-total{font-size:.72rem;color:var(--ink3);}
+.review-section-title{font-family:'Fraunces',serif;font-size:1.1rem;border-bottom:1px solid var(--border);padding-bottom:12px;
+ margin:22px 0 16px;display:flex;align-items:center;gap:10px;}
+.review-item{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px;background:var(--surface2);}
+.review-item.right{border-left:3px solid var(--green);}
+.review-item.miss{border-left:3px solid var(--red);}
+.ri-q{font-size:.9rem;margin-bottom:10px;line-height:1.6;}
+.ri-section{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:5px;}
+.ri-ans{font-size:.83rem;margin-top:5px;display:flex;align-items:flex-start;gap:7px;}
+.ri-ans.right{color:var(--green);}
+.ri-ans.wrong{color:var(--red);}
+.ri-ans.correct-reveal{color:#2dd4bf;}
+.ri-exp{margin-top:10px;padding:12px 14px;background:rgba(79,142,247,.04);border:1px solid rgba(79,142,247,.12);
+ border-radius:9px;font-size:.82rem;line-height:1.65;color:var(--ink2);}
+
+footer{text-align:center;font-size:.7rem;color:var(--ink3);padding:18px;border-top:1px solid var(--border);
+ font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+footer i{color:var(--accent);}
+
+@media(max-width:560px){
+ .card{padding:22px 16px;}
+ .mode-grid{grid-template-columns:1fr;}
+ .hero-title{font-size:1.8rem;}
+ .breakdown-grid{grid-template-columns:repeat(2,1fr);}
+ #quizTools{right:14px;bottom:18px;}
+}
+
+@media print{
+ @page{ margin:14mm; }
+ *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
+ .topbar, footer, #quizTools, #homeBtn, #retryBtn, #printBtn, .kbd-hint, #statsBar,
+ #calcBackdrop, #calcPanel, #pauseOverlay, #leaveWarningModal, #resumeModal, #soundToggle, .hamburger, .mobile-nav { display:none !important; }
+ body{background:#fff;color:#000;}
+ main{padding:0;}
+ .card{border:1px solid #ccc;background:#fff;box-shadow:none;}
+ .bd-card, .review-item{background:#f6f6f6;border-color:#ddd;}
+ .ri-exp{background:#f0f4ff;border-color:#cfd9ff;color:#333;}
+ .result-hero, .bd-card, .review-item{ break-inside:avoid; page-break-inside:avoid; }
+ .review-item{ margin-bottom:14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+ <div class="brand">
+ <span class="brand-badge">SWE122</span>
+ <div class="brand-sub"><i class="fa-solid fa-microchip" style="margin-right:5px;"></i>Computer Hardware Fundamentals · Components &amp; Connectors</div>
+ </div>
+ <div style="display:flex;align-items:center;gap:10px;">
+ <div id="timer" class="hidden"><i class="fa-regular fa-clock"></i><span id="timerText">00:00</span></div>
+ <button id="soundToggle" title="Mute sounds" aria-label="Mute sounds" aria-pressed="false"></button>
+ <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
+ <i class="fa-solid fa-bars"></i>
+ <i class="fa-solid fa-xmark"></i>
+ </button>
+ </div>
+</div>
+
+<div class="mobile-nav" id="mobileNav">
+ <div class="mobile-nav-panel">
+ <span class="nav-group-label">Navigate</span>
+ <a href="../dashboard.html"><i class="fa-solid fa-house"></i>Home / Dashboard</a>
+ <a href="../aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+ <span class="nav-group-label">DTZ TRIO</span>
+ <a href="../about.html"><i class="fa-solid fa-users"></i>About Us</a>
+ <a href="../social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+ <span class="nav-group-label">Account</span>
+ <a href="../set.html"><i class="fa-solid fa-gear"></i>Settings</a>
+ <a href="../help.html"><i class="fa-solid fa-circle-question"></i>Help &amp; FAQ</a>
+ </div>
+</div>
+
+<main>
+
+<!-- HOME SCREEN -->
+<div id="homeScreen">
+ <div class="hero-wrap">
+ <div class="hero-eyebrow"><i class="fa-solid fa-microchip"></i> SWE122 Practice Quiz</div>
+ <h1 class="hero-title">100 questions,<br><span>two ways to train.</span></h1>
+ <p class="hero-desc">Covering Computer Hardware Fundamentals and Components &amp; Connectors — with full worked explanations for every question.</p>
+ </div>
+
+ <div id="statsBar" class="hidden"></div>
+
+ <div class="mode-grid">
+ <div class="mode-card" id="pickAuto">
+ <div class="mode-icon"><i class="fa-solid fa-gauge-high"></i></div>
+ <div class="mode-name">Automatic Timer</div>
+ <div class="mode-desc">All 100 questions, shuffled, with a timer the app sets for you. Get instant feedback the moment you answer, and pause any time you need a break.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-regular fa-clock"></i> Auto-set clock</span>
+ <span class="mode-tag"><i class="fa-solid fa-list-check"></i> 100 Qs</span>
+ <span class="mode-tag"><i class="fa-solid fa-pause"></i> Pausable</span>
+ </div>
+ </div>
+ <div class="mode-card" id="pickCustom">
+ <div class="mode-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="mode-name">Custom Timer</div>
+ <div class="mode-desc">Pick your own topics, time limit, and question count. Answer everything first — no pausing, and no feedback until you submit.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-solid fa-sliders"></i> Custom setup</span>
+ <span class="mode-tag"><i class="fa-solid fa-ban"></i> No pausing</span>
+ <span class="mode-tag"><i class="fa-solid fa-flag-checkered"></i> Results at end</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="section-heading">
+ <div class="section-heading-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+ <div class="section-heading-text">How each mode works</div>
+ </div>
+ <div class="rules-list">
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-gauge-high"></i></span>
+ <span class="rule-text"><strong>Automatic Timer</strong> runs all 100 questions with a clock the app manages for you. Tap an option and it's locked in immediately — correct turns green, wrong turns red, with a short explanation right away. Tap <strong>Pause</strong> any time to freeze the clock and blur the screen. You must answer at least <strong>30 questions</strong> before you can submit.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-sliders"></i></span>
+ <span class="rule-text"><strong>Custom Timer</strong> lets you choose specific topics, your own time limit (up to 120 min), and how many questions to include. It cannot be paused — answers stay hidden until you submit, then you get a full score breakdown and review.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-calculator"></i></span>
+ <span class="rule-text">A full <strong>scientific calculator</strong> — sin/cos/tan, log, ln, √, powers, π and e — is available as a draggable floating window in both modes.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-shield-halved"></i></span>
+ <span class="rule-text">Your progress is <strong>auto-saved</strong> as you go, so a refresh won't lose your place. For fairness, switching away from the tab is tracked — leaving 3 times in one quiz resets it.</span></div>
+ </div>
+</div>
+
+<!-- CONFIG SCREEN -->
+<div id="configScreen" class="hidden">
+ <div class="section-heading" style="margin-top:36px;">
+ <div class="section-heading-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="section-heading-text">Set up your Custom Timer exam</div>
+ </div>
+ <div class="card">
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-layer-group"></i> Topics to include</div>
+ <div class="topics-grid" id="topicsWrap"></div>
+ <div class="config-hint" id="topicsHint">Select at least one topic.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-regular fa-clock"></i> Time limit (minutes)</div>
+ <div class="config-input-row">
+ <input type="range" id="timeSlider" class="config-slider" min="5" max="120" step="5" value="60">
+ <span class="config-value" id="timeValue">60</span>
+ </div>
+ <div class="config-hint">Maximum 120 minutes. This clock cannot be paused once the exam starts.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-list-ol"></i> Number of questions</div>
+ <div class="config-input-row">
+ <input type="range" id="countSlider" class="config-slider" min="1" max="100" step="1" value="50">
+ <span class="config-value" id="countValue">50</span>
+ </div>
+ <div class="config-hint" id="countHint">Randomly picked from the selected topics.</div>
+ </div>
+ <div class="nav-row" style="margin-top:8px;">
+ <button class="btn-ghost" id="backToHomeFromConfig"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <button class="btn" id="startCustomBtn"><i class="fa-solid fa-play"></i> Start Custom Timer</button>
+ </div>
+ </div>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" class="hidden">
+ <div class="loader-ring"></div>
+ <div class="loader-text">Preparing your questions…</div>
+ <div class="loader-sub">Shuffling &amp; randomizing options</div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="quizScreen" class="hidden">
+ <div id="progressWrap">
+ <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+ <div class="dots-group" id="dotsRow"></div>
+ </div>
+ <div class="card">
+ <div class="q-meta">
+ <span class="q-section-tag" id="sectionTag"></span>
+ <span class="q-counter" id="qCounter"></span>
+ </div>
+ <div class="q-text" id="qText"></div>
+ <div id="optsWrap"></div>
+ <div id="inlineExplain" class="inline-explain"></div>
+ <div class="nav-row">
+ <button class="btn-ghost" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <div style="display:flex;gap:8px;">
+ <button class="btn" id="nextBtn">Next <i class="fa-solid fa-arrow-right"></i></button>
+ <button class="btn hidden" id="finishBtn"><i class="fa-solid fa-check"></i> Submit Quiz</button>
+ </div>
+ </div>
+ <div class="kbd-hint">Keyboard: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate &nbsp;·&nbsp; <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to select</div>
+ </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="hidden">
+ <div class="card">
+ <div class="result-hero">
+ <div class="result-ring"><div><div class="result-score" id="resultScore">0</div><div class="result-of" id="resultOf">/ 100</div></div></div>
+ <div class="result-pct" id="resultPct"></div>
+ <div class="result-msg" id="resultMsg"></div>
+ <div id="bestBadge"></div>
+ </div>
+ <div class="breakdown-grid" id="breakdownGrid"></div>
+ <div class="review-section-title"><i class="fa-solid fa-magnifying-glass"></i> Question Review</div>
+ <div id="reviewList"></div>
+ <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;">
+ <button class="btn-ghost" id="homeBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-house"></i> Home</button>
+ <button class="btn-ghost" id="printBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+ <button class="btn" id="retryBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-rotate-right"></i> Retake</button>
+ </div>
+ </div>
+</div>
+
+</main>
+
+<!-- FLOATING QUIZ TOOLS -->
+<div id="quizTools" class="hidden">
+ <button class="fab pause-fab hidden" id="pauseBtn" title="Pause"><i class="fa-solid fa-pause"></i></button>
+ <button class="fab" id="calcFab" title="Calculator"><i class="fa-solid fa-calculator"></i></button>
+</div>
+
+<!-- SCIENTIFIC CALCULATOR -->
+<div id="calcBackdrop" class="calc-backdrop hidden"></div>
+<div id="calcPanel" class="calc-panel hidden">
+ <div id="calcHeader" class="calc-header">
+ <div class="calc-header-title"><i class="fa-solid fa-calculator"></i> Calculator</div>
+ <div class="calc-mode-toggle">
+ <button type="button" id="calcModeDeg" class="calc-mode-btn active">DEG</button>
+ <button type="button" id="calcModeRad" class="calc-mode-btn">RAD</button>
+ </div>
+ <button type="button" id="calcClose" class="calc-close-btn"><i class="fa-solid fa-xmark"></i></button>
+ </div>
+ <div class="calc-display">
+ <div id="calcExpr" class="calc-expr">&nbsp;</div>
+ <div id="calcResult" class="calc-result">0</div>
+ </div>
+ <div id="calcGrid" class="calc-grid"></div>
+</div>
+
+<!-- PAUSE OVERLAY -->
+<div id="pauseOverlay" class="hidden">
+ <div class="modal-icon"><i class="fa-solid fa-pause"></i></div>
+ <h2>Quiz Paused</h2>
+ <p>The clock is frozen and nothing on this screen is visible or clickable until you resume.</p>
+ <button class="btn" id="resumeFromPauseBtn"><i class="fa-solid fa-play"></i> Resume Quiz</button>
+</div>
+
+<!-- LEAVE-WARNING MODAL -->
+<div id="leaveWarningModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></div>
+ <div class="modal-title">You left the quiz</div>
+ <div class="modal-text" id="leaveWarnText"></div>
+ <button class="btn" id="leaveWarnOk">Okay, continue</button>
+ </div>
+</div>
+
+<!-- RESUME AUTOSAVE MODAL -->
+<div id="resumeModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+ <div class="modal-title">Resume your quiz?</div>
+ <div class="modal-text">We found a quiz in progress:<br><strong id="resumeInfo" style="color:var(--ink);"></strong></div>
+ <div style="display:flex;gap:10px;">
+ <button class="btn-ghost" id="resumeNo" style="flex:1;justify-content:center;">Discard</button>
+ <button class="btn" id="resumeYes" style="flex:1;justify-content:center;">Resume</button>
+ </div>
+ </div>
+</div>
+
+<footer><i class="fa-solid fa-microchip"></i> SWE122 &nbsp;·&nbsp; Computer Hardware Systems Practice Quiz</footer>
+
+<script>
+/* ============================================================
+ HAMBURGER / MOBILE NAV
+ ============================================================ */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+function closeMobileNav(){mobileNav.classList.remove('open');hamburgerBtn.setAttribute('aria-expanded','false');}
+function toggleMobileNav(){const isOpen = mobileNav.classList.toggle('open');hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');}
+hamburgerBtn.addEventListener('click', toggleMobileNav);
+mobileNav.addEventListener('click', (e)=>{ if(e.target === mobileNav) closeMobileNav(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMobileNav(); });
+
+/* ============================================================
+ SWE122 — 100-QUESTION BANK
+ ============================================================ */
+const QUESTIONS = [
+// Introduction to Computer Hardware Systems
+{sec:'Introduction to Computer Hardware Systems', q:"What is a computer?", opts:["A type of abacus","A mechanical calculator","An electronic device that processes data","A manual counting tool"], ans:2, ex:"A computer is an electronic device that accepts, processes, and outputs data, unlike manual tools such as an abacus."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of the following is NOT a characteristic of computers?", opts:["Accuracy","High Speed","Automation","Forgetfulness"], ans:3, ex:"Computers are known for accuracy, speed, and automation; forgetfulness is not one of their traits since they store data reliably."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is an early computing device?", opts:["Abacus","Transistor","Integrated Circuit","Microprocessor"], ans:0, ex:"The abacus predates electronic computers and was used for manual calculation long before transistors or ICs existed."},
+{sec:'Introduction to Computer Hardware Systems', q:"The first generation of computers used:", opts:["Vacuum Tubes","Transistors","Microprocessors","Integrated Circuits"], ans:0, ex:"First-generation computers relied on vacuum tubes for processing, which made them large and power-hungry."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which component is known as the brain of the computer?", opts:["RAM","CPU","Motherboard","Power Supply"], ans:1, ex:"The CPU carries out instructions and calculations, earning it the nickname 'brain' of the computer."},
+{sec:'Introduction to Computer Hardware Systems', q:"ROM is:", opts:["Volatile Memory","Non-Volatile Memory","Temporary Storage","Used only for graphics"], ans:1, ex:"ROM retains its stored data even when power is removed, unlike RAM which is volatile."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is NOT a storage device?", opts:["HDD","SSD","Keyboard","Optical Drive"], ans:2, ex:"A keyboard is an input device used to enter data, not a device used to store it."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of the following is an input device?", opts:["Monitor","Mouse","Printer","Speaker"], ans:1, ex:"A mouse sends data and commands into the computer, making it an input device."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of the following is an output device?", opts:["Scanner","Microphone","Monitor","Keyboard"], ans:2, ex:"A monitor displays processed data to the user, making it an output device."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which memory loses data when the computer is switched off?", opts:["ROM","RAM","HDD","SSD"], ans:1, ex:"RAM is volatile memory, meaning its contents are cleared once power is removed."},
+{sec:'Introduction to Computer Hardware Systems', q:"System software includes:", opts:["Operating Systems","Web Browser","Video Games","Word Processor"], ans:0, ex:"Operating systems manage hardware and software resources, making them a core type of system software."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is NOT application software?", opts:["Microsoft Word","Adobe Photoshop","Linux OS","Google Chrome"], ans:2, ex:"Linux is an operating system, which is system software, while the other options are user-facing applications."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of the following is an example of utility software?", opts:["Disk Cleanup","Microsoft Word","Adobe Illustrator","Google Docs"], ans:0, ex:"Disk Cleanup is a utility tool that helps maintain and optimize the system rather than perform user tasks."},
+{sec:'Introduction to Computer Hardware Systems', q:"Firmware is stored in:", opts:["Hard Disk","RAM","Embedded Chips","Cloud Storage"], ans:2, ex:"Firmware is low-level software stored directly on embedded chips to control specific hardware."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of the following is NOT a type of system software?", opts:["Device Driver","Operating System","Firmware","Spreadsheet"], ans:3, ex:"A spreadsheet program is application software used for tasks like calculations, not for managing the system itself."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of the following is an example of productivity software?", opts:["Microsoft Excel","BIOS","Linux Kernel","Printer Driver"], ans:0, ex:"Microsoft Excel helps users perform tasks such as calculations and data management, making it productivity software."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is an internet/web software?", opts:["Google Chrome","MS Word","Photoshop","VLC"], ans:0, ex:"Google Chrome is a web browser used to access and browse the internet."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is multimedia software?", opts:["Adobe Photoshop","MySQL","Windows OS","Printer Driver"], ans:0, ex:"Photoshop is used to create and edit images, making it multimedia software."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of the following is entertainment software?", opts:["Video Games","Spreadsheet","Antivirus","Device Driver"], ans:0, ex:"Video games are designed primarily for entertainment purposes."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is educational software?", opts:["E-learning Platforms","Windows OS","Disk Defragmenter","Firewall"], ans:0, ex:"E-learning platforms are built specifically to support teaching and learning."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of the following is NOT an input device?", opts:["Keyboard","Mouse","Printer","Scanner"], ans:2, ex:"A printer produces output on paper; it does not send data into the computer."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is a volatile memory?", opts:["ROM","RAM","SSD","HDD"], ans:1, ex:"RAM loses its contents when power is cut, making it volatile memory."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is a non-volatile memory?", opts:["RAM","Cache","ROM","Registers"], ans:2, ex:"ROM keeps its data permanently, even without power, unlike RAM or cache."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which computer generation introduced transistors?", opts:["First Generation","Second Generation","Third Generation","Fourth Generation"], ans:1, ex:"Second-generation computers replaced vacuum tubes with smaller, more reliable transistors."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which computer generation introduced integrated circuits?", opts:["First Generation","Second Generation","Third Generation","Fourth Generation"], ans:2, ex:"Third-generation computers used integrated circuits, which combined many transistors on a single chip."},
+{sec:'Introduction to Computer Hardware Systems', q:"The microprocessor was introduced in which generation?", opts:["First","Second","Third","Fourth"], ans:3, ex:"Fourth-generation computers introduced the microprocessor, packing an entire CPU onto one chip."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which generation of computers is associated with AI and quantum computing?", opts:["Third","Fourth","Fifth","Second"], ans:2, ex:"Fifth-generation computing focuses on artificial intelligence and emerging technologies like quantum computing."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is a storage device that uses spinning magnetic disks?", opts:["SSD","HDD","ROM","Cache"], ans:1, ex:"A Hard Disk Drive stores data on spinning magnetic platters."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is a faster storage device using flash memory?", opts:["SSD","HDD","Optical Drive","Tape Drive"], ans:0, ex:"A Solid State Drive uses flash memory chips, giving it much faster read/write speeds than a mechanical HDD."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of the following is an example of a system utility program?", opts:["Disk Defragmenter","Microsoft Excel","VLC Media Player","WhatsApp"], ans:0, ex:"Disk Defragmenter reorganizes files on a drive to improve performance, making it a system utility."},
+{sec:'Introduction to Computer Hardware Systems', q:"The ALU in a CPU performs:", opts:["Storage","Arithmetic and Logic Operations","Input Functions","Power Conversion"], ans:1, ex:"The Arithmetic Logic Unit handles calculations and logical comparisons within the CPU."},
+{sec:'Introduction to Computer Hardware Systems', q:"The Control Unit in a CPU is responsible for:", opts:["Fetching, decoding, and executing instructions","Storing data permanently","Powering the computer","Displaying output"], ans:0, ex:"The Control Unit directs the fetch-decode-execute cycle that drives all CPU operations."},
+{sec:'Introduction to Computer Hardware Systems', q:"Registers in CPU are:", opts:["Large storage units","Temporary fast storage units","External devices","Network components"], ans:1, ex:"Registers hold small amounts of data temporarily for immediate use by the CPU, offering extremely fast access."},
+{sec:'Introduction to Computer Hardware Systems', q:"Cache memory is:", opts:["Slower than RAM","Faster than RAM","Same speed as SSD","Permanent memory"], ans:1, ex:"Cache sits closer to the CPU and operates at higher speed than main RAM, reducing access delays."},
+{sec:'Introduction to Computer Hardware Systems', q:"The fetch-decode-execute cycle is part of:", opts:["Input operations","Processing operations","Storage operations","Output operations"], ans:1, ex:"This cycle describes how the CPU processes instructions, making it part of processing operations."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is an example of an output device?", opts:["Keyboard","Scanner","Monitor","Microphone"], ans:2, ex:"A monitor displays visual output generated by the computer."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is an optical storage device?", opts:["HDD","SSD","Blu-ray Disc","RAM"], ans:2, ex:"Blu-ray discs use laser light to read and write data, classifying them as optical storage."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is an example of cloud storage?", opts:["Flash Drive","Google Drive","HDD","DVD"], ans:1, ex:"Google Drive stores data on remote servers accessed via the internet, a hallmark of cloud storage."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of the following is a main circuit board in a computer?", opts:["CPU","RAM","Motherboard","ROM"], ans:2, ex:"The motherboard connects and allows communication between all major components of a computer."},
+{sec:'Introduction to Computer Hardware Systems', q:"The Power Supply Unit (PSU) converts:", opts:["Digital signals to analog","Electrical power for computer components","Data into information","Hardware into software"], ans:1, ex:"The Power Supply Unit converts incoming AC power into the DC voltages needed by internal components."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is a personal computer type?", opts:["Supercomputer","Laptop","Mainframe","Server"], ans:1, ex:"A laptop is a portable personal computer designed for individual use."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is a high-performance system for technical or scientific use?", opts:["Workstation","Smartphone","Laptop","Tablet"], ans:0, ex:"Workstations are built with powerful hardware for demanding technical and scientific applications."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which type of computer provides services to other computers over a network?", opts:["Mainframe","Server","Workstation","Embedded System"], ans:1, ex:"A server is dedicated to providing resources or services to client computers over a network."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which type of computer is used for bulk data processing?", opts:["Personal Computer","Supercomputer","Mainframe","Laptop"], ans:2, ex:"Mainframes are designed to process massive volumes of data reliably, common in large organizations."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is the fastest type of computer?", opts:["Supercomputer","Laptop","Desktop","Mainframe"], ans:0, ex:"Supercomputers offer the highest processing power, used for complex scientific calculations."},
+{sec:'Introduction to Computer Hardware Systems', q:"Which of these is an embedded system?", opts:["Smart Refrigerator","Supercomputer","Workstation","Server"], ans:0, ex:"A smart refrigerator contains a dedicated embedded computer system built into the appliance."},
+{sec:'Introduction to Computer Hardware Systems', q:"Computers in education are used for:", opts:["Telemedicine","Virtual Classrooms","Streaming","Gaming"], ans:1, ex:"Virtual classrooms use computers to deliver remote, interactive learning experiences."},
+{sec:'Introduction to Computer Hardware Systems', q:"Computers in healthcare are used for:", opts:["Gaming","Electronic Health Records","Movie Editing","Presentation"], ans:1, ex:"Electronic Health Records let healthcare providers store and access patient data digitally."},
+{sec:'Introduction to Computer Hardware Systems', q:"Computers in business are used for:", opts:["E-commerce platforms","Card Games","Abacus Simulation","Calculators"], ans:0, ex:"E-commerce platforms rely on computers to enable online buying and selling."},
+{sec:'Introduction to Computer Hardware Systems', q:"Computers in entertainment are used for:", opts:["Telemedicine","Streaming Services","Compiler Design","Scientific Research"], ans:1, ex:"Streaming services use computers and networks to deliver video and audio content to users."},
+// Components and Connectors
+{sec:'Components and Connectors', q:"The CPU is often referred to as the ______ of the computer.", opts:["Heart","Brain","Backbone","Nerve"], ans:1, ex:"The CPU processes instructions and coordinates operations, much like a brain controls a body."},
+{sec:'Components and Connectors', q:"Which CPU component is responsible for performing arithmetic and logical operations?", opts:["Control Unit","Arithmetic Logic Unit","Register","Cache"], ans:1, ex:"The ALU is the CPU component dedicated to arithmetic and logical computations."},
+{sec:'Components and Connectors', q:"The Control Unit in the CPU is responsible for:", opts:["Performing calculations","Storing data","Directing operations","Connecting devices"], ans:2, ex:"The Control Unit directs and coordinates the activities of other CPU components."},
+{sec:'Components and Connectors', q:"Temporary storage areas in the CPU that hold data and instructions are called:", opts:["Ports","Registers","Slots","Buses"], ans:1, ex:"Registers are small, extremely fast storage locations inside the CPU used during instruction execution."},
+{sec:'Components and Connectors', q:"The speed at which a CPU executes instructions is measured in:", opts:["Bytes","Gigahertz (GHz)","Megabytes","Hertz"], ans:1, ex:"Clock speed, measured in gigahertz, indicates how many cycles a CPU can perform per second."},
+{sec:'Components and Connectors', q:"Multiple cores in a CPU allow it to:", opts:["Consume more power","Handle multiple tasks simultaneously","Reduce cache size","Increase clock speed"], ans:1, ex:"Multi-core CPUs can execute several instruction streams in parallel, improving multitasking performance."},
+{sec:'Components and Connectors', q:"Which CPU architecture is common in PCs?", opts:["ARM","x86","MIPS","SPARC"], ans:1, ex:"x86 is the dominant CPU architecture used in most desktop and laptop PCs."},
+{sec:'Components and Connectors', q:"The main circuit board in a computer is known as:", opts:["PSU","Motherboard","CPU","GPU"], ans:1, ex:"The motherboard is the central circuit board that houses and connects the computer's core components."},
+{sec:'Components and Connectors', q:"Which component on the motherboard acts as a communication hub?", opts:["Slots","BIOS","Chipset","Cache"], ans:2, ex:"The chipset manages data flow between the CPU, memory, and other components on the motherboard."},
+{sec:'Components and Connectors', q:"BIOS/UEFI is responsible for:", opts:["Running applications","Initializing hardware during boot","Storing user data","Managing network connections"], ans:1, ex:"BIOS/UEFI firmware initializes and tests hardware components before handing control to the operating system."},
+{sec:'Components and Connectors', q:"Which slot on the motherboard is used for graphics cards?", opts:["PCIe","SATA","RAM","AGP"], ans:0, ex:"PCIe slots provide the high-speed connection needed for modern graphics cards."},
+{sec:'Components and Connectors', q:"Which slot is used to install memory modules?", opts:["PCI","RAM slot","AGP","USB"], ans:1, ex:"RAM slots on the motherboard are specifically designed to hold memory modules."},
+{sec:'Components and Connectors', q:"A common form factor for motherboards is:", opts:["ATX","PCI","USB","GPU"], ans:0, ex:"ATX is one of the most widely used standard motherboard form factors."},
+{sec:'Components and Connectors', q:"Which port is used for connecting keyboards and mice in older computers?", opts:["USB","PS/2","HDMI","SATA"], ans:1, ex:"PS/2 ports were the standard connectors for keyboards and mice before USB became common."},
+{sec:'Components and Connectors', q:"The port commonly used to connect monitors is:", opts:["HDMI","USB","SATA","Ethernet"], ans:0, ex:"HDMI carries both video and audio signals and is a standard port for connecting monitors."},
+{sec:'Components and Connectors', q:"Which type of memory is volatile?", opts:["ROM","RAM","SSD","HDD"], ans:1, ex:"RAM loses its stored data when the computer is powered off, making it volatile."},
+{sec:'Components and Connectors', q:"The memory that stores essential firmware and system instructions is:", opts:["RAM","ROM","SSD","Cache"], ans:1, ex:"ROM is used to permanently store essential firmware and boot instructions."},
+{sec:'Components and Connectors', q:"Which memory type is faster but smaller in size?", opts:["HDD","Cache","RAM","USB"], ans:1, ex:"Cache memory is smaller in capacity but much faster than RAM, since it sits closer to the CPU."},
+{sec:'Components and Connectors', q:"Which storage device uses spinning disks to read and write data?", opts:["SSD","HDD","Cache","USB"], ans:1, ex:"HDDs read and write data using spinning magnetic platters."},
+{sec:'Components and Connectors', q:"Which storage device is faster and uses flash memory?", opts:["HDD","SSD","CD-ROM","Tape"], ans:1, ex:"SSDs use flash memory chips instead of moving parts, giving them faster performance than HDDs."},
+{sec:'Components and Connectors', q:"Which type of drive combines SSD speed with HDD capacity?", opts:["Flash drive","SSHD","CD-ROM","Blu-ray"], ans:1, ex:"A Solid State Hybrid Drive (SSHD) combines flash storage for speed with a traditional disk for larger capacity."},
+{sec:'Components and Connectors', q:"The common interface for connecting HDDs and SSDs is:", opts:["HDMI","SATA","PCIe","USB"], ans:1, ex:"SATA is the standard interface used to connect most HDDs and SSDs to the motherboard."},
+{sec:'Components and Connectors', q:"Which storage interface connects SSDs directly to the PCIe bus?", opts:["SATA","NVMe","IDE","AGP"], ans:1, ex:"NVMe is a protocol designed to let SSDs communicate directly over the high-speed PCIe bus."},
+{sec:'Components and Connectors', q:"The M.2 connector is commonly used for:", opts:["Graphics cards","SSDs","Printers","Monitors"], ans:1, ex:"The M.2 slot is commonly used to connect compact, high-speed SSDs directly to the motherboard."},
+{sec:'Components and Connectors', q:"The component that converts electrical power into usable power for the computer is:", opts:["CPU","PSU","GPU","RAM"], ans:1, ex:"The Power Supply Unit converts wall power into the specific voltages the computer's components need."},
+{sec:'Components and Connectors', q:"The unit of measurement for PSU capacity is:", opts:["Bytes","Hertz","Wattage","Amps"], ans:2, ex:"Power supplies are rated in watts, indicating how much power they can deliver."},
+{sec:'Components and Connectors', q:"PSU efficiency ratings include:", opts:["80 Plus Bronze, Silver, Gold","SATA, NVMe, M.2","ATX, MicroATX, ITX","BIOS, UEFI, CMOS"], ans:0, ex:"The 80 Plus certification system rates power supply efficiency using tiers like Bronze, Silver, and Gold."},
+{sec:'Components and Connectors', q:"Which of the following is an input device?", opts:["Monitor","Printer","Mouse","Speaker"], ans:2, ex:"A mouse is used to input commands and navigate the interface."},
+{sec:'Components and Connectors', q:"Which of the following is an output device?", opts:["Scanner","Keyboard","Monitor","Mouse"], ans:2, ex:"A monitor is used to display output from the computer."},
+{sec:'Components and Connectors', q:"Which device is both an input and output device?", opts:["Printer","Touchscreen","Webcam","Keyboard"], ans:1, ex:"A touchscreen both displays output and accepts touch-based input, making it dual-purpose."},
+{sec:'Components and Connectors', q:"A device used to digitize physical documents is:", opts:["Scanner","Printer","Monitor","Cache"], ans:0, ex:"A scanner converts physical documents into digital image files."},
+{sec:'Components and Connectors', q:"Which device is used for video output?", opts:["Printer","Monitor","Scanner","Mouse"], ans:1, ex:"A monitor displays the video output generated by the computer."},
+{sec:'Components and Connectors', q:"Which device is primarily used to capture images and videos?", opts:["Scanner","Webcam","Microphone","RAM"], ans:1, ex:"A webcam is designed specifically to capture live video and images."},
+{sec:'Components and Connectors', q:"Which device produces sound output from a computer?", opts:["Microphone","Scanner","Speakers","Keyboard"], ans:2, ex:"Speakers convert electrical signals into audible sound output."},
+{sec:'Components and Connectors', q:"A device that can print, scan, and fax is called:", opts:["Printer","Multifunction Printer","Touchscreen","UPS"], ans:1, ex:"A multifunction printer combines printing, scanning, and faxing capabilities into a single device."},
+{sec:'Components and Connectors', q:"An expansion card that enhances a computer's graphics capability is:", opts:["Sound Card","GPU","NIC","USB card"], ans:1, ex:"A dedicated GPU (graphics card) improves a computer's ability to render images and video."},
+{sec:'Components and Connectors', q:"Which expansion card improves audio quality?", opts:["GPU","Sound Card","NIC","Cache"], ans:1, ex:"A sound card is designed specifically to improve audio processing and output quality."},
+{sec:'Components and Connectors', q:"A card used for wired or wireless internet connectivity is called:", opts:["GPU","NIC","PSU","USB card"], ans:1, ex:"A Network Interface Card (NIC) allows a computer to connect to wired or wireless networks."},
+{sec:'Components and Connectors', q:"Which expansion card adds additional USB ports?", opts:["GPU","Sound Card","USB Expansion Card","NIC"], ans:2, ex:"A USB expansion card adds extra USB ports beyond what the motherboard natively provides."},
+{sec:'Components and Connectors', q:"Where are expansion cards inserted?", opts:["RAM slots","PCIe slots","HDMI ports","USB ports"], ans:1, ex:"Expansion cards such as GPUs and sound cards are inserted into PCIe slots on the motherboard."},
+{sec:'Components and Connectors', q:"Which computer component stores data permanently?", opts:["RAM","ROM","Storage Device","Cache"], ans:2, ex:"Storage devices like HDDs and SSDs are designed to retain data permanently, unlike RAM or cache."},
+{sec:'Components and Connectors', q:"The physical size and shape of a motherboard is called:", opts:["Form Factor","Bus Width","Chipset","Slot"], ans:0, ex:"Form factor refers to the standardized size and shape of a motherboard, such as ATX or Mini-ITX."},
+{sec:'Components and Connectors', q:"Which of the following is NOT a form factor for motherboards?", opts:["ATX","MicroATX","Mini-ITX","DDR5"], ans:3, ex:"DDR5 is a type of memory standard, not a motherboard form factor like ATX or Mini-ITX."},
+{sec:'Components and Connectors', q:"Which memory is erased when power is switched off?", opts:["ROM","HDD","RAM","SSD"], ans:2, ex:"RAM is volatile and loses all stored data as soon as power is removed."},
+{sec:'Components and Connectors', q:"Which is an example of non-volatile memory?", opts:["RAM","ROM","Cache","Registers"], ans:1, ex:"ROM retains its data permanently, even without power, unlike RAM, cache, or registers."},
+{sec:'Components and Connectors', q:"The BIOS firmware is usually stored in:", opts:["ROM","RAM","Cache","HDD"], ans:0, ex:"BIOS firmware is stored in ROM so it remains available every time the computer boots."},
+{sec:'Components and Connectors', q:"Which of the following storage devices is the slowest?", opts:["SSD","HDD","NVMe SSD","Cache"], ans:1, ex:"HDDs rely on mechanical spinning disks, making them slower than SSDs or NVMe drives."},
+{sec:'Components and Connectors', q:"Which storage device is most cost-effective for large capacity?", opts:["HDD","SSD","ROM","Cache"], ans:0, ex:"HDDs offer the lowest cost per gigabyte, making them ideal for large-capacity storage."},
+{sec:'Components and Connectors', q:"Which power rating indicates higher efficiency in a PSU?", opts:["80 Plus Bronze","80 Plus Platinum","80 Plus Silver","80 Plus Gold"], ans:1, ex:"Among 80 Plus certifications, Platinum indicates a higher efficiency level than Bronze, Silver, or Gold."},
+{sec:'Components and Connectors', q:"Which component supplies power to the CPU and GPU?", opts:["PSU","RAM","Cache","BIOS"], ans:0, ex:"The Power Supply Unit delivers the electrical power required by the CPU, GPU, and other components."},
+];
+
+const ALL_TOPICS = [
+ 'Introduction to Computer Hardware Systems',
+ 'Components and Connectors'
+];
+
+/* ============================================================
+ STORAGE KEYS (persistent artifact storage, not localStorage)
+ ============================================================ */
+const MUTE_KEY = 'swe122-muted';
+const BEST_SCORE_KEY = 'swe122-best-score';
+const STORAGE_KEY = 'swe122-quiz-state';
+
+/* ============================================================
+ HELPERS
+ ============================================================ */
+
+/* Records this attempt into the same localStorage list the Settings
+   page (set.html) reads for Quiz History / Reset Progress / PDF export. */
+function saveResultToHistory(course, score, total){
+ try{
+  const raw = localStorage.getItem('dtz_quiz_results');
+  const list = raw ? JSON.parse(raw) : [];
+  list.push({ course, score, total, date: new Date().toISOString() });
+  localStorage.setItem('dtz_quiz_results', JSON.stringify(list));
+ }catch(e){ /* storage unavailable — silently skip, quiz still works */ }
+}
+
+function shuffle(arr){
+ const a=[...arr];
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+ return a;
+}
+function sectionIcon(sec){
+ return {
+  'Introduction to Computer Hardware Systems':'fa-desktop',
+  'Components and Connectors':'fa-microchip'
+ }[sec] || 'fa-microchip';
+}
+function randomizeOptions(item){
+ const pairs = item.opts.map((o,idx)=>({o, correct: idx===item.ans}));
+ const shuffled = shuffle(pairs);
+ return {...item, opts: shuffled.map(p=>p.o), ans: shuffled.findIndex(p=>p.correct)};
+}
+
+/* Safely read a value from persistent storage. Returns null if the key
+   doesn't exist or storage is unavailable, instead of throwing. */
+async function storageGet(key) {
+ try {
+  const result = await window.storage.get(key, false);
+  return result ? result.value : null;
+ } catch (e) {
+  return null;
+ }
+}
+async function storageSet(key, value) {
+ try {
+  await window.storage.set(key, value, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+async function storageDelete(key) {
+ try {
+  await window.storage.delete(key, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+
+/* SOUND ENGINE */
+const SoundEngine = (function() {
+ let ctx = null;
+ let muted = false;
+
+ async function init() {
+  const v = await storageGet(MUTE_KEY);
+  muted = v === '1';
+  return muted;
+ }
+
+ function getCtx() {
+ if (!ctx) {
+ const AC = window.AudioContext || window.webkitAudioContext;
+ if (!AC) return null;
+ ctx = new AC();
+ }
+ if (ctx.state === 'suspended') ctx.resume();
+ return ctx;
+ }
+
+ function isMuted() { return muted; }
+ async function setMuted(v) {
+ muted = v;
+ await storageSet(MUTE_KEY, v ? '1' : '0');
+ }
+
+ function playCorrect() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc1 = c.createOscillator();
+ const osc2 = c.createOscillator();
+ const gain = c.createGain();
+
+ osc1.type = 'sine'; osc1.frequency.setValueAtTime(880, t);
+ osc2.type = 'sine'; osc2.frequency.setValueAtTime(1760, t);
+
+ gain.gain.setValueAtTime(0.2, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+
+ osc1.connect(gain); osc2.connect(gain);
+ gain.connect(c.destination);
+
+ osc1.start(t); osc2.start(t);
+ osc1.stop(t + 0.6); osc2.stop(t + 0.6);
+ }
+
+ function playWrong() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc = c.createOscillator();
+ const gain = c.createGain();
+
+ osc.type = 'sawtooth';
+ osc.frequency.setValueAtTime(160, t);
+ osc.frequency.exponentialRampToValueAtTime(60, t + 0.35);
+
+ gain.gain.setValueAtTime(0.25, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+
+ osc.connect(gain);
+ gain.connect(c.destination);
+
+ osc.start(t);
+ osc.stop(t + 0.35);
+ }
+
+ return { init, isMuted, setMuted, playCorrect, playWrong };
+})();
+
+/* APP STATE */
+let quizMode = 'auto'; // 'auto' or 'custom'
+let activeQuestions = [];
+let userAnswers = []; // array of selected option indices
+let currentQ = 0;
+let timeRemaining = 0;
+let timerInterval = null;
+let isPaused = false;
+let leaveCount = 0;
+
+// DOM Elements
+const homeScreen = document.getElementById('homeScreen');
+const configScreen = document.getElementById('configScreen');
+const loadingScreen = document.getElementById('loadingScreen');
+const quizScreen = document.getElementById('quizScreen');
+const resultScreen = document.getElementById('resultScreen');
+
+const pickAuto = document.getElementById('pickAuto');
+const pickCustom = document.getElementById('pickCustom');
+const backToHomeFromConfig = document.getElementById('backToHomeFromConfig');
+const startCustomBtn = document.getElementById('startCustomBtn');
+
+const topicsWrap = document.getElementById('topicsWrap');
+const timeSlider = document.getElementById('timeSlider');
+const timeValue = document.getElementById('timeValue');
+const countSlider = document.getElementById('countSlider');
+const countValue = document.getElementById('countValue');
+
+const timerBox = document.getElementById('timer');
+const timerText = document.getElementById('timerText');
+const soundToggle = document.getElementById('soundToggle');
+
+const progressFill = document.getElementById('progressFill');
+const dotsRow = document.getElementById('dotsRow');
+const sectionTag = document.getElementById('sectionTag');
+const qCounter = document.getElementById('qCounter');
+const qText = document.getElementById('qText');
+const optsWrap = document.getElementById('optsWrap');
+const inlineExplain = document.getElementById('inlineExplain');
+
+const backBtn = document.getElementById('backBtn');
+const nextBtn = document.getElementById('nextBtn');
+const finishBtn = document.getElementById('finishBtn');
+
+const quizTools = document.getElementById('quizTools');
+const pauseBtn = document.getElementById('pauseBtn');
+const pauseOverlay = document.getElementById('pauseOverlay');
+const resumeFromPauseBtn = document.getElementById('resumeFromPauseBtn');
+
+const resumeModal = document.getElementById('resumeModal');
+const resumeInfo = document.getElementById('resumeInfo');
+const resumeYes = document.getElementById('resumeYes');
+const resumeNo = document.getElementById('resumeNo');
+
+const leaveWarningModal = document.getElementById('leaveWarningModal');
+const leaveWarnText = document.getElementById('leaveWarnText');
+const leaveWarnOk = document.getElementById('leaveWarnOk');
+
+const statsBar = document.getElementById('statsBar');
+
+/* INIT */
+window.addEventListener('load', async () => {
+ await SoundEngine.init();
+ updateSoundToggleUI();
+ setupConfigTopics();
+ await checkSavedState();
+ await updateHomeStats();
+});
+
+function updateSoundToggleUI() {
+ const muted = SoundEngine.isMuted();
+ soundToggle.classList.toggle('muted', muted);
+ soundToggle.setAttribute('aria-pressed', muted ? 'true' : 'false');
+ soundToggle.innerHTML = muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+}
+soundToggle.addEventListener('click', async () => {
+ await SoundEngine.setMuted(!SoundEngine.isMuted());
+ updateSoundToggleUI();
+});
+
+async function updateHomeStats() {
+ const best = await storageGet(BEST_SCORE_KEY);
+ if (best) {
+  statsBar.classList.remove('hidden');
+  statsBar.innerHTML = `<div class="stat-chip"><i class="fa-solid fa-trophy"></i> Best Score: <strong>${best}%</strong></div>`;
+ } else {
+  statsBar.classList.add('hidden');
+  statsBar.innerHTML = '';
+ }
+}
+
+/* CONFIG TOPICS BUILD */
+function setupConfigTopics() {
+ topicsWrap.innerHTML = '';
+ ALL_TOPICS.forEach((t) => {
+  const label = document.createElement('label');
+  label.className = 'topic-chip';
+  label.innerHTML = `<input type="checkbox" value="${t}" checked> <span><i class="fa-solid ${sectionIcon(t)}"></i> ${t}</span>`;
+  topicsWrap.appendChild(label);
+ });
+}
+
+timeSlider.addEventListener('input', () => { timeValue.textContent = timeSlider.value; });
+countSlider.addEventListener('input', () => { countValue.textContent = countSlider.value; });
+
+/* MODE SELECTION */
+pickAuto.addEventListener('click', () => {
+ startQuiz('auto', ALL_TOPICS, 60, QUESTIONS.length);
+});
+pickCustom.addEventListener('click', () => {
+ homeScreen.classList.add('hidden');
+ configScreen.classList.remove('hidden');
+});
+backToHomeFromConfig.addEventListener('click', () => {
+ configScreen.classList.add('hidden');
+ homeScreen.classList.remove('hidden');
+});
+
+startCustomBtn.addEventListener('click', () => {
+ const selectedTopics = Array.from(topicsWrap.querySelectorAll('input:checked')).map(i => i.value);
+ if (selectedTopics.length === 0) {
+  alert('Please select at least one topic.');
+  return;
+ }
+ const mins = parseInt(timeSlider.value, 10);
+ const count = parseInt(countSlider.value, 10);
+ configScreen.classList.add('hidden');
+ startQuiz('custom', selectedTopics, mins, count);
+});
+
+/* START QUIZ */
+function startQuiz(mode, topics, minutes, count) {
+ quizMode = mode;
+ showScreen(loadingScreen);
+ setTimeout(() => {
+  let filtered = QUESTIONS.filter(q => topics.includes(q.sec));
+  if (filtered.length === 0) filtered = [...QUESTIONS];
+  filtered = shuffle(filtered).map(randomizeOptions);
+  if (count < filtered.length) {
+   filtered = filtered.slice(0, count);
+  }
+  activeQuestions = filtered;
+  userAnswers = new Array(activeQuestions.length).fill(null);
+  currentQ = 0;
+  timeRemaining = minutes * 60;
+  isPaused = false;
+  leaveCount = 0;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') {
+   pauseBtn.classList.remove('hidden');
+  } else {
+   pauseBtn.classList.add('hidden');
+  }
+  timerBox.classList.remove('hidden');
+
+  startTimer();
+  renderQuestion();
+  saveState();
+ }, 600);
+}
+
+function showScreen(sc) {
+ [homeScreen, configScreen, loadingScreen, quizScreen, resultScreen].forEach(s => s.classList.add('hidden'));
+ sc.classList.remove('hidden');
+ if (sc === quizScreen) {
+  closeMobileNav();
+  hamburgerBtn.classList.add('hidden');
+ } else {
+  hamburgerBtn.classList.remove('hidden');
+ }
+}
+
+/* TIMER */
+function startTimer() {
+ clearInterval(timerInterval);
+ updateTimerDisplay();
+ timerInterval = setInterval(() => {
+  if (!isPaused) {
+   timeRemaining--;
+   updateTimerDisplay();
+   if (timeRemaining <= 0) {
+    clearInterval(timerInterval);
+    alert('Time is up! Submitting your answers.');
+    finishQuiz();
+   }
+  }
+ }, 1000);
+}
+
+function updateTimerDisplay() {
+ const m = Math.floor(Math.max(0, timeRemaining) / 60);
+ const s = Math.max(0, timeRemaining) % 60;
+ timerText.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+ if (timeRemaining < 300) {
+  timerBox.classList.add('warn');
+ } else {
+  timerBox.classList.remove('warn');
+ }
+}
+
+/* PAUSE ENGINE */
+pauseBtn.addEventListener('click', togglePause);
+resumeFromPauseBtn.addEventListener('click', togglePause);
+
+function togglePause() {
+ if (quizMode !== 'auto') return;
+ isPaused = !isPaused;
+ if (isPaused) {
+  pauseOverlay.classList.remove('hidden');
+ } else {
+  pauseOverlay.classList.add('hidden');
+ }
+}
+
+/* RENDER QUESTION */
+function renderQuestion() {
+ const q = activeQuestions[currentQ];
+ sectionTag.innerHTML = `<i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec}`;
+ qCounter.textContent = `Question ${currentQ + 1} of ${activeQuestions.length}`;
+ qText.textContent = q.q;
+
+ optsWrap.innerHTML = '';
+ inlineExplain.className = 'inline-explain';
+ inlineExplain.innerHTML = '';
+
+ const answered = userAnswers[currentQ] !== null;
+
+ q.opts.forEach((optStr, idx) => {
+  const optDiv = document.createElement('div');
+  optDiv.className = 'opt';
+  const letter = String.fromCharCode(65 + idx);
+
+  if (answered) {
+   optDiv.classList.add('locked');
+   if (quizMode === 'auto') {
+    if (idx === q.ans) optDiv.classList.add('correct');
+    if (userAnswers[currentQ] === idx && idx !== q.ans) optDiv.classList.add('wrong');
+   } else {
+    if (userAnswers[currentQ] === idx) optDiv.classList.add('selected');
+   }
+  }
+
+  optDiv.innerHTML = `<div class="opt-letter">${letter}</div><div class="opt-text">${optStr}</div>`;
+  optDiv.addEventListener('click', () => handleSelectOption(idx));
+  optsWrap.appendChild(optDiv);
+ });
+
+ if (answered && quizMode === 'auto') {
+  const isRight = userAnswers[currentQ] === q.ans;
+  inlineExplain.classList.add('show', isRight ? 'right' : 'wrong');
+  inlineExplain.innerHTML = `
+   <div class="ie-label">${isRight ? '<i class="fa-solid fa-circle-check"></i> Correct!' : '<i class="fa-solid fa-circle-xmark"></i> Incorrect'}</div>
+   <div>${q.ex}</div>
+  `;
+ }
+
+ // Navigation buttons state
+ backBtn.disabled = currentQ === 0;
+ if (currentQ === activeQuestions.length - 1) {
+  nextBtn.classList.add('hidden');
+  finishBtn.classList.remove('hidden');
+ } else {
+  nextBtn.classList.remove('hidden');
+  finishBtn.classList.add('hidden');
+ }
+
+ renderProgress();
+}
+
+function renderProgress() {
+ const pct = ((currentQ + 1) / activeQuestions.length) * 100;
+ progressFill.style.width = `${pct}%`;
+
+ dotsRow.innerHTML = '';
+ activeQuestions.forEach((q, idx) => {
+  const dot = document.createElement('div');
+  dot.className = 'dot';
+  if (idx === currentQ) dot.classList.add('current');
+
+  if (userAnswers[idx] !== null) {
+   if (quizMode === 'auto') {
+    if (userAnswers[idx] === q.ans) dot.classList.add('correct');
+    else dot.classList.add('wrong');
+   } else {
+    dot.classList.add('answered');
+   }
+  }
+  dot.addEventListener('click', () => {
+   currentQ = idx;
+   renderQuestion();
+  });
+  dotsRow.appendChild(dot);
+ });
+}
+
+/* OPTION SELECTION */
+function handleSelectOption(idx) {
+ if (userAnswers[currentQ] !== null && quizMode === 'auto') return; // locked in auto mode once picked
+
+ const prevAns = userAnswers[currentQ];
+ userAnswers[currentQ] = idx;
+
+ if (quizMode === 'auto' && prevAns === null) {
+  if (idx === activeQuestions[currentQ].ans) {
+   SoundEngine.playCorrect();
+  } else {
+   SoundEngine.playWrong();
+  }
+ }
+
+ renderQuestion();
+ saveState();
+}
+
+nextBtn.addEventListener('click', () => {
+ if (currentQ < activeQuestions.length - 1) {
+  currentQ++;
+  renderQuestion();
+ }
+});
+backBtn.addEventListener('click', () => {
+ if (currentQ > 0) {
+  currentQ--;
+  renderQuestion();
+ }
+});
+finishBtn.addEventListener('click', () => {
+ const answeredCount = userAnswers.filter(a => a !== null).length;
+ if (quizMode === 'auto' && answeredCount < Math.min(30, activeQuestions.length)) {
+  alert(`Please answer at least ${Math.min(30, activeQuestions.length)} questions before submitting.`);
+  return;
+ }
+ if (confirm('Are you sure you want to submit your quiz?')) {
+  finishQuiz();
+ }
+});
+
+/* KEYBOARD NAVIGATION */
+document.addEventListener('keydown', (e) => {
+ if (quizScreen.classList.contains('hidden')) return;
+ if (e.key === 'ArrowLeft' && currentQ > 0) {
+  currentQ--; renderQuestion();
+ } else if (e.key === 'ArrowRight' && currentQ < activeQuestions.length - 1) {
+  currentQ++; renderQuestion();
+ } else if (['1','2','3','4'].includes(e.key)) {
+  const idx = parseInt(e.key, 10) - 1;
+  if (idx < activeQuestions[currentQ].opts.length) {
+   handleSelectOption(idx);
+  }
+ }
+});
+
+/* FINISH QUIZ */
+function finishQuiz() {
+ clearInterval(timerInterval);
+ clearSavedState();
+ quizTools.classList.add('hidden');
+ timerBox.classList.add('hidden');
+
+ let correctCount = 0;
+ const breakdown = {};
+
+ activeQuestions.forEach((q, i) => {
+  if (!breakdown[q.sec]) breakdown[q.sec] = { correct: 0, total: 0 };
+  breakdown[q.sec].total++;
+
+  if (userAnswers[i] === q.ans) {
+   correctCount++;
+   breakdown[q.sec].correct++;
+  }
+ });
+
+ const total = activeQuestions.length;
+ const pct = Math.round((correctCount / total) * 100);
+
+ document.getElementById('resultScore').textContent = correctCount;
+ document.getElementById('resultOf').textContent = `/ ${total}`;
+ document.getElementById('resultPct').textContent = `${pct}% Overall Score`;
+
+ let msg = '';
+ if (pct >= 80) msg = '<i class="fa-solid fa-award" style="color:#facc15;"></i> Excellent Mastery! Outstanding Performance.';
+ else if (pct >= 60) msg = '<i class="fa-solid fa-thumbs-up" style="color:var(--accent);"></i> Good Job! Keep reviewing difficult topics.';
+ else msg = '<i class="fa-solid fa-book-open" style="color:var(--red);"></i> Keep Practicing! Review the explanations below.';
+ document.getElementById('resultMsg').innerHTML = msg;
+
+ saveResultToHistory('SWE122', correctCount, total);
+
+ document.getElementById('bestBadge').innerHTML = '';
+ (async () => {
+  const oldBestRaw = await storageGet(BEST_SCORE_KEY);
+  const oldBest = oldBestRaw ? parseInt(oldBestRaw, 10) : 0;
+  if (pct > oldBest) {
+   await storageSet(BEST_SCORE_KEY, String(pct));
+   document.getElementById('bestBadge').innerHTML = `<div class="best-badge"><i class="fa-solid fa-star"></i> New Personal Best!</div>`;
+  }
+ })();
+
+ // Render breakdown grid
+ const breakdownGrid = document.getElementById('breakdownGrid');
+ breakdownGrid.innerHTML = '';
+ Object.keys(breakdown).forEach(sec => {
+  const item = breakdown[sec];
+  const bdCard = document.createElement('div');
+  bdCard.className = 'bd-card';
+  bdCard.innerHTML = `
+   <div class="bd-name"><i class="fa-solid ${sectionIcon(sec)}"></i> ${sec}</div>
+   <div class="bd-score">${item.correct} <span class="bd-total">/ ${item.total}</span></div>
+  `;
+  breakdownGrid.appendChild(bdCard);
+ });
+
+ // Render question review list
+ const reviewList = document.getElementById('reviewList');
+ reviewList.innerHTML = '';
+ activeQuestions.forEach((q, i) => {
+  const uAns = userAnswers[i];
+  const isRight = uAns === q.ans;
+  const revItem = document.createElement('div');
+  revItem.className = `review-item ${isRight ? 'right' : 'miss'}`;
+
+  const uAnsText = uAns !== null ? `${String.fromCharCode(65 + uAns)}) ${q.opts[uAns]}` : 'Not Answered';
+  const cAnsText = `${String.fromCharCode(65 + q.ans)}) ${q.opts[q.ans]}`;
+
+  revItem.innerHTML = `
+   <div class="ri-section"><i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec} · Q${i + 1}</div>
+   <div class="ri-q"><strong>${q.q}</strong></div>
+   <div class="ri-ans ${isRight ? 'right' : 'wrong'}">
+    <i class="fa-solid ${isRight ? 'fa-check' : 'fa-xmark'}"></i>
+    <span><strong>Your Answer:</strong> ${uAnsText}</span>
+   </div>
+   ${!isRight ? `<div class="ri-ans correct-reveal"><i class="fa-solid fa-bullseye"></i> <span><strong>Correct Answer:</strong> ${cAnsText}</span></div>` : ''}
+   <div class="ri-exp"><strong>Explanation:</strong> ${q.ex}</div>
+  `;
+  reviewList.appendChild(revItem);
+ });
+
+ showScreen(resultScreen);
+ updateHomeStats();
+}
+
+document.getElementById('homeBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('retryBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+/* AUTOSAVE ENGINE (persistent artifact storage) */
+function saveState() {
+ const state = { quizMode, activeQuestions, userAnswers, currentQ, timeRemaining };
+ storageSet(STORAGE_KEY, JSON.stringify(state));
+}
+
+function clearSavedState() {
+ storageDelete(STORAGE_KEY);
+}
+
+async function checkSavedState() {
+ const raw = await storageGet(STORAGE_KEY);
+ if (!raw) return;
+ let data;
+ try {
+  data = JSON.parse(raw);
+ } catch (e) {
+  return;
+ }
+ if (!data || !data.activeQuestions || data.activeQuestions.length === 0) return;
+
+ resumeInfo.textContent = `${data.activeQuestions.length} Questions (${data.quizMode.toUpperCase()} Mode)`;
+ resumeModal.classList.remove('hidden');
+
+ resumeYes.onclick = () => {
+  resumeModal.classList.add('hidden');
+  quizMode = data.quizMode;
+  activeQuestions = data.activeQuestions;
+  userAnswers = data.userAnswers;
+  currentQ = data.currentQ;
+  timeRemaining = data.timeRemaining;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') pauseBtn.classList.remove('hidden'); else pauseBtn.classList.add('hidden');
+  timerBox.classList.remove('hidden');
+  startTimer();
+  renderQuestion();
+ };
+
+ resumeNo.onclick = () => {
+  resumeModal.classList.add('hidden');
+  clearSavedState();
+ };
+}
+
+/* TAB SWITCH GUARDRAIL */
+document.addEventListener('visibilitychange', () => {
+ if (!quizScreen.classList.contains('hidden') && document.hidden) {
+  leaveCount++;
+  if (leaveCount >= 3) {
+   alert('You have left the quiz tab 3 times. The quiz will now reset.');
+   clearSavedState();
+   location.reload();
+  } else {
+   leaveWarnText.textContent = `You switched away from the quiz tab. Warning ${leaveCount} of 3. Leaving 3 times will reset your quiz.`;
+   leaveWarningModal.classList.remove('hidden');
+  }
+ }
+});
+leaveWarnOk.addEventListener('click', () => leaveWarningModal.classList.add('hidden'));
+
+/* SCIENTIFIC CALCULATOR ENGINE */
+(function setupCalculator(){
+ const calcFab = document.getElementById('calcFab');
+ const calcBackdrop = document.getElementById('calcBackdrop');
+ const calcPanel = document.getElementById('calcPanel');
+ const calcClose = document.getElementById('calcClose');
+ const calcExpr = document.getElementById('calcExpr');
+ const calcResult = document.getElementById('calcResult');
+ const calcGrid = document.getElementById('calcGrid');
+ const calcHeader = document.getElementById('calcHeader');
+ const calcModeDeg = document.getElementById('calcModeDeg');
+ const calcModeRad = document.getElementById('calcModeRad');
+
+ let expr = '';
+ let isRad = false;
+
+ calcFab.addEventListener('click', () => {
+  calcBackdrop.classList.remove('hidden');
+  calcPanel.classList.remove('hidden');
+ });
+ calcClose.addEventListener('click', closeCalc);
+ calcBackdrop.addEventListener('click', closeCalc);
+
+ function closeCalc(){
+  calcBackdrop.classList.add('hidden');
+  calcPanel.classList.add('hidden');
+ }
+
+ calcModeDeg.addEventListener('click', () => {
+  isRad = false;
+  calcModeDeg.classList.add('active'); calcModeRad.classList.remove('active');
+ });
+ calcModeRad.addEventListener('click', () => {
+  isRad = true;
+  calcModeRad.classList.add('active'); calcModeDeg.classList.remove('active');
+ });
+
+ const buttons = [
+  { label: 'C', cls: 'clear', action: 'clear' },
+  { label: '(', cls: 'op', action: 'append', val: '(' },
+  { label: ')', cls: 'op', action: 'append', val: ')' },
+  { label: '÷', cls: 'op', action: 'append', val: '/' },
+
+  { label: 'sin', cls: 'fn', action: 'fn', fn: 'sin' },
+  { label: '7', action: 'append', val: '7' },
+  { label: '8', action: 'append', val: '8' },
+  { label: '9', action: 'append', val: '9' },
+
+  { label: 'cos', cls: 'fn', action: 'fn', fn: 'cos' },
+  { label: '4', action: 'append', val: '4' },
+  { label: '5', action: 'append', val: '5' },
+  { label: '6', action: 'append', val: '6' },
+
+  { label: 'tan', cls: 'fn', action: 'fn', fn: 'tan' },
+  { label: '1', action: 'append', val: '1' },
+  { label: '2', action: 'append', val: '2' },
+  { label: '3', action: 'append', val: '3' },
+
+  { label: '√', cls: 'fn', action: 'fn', fn: 'sqrt' },
+  { label: '0', action: 'append', val: '0' },
+  { label: '.', action: 'append', val: '.' },
+  { label: '×', cls: 'op', action: 'append', val: '*' },
+
+  { label: 'ln', cls: 'fn', action: 'fn', fn: 'ln' },
+  { label: 'log', cls: 'fn', action: 'fn', fn: 'log10' },
+  { label: '^', cls: 'op', action: 'append', val: '**' },
+  { label: '-', cls: 'op', action: 'append', val: '-' },
+
+  { label: 'π', cls: 'fn', action: 'append', val: 'π' },
+  { label: 'e', cls: 'fn', action: 'append', val: 'e' },
+  { label: '+', cls: 'op', action: 'append', val: '+' },
+  { label: '=', cls: 'equals', action: 'calc' }
+ ];
+
+ calcGrid.innerHTML = '';
+ buttons.forEach(b => {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = `calc-btn ${b.cls || ''}`;
+  btn.textContent = b.label;
+  btn.addEventListener('click', () => handleCalc(b));
+  calcGrid.appendChild(btn);
+ });
+
+ function handleCalc(b) {
+  if (b.action === 'clear') {
+   expr = '';
+   calcExpr.innerHTML = '&nbsp;';
+   calcResult.textContent = '0';
+   calcResult.classList.remove('err');
+  } else if (b.action === 'append') {
+   expr += b.val;
+   calcExpr.textContent = expr;
+  } else if (b.action === 'fn') {
+   expr += `${b.fn}(`;
+   calcExpr.textContent = expr;
+  } else if (b.action === 'calc') {
+   try {
+    // Substitute π and standalone "e" for the constants passed into the
+    // evaluator scope. Using named helper functions (rather than a
+    // regex-based degree/radian post-process) avoids breaking on nested
+    // parentheses, e.g. sin(sqrt(4)).
+    let safeExpr = expr.replace(/π/g, 'PI').replace(/\be\b/g, 'E');
+
+    // Auto-close any open parentheses (e.g. "sin(30" -> "sin(30)") so
+    // pressing "=" works without manually typing the closing bracket.
+    const openCount = (safeExpr.match(/\(/g) || []).length;
+    const closeCount = (safeExpr.match(/\)/g) || []).length;
+    if (openCount > closeCount) {
+     safeExpr += ')'.repeat(openCount - closeCount);
+    }
+
+    const sinFn = x => isRad ? Math.sin(x) : Math.sin(x * Math.PI / 180);
+    const cosFn = x => isRad ? Math.cos(x) : Math.cos(x * Math.PI / 180);
+    const tanFn = x => isRad ? Math.tan(x) : Math.tan(x * Math.PI / 180);
+
+    const evaluator = new Function(
+     'sin', 'cos', 'tan', 'sqrt', 'ln', 'log10', 'PI', 'E',
+     `"use strict"; return (${safeExpr});`
+    );
+    const res = evaluator(sinFn, cosFn, tanFn, Math.sqrt, Math.log, Math.log10, Math.PI, Math.E);
+
+    calcResult.textContent = Number.isFinite(res) ? +res.toFixed(6) : 'Error';
+    calcResult.classList.remove('err');
+   } catch(e) {
+    calcResult.textContent = 'Error';
+    calcResult.classList.add('err');
+   }
+  }
+ }
+
+ // Draggable window logic
+ let isDragging = false, startX, startY, initialX, initialY;
+ calcHeader.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  calcPanel.classList.add('dragged');
+  startX = e.clientX; startY = e.clientY;
+  const rect = calcPanel.getBoundingClientRect();
+  initialX = rect.left; initialY = rect.top;
+ });
+ document.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  const dx = e.clientX - startX;
+  const dy = e.clientY - startY;
+  calcPanel.style.left = `${initialX + dx}px`;
+  calcPanel.style.top = `${initialY + dy}px`;
+ });
+ document.addEventListener('mouseup', () => isDragging = false);
+})();
+</script>
+</body>
+</html>
