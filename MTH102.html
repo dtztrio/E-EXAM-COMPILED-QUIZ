@@ -555,8 +555,8 @@ const QUESTIONS = [
 {sec:'Limits', q:"Evaluate lim x→0 x³/(x-sinx).", opts:["6","1/6","0","3"], ans:0, ex:"Using the Taylor expansion x-sinx ≈ x³/6 for small x, the ratio x³/(x³/6) approaches 6."},
 {sec:'Limits', q:"Evaluate lim x→4 (x²-x-12)/(x-4).", opts:["7","-7","1","0"], ans:0, ex:"Factor: (x-4)(x+3)/(x-4) = x+3, which equals 7 at x=4."},
 {sec:'Limits', q:"Evaluate lim p→3 (p²-9)/(p-3).", opts:["6","-6","0","9"], ans:0, ex:"Factor: (p-3)(p+3)/(p-3) = p+3, which equals 6 at p=3."},
-{sec:'Limits', q:"Evaluate lim a→4 (a²-7a+12)/(a-4).", opts:["1","-1","0","7"], ans:0, ex:"Factor: (a-3)(a-4)/(a-4) = a-3, which equals 1 at a=4."},
-{sec:'Limits', q:"Evaluate lim x→3 (x⁴-81)/(x²-9).", opts:["18","9","36","0"], ans:0, ex:"Factor: x⁴-81=(x²-9)(x²+9). Cancel (x²-9) to get x²+9, which equals 18 at x=3."},
+{sec:'Limits', q:"What is the formula for the circumference of a circle of radius r?", opts:["2πr","πr²","πd/2","4r²"], ans:0, ex:"The circumference is C=2πr. Classically, this formula is derived as the limit of the perimeters of regular polygons inscribed in the circle as the number of sides grows without bound."},
+{sec:'Limits', q:"Given y = (x-1)(x-4)/[(x-2)(x-3)], find the vertical asymptotes.", opts:["x=2 and x=3","x=1 and x=4","x=2, 3, and 4","x=-2 and x=-3"], ans:0, ex:"Vertical asymptotes occur where the denominator vanishes without cancelling against the numerator. Since (x-2)(x-3)=0 at x=2 and x=3, and neither cancels with the numerator's zeros (x=1,4), the function's limit grows unbounded at both x=2 and x=3."},
 
 // DIFFERENTIATION (Questions 31-60)
 {sec:'Differentiation', q:"Find the derivative of y = sin⁻¹x.", opts:["1/√(1-x²)","-1/√(1-x²)","1/(1+x²)","1/√(x²-1)"], ans:0, ex:"The derivative of the inverse sine function is 1/√(1-x²)."},
@@ -587,8 +587,8 @@ const QUESTIONS = [
 {sec:'Differentiation', q:"Find dy/dx if y = x²tanx.", opts:["2xtanx + x²sec²x","2xtanx - x²sec²x","x²sec²x","2xsec²x"], ans:0, ex:"By the product rule: d/dx(x²)·tanx + x²·d/dx(tanx) = 2xtanx + x²sec²x."},
 {sec:'Differentiation', q:"Differentiate x^(1/4) with respect to x.", opts:["(1/4)x^(-3/4)","(1/4)x^(3/4)","4x^(-3/4)","x^(-3/4)"], ans:0, ex:"By the power rule: (1/4)x^((1/4)-1) = (1/4)x^(-3/4)."},
 {sec:'Differentiation', q:"Find dy/dt of y = p(t)q(t).", opts:["p'q + pq'","p'q - pq'","p'q'","pq"], ans:0, ex:"By the product rule, y' = p'(t)q(t) + p(t)q'(t)."},
-{sec:'Differentiation', q:"Find dy/dx if y = (ax+b)ⁿ.", opts:["an(ax+b)^(n-1)","n(ax+b)^(n-1)","a(ax+b)^(n-1)","an(ax+b)ⁿ"], ans:0, ex:"By the chain rule: n(ax+b)^(n-1) × a = an(ax+b)^(n-1)."},
-{sec:'Differentiation', q:"If x²-xy+y² = 7, find y' at x=3, y=2.", opts:["-4","4","-1/4","1/4"], ans:0, ex:"Implicit differentiation: 2x-y-xy'+2yy'=0. Solving: y'(2y-x)=y-2x, so y'=(2-6)/(4-3)=-4."},
+{sec:'Differentiation', q:"Find the values of x when y=x²+2x-3=0.", opts:["x=-3, 1","x=3, -1","x=-3, -1","x=3, 1"], ans:0, ex:"Factor: x²+2x-3=(x+3)(x-1)=0, giving x=-3 and x=1 — the kind of zero-finding used when locating where a derivative or function crosses the x-axis."},
+{sec:'Differentiation', q:"In sketching a graph, one of the most important points to consider is:", opts:["Intercept","Color","Font size","Page margin"], ans:0, ex:"When sketching a curve with the help of derivative information, intercepts (together with critical points, concavity, and asymptotes) are among the key features to identify."},
 
 // INTEGRATION (Questions 61-100)
 {sec:'Integration', q:"∫√t dt =", opts:["(2/3)t^(3/2)+C","(1/2)t^(3/2)+C","(3/2)t^(1/2)+C","t^(3/2)+C"], ans:0, ex:"√t = t^(1/2), so ∫t^(1/2)dt = t^(3/2)/(3/2)+C = (2/3)t^(3/2)+C."},
@@ -614,23 +614,22 @@ const QUESTIONS = [
 {sec:'Integration', q:"∫ ae^(b-ct) dt =", opts:["-(a/c)e^(b-ct) + C","(a/c)e^(b-ct) + C","-a·c·e^(b-ct) + C","a·e^(b-ct) + C"], ans:0, ex:"Treating -ct as the inner function, ∫ae^(b-ct)dt = a×[-1/c]e^(b-ct)+C = -(a/c)e^(b-ct)+C."},
 {sec:'Integration', q:"∫ (5x+3)⁻⁶ dx =", opts:["-1/[25(5x+3)⁵] + C","1/[25(5x+3)⁵] + C","-1/[5(5x+3)⁵] + C","-5/(5x+3)⁵ + C"], ans:0, ex:"∫(5x+3)⁻⁶dx = (5x+3)⁻⁵/[5×(-5)]+C = -1/[25(5x+3)⁵]+C."},
 {sec:'Integration', q:"∫ ⁿ√x dx =", opts:["[n/(n+1)]x^((n+1)/n) + C","x^((n+1)/n) + C","[(n+1)/n]x^(n/(n+1)) + C","n·x^(1/n) + C"], ans:0, ex:"ⁿ√x = x^(1/n), so ∫x^(1/n)dx = x^(1/n+1)/(1/n+1)+C = [n/(n+1)]x^((n+1)/n)+C."},
-{sec:'Integration', q:"∫ 9e^(2-3x) dx =", opts:["-3e^(2-3x) + C","3e^(2-3x) + C","-27e^(2-3x) + C","9e^(2-3x) + C"], ans:0, ex:"Treating -3x as the inner function: 9×[-1/3]e^(2-3x)+C = -3e^(2-3x)+C."},
-{sec:'Integration', q:"∫ 4e^(2x+3) dx =", opts:["2e^(2x+3) + C","4e^(2x+3) + C","8e^(2x+3) + C","(1/2)e^(2x+3) + C"], ans:0, ex:"∫4e^(2x+3)dx = 4×(1/2)e^(2x+3)+C = 2e^(2x+3)+C."},
-{sec:'Integration', q:"∫ xⁿ · nx^(n-1) dx =", opts:["x^(2n)/2 + C","x^(2n) + C","nx^(2n)/2 + C","x^(2n-1)/(2n-1) + C"], ans:0, ex:"xⁿ·nx^(n-1) = nx^(2n-1), so ∫nx^(2n-1)dx = n·x^(2n)/(2n)+C = x^(2n)/2+C."},
-{sec:'Integration', q:"∫ √(4x+3) dx =", opts:["(1/6)(4x+3)^(3/2) + C","(1/4)(4x+3)^(3/2) + C","(2/3)(4x+3)^(3/2) + C","(4/3)(4x+3)^(3/2) + C"], ans:0, ex:"∫(4x+3)^(1/2)dx = (1/4)×(2/3)(4x+3)^(3/2)+C = (1/6)(4x+3)^(3/2)+C."},
-{sec:'Integration', q:"∫ tan x dx =", opts:["ln|sec x| + C","ln|sin x| + C","-ln|sin x| + C","sec²x + C"], ans:0, ex:"∫tanx dx = -ln|cosx| + C, which is equivalently written as ln|secx| + C."},
-{sec:'Integration', q:"∫ (xⁿ - x^(n-1)) dx =", opts:["x^(n+1)/(n+1) - xⁿ/n + C","xⁿ/n - x^(n-1)/(n-1) + C","x^(n+1)/(n+1) + xⁿ/n + C","nx^(n-1) - (n-1)x^(n-2) + C"], ans:0, ex:"Integrate term by term: ∫xⁿdx - ∫x^(n-1)dx = x^(n+1)/(n+1) - xⁿ/n + C."},
-{sec:'Integration', q:"∫ 6x⁻¹ dx =", opts:["6 ln|x| + C","-6/x² + C","-6/x + C","ln|6x| + C"], ans:0, ex:"∫6x⁻¹dx = 6∫(1/x)dx = 6 ln|x| + C."},
-{sec:'Integration', q:"∫ √(3-4x) dx =", opts:["-(1/6)(3-4x)^(3/2) + C","(1/6)(3-4x)^(3/2) + C","-(1/4)(3-4x)^(3/2) + C","(2/3)(3-4x)^(3/2) + C"], ans:0, ex:"∫(3-4x)^(1/2)dx = (1/(-4))×(2/3)(3-4x)^(3/2)+C = -(1/6)(3-4x)^(3/2)+C."},
-{sec:'Integration', q:"∫ 3√(x⁴) dx =", opts:["x³ + C","3x³ + C","(3/5)x^(5/2) + C","x⁴ + C"], ans:0, ex:"√(x⁴)=x², so 3√(x⁴)=3x², and ∫3x²dx = x³ + C."},
-{sec:'Integration', q:"Evaluate ∫₁³ 3x² dx.", opts:["26","27","24","9"], ans:0, ex:"Antiderivative: x³. Evaluating: 3³-1³ = 27-1 = 26."},
-{sec:'Integration', q:"∫ sinx/(1-cosx) dx =", opts:["ln|1-cosx| + C","-ln|1-cosx| + C","ln|sinx| + C","ln|1+cosx| + C"], ans:0, ex:"Since the numerator sinx is the derivative of the denominator (1-cosx), the integral is ln|1-cosx| + C."},
-{sec:'Integration', q:"∫ nx^(n-1) dx =", opts:["xⁿ + C","x^(n-1) + C","nxⁿ + C","x^(n-1)/(n-1) + C"], ans:0, ex:"This is the reverse of the power rule: ∫nx^(n-1)dx = xⁿ + C."},
-{sec:'Integration', q:"∫ e^(nx) dx =", opts:["(1/n)e^(nx) + C","n·e^(nx) + C","e^(nx) + C","n²e^(nx) + C"], ans:0, ex:"∫e^(ax)dx = (1/a)e^(ax)+C; with a=n, this gives (1/n)e^(nx)+C."},
-{sec:'Integration', q:"∫ 7/(2x-5) dx =", opts:["(7/2)ln|2x-5| + C","7ln|2x-5| + C","(7/5)ln|2x-5| + C","(2/7)ln|2x-5| + C"], ans:0, ex:"∫k/(ax+b)dx = (k/a)ln|ax+b|+C; here k=7, a=2, giving (7/2)ln|2x-5|+C."},
-{sec:'Integration', q:"∫ x^(1/2) dx =", opts:["(2/3)x^(3/2) + C","(1/2)x^(3/2) + C","(3/2)x^(1/2) + C","x^(3/2) + C"], ans:0, ex:"∫x^(1/2)dx = x^(3/2)/(3/2)+C = (2/3)x^(3/2)+C."},
-{sec:'Integration', q:"∫ e^(ax) dx =", opts:["(1/a)e^(ax) + C","a·e^(ax) + C","e^(ax) + C","e^(ax)/x + C"], ans:0, ex:"By reversing the chain rule, ∫e^(ax)dx = (1/a)e^(ax)+C."},
-{sec:'Integration', q:"∫ 3/(4x-1) dx =", opts:["(3/4)ln|4x-1| + C","3ln|4x-1| + C","(3/1)ln|4x-1| + C","(4/3)ln|4x-1| + C"], ans:0, ex:"∫k/(ax+b)dx = (k/a)ln|ax+b|+C; here k=3, a=4, giving (3/4)ln|4x-1|+C."}
+{sec:'Integration', q:"Evaluate ∫ cos(x³) dx.", opts:["No elementary antiderivative","sin(x³)/3x² + C","sin(x³) + C","-sin(x³) + C"], ans:0, ex:"Unlike cos(ax) for a linear argument, the composition cos(x³) cannot be integrated in terms of elementary functions."},
+{sec:'Integration', q:"Find the area under the curve y = x² from x=1 to x=2.", opts:["7/3","8/3","1","3"], ans:0, ex:"Area = ∫₁² x²dx = [x³/3] from 1 to 2 = 8/3-1/3 = 7/3."},
+{sec:'Integration', q:"The volume of the cone formed by rotating the line y=mx (height h) about the x-axis is:", opts:["(1/3)πm²h³","πm²h³","(1/3)πmh³","(1/3)πm²h²"], ans:0, ex:"Using the disk method, V=∫₀ʰ π(mx)²dx = πm²[x³/3] from 0 to h = (1/3)πm²h³."},
+{sec:'Integration', q:"Which formula gives the arc length of a curve y=f(x) from x=a to x=b?", opts:["∫ₐᵇ √(1+(dy/dx)²) dx","∫ₐᵇ (dy/dx) dx","∫ₐᵇ √(1-(dy/dx)²) dx","∫ₐᵇ y dx"], ans:0, ex:"The arc length formula integrates the square root of one plus the square of the derivative: S=∫ₐᵇ√(1+(dy/dx)²)dx."},
+{sec:'Integration', q:"Find the area bounded by y = x²+2 from x=1 to x=3.", opts:["38/3","40/3","36/3","38"], ans:0, ex:"Area = ∫₁³(x²+2)dx = [x³/3+2x] from 1 to 3 = (9+6)-(1/3+2) = 15-7/3 = 38/3."},
+{sec:'Integration', q:"Evaluate ∫₀² e^(2x) dx.", opts:["(e⁴-1)/2","e⁴-1","(e²-1)/2","2(e⁴-1)"], ans:0, ex:"Antiderivative: (1/2)e^(2x). Evaluating from 0 to 2: (1/2)(e⁴-e⁰) = (e⁴-1)/2."},
+{sec:'Integration', q:"Evaluate ∫ cos x dx.", opts:["sinx + C","-sinx + C","cosx + C","-cosx + C"], ans:0, ex:"The antiderivative of cosx is sinx, so ∫cosx dx = sinx + C."},
+{sec:'Integration', q:"Evaluate ∫₀¹ 3x² dx.", opts:["1","3","0","1/3"], ans:0, ex:"Antiderivative: x³. Evaluating from 0 to 1: 1³-0³ = 1."},
+{sec:'Integration', q:"Evaluate ∫ x⁻² dx.", opts:["-1/x + C","1/x + C","-2/x³ + C","ln|x| + C"], ans:0, ex:"x⁻²=1/x², so ∫x⁻²dx = -x⁻¹+C = -1/x + C."},
+{sec:'Integration', q:"Evaluate ∫ eˣ dx.", opts:["eˣ + C","xeˣ⁻¹+C","eˣ⁻¹+C","ln x + C"], ans:0, ex:"The exponential function eˣ is its own antiderivative, so ∫eˣdx = eˣ+C."},
+{sec:'Integration', q:"Evaluate ∫ sec²x dx.", opts:["tanx + C","secx + C","-cotx + C","sec x tanx + C"], ans:0, ex:"Since d/dx(tanx)=sec²x, ∫sec²x dx = tanx + C."},
+{sec:'Integration', q:"Evaluate ∫ sin²x dx.", opts:["x/2 - sin2x/4 + C","x/2 + sin2x/4 + C","-cos2x/2 + C","x - sin2x + C"], ans:0, ex:"Using the identity sin²x=(1-cos2x)/2, integrate term by term to get x/2 - sin2x/4 + C."},
+{sec:'Integration', q:"Evaluate ∫ (x³+x²+x+1) dx.", opts:["x⁴/4 + x³/3 + x²/2 + x + C","x⁴/4 + x³/3 + x²/2 + C","x³+x²+x+C","x⁴+x³+x²+x+C"], ans:0, ex:"Integrate term by term using the power rule on each term to get x⁴/4 + x³/3 + x²/2 + x + C."},
+{sec:'Integration', q:"Evaluate ∫₀¹ x³ dx.", opts:["1/4","1/3","1","0"], ans:0, ex:"Antiderivative: x⁴/4. Evaluating from 0 to 1: 1/4-0 = 1/4."},
+{sec:'Integration', q:"Evaluate ∫ x sinx dx.", opts:["-x cosx + sinx + C","x cosx + sinx + C","-x cosx - sinx + C","x sinx + cosx + C"], ans:0, ex:"Using integration by parts with u=x, dv=sinx dx: ∫x sinx dx = -x cosx + sinx + C."},
+{sec:'Integration', q:"Evaluate ∫ (3x+4)⁸ dx.", opts:["(3x+4)⁹/27 + C","(3x+4)⁹/9 + C","9(3x+4)⁹ + C","(3x+4)⁹/3 + C"], ans:0, ex:"By reversing the chain rule, ∫(3x+4)⁸dx = (3x+4)⁹/[3×9]+C = (3x+4)⁹/27+C."}
 ];
 
 const ALL_TOPICS = [
@@ -1317,7 +1316,16 @@ leaveWarnOk.addEventListener('click', () => leaveWarningModal.classList.add('hid
  let expr = '';
  let isRad = false;
 
+ function resetPanelPosition() {
+  // Clear any position left over from a previous drag so the calculator
+  // reopens centered instead of wherever it was last left/jumped to.
+  calcPanel.classList.remove('dragged');
+  calcPanel.style.left = '';
+  calcPanel.style.top = '';
+ }
+
  calcFab.addEventListener('click', () => {
+  resetPanelPosition();
   calcBackdrop.classList.remove('hidden');
   calcPanel.classList.remove('hidden');
  });
@@ -1427,11 +1435,24 @@ leaveWarnOk.addEventListener('click', () => leaveWarningModal.classList.add('hid
  // Draggable window logic
  let isDragging = false, startX, startY, initialX, initialY;
  calcHeader.addEventListener('mousedown', (e) => {
-  isDragging = true;
-  calcPanel.classList.add('dragged');
-  startX = e.clientX; startY = e.clientY;
+  // Ignore drags started on the header's own controls (DEG/RAD toggle,
+  // close button) so clicking them doesn't also kick off a "drag" that
+  // relocates the panel.
+  if (e.target.closest('button')) return;
+
+  // Capture the panel's current on-screen position *before* switching it
+  // from the centered (transform-based) anchor to an absolute left/top
+  // anchor. Writing that position back immediately means the removal of
+  // the centering transform (via the .dragged class) doesn't cause the
+  // panel to visually jump.
   const rect = calcPanel.getBoundingClientRect();
   initialX = rect.left; initialY = rect.top;
+  calcPanel.style.left = `${initialX}px`;
+  calcPanel.style.top = `${initialY}px`;
+  calcPanel.classList.add('dragged');
+
+  isDragging = true;
+  startX = e.clientX; startY = e.clientY;
  });
  document.addEventListener('mousemove', (e) => {
   if (!isDragging) return;
@@ -1440,7 +1461,7 @@ leaveWarnOk.addEventListener('click', () => leaveWarningModal.classList.add('hid
   calcPanel.style.left = `${initialX + dx}px`;
   calcPanel.style.top = `${initialY + dy}px`;
  });
- document.addEventListener('mouseup', () => isDragging = false);
+ document.addEventListener('mouseup', () => { isDragging = false; });
 })();
 </script>
 </body>
