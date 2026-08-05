@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STA122 · Probability &amp; Statistics Practice Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+ --bg:#0a0c12; --surface:#0f1117; --surface2:#141820; --surface3:#1a2030;
+ --border:#1e2640; --border2:#26304e; --ink:#e2e8f6; --ink2:#94a3c0; --ink3:#4a5878;
+ --accent:#4f8ef7; --accent2:#7c6fff; --accent-dim:#0d1630; --accent-glow:rgba(79,142,247,.14);
+ --green:#34d399; --green-dim:#0a1e14; --red:#f87171; --red-dim:#1e0a0a; --purple:#a78bfa;
+ --bar-bg:rgba(10,12,18,.92); --font-scale:1;
+ --r:16px;
+}
+html{font-size:calc(16px * var(--font-scale, 1));}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+sup{font-size:.7em;vertical-align:super;line-height:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Outfit',sans-serif;min-height:100vh;display:flex;flex-direction:column;
+ background-image:radial-gradient(ellipse 900px 600px at 10% 0%, rgba(79,142,247,.06) 0%, transparent 70%),
+ radial-gradient(ellipse 700px 500px at 90% 30%, rgba(124,111,255,.05) 0%, transparent 60%);
+ transition:background-color .2s ease, color .2s ease;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);
+ background:var(--bar-bg);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px;}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.brand-badge{background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;font-weight:800;font-size:.72rem;letter-spacing:2px;
+ padding:6px 14px;border-radius:50px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+.brand-sub{font-size:.7rem;color:var(--ink3);letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+#timer{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:600;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:7px 16px;border-radius:50px;letter-spacing:2px;min-width:96px;text-align:center;
+ display:flex;align-items:center;gap:8px;justify-content:center;}
+#timer.warn{color:var(--red);background:var(--red-dim);border-color:rgba(248,113,113,.3);animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+#soundToggle{width:38px;height:38px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);
+ color:var(--ink2);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;
+ transition:border-color .15s,color .15s,background .15s;flex-shrink:0;}
+#soundToggle:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+#soundToggle.muted{color:var(--ink3);}
+.hamburger{display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;cursor:pointer;padding:0;color:var(--ink);font-size:.95rem;transition:border-color .15s,color .15s;flex-shrink:0;}
+.hamburger:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+.hamburger .fa-xmark{display:none;} .hamburger[aria-expanded="true"] .fa-bars{display:none;} .hamburger[aria-expanded="true"] .fa-xmark{display:inline-block;}
+.mobile-nav{position:fixed;inset:0;z-index:99;background:transparent;opacity:0;pointer-events:none;transition:opacity .15s ease;}
+.mobile-nav.open{opacity:1;pointer-events:auto;}
+.mobile-nav-panel{position:absolute;top:70px;right:20px;width:250px;max-width:82vw;max-height:min(70vh,520px);background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:1px;transform:scale(.94) translateY(-8px);transform-origin:top right;opacity:0;transition:transform .16s ease,opacity .16s ease;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow-y:auto;}
+.mobile-nav.open .mobile-nav-panel{transform:scale(1) translateY(0);opacity:1;}
+.mobile-nav-panel a{display:flex;align-items:center;gap:12px;padding:11px 10px;font-size:.9rem;font-weight:600;color:var(--ink);text-decoration:none;border-radius:8px;}
+.mobile-nav-panel a:hover{background:var(--accent-glow);}
+.mobile-nav-panel a i{width:18px;text-align:center;color:var(--accent);font-size:.85rem;}
+.mobile-nav-panel a.active{color:var(--accent);background:var(--accent-dim);}
+.mobile-nav-panel .nav-group-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);padding:12px 10px 4px;}
+.mobile-nav-panel .nav-group-label:first-child{padding-top:6px;}
+main{flex:1;display:flex;justify-content:center;padding:0 16px 100px;}
+#homeScreen,#configScreen,#quizScreen,#resultScreen,#loadingScreen{width:100%;max-width:720px;}
+.hidden{display:none !important;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:32px 28px;margin-bottom:20px;}
+
+a { text-decoration: none; }
+#statsBar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;}
+.stat-chip{font-size:.78rem;color:var(--ink2);background:var(--surface2);border:1px solid var(--border);padding:8px 16px;
+ border-radius:50px;display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;}
+.stat-chip i{color:var(--accent);}
+.stat-chip strong{color:var(--ink);}
+
+/* HOME */
+.hero-wrap{padding:48px 0 8px;text-align:center;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
+ color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:500;margin-bottom:22px;background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.22);padding:7px 16px 7px 13px;border-radius:50px;}
+.hero-title{font-family:'Fraunces',serif;font-size:2.3rem;line-height:1.16;margin-bottom:16px;font-weight:600;letter-spacing:-.5px;}
+.hero-title span{color:var(--accent);font-style:italic;}
+.hero-desc{color:var(--ink2);font-size:.96rem;line-height:1.75;max-width:480px;margin:0 auto 34px;}
+
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:30px;}
+.mode-card{background:var(--surface2);border:1px solid var(--border2);border-radius:18px;padding:26px 22px;cursor:pointer;
+ transition:border-color .15s,transform .15s,background .15s;text-align:left;}
+.mode-card:hover{border-color:rgba(79,142,247,.4);transform:translateY(-3px);background:var(--surface3);}
+.mode-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;
+ display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:16px;}
+.mode-name{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;margin-bottom:8px;}
+.mode-desc{font-size:.85rem;color:var(--ink2);line-height:1.6;margin-bottom:14px;}
+.mode-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.mode-tag{font-size:.66rem;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ padding:3px 9px;border-radius:20px;font-family:'JetBrains Mono',monospace;}
+
+.section-heading{display:flex;align-items:center;gap:12px;margin:36px 0 18px;}
+.section-heading-icon{width:34px;height:34px;border-radius:10px;background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.85rem;flex-shrink:0;}
+.section-heading-text{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;}
+.rules-list{display:grid;gap:8px;}
+.rule-item{display:flex;gap:14px;align-items:flex-start;font-size:.86rem;color:var(--ink2);line-height:1.55;padding:14px 16px;
+ background:var(--surface2);border:1px solid var(--border);border-radius:10px;}
+.rule-icon{width:30px;height:30px;border-radius:8px;flex-shrink:0;background:var(--accent-dim);border:1px solid rgba(79,142,247,.2);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.78rem;margin-top:1px;}
+.rule-text strong{color:var(--ink);}
+
+/* CONFIG SCREEN */
+.config-field{margin-bottom:22px;}
+.config-label{font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.config-label i{color:var(--accent);}
+.config-input-row{display:flex;align-items:center;gap:14px;}
+.config-slider{flex:1;-webkit-appearance:none;height:6px;border-radius:6px;background:var(--border2);outline:none;}
+.config-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;box-shadow:0 2px 8px rgba(79,142,247,.4);}
+.config-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;border:none;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;}
+.config-value{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:6px 14px;border-radius:10px;min-width:74px;text-align:center;font-size:.9rem;}
+.config-hint{font-size:.74rem;color:var(--ink3);margin-top:8px;}
+.topics-grid{display:flex;flex-wrap:wrap;gap:10px;}
+.topic-chip{display:flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--border2);
+ padding:10px 16px;border-radius:12px;cursor:pointer;font-size:.85rem;transition:border-color .15s,background .15s;}
+.topic-chip:hover{border-color:rgba(79,142,247,.4);}
+.topic-chip input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);
+ color:#fff;border:none;padding:14px 28px;border-radius:50px;font-weight:700;font-size:.95rem;cursor:pointer;
+ font-family:'Outfit',sans-serif;transition:transform .15s,box-shadow .15s,opacity .2s;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(79,142,247,.3);}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--border2);padding:12px 22px;border-radius:50px;
+ font-weight:600;font-size:.9rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:border-color .15s,background .15s;
+ display:inline-flex;align-items:center;gap:8px;}
+.btn-ghost:hover{background:var(--accent-glow);border-color:rgba(79,142,247,.35);}
+.btn-ghost:disabled{opacity:.35;cursor:not-allowed;}
+
+/* LOADING SCREEN */
+#loadingScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 0;text-align:center;}
+.loader-ring{width:56px;height:56px;border-radius:50%;border:4px solid var(--border2);border-top-color:var(--accent);
+ animation:spin .8s linear infinite;margin-bottom:24px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader-text{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--ink2);}
+.loader-sub{font-size:.78rem;color:var(--ink3);margin-top:8px;font-family:'JetBrains Mono',monospace;}
+
+/* QUIZ */
+#progressWrap{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;padding-top:24px;}
+.progress-bar-track{height:4px;background:var(--border);border-radius:4px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .3s;}
+.dots-group{display:flex;gap:5px;flex-wrap:wrap;}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .15s,transform .1s;}
+.dot:hover{transform:scale(1.35);}
+.dot.answered{background:rgba(79,142,247,.4);border:1px solid var(--accent);}
+.dot.current{background:var(--accent);box-shadow:0 0 0 3px rgba(79,142,247,.25);}
+.dot.correct{background:var(--green);}
+.dot.wrong{background:var(--red);}
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.q-section-tag{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;
+ font-weight:600;background:var(--accent-dim);padding:4px 10px;border-radius:20px;border:1px solid rgba(79,142,247,.2);}
+.q-counter{font-size:.78rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;}
+.q-text{font-size:1.1rem;line-height:1.65;margin:0 0 26px;font-family:'Fraunces',serif;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.opt{display:flex;align-items:flex-start;gap:14px;padding:15px 18px;border-radius:12px;border:1px solid var(--border2);
+ margin-bottom:10px;background:var(--surface2);cursor:pointer;transition:border-color .15s,background .15s,transform .1s;}
+.opt:hover{border-color:rgba(79,142,247,.35);background:var(--surface3);}
+.opt.locked{cursor:default;}
+.opt.selected{border-color:var(--accent);background:var(--accent-dim);}
+.opt.correct{border-color:var(--green);background:var(--green-dim);}
+.opt.wrong{border-color:var(--red);background:var(--red-dim);}
+.opt-letter{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;
+ justify-content:center;font-size:.75rem;font-weight:700;color:var(--ink3);flex-shrink:0;font-family:'JetBrains Mono',monospace;
+ transition:all .15s;margin-top:1px;}
+.opt.selected .opt-letter{background:var(--accent);color:#fff;border-color:var(--accent);}
+.opt.correct .opt-letter{background:var(--green);color:#fff;border-color:var(--green);}
+.opt.wrong .opt-letter{background:var(--red);color:#fff;border-color:var(--red);}
+.opt-text{font-size:.92rem;line-height:1.55;padding-top:3px;}
+.inline-explain{display:none;margin-top:6px;margin-bottom:14px;padding:16px 18px;background:rgba(79,142,247,.05);
+ border:1px solid rgba(79,142,247,.15);border-radius:10px;font-size:.85rem;line-height:1.7;color:var(--ink2);animation:fadeUp .2s ease;}
+.inline-explain.show{display:block;}
+.inline-explain .ie-label{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;
+ margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.inline-explain.right .ie-label{color:var(--green);}
+.inline-explain.wrong .ie-label{color:var(--red);}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;}
+.kbd-hint{text-align:center;font-size:.68rem;color:var(--ink3);margin-top:14px;font-family:'JetBrains Mono',monospace;}
+.kbd-hint kbd{background:var(--surface3);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;font-family:'JetBrains Mono',monospace;}
+
+#quizTools{position:fixed;right:20px;bottom:24px;display:flex;flex-direction:column;gap:12px;z-index:60;}
+.fab{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;border:none;
+ cursor:pointer;font-size:1.05rem;box-shadow:0 8px 24px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;
+ transition:transform .15s;}
+.fab:hover{transform:translateY(-3px) scale(1.04);}
+.fab.pause-fab{background:linear-gradient(135deg,#f59e0b,#f97316);}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.72);backdrop-filter:blur(6px);z-index:200;
+ display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-card{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:26px 24px;max-width:380px;
+ width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.modal-icon{width:52px;height:52px;border-radius:50%;background:var(--accent-dim);border:1px solid rgba(79,142,247,.25);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.3rem;margin:0 auto 16px;}
+.modal-icon.warn{background:var(--red-dim);border-color:rgba(248,113,113,.3);color:var(--red);}
+.modal-title{font-family:'Fraunces',serif;font-size:1.2rem;margin-bottom:10px;}
+.modal-text{font-size:.87rem;color:var(--ink2);line-height:1.6;margin-bottom:20px;}
+
+#pauseOverlay{position:fixed;inset:0;background:rgba(6,8,14,.85);backdrop-filter:blur(16px);z-index:150;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
+#pauseOverlay .modal-icon{width:64px;height:64px;font-size:1.6rem;margin-bottom:20px;}
+#pauseOverlay h2{font-family:'Fraunces',serif;font-size:1.6rem;margin-bottom:10px;}
+#pauseOverlay p{color:var(--ink2);font-size:.9rem;max-width:320px;margin-bottom:26px;line-height:1.6;}
+
+.calc-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.55);backdrop-filter:blur(4px);z-index:180;}
+.calc-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:190;width:320px;max-width:92vw;
+ background:var(--surface);border:1px solid var(--border2);border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.55);overflow:hidden;}
+.calc-panel.dragged{transform:none;}
+.calc-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface2);
+ border-bottom:1px solid var(--border);cursor:grab;font-size:.8rem;font-weight:600;color:var(--ink2);user-select:none;gap:8px;}
+.calc-header:active{cursor:grabbing;}
+.calc-header-title{display:flex;align-items:center;gap:8px;}
+.calc-header-title i{color:var(--accent);}
+.calc-mode-toggle{display:flex;gap:4px;background:var(--surface3);border-radius:8px;padding:3px;}
+.calc-mode-btn{background:transparent;border:none;color:var(--ink3);font-size:.62rem;font-family:'JetBrains Mono',monospace;
+ padding:5px 9px;border-radius:6px;cursor:pointer;font-weight:700;letter-spacing:.5px;}
+.calc-mode-btn.active{background:var(--accent);color:#fff;}
+.calc-close-btn{background:none;border:none;color:var(--ink3);font-size:1rem;cursor:pointer;line-height:1;}
+.calc-display{padding:18px 16px 10px;text-align:right;}
+.calc-expr{font-size:.82rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;min-height:18px;overflow-x:auto;white-space:nowrap;}
+.calc-result{font-size:1.65rem;font-weight:700;color:var(--ink);font-family:'JetBrains Mono',monospace;margin-top:4px;
+ overflow-x:auto;white-space:nowrap;}
+.calc-result.err{color:var(--red);}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 16px 20px;}
+.calc-btn{background:var(--surface3);border:1px solid var(--border2);color:var(--ink);border-radius:10px;padding:12px 0;
+ font-size:.92rem;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:background .15s;}
+.calc-btn:hover{background:var(--border2);}
+.calc-btn.op{color:var(--accent);}
+.calc-btn.fn{color:var(--purple);font-size:.76rem;}
+.calc-btn.clear{color:var(--red);}
+.calc-btn.equals{background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;border:none;}
+
+.result-hero{text-align:center;padding:26px 0 22px;border-bottom:1px solid var(--border);margin-bottom:26px;}
+.result-ring{display:inline-flex;align-items:center;justify-content:center;width:124px;height:124px;border-radius:50%;
+ border:3px solid var(--accent);background:var(--accent-dim);margin-bottom:16px;}
+.result-score{font-family:'JetBrains Mono',monospace;font-size:2.3rem;font-weight:700;color:var(--accent);}
+.result-of{font-size:.8rem;color:var(--ink3);margin-top:2px;}
+.result-pct{font-family:'Fraunces',serif;font-size:1.5rem;margin-bottom:6px;}
+.result-msg{color:var(--ink2);font-size:.9rem;line-height:1.6;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.best-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;color:#facc15;background:rgba(250,204,21,.08);
+ border:1px solid rgba(250,204,21,.25);padding:4px 12px;border-radius:20px;margin-top:10px;font-family:'JetBrains Mono',monospace;}
+.breakdown-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:26px;}
+.bd-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.bd-name{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.bd-score{font-size:1.35rem;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.bd-total{font-size:.72rem;color:var(--ink3);}
+.review-section-title{font-family:'Fraunces',serif;font-size:1.1rem;border-bottom:1px solid var(--border);padding-bottom:12px;
+ margin:22px 0 16px;display:flex;align-items:center;gap:10px;}
+.review-item{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px;background:var(--surface2);}
+.review-item.right{border-left:3px solid var(--green);}
+.review-item.miss{border-left:3px solid var(--red);}
+.ri-q{font-size:.9rem;margin-bottom:10px;line-height:1.6;}
+.ri-section{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:5px;}
+.ri-ans{font-size:.83rem;margin-top:5px;display:flex;align-items:flex-start;gap:7px;}
+.ri-ans.right{color:var(--green);}
+.ri-ans.wrong{color:var(--red);}
+.ri-ans.correct-reveal{color:#2dd4bf;}
+.ri-exp{margin-top:10px;padding:12px 14px;background:rgba(79,142,247,.04);border:1px solid rgba(79,142,247,.12);
+ border-radius:9px;font-size:.82rem;line-height:1.65;color:var(--ink2);}
+
+footer{text-align:center;font-size:.7rem;color:var(--ink3);padding:18px;border-top:1px solid var(--border);
+ font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+footer i{color:var(--accent);}
+
+@media(max-width:560px){
+ .card{padding:22px 16px;}
+ .mode-grid{grid-template-columns:1fr;}
+ .hero-title{font-size:1.8rem;}
+ .breakdown-grid{grid-template-columns:repeat(2,1fr);}
+ #quizTools{right:14px;bottom:18px;}
+}
+
+@media print{
+ @page{ margin:14mm; }
+ *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
+ .topbar, footer, #quizTools, #homeBtn, #retryBtn, #printBtn, .kbd-hint, #statsBar,
+ #calcBackdrop, #calcPanel, #pauseOverlay, #leaveWarningModal, #resumeModal, #soundToggle, .hamburger, .mobile-nav { display:none !important; }
+ body{background:#fff;color:#000;}
+ main{padding:0;}
+ .card{border:1px solid #ccc;background:#fff;box-shadow:none;}
+ .bd-card, .review-item{background:#f6f6f6;border-color:#ddd;}
+ .ri-exp{background:#f0f4ff;border-color:#cfd9ff;color:#333;}
+ .result-hero, .bd-card, .review-item{ break-inside:avoid; page-break-inside:avoid; }
+ .review-item{ margin-bottom:14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+ <div class="brand">
+ <span class="brand-badge">STA122</span>
+ <div class="brand-sub"><i class="fa-solid fa-chart-line" style="margin-right:5px;"></i>Probability &amp; Statistics · Combinatorics · Distributions · Inference</div>
+ </div>
+ <div style="display:flex;align-items:center;gap:10px;">
+ <div id="timer" class="hidden"><i class="fa-regular fa-clock"></i><span id="timerText">00:00</span></div>
+ <button id="soundToggle" title="Mute sounds" aria-label="Mute sounds" aria-pressed="false"></button>
+ <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
+ <i class="fa-solid fa-bars"></i>
+ <i class="fa-solid fa-xmark"></i>
+ </button>
+ </div>
+</div>
+
+<div class="mobile-nav" id="mobileNav">
+ <div class="mobile-nav-panel">
+ <span class="nav-group-label">Navigate</span>
+ <a href="../dashboard.html"><i class="fa-solid fa-house"></i>Home / Dashboard</a>
+ <a href="../aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+ <span class="nav-group-label">DTZ TRIO</span>
+ <a href="../about.html"><i class="fa-solid fa-users"></i>About Us</a>
+ <a href="../social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+ <span class="nav-group-label">Account</span>
+ <a href="../set.html"><i class="fa-solid fa-gear"></i>Settings</a>
+ <a href="../help.html"><i class="fa-solid fa-circle-question"></i>Help &amp; FAQ</a>
+ </div>
+</div>
+
+<main>
+
+<!-- HOME SCREEN -->
+<div id="homeScreen">
+ <div class="hero-wrap">
+ <div class="hero-eyebrow"><i class="fa-solid fa-chart-line"></i> STA122 Practice Quiz</div>
+ <h1 class="hero-title">100 questions,<br><span>two ways to train.</span></h1>
+ <p class="hero-desc">Covering Combinatorics, Probability, Conditional Probability &amp; Bayes, Random Variables, Special Distributions, and Continuous/Inferential Statistics — with full worked explanations for every question.</p>
+ </div>
+
+ <div id="statsBar" class="hidden"></div>
+
+ <div class="mode-grid">
+ <div class="mode-card" id="pickAuto">
+ <div class="mode-icon"><i class="fa-solid fa-gauge-high"></i></div>
+ <div class="mode-name">Automatic Timer</div>
+ <div class="mode-desc">All 100 questions, shuffled, with a timer the app sets for you. Get instant feedback the moment you answer, and pause any time you need a break.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-regular fa-clock"></i> Auto-set clock</span>
+ <span class="mode-tag"><i class="fa-solid fa-list-check"></i> 100 Qs</span>
+ <span class="mode-tag"><i class="fa-solid fa-pause"></i> Pausable</span>
+ </div>
+ </div>
+ <div class="mode-card" id="pickCustom">
+ <div class="mode-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="mode-name">Custom Timer</div>
+ <div class="mode-desc">Pick your own topics, time limit, and question count. Answer everything first — no pausing, and no feedback until you submit.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-solid fa-sliders"></i> Custom setup</span>
+ <span class="mode-tag"><i class="fa-solid fa-ban"></i> No pausing</span>
+ <span class="mode-tag"><i class="fa-solid fa-flag-checkered"></i> Results at end</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="section-heading">
+ <div class="section-heading-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+ <div class="section-heading-text">How each mode works</div>
+ </div>
+ <div class="rules-list">
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-gauge-high"></i></span>
+ <span class="rule-text"><strong>Automatic Timer</strong> runs all 100 questions with a clock the app manages for you. Tap an option and it's locked in immediately — correct turns green, wrong turns red, with a short explanation right away. Tap <strong>Pause</strong> any time to freeze the clock and blur the screen. You must answer at least <strong>30 questions</strong> before you can submit.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-sliders"></i></span>
+ <span class="rule-text"><strong>Custom Timer</strong> lets you choose specific topics, your own time limit (up to 120 min), and how many questions to include. It cannot be paused — answers stay hidden until you submit, then you get a full score breakdown and review.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-calculator"></i></span>
+ <span class="rule-text">A full <strong>scientific calculator</strong> — sin/cos/tan, log, ln, √, powers, π and e — is available as a draggable floating window in both modes.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-shield-halved"></i></span>
+ <span class="rule-text">Your progress is <strong>auto-saved</strong> as you go, so a refresh won't lose your place. For fairness, switching away from the tab is tracked — leaving 3 times in one quiz resets it.</span></div>
+ </div>
+</div>
+
+<!-- CONFIG SCREEN -->
+<div id="configScreen" class="hidden">
+ <div class="section-heading" style="margin-top:36px;">
+ <div class="section-heading-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="section-heading-text">Set up your Custom Timer exam</div>
+ </div>
+ <div class="card">
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-layer-group"></i> Topics to include</div>
+ <div class="topics-grid" id="topicsWrap"></div>
+ <div class="config-hint" id="topicsHint">Select at least one topic.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-regular fa-clock"></i> Time limit (minutes)</div>
+ <div class="config-input-row">
+ <input type="range" id="timeSlider" class="config-slider" min="5" max="120" step="5" value="60">
+ <span class="config-value" id="timeValue">60</span>
+ </div>
+ <div class="config-hint">Maximum 120 minutes. This clock cannot be paused once the exam starts.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-list-ol"></i> Number of questions</div>
+ <div class="config-input-row">
+ <input type="range" id="countSlider" class="config-slider" min="1" max="100" step="1" value="50">
+ <span class="config-value" id="countValue">50</span>
+ </div>
+ <div class="config-hint" id="countHint">Randomly picked from the selected topics.</div>
+ </div>
+ <div class="nav-row" style="margin-top:8px;">
+ <button class="btn-ghost" id="backToHomeFromConfig"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <button class="btn" id="startCustomBtn"><i class="fa-solid fa-play"></i> Start Custom Timer</button>
+ </div>
+ </div>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" class="hidden">
+ <div class="loader-ring"></div>
+ <div class="loader-text">Preparing your questions…</div>
+ <div class="loader-sub">Shuffling &amp; randomizing options</div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="quizScreen" class="hidden">
+ <div id="progressWrap">
+ <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+ <div class="dots-group" id="dotsRow"></div>
+ </div>
+ <div class="card">
+ <div class="q-meta">
+ <span class="q-section-tag" id="sectionTag"></span>
+ <span class="q-counter" id="qCounter"></span>
+ </div>
+ <div class="q-text" id="qText"></div>
+ <div id="optsWrap"></div>
+ <div id="inlineExplain" class="inline-explain"></div>
+ <div class="nav-row">
+ <button class="btn-ghost" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <div style="display:flex;gap:8px;">
+ <button class="btn" id="nextBtn">Next <i class="fa-solid fa-arrow-right"></i></button>
+ <button class="btn hidden" id="finishBtn"><i class="fa-solid fa-check"></i> Submit Quiz</button>
+ </div>
+ </div>
+ <div class="kbd-hint">Keyboard: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate &nbsp;·&nbsp; <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to select</div>
+ </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="hidden">
+ <div class="card">
+ <div class="result-hero">
+ <div class="result-ring"><div><div class="result-score" id="resultScore">0</div><div class="result-of" id="resultOf">/ 100</div></div></div>
+ <div class="result-pct" id="resultPct"></div>
+ <div class="result-msg" id="resultMsg"></div>
+ <div id="bestBadge"></div>
+ </div>
+ <div class="breakdown-grid" id="breakdownGrid"></div>
+ <div class="review-section-title"><i class="fa-solid fa-magnifying-glass"></i> Question Review</div>
+ <div id="reviewList"></div>
+ <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;">
+ <button class="btn-ghost" id="homeBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-house"></i> Home</button>
+ <button class="btn-ghost" id="printBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+ <button class="btn" id="retryBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-rotate-right"></i> Retake</button>
+ </div>
+ </div>
+</div>
+
+</main>
+
+<!-- FLOATING QUIZ TOOLS -->
+<div id="quizTools" class="hidden">
+ <button class="fab pause-fab hidden" id="pauseBtn" title="Pause"><i class="fa-solid fa-pause"></i></button>
+ <button class="fab" id="calcFab" title="Calculator"><i class="fa-solid fa-calculator"></i></button>
+</div>
+
+<!-- SCIENTIFIC CALCULATOR -->
+<div id="calcBackdrop" class="calc-backdrop hidden"></div>
+<div id="calcPanel" class="calc-panel hidden">
+ <div id="calcHeader" class="calc-header">
+ <div class="calc-header-title"><i class="fa-solid fa-calculator"></i> Calculator</div>
+ <div class="calc-mode-toggle">
+ <button type="button" id="calcModeDeg" class="calc-mode-btn active">DEG</button>
+ <button type="button" id="calcModeRad" class="calc-mode-btn">RAD</button>
+ </div>
+ <button type="button" id="calcClose" class="calc-close-btn"><i class="fa-solid fa-xmark"></i></button>
+ </div>
+ <div class="calc-display">
+ <div id="calcExpr" class="calc-expr">&nbsp;</div>
+ <div id="calcResult" class="calc-result">0</div>
+ </div>
+ <div id="calcGrid" class="calc-grid"></div>
+</div>
+
+<!-- PAUSE OVERLAY -->
+<div id="pauseOverlay" class="hidden">
+ <div class="modal-icon"><i class="fa-solid fa-pause"></i></div>
+ <h2>Quiz Paused</h2>
+ <p>The clock is frozen and nothing on this screen is visible or clickable until you resume.</p>
+ <button class="btn" id="resumeFromPauseBtn"><i class="fa-solid fa-play"></i> Resume Quiz</button>
+</div>
+
+<!-- LEAVE-WARNING MODAL -->
+<div id="leaveWarningModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></div>
+ <div class="modal-title">You left the quiz</div>
+ <div class="modal-text" id="leaveWarnText"></div>
+ <button class="btn" id="leaveWarnOk">Okay, continue</button>
+ </div>
+</div>
+
+<!-- RESUME AUTOSAVE MODAL -->
+<div id="resumeModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+ <div class="modal-title">Resume your quiz?</div>
+ <div class="modal-text">We found a quiz in progress:<br><strong id="resumeInfo" style="color:var(--ink);"></strong></div>
+ <div style="display:flex;gap:10px;">
+ <button class="btn-ghost" id="resumeNo" style="flex:1;justify-content:center;">Discard</button>
+ <button class="btn" id="resumeYes" style="flex:1;justify-content:center;">Resume</button>
+ </div>
+ </div>
+</div>
+
+<footer><i class="fa-solid fa-chart-line"></i> STA122 &nbsp;·&nbsp; Probability &amp; Statistics Practice Quiz</footer>
+
+<script>
+/* ============================================================
+ HAMBURGER / MOBILE NAV
+ ============================================================ */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+function closeMobileNav(){mobileNav.classList.remove('open');hamburgerBtn.setAttribute('aria-expanded','false');}
+function toggleMobileNav(){const isOpen = mobileNav.classList.toggle('open');hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');}
+hamburgerBtn.addEventListener('click', toggleMobileNav);
+mobileNav.addEventListener('click', (e)=>{ if(e.target === mobileNav) closeMobileNav(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMobileNav(); });
+
+/* ============================================================
+ STA122 — 100-QUESTION BANK
+ (Combinatorics · Basic Probability · Conditional Probability & Bayes ·
+  Discrete Random Variables · Special Distributions · Continuous RVs & Inference)
+ ============================================================ */
+const QUESTIONS = [
+// COMBINATORICS (1-15)
+{sec:'Combinatorics', q:"How many three-letter words can be formed from the letters {a, b, c, d, e} if letters can be used at most once?", opts:["60","125","10","15"], ans:0, ex:"This is a permutation of 5 items taken 3 at a time (no repetition): 5P3 = 5×4×3 = 60."},
+{sec:'Combinatorics', q:"How many different sequences are possible for a Vice-Chancellor visiting a Registrar, Bursar, and Librarian?", opts:["6","3","9","1"], ans:0, ex:"There are 3! = 3×2×1 = 6 ways to order the three visits."},
+{sec:'Combinatorics', q:"Calculate the number of ways 3 out of 18 automobile engines can be chosen for a team.", opts:["816","4,896","5,814","54"], ans:0, ex:"Since order doesn't matter, use combinations: C(18,3) = 18!/(3!·15!) = 816."},
+{sec:'Combinatorics', q:"How many five-letter words can be formed using the 26 letters of the English alphabet if repetitions are allowed?", opts:["11,881,376","7,893,600","65,780","7,893,376"], ans:0, ex:"With repetition allowed, each of the 5 positions has 26 choices: 26⁵ = 11,881,376."},
+{sec:'Combinatorics', q:"In how many ways can 9 books be arranged on a shelf?", opts:["362,880","40,320","9","81"], ans:0, ex:"All 9 books arranged in a row: 9! = 362,880."},
+{sec:'Combinatorics', q:"Evaluate 5P3 / 6P2.", opts:["2","1","3","0.5"], ans:0, ex:"5P3 = 60 and 6P2 = 30, so 60/30 = 2."},
+{sec:'Combinatorics', q:"In how many ways can a committee of 7 members be constituted from 10 members?", opts:["120","5,040","70","720"], ans:0, ex:"C(10,7) = C(10,3) = 120 (choosing 7 to include is equivalent to choosing 3 to leave out)."},
+{sec:'Combinatorics', q:"In how many ways can 10 people be seated on a bench if only 4 seats are available?", opts:["5,040","210","40","10,000"], ans:0, ex:"This is a permutation: 10P4 = 10×9×8×7 = 5,040."},
+{sec:'Combinatorics', q:"Calculate the number of permutations that can be formed using the word 'STATISTICS.'", opts:["50,400","3,628,800","604,800","25,200"], ans:0, ex:"STATISTICS has 10 letters with S×3, T×3, I×2, A×1, C×1: 10!/(3!·3!·2!) = 50,400."},
+{sec:'Combinatorics', q:"Evaluate 8P3 - 5P2.", opts:["316","336","300","356"], ans:0, ex:"8P3 = 336 and 5P2 = 20, so 336 - 20 = 316."},
+{sec:'Combinatorics', q:"Compute 7P4 / 4P4.", opts:["35","840","24","5"], ans:0, ex:"7P4 = 840 and 4P4 = 24, so 840/24 = 35."},
+{sec:'Combinatorics', q:"If nC(n-2) = 10, find the value of n.", opts:["5","10","4","6"], ans:0, ex:"nC(n-2) = nC2 = n(n-1)/2 = 10, so n(n-1) = 20, giving n = 5."},
+{sec:'Combinatorics', q:"How many different arrangements of nine Christmas tree lights can be made if there are three red, four yellow, and two blue bulbs?", opts:["1,260","362,880","9!","126"], ans:0, ex:"With repeated colors: 9!/(3!·4!·2!) = 1,260."},
+{sec:'Combinatorics', q:"In how many ways can a committee of 4 be chosen from 10 people if one specific person must be the chairperson?", opts:["84","210","720","126"], ans:0, ex:"With the chair fixed, choose the remaining 3 members from the other 9 people: C(9,3) = 84."},
+{sec:'Combinatorics', q:"If an operation can be performed in n₁ ways and a second in n₂ ways, how many ways can both be performed?", opts:["n₁ × n₂","n₁ + n₂","n₁ⁿ²","n₁ / n₂"], ans:0, ex:"By the fundamental counting principle, performing both operations together gives n₁ × n₂ ways."},
+
+// BASIC PROBABILITY (16-30)
+{sec:'Basic Probability', q:"A box contains 10 balls: 4 yellow, 2 red, and 4 orange. How many distinct patterns can be formed by arranging all these balls?", opts:["3,150","10!","907,200","630"], ans:0, ex:"With repeated colors: 10!/(4!·2!·4!) = 3,150."},
+{sec:'Basic Probability', q:"A 6-sided die and a 4-sided die are thrown. Determine the total number of sample points in the sample space.", opts:["24","10","6","4"], ans:0, ex:"Each pair of outcomes (die1, die2) is a sample point, giving 6×4 = 24 total outcomes."},
+{sec:'Basic Probability', q:"Find the probability of obtaining a sum of 3 when two dice are thrown.", opts:["1/18","1/6","1/12","1/36"], ans:0, ex:"A sum of 3 occurs for (1,2) and (2,1): 2 out of 36 outcomes, giving 2/36 = 1/18."},
+{sec:'Basic Probability', q:"Find the probability that a number chosen at random from {4 ≤ x ≤ 17} is a perfect square.", opts:["3/14","2/14","4/14","1/14"], ans:0, ex:"There are 14 integers from 4 to 17; the perfect squares among them are 4, 9, and 16, giving 3/14."},
+{sec:'Basic Probability', q:"A bag contains 5 blue, 3 red, and 2 black balls. If one is drawn at random, what is the probability it is red?", opts:["3/10","1/5","1/2","3/5"], ans:0, ex:"There are 10 balls total, 3 of which are red: P(red) = 3/10."},
+{sec:'Basic Probability', q:"If one card is drawn from a deck of 52, what is the probability it is a queen or a heart?", opts:["4/13","17/52","1/13","5/13"], ans:0, ex:"P(Q∪H) = P(Q) + P(H) - P(Q∩H) = 4/52 + 13/52 - 1/52 = 16/52 = 4/13."},
+{sec:'Basic Probability', q:"If P(A) = 0.45, P(B) = 0.63, and P(A ∩ B) = 0.72, find P(A ∪ B).", opts:["0.36","1.80","0.18","0.72"], ans:0, ex:"Using P(A∪B) = P(A) + P(B) - P(A∩B) = 0.45 + 0.63 - 0.72 = 0.36."},
+{sec:'Basic Probability', q:"If P(A ∩ B) = 0.28 and P(A ∩ B') = 0.32, what is P(A)?", opts:["0.60","0.04","0.28","0.32"], ans:0, ex:"Since B and B' partition the sample space, P(A) = P(A∩B) + P(A∩B') = 0.28 + 0.32 = 0.60."},
+{sec:'Basic Probability', q:"A coin is tossed ten times. How many total possible outcomes exist?", opts:["1,024","20","100","512"], ans:0, ex:"Each toss has 2 outcomes, so 2¹⁰ = 1,024 total sequences."},
+{sec:'Basic Probability', q:"Three coins are tossed. What is the total number of sample points in the sample space?", opts:["8","6","3","9"], ans:0, ex:"Each coin has 2 outcomes, so 2³ = 8 sample points."},
+{sec:'Basic Probability', q:"Determine the probability of obtaining a multiple of 3 if a 6-sided die is rolled once.", opts:["1/3","1/6","1/2","2/3"], ans:0, ex:"Multiples of 3 on a die are {3,6}: 2 out of 6 outcomes, giving 2/6 = 1/3."},
+{sec:'Basic Probability', q:"In a box of 260 bolts, 5 are defective. What is the probability that a randomly selected bolt is not defective?", opts:["51/52","1/52","5/52","49/52"], ans:0, ex:"P(not defective) = 255/260 = 51/52 ≈ 0.981."},
+{sec:'Basic Probability', q:"What is the probability of a 'prime sum' if two fair dice are tossed?", opts:["5/12","1/6","1/2","7/36"], ans:0, ex:"Prime sums (2,3,5,7,11) occur in 1+2+4+6+2 = 15 of the 36 outcomes: 15/36 = 5/12."},
+{sec:'Basic Probability', q:"A coin is tossed four times. Find the probability of getting at least two heads.", opts:["11/16","5/16","1/2","3/4"], ans:0, ex:"P(at least 2) = 1 - P(0 heads) - P(1 head) = 1 - 1/16 - 4/16 = 11/16."},
+{sec:'Basic Probability', q:"If A, B, and C are mutually exclusive events with P(A)=0.2, P(B)=0.3, and P(C)=0.5, find P(A ∪ B ∪ C).", opts:["1.0","0.6","0.7","0.3"], ans:0, ex:"For mutually exclusive events, the probabilities simply add: 0.2 + 0.3 + 0.5 = 1.0."},
+
+// CONDITIONAL PROBABILITY & BAYES' THEOREM (31-45)
+{sec:'Conditional Probability', q:"If P(B|A) = 0.08 and P(A) = 0.75, find P(A ∩ B).", opts:["0.06","0.83","0.094","0.60"], ans:0, ex:"P(A∩B) = P(B|A) × P(A) = 0.08 × 0.75 = 0.06."},
+{sec:'Conditional Probability', q:"A couple has two children. If the eldest is a girl, what is the probability that both are girls?", opts:["1/2","1/4","1/3","3/4"], ans:0, ex:"Given the eldest is a girl, the younger child is independently a girl with probability 1/2."},
+{sec:'Conditional Probability', q:"Suppose 30% of a population are Obese, 7% suffer from diabetes, and 5% are both. Find the probability a person is Obese or suffers from diabetes.", opts:["0.32","0.37","0.30","0.35"], ans:0, ex:"P(Obese ∪ Diabetes) = 0.30 + 0.07 - 0.05 = 0.32."},
+{sec:'Conditional Probability', q:"Suppose 1 in 1000 persons has a disease. A test is 99% accurate for diseased people and has a 5% false-positive rate for healthy people. Calculate the probability a person has the disease given a positive test.", opts:["≈1.9%","≈95%","≈99%","≈50%"], ans:0, ex:"By Bayes' theorem: P(D|+) = (0.99×0.001)/[(0.99×0.001)+(0.05×0.999)] ≈ 0.00099/0.05094 ≈ 0.019, about 1.9%."},
+{sec:'Conditional Probability', q:"An insurance company finds 4% of people under 30 and 2% over 30 file claims. If 30% of the population is under 30, find the total probability of a claim.", opts:["0.026","0.030","0.020","0.060"], ans:0, ex:"Total probability: P(claim) = 0.3×0.04 + 0.7×0.02 = 0.012 + 0.014 = 0.026."},
+{sec:'Conditional Probability', q:"Machines M1, M2, M3 produce 10%, 30%, 60% of items respectively, with defect rates 4%, 3%, 2%. If an item is defective, find the probability it came from M1.", opts:["0.16","0.04","0.40","0.10"], ans:0, ex:"P(defective) = 0.1(.04)+0.3(.03)+0.6(.02) = 0.025. P(M1|defective) = 0.004/0.025 = 0.16."},
+{sec:'Conditional Probability', q:"If P(A|B) = P(A), what does this imply about the relationship between events A and B?", opts:["A and B are independent","A and B are mutually exclusive","A is a subset of B","B always occurs"], ans:0, ex:"When conditioning on B does not change the probability of A, the events are independent by definition."},
+{sec:'Conditional Probability', q:"Calculate P(A|B) if P(A ∩ B) = 0.2 and P(B) = 0.5.", opts:["0.4","0.1","2.5","0.7"], ans:0, ex:"P(A|B) = P(A∩B)/P(B) = 0.2/0.5 = 0.4."},
+{sec:'Conditional Probability', q:"Two balls are drawn without replacement from a bag with 2 white and 3 black balls. Find the probability the second ball is white.", opts:["2/5","1/5","3/5","1/2"], ans:0, ex:"By symmetry, every position in the sequence is equally likely to be white overall: P(second white) = 2/5."},
+{sec:'Conditional Probability', q:"Find P(A ∪ B) if A and B are independent, P(A)=0.3, and P(B)=0.4.", opts:["0.58","0.70","0.12","0.42"], ans:0, ex:"For independent events, P(A∪B) = P(A) + P(B) - P(A)P(B) = 0.3 + 0.4 - 0.12 = 0.58."},
+{sec:'Conditional Probability', q:"If 28% of Nigerians smoke cigarettes, 7% smoke cigars, and 5% smoke both, what is the probability a person smokes neither?", opts:["0.70","0.30","0.65","0.35"], ans:0, ex:"P(smokes) = 0.28 + 0.07 - 0.05 = 0.30, so P(neither) = 1 - 0.30 = 0.70."},
+{sec:'Conditional Probability', q:"A card is drawn from a deck. Find P(Queen | Heart).", opts:["1/13","1/52","4/13","1/4"], ans:0, ex:"Given it's a heart (13 cards), only 1 is a queen: P(Queen|Heart) = 1/13."},
+{sec:'Conditional Probability', q:"Find P(Queen | Face Card) from a standard deck.", opts:["1/3","1/12","1/13","4/12 rounded to 1/4"], ans:0, ex:"There are 12 face cards, 4 of which are queens: P(Queen|Face) = 4/12 = 1/3."},
+{sec:'Conditional Probability', q:"If P(A)=0.4 and P(B)=0.5 and they are mutually exclusive, find P(A ∩ B).", opts:["0","0.20","0.90","0.10"], ans:0, ex:"Mutually exclusive events cannot occur together, so P(A∩B) = 0."},
+{sec:'Conditional Probability', q:"Given P(A ∩ B) = 0.12 and P(A)=0.4, find P(B|A).", opts:["0.30","0.48","0.12","3.33"], ans:0, ex:"P(B|A) = P(A∩B)/P(A) = 0.12/0.4 = 0.30."},
+
+// DISCRETE RANDOM VARIABLES: PMF, MEAN, VARIANCE (46-65)
+{sec:'Discrete Random Variables', q:"If f(x) = cx³/9 for x ∈ {1, 2, 3}, find the value of the constant c.", opts:["1/4","1/9","1/36","9"], ans:0, ex:"The probabilities must sum to 1: c(1+8+27)/9 = 4c = 1, so c = 1/4."},
+{sec:'Discrete Random Variables', q:"Find the mean of the probability function: p(0)=0.3164, p(1)=0.4219, p(2)=0.2109, p(3)=0.0469, p(4)=0.0039.", opts:["≈1.0","≈2.0","≈0.5","≈1.5"], ans:0, ex:"Mean = Σxp(x) = 0(.3164)+1(.4219)+2(.2109)+3(.0469)+4(.0039) ≈ 1.0."},
+{sec:'Discrete Random Variables', q:"Using the values from the previous distribution, calculate the variance.", opts:["≈0.75","≈1.0","≈0.5","≈1.75"], ans:0, ex:"E[X²] ≈ 1.75, so Var = E[X²] - (E[X])² = 1.75 - 1² = 0.75."},
+{sec:'Discrete Random Variables', q:"A random variable X has P(0)=1/6, P(-3)=1/2, P(4)=1/3. Calculate the variance.", opts:["≈9.81","≈9.83","≈0.17","≈4.5"], ans:0, ex:"E[X] ≈ -0.167 and E[X²] ≈ 9.833, so Var = 9.833 - (-0.167)² ≈ 9.81."},
+{sec:'Discrete Random Variables', q:"For what value of k is k/x a proper distribution function for x ∈ {1, 2}?", opts:["2/3","1/2","1","3/2"], ans:0, ex:"k/1 + k/2 = 1 gives 1.5k = 1, so k = 2/3."},
+{sec:'Discrete Random Variables', q:"Calculate the expected value E[X] for a fair 6-sided die.", opts:["3.5","3","4","3.0 rounded"], ans:0, ex:"E[X] = (1+2+3+4+5+6)/6 = 3.5."},
+{sec:'Discrete Random Variables', q:"Calculate the variance for a fair 6-sided die.", opts:["35/12 ≈ 2.92","3.5","91/6","1"], ans:0, ex:"Var = E[X²] - (E[X])² = 91/6 - 3.5² = 15.167 - 12.25 = 35/12 ≈ 2.92."},
+{sec:'Discrete Random Variables', q:"If E[X] = 5, find E[2X + 3].", opts:["13","10","8","5"], ans:0, ex:"By linearity of expectation: E[2X+3] = 2E[X] + 3 = 2(5) + 3 = 13."},
+{sec:'Discrete Random Variables', q:"If Var(X) = 4, find Var(3X + 10).", opts:["36","12","9","30"], ans:0, ex:"Var(aX+b) = a²Var(X), so Var(3X+10) = 9(4) = 36."},
+{sec:'Discrete Random Variables', q:"Find the first moment about 0 for the distribution {2, 4, 6, 8, 10, 12, 14}.", opts:["8","7","56","6"], ans:0, ex:"The first moment about 0 (the mean) is the average of the values: 56/7 = 8."},
+{sec:'Discrete Random Variables', q:"Find the second moment about the mean for the distribution in the previous question.", opts:["16","8","112","4"], ans:0, ex:"Squared deviations from the mean (8) sum to 112; dividing by 7 gives a variance of 16."},
+{sec:'Discrete Random Variables', q:"For a Bernoulli distribution with p=0.6, calculate the variance.", opts:["0.24","0.60","0.36","0.40"], ans:0, ex:"Var = p(1-p) = 0.6 × 0.4 = 0.24."},
+{sec:'Discrete Random Variables', q:"A discrete variable X has P(X=1)=1/8, P(x)=cx/16 for x=2,3,4, and P(5)=1/64. Find c.", opts:["55/36","1","9/16","5/9"], ans:0, ex:"Setting the total probability to 1: 1/8 + 9c/16 + 1/64 = 1 gives c = 55/36."},
+{sec:'Discrete Random Variables', q:"If f(x) = k(3x-1) for 0 ≤ x ≤ 1, find k for a valid probability density.", opts:["2","1","1/2","3"], ans:0, ex:"∫₀¹k(3x-1)dx = k(1/2) = 1, so k = 2."},
+{sec:'Discrete Random Variables', q:"Find E[X²] for the distribution where P(0)=1/6, P(-3)=1/2, P(4)=1/3.", opts:["≈9.83","≈9.81","4.5","5.33"], ans:0, ex:"E[X²] = 0(1/6) + 9(1/2) + 16(1/3) = 4.5 + 5.333 ≈ 9.83."},
+{sec:'Discrete Random Variables', q:"If X is the number of heads in 3 coin tosses, find P(X ≤ 2).", opts:["7/8","1/8","3/8","1/2"], ans:0, ex:"P(X≤2) = 1 - P(X=3) = 1 - 1/8 = 7/8."},
+{sec:'Discrete Random Variables', q:"Find the expected value of the pay-off g(X)=X² for a single die roll.", opts:["91/6 ≈ 15.17","3.5","12.25","6"], ans:0, ex:"E[X²] = (1+4+9+16+25+36)/6 = 91/6 ≈ 15.17."},
+{sec:'Discrete Random Variables', q:"Calculate the standard deviation for the distribution {2, 4, 6, 8, 10, 12, 14}.", opts:["4","16","2","8"], ans:0, ex:"Since the variance is 16, the standard deviation is √16 = 4."},
+{sec:'Discrete Random Variables', q:"If p(x) = (1/2)^x for x=1, 2, 3..., find P(X ≤ 3).", opts:["7/8","1/2","3/4","15/16"], ans:0, ex:"P(X≤3) = 1/2 + 1/4 + 1/8 = 7/8."},
+{sec:'Discrete Random Variables', q:"Find E[X] for the distribution where p(k) = 1/2^k for k=1, 2, 3...", opts:["2","1","1/2","4"], ans:0, ex:"This is a geometric distribution with p=1/2; E[X] = 1/p = 2."},
+
+// SPECIAL DISTRIBUTIONS: BINOMIAL AND POISSON (66-80)
+{sec:'Special Distributions', q:"If 1% of machine tools are defective, find the mean number of defective parts in a sample of 25.", opts:["0.25","1","25","2.5"], ans:0, ex:"Mean = np = 25 × 0.01 = 0.25."},
+{sec:'Special Distributions', q:"In a binomial distribution with n=5 and p=0.3, find the probability of exactly 3 successes.", opts:["≈0.132","≈0.309","≈0.028","≈0.216"], ans:0, ex:"P(X=3) = C(5,3)(0.3)³(0.7)² = 10 × 0.027 × 0.49 ≈ 0.132."},
+{sec:'Special Distributions', q:"If 4% of items are defective, find the probability that a sample of 100 has at least 2 defectives (use Poisson approximation, λ=4).", opts:["≈0.908","≈0.092","≈0.865","≈0.982"], ans:0, ex:"With λ=4: P(X≥2) = 1 - e⁻⁴ - 4e⁻⁴ = 1 - 5e⁻⁴ ≈ 1 - 0.0916 = 0.908."},
+{sec:'Special Distributions', q:"Using the data in the previous question, find the probability of exactly 4 defectives using the Poisson approximation.", opts:["≈0.195","≈0.092","≈0.147","≈0.084"], ans:0, ex:"P(X=4) = e⁻⁴(4⁴)/4! = 0.0183 × 256/24 ≈ 0.195."},
+{sec:'Special Distributions', q:"For a Poisson distribution with λ = 6, find the probability that X=2.", opts:["≈0.045","≈0.149","≈0.0025","≈0.161"], ans:0, ex:"P(X=2) = e⁻⁶(6²)/2! = 0.002479 × 18 ≈ 0.045."},
+{sec:'Special Distributions', q:"If customers arrive at 6 per hour, what is the probability that more than 2 arrive in an hour?", opts:["≈0.938","≈0.062","≈0.446","≈0.762"], ans:0, ex:"P(X>2) = 1 - P(0) - P(1) - P(2) = 1 - e⁻⁶(1+6+18) = 1 - 25e⁻⁶ ≈ 0.938."},
+{sec:'Special Distributions', q:"Find the variance of a binomial distribution with n=100 and p=0.1.", opts:["9","10","90","0.9"], ans:0, ex:"Var = np(1-p) = 100 × 0.1 × 0.9 = 9."},
+{sec:'Special Distributions', q:"A binomial distribution has n=12 and p=0.5. Calculate the standard deviation.", opts:["≈1.73","3","6","2.45"], ans:0, ex:"SD = √(np(1-p)) = √(12×0.5×0.5) = √3 ≈ 1.73."},
+{sec:'Special Distributions', q:"If defects in a wire occur at 1 per 10 meters, find the probability that a 12-meter roll has no defects (λ=1.2).", opts:["≈0.301","≈0.699","≈0.361","≈0.120"], ans:0, ex:"P(X=0) = e⁻¹·² ≈ 0.301."},
+{sec:'Special Distributions', q:"Using the previous question, find the probability of exactly 1 defect in 12 meters.", opts:["≈0.361","≈0.301","≈0.120","≈0.199"], ans:0, ex:"P(X=1) = λe⁻λ = 1.2 × e⁻¹·² ≈ 0.361."},
+{sec:'Special Distributions', q:"If n=500 and p=0.01, find the Poisson parameter λ.", opts:["5","0.5","50","500"], ans:0, ex:"λ = np = 500 × 0.01 = 5."},
+{sec:'Special Distributions', q:"For a Poisson distribution with λ=2, find P(X=0).", opts:["≈0.135","≈0.271","≈0.406","≈0.677"], ans:0, ex:"P(X=0) = e⁻² ≈ 0.135."},
+{sec:'Special Distributions', q:"If Var(X)=np(1-p), calculate the variance for n=60, p=0.1.", opts:["5.4","6","54","0.6"], ans:0, ex:"Var = 60 × 0.1 × 0.9 = 5.4."},
+{sec:'Special Distributions', q:"Calculate the mean of a Poisson distribution where P(X=0)=e⁻³.", opts:["3","e⁻³","1/3","9"], ans:0, ex:"Since P(X=0) = e⁻λ = e⁻³, the mean is λ = 3."},
+{sec:'Special Distributions', q:"If 10% of tools are defective, find the probability that exactly 2 are defective in a sample of 100 (use Poisson, λ=10).", opts:["≈0.00227","≈0.1","≈0.05","≈0.0454"], ans:0, ex:"With λ=10: P(X=2) = e⁻¹⁰(10²)/2! ≈ 0.00227."},
+
+// CONTINUOUS RANDOM VARIABLES AND JOINT DISTRIBUTIONS / INFERENCE (81-100)
+{sec:'Continuous Random Variables', q:"A continuous variable x has CDF F(x) = 2x - 1. Find the PDF f(x).", opts:["2","2x","x","1"], ans:0, ex:"The PDF is the derivative of the CDF: f(x) = F'(x) = 2."},
+{sec:'Continuous Random Variables', q:"If f(x) = 12x²(1-x) for 0 ≤ x ≤ 1, find the expected value E[X].", opts:["0.6","0.5","0.4","0.8"], ans:0, ex:"E[X] = ∫₀¹12x³(1-x)dx = 12(1/4 - 1/5) = 0.6."},
+{sec:'Continuous Random Variables', q:"For the PDF f(x) = e⁻ˣ for x > 0, calculate P(0 < X ≤ 1).", opts:["≈0.632","≈0.368","≈0.500","1"], ans:0, ex:"P(0<X≤1) = ∫₀¹e⁻ˣdx = 1 - e⁻¹ ≈ 0.632."},
+{sec:'Continuous Random Variables', q:"Using the previous question, calculate E[X].", opts:["1","0.632","0.5","2"], ans:0, ex:"For an exponential distribution with rate 1, E[X] = 1/rate = 1."},
+{sec:'Continuous Random Variables', q:"Find the constant c for the PDF f(x) = c(1-x²) for -1 < x ≤ 1.", opts:["3/4","1/2","1","2/3"], ans:0, ex:"∫₋₁¹c(1-x²)dx = c(4/3) = 1, so c = 3/4."},
+{sec:'Continuous Random Variables', q:"If f(x,y) = 1 for x, y ∈ (0, 1], calculate P(X ≤ 1/3, Y ≤ 1/2).", opts:["1/6","1/3","1/2","1/5"], ans:0, ex:"For a uniform joint density on the unit square: P = (1/3)(1/2) = 1/6."},
+{sec:'Continuous Random Variables', q:"Find the marginal density f_X(x) for the joint density in the previous question.", opts:["1","x","1/2","2"], ans:0, ex:"Integrating over y from 0 to 1: f_X(x) = ∫₀¹1 dy = 1."},
+{sec:'Continuous Random Variables', q:"Calculate the covariance Cov(X,Y) if E[XY]=16, E[X]=2, E[Y]=8.", opts:["0","16","8","2"], ans:0, ex:"Cov(X,Y) = E[XY] - E[X]E[Y] = 16 - (2×8) = 0."},
+{sec:'Continuous Random Variables', q:"If f(x) = 1/2 for x ∈ [-1, 1], find the standard deviation.", opts:["≈0.577","1","≈0.333","2"], ans:0, ex:"For this uniform distribution, Var = (2)²/12 = 1/3, so SD = √(1/3) ≈ 0.577."},
+{sec:'Continuous Random Variables', q:"A stick of length 1 is split at a random point X. Find the expected length of the piece containing 1/3.", opts:["13/18","1/2","5/18","8/18"], ans:0, ex:"Splitting the integral at X=1/3: E = ∫₀^(1/3)(1-x)dx + ∫_(1/3)¹x dx = 5/18 + 8/18 = 13/18."},
+{sec:'Continuous Random Variables', q:"Find the value of z such that P(Z > z) = 0.05 for a standard normal distribution.", opts:["1.645","1.96","2.33","1.28"], ans:0, ex:"The value leaving 5% in the upper tail of the standard normal distribution is z = 1.645."},
+{sec:'Continuous Random Variables', q:"If X is normally distributed with μ=1.5, σ=2.5, find P(X ≤ -0.5) using z-scores.", opts:["≈0.212","≈0.788","≈0.500","≈0.317"], ans:0, ex:"z = (-0.5-1.5)/2.5 = -0.8, and P(Z≤-0.8) ≈ 0.212."},
+{sec:'Continuous Random Variables', q:"Find the mean of a Chi-Square distribution with n=10 degrees of freedom.", opts:["10","20","5","100"], ans:0, ex:"The mean of a chi-square distribution equals its degrees of freedom: 10."},
+{sec:'Continuous Random Variables', q:"Calculate the variance for the Chi-Square distribution in the previous question.", opts:["20","10","40","100"], ans:0, ex:"Variance of a chi-square distribution is twice its degrees of freedom: 2×10 = 20."},
+{sec:'Continuous Random Variables', q:"Use the Central Limit Theorem to find the mean of the sum of 25 independent variables with μ=1000.", opts:["25,000","1,000","40","5,000"], ans:0, ex:"The mean of a sum of n iid variables is n×μ = 25×1000 = 25,000."},
+{sec:'Continuous Random Variables', q:"Find the standard deviation of the sample mean (σ_X̄) for n=25 and σ=100.", opts:["20","4","100","25"], ans:0, ex:"σ_X̄ = σ/√n = 100/√25 = 100/5 = 20."},
+{sec:'Continuous Random Variables', q:"Calculate the 95% confidence interval for μ given n=25, σ=3, X̄=4.5.", opts:["(3.32, 5.68)","(3.5, 5.5)","(4.0, 5.0)","(2.5, 6.5)"], ans:0, ex:"Margin = 1.96×(3/√25) = 1.96×0.6 = 1.176, giving the interval 4.5 ± 1.176 ≈ (3.32, 5.68)."},
+{sec:'Continuous Random Variables', q:"Find the sample variance S² for the data {-0.737, 0.511, -0.083, 0.066, -0.562, -0.906, 0.358, 0.359}.", opts:["≈0.298","≈0.261","≈0.149","≈0.373"], ans:0, ex:"Computing the mean (≈-0.124) and summing squared deviations (≈2.086), then dividing by n-1=7, gives S² ≈ 0.298."},
+{sec:'Continuous Random Variables', q:"Determine the minimax value x̂* if μ₁=1000, σ₁=100, μ₂=1100, σ₂=200.", opts:["≈1033.3","≈1050","≈1066.7","≈1000"], ans:0, ex:"Using x̂* = (σ₂μ₁+σ₁μ₂)/(σ₁+σ₂) = (200×1000+100×1100)/300 ≈ 1033.3."},
+{sec:'Continuous Random Variables', q:"Calculate the least squares coefficient c₁ for the points (0,1), (1,3), (2,2), (4,3) for the line y=c₁+c₂x.", opts:["1.6","1.0","2.0","0.37"], ans:0, ex:"Solving the normal equations gives slope c₂=13/35≈0.371 and intercept c₁=(Σy-c₂Σx)/n=(9-2.6)/4=1.6."}
+];
+
+const ALL_TOPICS = [
+ 'Combinatorics',
+ 'Basic Probability',
+ 'Conditional Probability',
+ 'Discrete Random Variables',
+ 'Special Distributions',
+ 'Continuous Random Variables'
+];
+
+/* ============================================================
+ STORAGE KEYS (persistent artifact storage, not localStorage)
+ ============================================================ */
+const MUTE_KEY = 'sta122-muted';
+const BEST_SCORE_KEY = 'sta122-best-score';
+const STORAGE_KEY = 'sta122-quiz-state';
+
+/* ============================================================
+ HELPERS
+ ============================================================ */
+function shuffle(arr){
+ const a=[...arr];
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+ return a;
+}
+
+/* MATH RENDERING
+   The question bank mixes several ways of writing exponents / subscripts:
+   (1) caret notation like x^(4/3) or ax^n — plain text, not visually raised
+   (2) unicode superscript glyphs like x⁴ or xⁿ — visually raised, but only
+       loosely supported by some fonts/weights
+   renderMath() normalizes both into real <sup> tags so every exponent
+   actually renders as superscript, consistently, in whatever font is active. */
+const SUPERSCRIPT_MAP = {
+ '⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9',
+ '⁺':'+','⁻':'-','⁼':'=','⁽':'(','⁾':')','ⁿ':'n','ⁱ':'i','ᵛ':'v'
+};
+const SUP_RUN_RE = new RegExp('[' + Object.keys(SUPERSCRIPT_MAP).join('') + ']+', 'g');
+
+function renderMath(str) {
+ if (!str) return str;
+ let out = String(str);
+ // 1) caret + parenthesised exponent: x^(n-1)  ->  x<sup>n-1</sup>
+ out = out.replace(/\^\(([^()]*)\)/g, (_, inner) => `<sup>${inner}</sup>`);
+ // 2) caret + bare token exponent: x^m  ->  x<sup>m</sup>
+ out = out.replace(/\^([A-Za-z0-9]+)/g, (_, inner) => `<sup>${inner}</sup>`);
+ // 3) collapse runs of unicode superscript characters into real <sup> tags
+ out = out.replace(SUP_RUN_RE, (m) => {
+  const converted = m.split('').map(ch => SUPERSCRIPT_MAP[ch] || ch).join('');
+  return `<sup>${converted}</sup>`;
+ });
+ return out;
+}
+
+function sectionIcon(sec){
+ return {
+  'Combinatorics':'fa-diagram-project',
+  'Basic Probability':'fa-dice',
+  'Conditional Probability':'fa-code-branch',
+  'Discrete Random Variables':'fa-chart-column',
+  'Special Distributions':'fa-bell',
+  'Continuous Random Variables':'fa-chart-area'
+ }[sec] || 'fa-chart-line';
+}
+function randomizeOptions(item){
+ const pairs = item.opts.map((o,idx)=>({o, correct: idx===item.ans}));
+ const shuffled = shuffle(pairs);
+ return {...item, opts: shuffled.map(p=>p.o), ans: shuffled.findIndex(p=>p.correct)};
+}
+
+/* Safely read a value from persistent storage. Returns null if the key
+   doesn't exist or storage is unavailable, instead of throwing. */
+async function storageGet(key) {
+ try {
+  const result = await window.storage.get(key, false);
+  return result ? result.value : null;
+ } catch (e) {
+  return null;
+ }
+}
+async function storageSet(key, value) {
+ try {
+  await window.storage.set(key, value, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+async function storageDelete(key) {
+ try {
+  await window.storage.delete(key, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+
+/* SOUND ENGINE */
+const SoundEngine = (function() {
+ let ctx = null;
+ let muted = false;
+
+ async function init() {
+  const v = await storageGet(MUTE_KEY);
+  muted = v === '1';
+  return muted;
+ }
+
+ function getCtx() {
+ if (!ctx) {
+ const AC = window.AudioContext || window.webkitAudioContext;
+ if (!AC) return null;
+ ctx = new AC();
+ }
+ if (ctx.state === 'suspended') ctx.resume();
+ return ctx;
+ }
+
+ function isMuted() { return muted; }
+ async function setMuted(v) {
+ muted = v;
+ await storageSet(MUTE_KEY, v ? '1' : '0');
+ }
+
+ function playCorrect() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc1 = c.createOscillator();
+ const osc2 = c.createOscillator();
+ const gain = c.createGain();
+
+ osc1.type = 'sine'; osc1.frequency.setValueAtTime(880, t);
+ osc2.type = 'sine'; osc2.frequency.setValueAtTime(1760, t);
+
+ gain.gain.setValueAtTime(0.2, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+
+ osc1.connect(gain); osc2.connect(gain);
+ gain.connect(c.destination);
+
+ osc1.start(t); osc2.start(t);
+ osc1.stop(t + 0.6); osc2.stop(t + 0.6);
+ }
+
+ function playWrong() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc = c.createOscillator();
+ const gain = c.createGain();
+
+ osc.type = 'sawtooth';
+ osc.frequency.setValueAtTime(160, t);
+ osc.frequency.exponentialRampToValueAtTime(60, t + 0.35);
+
+ gain.gain.setValueAtTime(0.25, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+
+ osc.connect(gain);
+ gain.connect(c.destination);
+
+ osc.start(t);
+ osc.stop(t + 0.35);
+ }
+
+ return { init, isMuted, setMuted, playCorrect, playWrong };
+})();
+
+/* APP STATE */
+let quizMode = 'auto'; // 'auto' or 'custom'
+let activeQuestions = [];
+let userAnswers = []; // array of selected option indices
+let currentQ = 0;
+let timeRemaining = 0;
+let timerInterval = null;
+let isPaused = false;
+let leaveCount = 0;
+
+// DOM Elements
+const homeScreen = document.getElementById('homeScreen');
+const configScreen = document.getElementById('configScreen');
+const loadingScreen = document.getElementById('loadingScreen');
+const quizScreen = document.getElementById('quizScreen');
+const resultScreen = document.getElementById('resultScreen');
+
+const pickAuto = document.getElementById('pickAuto');
+const pickCustom = document.getElementById('pickCustom');
+const backToHomeFromConfig = document.getElementById('backToHomeFromConfig');
+const startCustomBtn = document.getElementById('startCustomBtn');
+
+const topicsWrap = document.getElementById('topicsWrap');
+const timeSlider = document.getElementById('timeSlider');
+const timeValue = document.getElementById('timeValue');
+const countSlider = document.getElementById('countSlider');
+const countValue = document.getElementById('countValue');
+
+const timerBox = document.getElementById('timer');
+const timerText = document.getElementById('timerText');
+const soundToggle = document.getElementById('soundToggle');
+
+const progressFill = document.getElementById('progressFill');
+const dotsRow = document.getElementById('dotsRow');
+const sectionTag = document.getElementById('sectionTag');
+const qCounter = document.getElementById('qCounter');
+const qText = document.getElementById('qText');
+const optsWrap = document.getElementById('optsWrap');
+const inlineExplain = document.getElementById('inlineExplain');
+
+const backBtn = document.getElementById('backBtn');
+const nextBtn = document.getElementById('nextBtn');
+const finishBtn = document.getElementById('finishBtn');
+
+const quizTools = document.getElementById('quizTools');
+const pauseBtn = document.getElementById('pauseBtn');
+const pauseOverlay = document.getElementById('pauseOverlay');
+const resumeFromPauseBtn = document.getElementById('resumeFromPauseBtn');
+
+const resumeModal = document.getElementById('resumeModal');
+const resumeInfo = document.getElementById('resumeInfo');
+const resumeYes = document.getElementById('resumeYes');
+const resumeNo = document.getElementById('resumeNo');
+
+const leaveWarningModal = document.getElementById('leaveWarningModal');
+const leaveWarnText = document.getElementById('leaveWarnText');
+const leaveWarnOk = document.getElementById('leaveWarnOk');
+
+const statsBar = document.getElementById('statsBar');
+
+/* INIT */
+window.addEventListener('load', async () => {
+ await SoundEngine.init();
+ updateSoundToggleUI();
+ setupConfigTopics();
+ await checkSavedState();
+ await updateHomeStats();
+});
+
+function updateSoundToggleUI() {
+ const muted = SoundEngine.isMuted();
+ soundToggle.classList.toggle('muted', muted);
+ soundToggle.setAttribute('aria-pressed', muted ? 'true' : 'false');
+ soundToggle.innerHTML = muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+}
+soundToggle.addEventListener('click', async () => {
+ await SoundEngine.setMuted(!SoundEngine.isMuted());
+ updateSoundToggleUI();
+});
+
+async function updateHomeStats() {
+ const best = await storageGet(BEST_SCORE_KEY);
+ if (best) {
+  statsBar.classList.remove('hidden');
+  statsBar.innerHTML = `<div class="stat-chip"><i class="fa-solid fa-trophy"></i> Best Score: <strong>${best}%</strong></div>`;
+ } else {
+  statsBar.classList.add('hidden');
+  statsBar.innerHTML = '';
+ }
+}
+
+/* CONFIG TOPICS BUILD */
+function setupConfigTopics() {
+ topicsWrap.innerHTML = '';
+ ALL_TOPICS.forEach((t) => {
+  const label = document.createElement('label');
+  label.className = 'topic-chip';
+  label.innerHTML = `<input type="checkbox" value="${t}" checked> <span><i class="fa-solid ${sectionIcon(t)}"></i> ${t}</span>`;
+  topicsWrap.appendChild(label);
+ });
+}
+
+timeSlider.addEventListener('input', () => { timeValue.textContent = timeSlider.value; });
+countSlider.addEventListener('input', () => { countValue.textContent = countSlider.value; });
+
+/* MODE SELECTION */
+pickAuto.addEventListener('click', () => {
+ startQuiz('auto', ALL_TOPICS, 60, QUESTIONS.length);
+});
+pickCustom.addEventListener('click', () => {
+ homeScreen.classList.add('hidden');
+ configScreen.classList.remove('hidden');
+});
+backToHomeFromConfig.addEventListener('click', () => {
+ configScreen.classList.add('hidden');
+ homeScreen.classList.remove('hidden');
+});
+
+startCustomBtn.addEventListener('click', () => {
+ const selectedTopics = Array.from(topicsWrap.querySelectorAll('input:checked')).map(i => i.value);
+ if (selectedTopics.length === 0) {
+  alert('Please select at least one topic.');
+  return;
+ }
+ const mins = parseInt(timeSlider.value, 10);
+ const count = parseInt(countSlider.value, 10);
+ configScreen.classList.add('hidden');
+ startQuiz('custom', selectedTopics, mins, count);
+});
+
+/* START QUIZ */
+function startQuiz(mode, topics, minutes, count) {
+ quizMode = mode;
+ showScreen(loadingScreen);
+ setTimeout(() => {
+  let filtered = QUESTIONS.filter(q => topics.includes(q.sec));
+  if (filtered.length === 0) filtered = [...QUESTIONS];
+  filtered = shuffle(filtered).map(randomizeOptions);
+  if (count < filtered.length) {
+   filtered = filtered.slice(0, count);
+  }
+  activeQuestions = filtered;
+  userAnswers = new Array(activeQuestions.length).fill(null);
+  currentQ = 0;
+  timeRemaining = minutes * 60;
+  isPaused = false;
+  leaveCount = 0;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') {
+   pauseBtn.classList.remove('hidden');
+  } else {
+   pauseBtn.classList.add('hidden');
+  }
+  timerBox.classList.remove('hidden');
+
+  startTimer();
+  renderQuestion();
+  saveState();
+ }, 600);
+}
+
+function showScreen(sc) {
+ [homeScreen, configScreen, loadingScreen, quizScreen, resultScreen].forEach(s => s.classList.add('hidden'));
+ sc.classList.remove('hidden');
+ if (sc === quizScreen) {
+  closeMobileNav();
+  hamburgerBtn.classList.add('hidden');
+ } else {
+  hamburgerBtn.classList.remove('hidden');
+ }
+}
+
+/* TIMER */
+function startTimer() {
+ clearInterval(timerInterval);
+ updateTimerDisplay();
+ timerInterval = setInterval(() => {
+  if (!isPaused) {
+   timeRemaining--;
+   updateTimerDisplay();
+   if (timeRemaining <= 0) {
+    clearInterval(timerInterval);
+    alert('Time is up! Submitting your answers.');
+    finishQuiz();
+   }
+  }
+ }, 1000);
+}
+
+function updateTimerDisplay() {
+ const m = Math.floor(Math.max(0, timeRemaining) / 60);
+ const s = Math.max(0, timeRemaining) % 60;
+ timerText.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+ if (timeRemaining < 300) {
+  timerBox.classList.add('warn');
+ } else {
+  timerBox.classList.remove('warn');
+ }
+}
+
+/* PAUSE ENGINE */
+pauseBtn.addEventListener('click', togglePause);
+resumeFromPauseBtn.addEventListener('click', togglePause);
+
+function togglePause() {
+ if (quizMode !== 'auto') return;
+ isPaused = !isPaused;
+ if (isPaused) {
+  pauseOverlay.classList.remove('hidden');
+ } else {
+  pauseOverlay.classList.add('hidden');
+ }
+}
+
+/* RENDER QUESTION */
+function renderQuestion() {
+ const q = activeQuestions[currentQ];
+ sectionTag.innerHTML = `<i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec}`;
+ qCounter.textContent = `Question ${currentQ + 1} of ${activeQuestions.length}`;
+ qText.innerHTML = renderMath(q.q);
+
+ optsWrap.innerHTML = '';
+ inlineExplain.className = 'inline-explain';
+ inlineExplain.innerHTML = '';
+
+ const answered = userAnswers[currentQ] !== null;
+
+ q.opts.forEach((optStr, idx) => {
+  const optDiv = document.createElement('div');
+  optDiv.className = 'opt';
+  const letter = String.fromCharCode(65 + idx);
+
+  if (answered) {
+   optDiv.classList.add('locked');
+   if (quizMode === 'auto') {
+    if (idx === q.ans) optDiv.classList.add('correct');
+    if (userAnswers[currentQ] === idx && idx !== q.ans) optDiv.classList.add('wrong');
+   } else {
+    if (userAnswers[currentQ] === idx) optDiv.classList.add('selected');
+   }
+  }
+
+  optDiv.innerHTML = `<div class="opt-letter">${letter}</div><div class="opt-text">${renderMath(optStr)}</div>`;
+  optDiv.addEventListener('click', () => handleSelectOption(idx));
+  optsWrap.appendChild(optDiv);
+ });
+
+ if (answered && quizMode === 'auto') {
+  const isRight = userAnswers[currentQ] === q.ans;
+  inlineExplain.classList.add('show', isRight ? 'right' : 'wrong');
+  inlineExplain.innerHTML = `
+   <div class="ie-label">${isRight ? '<i class="fa-solid fa-circle-check"></i> Correct!' : '<i class="fa-solid fa-circle-xmark"></i> Incorrect'}</div>
+   <div>${renderMath(q.ex)}</div>
+  `;
+ }
+
+ // Navigation buttons state
+ backBtn.disabled = currentQ === 0;
+ if (currentQ === activeQuestions.length - 1) {
+  nextBtn.classList.add('hidden');
+  finishBtn.classList.remove('hidden');
+ } else {
+  nextBtn.classList.remove('hidden');
+  finishBtn.classList.add('hidden');
+ }
+
+ renderProgress();
+}
+
+function renderProgress() {
+ const pct = ((currentQ + 1) / activeQuestions.length) * 100;
+ progressFill.style.width = `${pct}%`;
+
+ dotsRow.innerHTML = '';
+ activeQuestions.forEach((q, idx) => {
+  const dot = document.createElement('div');
+  dot.className = 'dot';
+  if (idx === currentQ) dot.classList.add('current');
+
+  if (userAnswers[idx] !== null) {
+   if (quizMode === 'auto') {
+    if (userAnswers[idx] === q.ans) dot.classList.add('correct');
+    else dot.classList.add('wrong');
+   } else {
+    dot.classList.add('answered');
+   }
+  }
+  dot.addEventListener('click', () => {
+   currentQ = idx;
+   renderQuestion();
+  });
+  dotsRow.appendChild(dot);
+ });
+}
+
+/* OPTION SELECTION */
+function handleSelectOption(idx) {
+ if (userAnswers[currentQ] !== null && quizMode === 'auto') return; // locked in auto mode once picked
+
+ const prevAns = userAnswers[currentQ];
+ userAnswers[currentQ] = idx;
+
+ if (quizMode === 'auto' && prevAns === null) {
+  if (idx === activeQuestions[currentQ].ans) {
+   SoundEngine.playCorrect();
+  } else {
+   SoundEngine.playWrong();
+  }
+ }
+
+ renderQuestion();
+ saveState();
+}
+
+nextBtn.addEventListener('click', () => {
+ if (currentQ < activeQuestions.length - 1) {
+  currentQ++;
+  renderQuestion();
+ }
+});
+backBtn.addEventListener('click', () => {
+ if (currentQ > 0) {
+  currentQ--;
+  renderQuestion();
+ }
+});
+finishBtn.addEventListener('click', () => {
+ const answeredCount = userAnswers.filter(a => a !== null).length;
+ if (quizMode === 'auto' && answeredCount < Math.min(30, activeQuestions.length)) {
+  alert(`Please answer at least ${Math.min(30, activeQuestions.length)} questions before submitting.`);
+  return;
+ }
+ if (confirm('Are you sure you want to submit your quiz?')) {
+  finishQuiz();
+ }
+});
+
+/* KEYBOARD NAVIGATION */
+document.addEventListener('keydown', (e) => {
+ if (quizScreen.classList.contains('hidden')) return;
+ if (e.key === 'ArrowLeft' && currentQ > 0) {
+  currentQ--; renderQuestion();
+ } else if (e.key === 'ArrowRight' && currentQ < activeQuestions.length - 1) {
+  currentQ++; renderQuestion();
+ } else if (['1','2','3','4'].includes(e.key)) {
+  const idx = parseInt(e.key, 10) - 1;
+  if (idx < activeQuestions[currentQ].opts.length) {
+   handleSelectOption(idx);
+  }
+ }
+});
+
+/* FINISH QUIZ */
+function finishQuiz() {
+ clearInterval(timerInterval);
+ clearSavedState();
+ quizTools.classList.add('hidden');
+ timerBox.classList.add('hidden');
+
+ let correctCount = 0;
+ const breakdown = {};
+
+ activeQuestions.forEach((q, i) => {
+  if (!breakdown[q.sec]) breakdown[q.sec] = { correct: 0, total: 0 };
+  breakdown[q.sec].total++;
+
+  if (userAnswers[i] === q.ans) {
+   correctCount++;
+   breakdown[q.sec].correct++;
+  }
+ });
+
+ const total = activeQuestions.length;
+ const pct = Math.round((correctCount / total) * 100);
+
+ document.getElementById('resultScore').textContent = correctCount;
+ document.getElementById('resultOf').textContent = `/ ${total}`;
+ document.getElementById('resultPct').textContent = `${pct}% Overall Score`;
+
+ let msg = '';
+ if (pct >= 80) msg = '<i class="fa-solid fa-award" style="color:#facc15;"></i> Excellent Mastery! Outstanding Performance.';
+ else if (pct >= 60) msg = '<i class="fa-solid fa-thumbs-up" style="color:var(--accent);"></i> Good Job! Keep reviewing difficult topics.';
+ else msg = '<i class="fa-solid fa-book-open" style="color:var(--red);"></i> Keep Practicing! Review the explanations below.';
+ document.getElementById('resultMsg').innerHTML = msg;
+
+ document.getElementById('bestBadge').innerHTML = '';
+ (async () => {
+  const oldBestRaw = await storageGet(BEST_SCORE_KEY);
+  const oldBest = oldBestRaw ? parseInt(oldBestRaw, 10) : 0;
+  if (pct > oldBest) {
+   await storageSet(BEST_SCORE_KEY, String(pct));
+   document.getElementById('bestBadge').innerHTML = `<div class="best-badge"><i class="fa-solid fa-star"></i> New Personal Best!</div>`;
+  }
+ })();
+
+ // Render breakdown grid
+ const breakdownGrid = document.getElementById('breakdownGrid');
+ breakdownGrid.innerHTML = '';
+ Object.keys(breakdown).forEach(sec => {
+  const item = breakdown[sec];
+  const bdCard = document.createElement('div');
+  bdCard.className = 'bd-card';
+  bdCard.innerHTML = `
+   <div class="bd-name"><i class="fa-solid ${sectionIcon(sec)}"></i> ${sec}</div>
+   <div class="bd-score">${item.correct} <span class="bd-total">/ ${item.total}</span></div>
+  `;
+  breakdownGrid.appendChild(bdCard);
+ });
+
+ // Render question review list
+ const reviewList = document.getElementById('reviewList');
+ reviewList.innerHTML = '';
+ activeQuestions.forEach((q, i) => {
+  const uAns = userAnswers[i];
+  const isRight = uAns === q.ans;
+  const revItem = document.createElement('div');
+  revItem.className = `review-item ${isRight ? 'right' : 'miss'}`;
+
+  const uAnsText = uAns !== null ? `${String.fromCharCode(65 + uAns)}) ${renderMath(q.opts[uAns])}` : 'Not Answered';
+  const cAnsText = `${String.fromCharCode(65 + q.ans)}) ${renderMath(q.opts[q.ans])}`;
+
+  revItem.innerHTML = `
+   <div class="ri-section"><i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec} · Q${i + 1}</div>
+   <div class="ri-q"><strong>${renderMath(q.q)}</strong></div>
+   <div class="ri-ans ${isRight ? 'right' : 'wrong'}">
+    <i class="fa-solid ${isRight ? 'fa-check' : 'fa-xmark'}"></i>
+    <span><strong>Your Answer:</strong> ${uAnsText}</span>
+   </div>
+   ${!isRight ? `<div class="ri-ans correct-reveal"><i class="fa-solid fa-bullseye"></i> <span><strong>Correct Answer:</strong> ${cAnsText}</span></div>` : ''}
+   <div class="ri-exp"><strong>Explanation:</strong> ${renderMath(q.ex)}</div>
+  `;
+  reviewList.appendChild(revItem);
+ });
+
+ showScreen(resultScreen);
+ updateHomeStats();
+}
+
+document.getElementById('homeBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('retryBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+/* AUTOSAVE ENGINE (persistent artifact storage) */
+function saveState() {
+ const state = { quizMode, activeQuestions, userAnswers, currentQ, timeRemaining };
+ storageSet(STORAGE_KEY, JSON.stringify(state));
+}
+
+function clearSavedState() {
+ storageDelete(STORAGE_KEY);
+}
+
+async function checkSavedState() {
+ const raw = await storageGet(STORAGE_KEY);
+ if (!raw) return;
+ let data;
+ try {
+  data = JSON.parse(raw);
+ } catch (e) {
+  return;
+ }
+ if (!data || !data.activeQuestions || data.activeQuestions.length === 0) return;
+
+ resumeInfo.textContent = `${data.activeQuestions.length} Questions (${data.quizMode.toUpperCase()} Mode)`;
+ resumeModal.classList.remove('hidden');
+
+ resumeYes.onclick = () => {
+  resumeModal.classList.add('hidden');
+  quizMode = data.quizMode;
+  activeQuestions = data.activeQuestions;
+  userAnswers = data.userAnswers;
+  currentQ = data.currentQ;
+  timeRemaining = data.timeRemaining;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') pauseBtn.classList.remove('hidden'); else pauseBtn.classList.add('hidden');
+  timerBox.classList.remove('hidden');
+  startTimer();
+  renderQuestion();
+ };
+
+ resumeNo.onclick = () => {
+  resumeModal.classList.add('hidden');
+  clearSavedState();
+ };
+}
+
+/* TAB SWITCH GUARDRAIL */
+document.addEventListener('visibilitychange', () => {
+ if (!quizScreen.classList.contains('hidden') && document.hidden) {
+  leaveCount++;
+  if (leaveCount >= 3) {
+   alert('You have left the quiz tab 3 times. The quiz will now reset.');
+   clearSavedState();
+   location.reload();
+  } else {
+   leaveWarnText.textContent = `You switched away from the quiz tab. Warning ${leaveCount} of 3. Leaving 3 times will reset your quiz.`;
+   leaveWarningModal.classList.remove('hidden');
+  }
+ }
+});
+leaveWarnOk.addEventListener('click', () => leaveWarningModal.classList.add('hidden'));
+
+/* SCIENTIFIC CALCULATOR ENGINE */
+(function setupCalculator(){
+ const calcFab = document.getElementById('calcFab');
+ const calcBackdrop = document.getElementById('calcBackdrop');
+ const calcPanel = document.getElementById('calcPanel');
+ const calcClose = document.getElementById('calcClose');
+ const calcExpr = document.getElementById('calcExpr');
+ const calcResult = document.getElementById('calcResult');
+ const calcGrid = document.getElementById('calcGrid');
+ const calcHeader = document.getElementById('calcHeader');
+ const calcModeDeg = document.getElementById('calcModeDeg');
+ const calcModeRad = document.getElementById('calcModeRad');
+
+ let expr = '';
+ let isRad = false;
+
+ function resetPanelPosition() {
+  // Clear any position left over from a previous drag so the calculator
+  // reopens centered instead of wherever it was last left/jumped to.
+  calcPanel.classList.remove('dragged');
+  calcPanel.style.left = '';
+  calcPanel.style.top = '';
+ }
+
+ calcFab.addEventListener('click', () => {
+  resetPanelPosition();
+  calcBackdrop.classList.remove('hidden');
+  calcPanel.classList.remove('hidden');
+ });
+ calcClose.addEventListener('click', closeCalc);
+ calcBackdrop.addEventListener('click', closeCalc);
+
+ function closeCalc(){
+  calcBackdrop.classList.add('hidden');
+  calcPanel.classList.add('hidden');
+ }
+
+ calcModeDeg.addEventListener('click', () => {
+  isRad = false;
+  calcModeDeg.classList.add('active'); calcModeRad.classList.remove('active');
+ });
+ calcModeRad.addEventListener('click', () => {
+  isRad = true;
+  calcModeRad.classList.add('active'); calcModeDeg.classList.remove('active');
+ });
+
+ const buttons = [
+  { label: 'C', cls: 'clear', action: 'clear' },
+  { label: '(', cls: 'op', action: 'append', val: '(' },
+  { label: ')', cls: 'op', action: 'append', val: ')' },
+  { label: '÷', cls: 'op', action: 'append', val: '/' },
+
+  { label: 'sin', cls: 'fn', action: 'fn', fn: 'sin' },
+  { label: '7', action: 'append', val: '7' },
+  { label: '8', action: 'append', val: '8' },
+  { label: '9', action: 'append', val: '9' },
+
+  { label: 'cos', cls: 'fn', action: 'fn', fn: 'cos' },
+  { label: '4', action: 'append', val: '4' },
+  { label: '5', action: 'append', val: '5' },
+  { label: '6', action: 'append', val: '6' },
+
+  { label: 'tan', cls: 'fn', action: 'fn', fn: 'tan' },
+  { label: '1', action: 'append', val: '1' },
+  { label: '2', action: 'append', val: '2' },
+  { label: '3', action: 'append', val: '3' },
+
+  { label: '√', cls: 'fn', action: 'fn', fn: 'sqrt' },
+  { label: '0', action: 'append', val: '0' },
+  { label: '.', action: 'append', val: '.' },
+  { label: '×', cls: 'op', action: 'append', val: '*' },
+
+  { label: 'ln', cls: 'fn', action: 'fn', fn: 'ln' },
+  { label: 'log', cls: 'fn', action: 'fn', fn: 'log10' },
+  { label: '^', cls: 'op', action: 'append', val: '**' },
+  { label: '-', cls: 'op', action: 'append', val: '-' },
+
+  { label: 'π', cls: 'fn', action: 'append', val: 'π' },
+  { label: 'e', cls: 'fn', action: 'append', val: 'e' },
+  { label: '+', cls: 'op', action: 'append', val: '+' },
+  { label: '=', cls: 'equals', action: 'calc' }
+ ];
+
+ calcGrid.innerHTML = '';
+ buttons.forEach(b => {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = `calc-btn ${b.cls || ''}`;
+  btn.textContent = b.label;
+  btn.addEventListener('click', () => handleCalc(b));
+  calcGrid.appendChild(btn);
+ });
+
+ function handleCalc(b) {
+  if (b.action === 'clear') {
+   expr = '';
+   calcExpr.innerHTML = '&nbsp;';
+   calcResult.textContent = '0';
+   calcResult.classList.remove('err');
+  } else if (b.action === 'append') {
+   expr += b.val;
+   calcExpr.textContent = expr;
+  } else if (b.action === 'fn') {
+   expr += `${b.fn}(`;
+   calcExpr.textContent = expr;
+  } else if (b.action === 'calc') {
+   try {
+    // Substitute π and standalone "e" for the constants passed into the
+    // evaluator scope. Using named helper functions (rather than a
+    // regex-based degree/radian post-process) avoids breaking on nested
+    // parentheses, e.g. sin(sqrt(4)).
+    const safeExpr = expr.replace(/π/g, 'PI').replace(/\be\b/g, 'E');
+
+    const sinFn = x => isRad ? Math.sin(x) : Math.sin(x * Math.PI / 180);
+    const cosFn = x => isRad ? Math.cos(x) : Math.cos(x * Math.PI / 180);
+    const tanFn = x => isRad ? Math.tan(x) : Math.tan(x * Math.PI / 180);
+
+    const evaluator = new Function(
+     'sin', 'cos', 'tan', 'sqrt', 'ln', 'log10', 'PI', 'E',
+     `"use strict"; return (${safeExpr});`
+    );
+    const res = evaluator(sinFn, cosFn, tanFn, Math.sqrt, Math.log, Math.log10, Math.PI, Math.E);
+
+    calcResult.textContent = Number.isFinite(res) ? +res.toFixed(6) : 'Error';
+    calcResult.classList.remove('err');
+   } catch(e) {
+    calcResult.textContent = 'Error';
+    calcResult.classList.add('err');
+   }
+  }
+ }
+
+ // Draggable window logic
+ let isDragging = false, startX, startY, initialX, initialY;
+ calcHeader.addEventListener('mousedown', (e) => {
+  // Ignore drags started on the header's own controls (DEG/RAD toggle,
+  // close button) so clicking them doesn't also kick off a "drag" that
+  // relocates the panel.
+  if (e.target.closest('button')) return;
+
+  // Capture the panel's current on-screen position *before* switching it
+  // from the centered (transform-based) anchor to an absolute left/top
+  // anchor. Writing that position back immediately means the removal of
+  // the centering transform (via the .dragged class) doesn't cause the
+  // panel to visually jump.
+  const rect = calcPanel.getBoundingClientRect();
+  initialX = rect.left; initialY = rect.top;
+  calcPanel.style.left = `${initialX}px`;
+  calcPanel.style.top = `${initialY}px`;
+  calcPanel.classList.add('dragged');
+
+  isDragging = true;
+  startX = e.clientX; startY = e.clientY;
+ });
+ document.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  const dx = e.clientX - startX;
+  const dy = e.clientY - startY;
+  calcPanel.style.left = `${initialX + dx}px`;
+  calcPanel.style.top = `${initialY + dy}px`;
+ });
+ document.addEventListener('mouseup', () => { isDragging = false; });
+})();
+</script>
+</body>
+</html>
