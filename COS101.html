@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COS101 · Computer Fundamentals Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script>
+(function(){
+  try{
+    var theme = localStorage.getItem('dtz_theme') || 'dark';
+    var scale = localStorage.getItem('dtz_font_scale') || '1';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.style.setProperty('--font-scale', scale);
+  }catch(e){}
+})();
+</script>
+<style>
+:root {
+ --bg:#0a0c12; --surface:#0f1117; --surface2:#141820; --surface3:#1a2030;
+ --border:#1e2640; --border2:#26304e; --ink:#e2e8f6; --ink2:#94a3c0; --ink3:#4a5878;
+ --accent:#4f8ef7; --accent2:#7c6fff; --accent-dim:#0d1630; --accent-glow:rgba(79,142,247,.14);
+ --green:#34d399; --green-dim:#0a1e14; --red:#f87171; --red-dim:#1e0a0a; --purple:#a78bfa;
+ --bar-bg:rgba(10,12,18,.92); --font-scale:1;
+ --r:16px;
+}
+:root[data-theme="light"] {
+ --bg:#f4f6fc; --surface:#ffffff; --surface2:#eef1fb; --surface3:#e4e9f9;
+ --border:#dde3f3; --border2:#c7cafb; --ink:#131a2c; --ink2:#5b6478; --ink3:#8a93ab;
+ --accent-dim:#e3e6fd; --accent-glow:rgba(79,142,247,.10);
+ --green-dim:#e2f9ef; --red-dim:#fdeaea;
+ --bar-bg:rgba(255,255,255,.92);
+}
+html{font-size:calc(16px * var(--font-scale, 1));}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Outfit',sans-serif;min-height:100vh;display:flex;flex-direction:column;
+ background-image:radial-gradient(ellipse 900px 600px at 10% 0%, rgba(79,142,247,.06) 0%, transparent 70%),
+ radial-gradient(ellipse 700px 500px at 90% 30%, rgba(124,111,255,.05) 0%, transparent 60%);
+ transition:background-color .2s ease, color .2s ease;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);
+ background:var(--bar-bg);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px;}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.brand-badge{background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;font-weight:800;font-size:.72rem;letter-spacing:2px;
+ padding:6px 14px;border-radius:50px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+.brand-sub{font-size:.7rem;color:var(--ink3);letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+#timer{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:600;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:7px 16px;border-radius:50px;letter-spacing:2px;min-width:96px;text-align:center;
+ display:flex;align-items:center;gap:8px;justify-content:center;}
+#timer.warn{color:var(--red);background:var(--red-dim);border-color:rgba(248,113,113,.3);animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+#soundToggle{width:38px;height:38px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);
+ color:var(--ink2);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;
+ transition:border-color .15s,color .15s,background .15s;flex-shrink:0;}
+#soundToggle:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+#soundToggle.muted{color:var(--ink3);}
+.hamburger{display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;cursor:pointer;padding:0;color:var(--ink);font-size:.95rem;transition:border-color .15s,color .15s;flex-shrink:0;}
+.hamburger:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+.hamburger .fa-xmark{display:none;} .hamburger[aria-expanded="true"] .fa-bars{display:none;} .hamburger[aria-expanded="true"] .fa-xmark{display:inline-block;}
+.mobile-nav{position:fixed;inset:0;z-index:99;background:transparent;opacity:0;pointer-events:none;transition:opacity .15s ease;}
+.mobile-nav.open{opacity:1;pointer-events:auto;}
+.mobile-nav-panel{position:absolute;top:70px;right:20px;width:250px;max-width:82vw;max-height:min(70vh,520px);background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:1px;transform:scale(.94) translateY(-8px);transform-origin:top right;opacity:0;transition:transform .16s ease,opacity .16s ease;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow-y:auto;}
+.mobile-nav.open .mobile-nav-panel{transform:scale(1) translateY(0);opacity:1;}
+.mobile-nav-panel a{display:flex;align-items:center;gap:12px;padding:11px 10px;font-size:.9rem;font-weight:600;color:var(--ink);text-decoration:none;border-radius:8px;}
+.mobile-nav-panel a:hover{background:var(--accent-glow);}
+.mobile-nav-panel a i{width:18px;text-align:center;color:var(--accent);font-size:.85rem;}
+.mobile-nav-panel a.active{color:var(--accent);background:var(--accent-dim);}
+.mobile-nav-panel .nav-group-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);padding:12px 10px 4px;}
+.mobile-nav-panel .nav-group-label:first-child{padding-top:6px;}
+main{flex:1;display:flex;justify-content:center;padding:0 16px 100px;}
+#homeScreen,#configScreen,#quizScreen,#resultScreen,#loadingScreen{width:100%;max-width:720px;}
+.hidden{display:none !important;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:32px 28px;margin-bottom:20px;}
+
+a { text-decoration: none; }
+#statsBar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;}
+.stat-chip{font-size:.78rem;color:var(--ink2);background:var(--surface2);border:1px solid var(--border);padding:8px 16px;
+ border-radius:50px;display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;}
+.stat-chip i{color:var(--accent);}
+.stat-chip strong{color:var(--ink);}
+
+/* HOME */
+.hero-wrap{padding:48px 0 8px;text-align:center;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
+ color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:500;margin-bottom:22px;background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.22);padding:7px 16px 7px 13px;border-radius:50px;}
+.hero-title{font-family:'Fraunces',serif;font-size:2.3rem;line-height:1.16;margin-bottom:16px;font-weight:600;letter-spacing:-.5px;}
+.hero-title span{color:var(--accent);font-style:italic;}
+.hero-desc{color:var(--ink2);font-size:.96rem;line-height:1.75;max-width:480px;margin:0 auto 34px;}
+
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:30px;}
+.mode-card{background:var(--surface2);border:1px solid var(--border2);border-radius:18px;padding:26px 22px;cursor:pointer;
+ transition:border-color .15s,transform .15s,background .15s;text-align:left;}
+.mode-card:hover{border-color:rgba(79,142,247,.4);transform:translateY(-3px);background:var(--surface3);}
+.mode-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;
+ display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:16px;}
+.mode-name{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;margin-bottom:8px;}
+.mode-desc{font-size:.85rem;color:var(--ink2);line-height:1.6;margin-bottom:14px;}
+.mode-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.mode-tag{font-size:.66rem;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ padding:3px 9px;border-radius:20px;font-family:'JetBrains Mono',monospace;}
+
+.section-heading{display:flex;align-items:center;gap:12px;margin:36px 0 18px;}
+.section-heading-icon{width:34px;height:34px;border-radius:10px;background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.85rem;flex-shrink:0;}
+.section-heading-text{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;}
+.rules-list{display:grid;gap:8px;}
+.rule-item{display:flex;gap:14px;align-items:flex-start;font-size:.86rem;color:var(--ink2);line-height:1.55;padding:14px 16px;
+ background:var(--surface2);border:1px solid var(--border);border-radius:10px;}
+.rule-icon{width:30px;height:30px;border-radius:8px;flex-shrink:0;background:var(--accent-dim);border:1px solid rgba(79,142,247,.2);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.78rem;margin-top:1px;}
+.rule-text strong{color:var(--ink);}
+
+/* CONFIG SCREEN */
+.config-field{margin-bottom:22px;}
+.config-label{font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.config-label i{color:var(--accent);}
+.config-input-row{display:flex;align-items:center;gap:14px;}
+.config-slider{flex:1;-webkit-appearance:none;height:6px;border-radius:6px;background:var(--border2);outline:none;}
+.config-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;box-shadow:0 2px 8px rgba(79,142,247,.4);}
+.config-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;border:none;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;}
+.config-value{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:6px 14px;border-radius:10px;min-width:74px;text-align:center;font-size:.9rem;}
+.config-hint{font-size:.74rem;color:var(--ink3);margin-top:8px;}
+.topics-grid{display:flex;flex-wrap:wrap;gap:10px;}
+.topic-chip{display:flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--border2);
+ padding:10px 16px;border-radius:12px;cursor:pointer;font-size:.85rem;transition:border-color .15s,background .15s;}
+.topic-chip:hover{border-color:rgba(79,142,247,.4);}
+.topic-chip input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);
+ color:#fff;border:none;padding:14px 28px;border-radius:50px;font-weight:700;font-size:.95rem;cursor:pointer;
+ font-family:'Outfit',sans-serif;transition:transform .15s,box-shadow .15s,opacity .2s;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(79,142,247,.3);}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--border2);padding:12px 22px;border-radius:50px;
+ font-weight:600;font-size:.9rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:border-color .15s,background .15s;
+ display:inline-flex;align-items:center;gap:8px;}
+.btn-ghost:hover{background:var(--accent-glow);border-color:rgba(79,142,247,.35);}
+.btn-ghost:disabled{opacity:.35;cursor:not-allowed;}
+
+/* LOADING SCREEN */
+#loadingScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 0;text-align:center;}
+.loader-ring{width:56px;height:56px;border-radius:50%;border:4px solid var(--border2);border-top-color:var(--accent);
+ animation:spin .8s linear infinite;margin-bottom:24px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader-text{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--ink2);}
+.loader-sub{font-size:.78rem;color:var(--ink3);margin-top:8px;font-family:'JetBrains Mono',monospace;}
+
+/* QUIZ */
+#progressWrap{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;padding-top:24px;}
+.progress-bar-track{height:4px;background:var(--border);border-radius:4px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .3s;}
+.dots-group{display:flex;gap:5px;flex-wrap:wrap;}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .15s,transform .1s;}
+.dot:hover{transform:scale(1.35);}
+.dot.answered{background:rgba(79,142,247,.4);border:1px solid var(--accent);}
+.dot.current{background:var(--accent);box-shadow:0 0 0 3px rgba(79,142,247,.25);}
+.dot.correct{background:var(--green);}
+.dot.wrong{background:var(--red);}
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.q-section-tag{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;
+ font-weight:600;background:var(--accent-dim);padding:4px 10px;border-radius:20px;border:1px solid rgba(79,142,247,.2);}
+.q-counter{font-size:.78rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;}
+.q-text{font-size:1.1rem;line-height:1.65;margin:0 0 26px;font-family:'Fraunces',serif;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.opt{display:flex;align-items:flex-start;gap:14px;padding:15px 18px;border-radius:12px;border:1px solid var(--border2);
+ margin-bottom:10px;background:var(--surface2);cursor:pointer;transition:border-color .15s,background .15s,transform .1s;}
+.opt:hover{border-color:rgba(79,142,247,.35);background:var(--surface3);}
+.opt.locked{cursor:default;}
+.opt.selected{border-color:var(--accent);background:var(--accent-dim);}
+.opt.correct{border-color:var(--green);background:var(--green-dim);}
+.opt.wrong{border-color:var(--red);background:var(--red-dim);}
+.opt-letter{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;
+ justify-content:center;font-size:.75rem;font-weight:700;color:var(--ink3);flex-shrink:0;font-family:'JetBrains Mono',monospace;
+ transition:all .15s;margin-top:1px;}
+.opt.selected .opt-letter{background:var(--accent);color:#fff;border-color:var(--accent);}
+.opt.correct .opt-letter{background:var(--green);color:#fff;border-color:var(--green);}
+.opt.wrong .opt-letter{background:var(--red);color:#fff;border-color:var(--red);}
+.opt-text{font-size:.92rem;line-height:1.55;padding-top:3px;}
+.inline-explain{display:none;margin-top:6px;margin-bottom:14px;padding:16px 18px;background:rgba(79,142,247,.05);
+ border:1px solid rgba(79,142,247,.15);border-radius:10px;font-size:.85rem;line-height:1.7;color:var(--ink2);animation:fadeUp .2s ease;}
+.inline-explain.show{display:block;}
+.inline-explain .ie-label{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;
+ margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.inline-explain.right .ie-label{color:var(--green);}
+.inline-explain.wrong .ie-label{color:var(--red);}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;}
+.kbd-hint{text-align:center;font-size:.68rem;color:var(--ink3);margin-top:14px;font-family:'JetBrains Mono',monospace;}
+.kbd-hint kbd{background:var(--surface3);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;font-family:'JetBrains Mono',monospace;}
+
+#quizTools{position:fixed;right:20px;bottom:24px;display:flex;flex-direction:column;gap:12px;z-index:60;}
+.fab{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;border:none;
+ cursor:pointer;font-size:1.05rem;box-shadow:0 8px 24px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;
+ transition:transform .15s;}
+.fab:hover{transform:translateY(-3px) scale(1.04);}
+.fab.pause-fab{background:linear-gradient(135deg,#f59e0b,#f97316);}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.72);backdrop-filter:blur(6px);z-index:200;
+ display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-card{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:26px 24px;max-width:380px;
+ width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.modal-icon{width:52px;height:52px;border-radius:50%;background:var(--accent-dim);border:1px solid rgba(79,142,247,.25);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.3rem;margin:0 auto 16px;}
+.modal-icon.warn{background:var(--red-dim);border-color:rgba(248,113,113,.3);color:var(--red);}
+.modal-title{font-family:'Fraunces',serif;font-size:1.2rem;margin-bottom:10px;}
+.modal-text{font-size:.87rem;color:var(--ink2);line-height:1.6;margin-bottom:20px;}
+
+#pauseOverlay{position:fixed;inset:0;background:rgba(6,8,14,.85);backdrop-filter:blur(16px);z-index:150;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
+#pauseOverlay .modal-icon{width:64px;height:64px;font-size:1.6rem;margin-bottom:20px;}
+#pauseOverlay h2{font-family:'Fraunces',serif;font-size:1.6rem;margin-bottom:10px;}
+#pauseOverlay p{color:var(--ink2);font-size:.9rem;max-width:320px;margin-bottom:26px;line-height:1.6;}
+
+.calc-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.55);backdrop-filter:blur(4px);z-index:180;}
+.calc-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:190;width:320px;max-width:92vw;
+ background:var(--surface);border:1px solid var(--border2);border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.55);overflow:hidden;}
+.calc-panel.dragged{transform:none;}
+.calc-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface2);
+ border-bottom:1px solid var(--border);cursor:grab;font-size:.8rem;font-weight:600;color:var(--ink2);user-select:none;gap:8px;}
+.calc-header:active{cursor:grabbing;}
+.calc-header-title{display:flex;align-items:center;gap:8px;}
+.calc-header-title i{color:var(--accent);}
+.calc-mode-toggle{display:flex;gap:4px;background:var(--surface3);border-radius:8px;padding:3px;}
+.calc-mode-btn{background:transparent;border:none;color:var(--ink3);font-size:.62rem;font-family:'JetBrains Mono',monospace;
+ padding:5px 9px;border-radius:6px;cursor:pointer;font-weight:700;letter-spacing:.5px;}
+.calc-mode-btn.active{background:var(--accent);color:#fff;}
+.calc-close-btn{background:none;border:none;color:var(--ink3);font-size:1rem;cursor:pointer;line-height:1;}
+.calc-display{padding:18px 16px 10px;text-align:right;}
+.calc-expr{font-size:.82rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;min-height:18px;overflow-x:auto;white-space:nowrap;}
+.calc-result{font-size:1.65rem;font-weight:700;color:var(--ink);font-family:'JetBrains Mono',monospace;margin-top:4px;
+ overflow-x:auto;white-space:nowrap;}
+.calc-result.err{color:var(--red);}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 16px 20px;}
+.calc-btn{background:var(--surface3);border:1px solid var(--border2);color:var(--ink);border-radius:10px;padding:12px 0;
+ font-size:.92rem;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:background .15s;}
+.calc-btn:hover{background:var(--border2);}
+.calc-btn.op{color:var(--accent);}
+.calc-btn.fn{color:var(--purple);font-size:.76rem;}
+.calc-btn.clear{color:var(--red);}
+.calc-btn.equals{background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;border:none;}
+
+.result-hero{text-align:center;padding:26px 0 22px;border-bottom:1px solid var(--border);margin-bottom:26px;}
+.result-ring{display:inline-flex;align-items:center;justify-content:center;width:124px;height:124px;border-radius:50%;
+ border:3px solid var(--accent);background:var(--accent-dim);margin-bottom:16px;}
+.result-score{font-family:'JetBrains Mono',monospace;font-size:2.3rem;font-weight:700;color:var(--accent);}
+.result-of{font-size:.8rem;color:var(--ink3);margin-top:2px;}
+.result-pct{font-family:'Fraunces',serif;font-size:1.5rem;margin-bottom:6px;}
+.result-msg{color:var(--ink2);font-size:.9rem;line-height:1.6;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.best-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;color:#facc15;background:rgba(250,204,21,.08);
+ border:1px solid rgba(250,204,21,.25);padding:4px 12px;border-radius:20px;margin-top:10px;font-family:'JetBrains Mono',monospace;}
+.breakdown-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:26px;}
+.bd-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.bd-name{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.bd-score{font-size:1.35rem;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.bd-total{font-size:.72rem;color:var(--ink3);}
+.review-section-title{font-family:'Fraunces',serif;font-size:1.1rem;border-bottom:1px solid var(--border);padding-bottom:12px;
+ margin:22px 0 16px;display:flex;align-items:center;gap:10px;}
+.review-item{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px;background:var(--surface2);}
+.review-item.right{border-left:3px solid var(--green);}
+.review-item.miss{border-left:3px solid var(--red);}
+.ri-q{font-size:.9rem;margin-bottom:10px;line-height:1.6;}
+.ri-section{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:5px;}
+.ri-ans{font-size:.83rem;margin-top:5px;display:flex;align-items:flex-start;gap:7px;}
+.ri-ans.right{color:var(--green);}
+.ri-ans.wrong{color:var(--red);}
+.ri-ans.correct-reveal{color:#2dd4bf;}
+.ri-exp{margin-top:10px;padding:12px 14px;background:rgba(79,142,247,.04);border:1px solid rgba(79,142,247,.12);
+ border-radius:9px;font-size:.82rem;line-height:1.65;color:var(--ink2);}
+
+footer{text-align:center;font-size:.7rem;color:var(--ink3);padding:18px;border-top:1px solid var(--border);
+ font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+footer i{color:var(--accent);}
+
+@media(max-width:560px){
+ .card{padding:22px 16px;}
+ .mode-grid{grid-template-columns:1fr;}
+ .hero-title{font-size:1.8rem;}
+ .breakdown-grid{grid-template-columns:repeat(2,1fr);}
+ #quizTools{right:14px;bottom:18px;}
+}
+
+@media print{
+ @page{ margin:14mm; }
+ *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
+ .topbar, footer, #quizTools, #homeBtn, #retryBtn, #printBtn, .kbd-hint, #statsBar,
+ #calcBackdrop, #calcPanel, #pauseOverlay, #leaveWarningModal, #resumeModal, #soundToggle, .hamburger, .mobile-nav { display:none !important; }
+ body{background:#fff;color:#000;}
+ main{padding:0;}
+ .card{border:1px solid #ccc;background:#fff;box-shadow:none;}
+ .bd-card, .review-item{background:#f6f6f6;border-color:#ddd;}
+ .ri-exp{background:#f0f4ff;border-color:#cfd9ff;color:#333;}
+ .result-hero, .bd-card, .review-item{ break-inside:avoid; page-break-inside:avoid; }
+ .review-item{ margin-bottom:14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+ <div class="brand">
+ <span class="brand-badge">COS101</span>
+ <div class="brand-sub"><i class="fa-solid fa-microchip" style="margin-right:5px;"></i>Computer Fundamentals · Hardware, Software &amp; Programming</div>
+ </div>
+ <div style="display:flex;align-items:center;gap:10px;">
+ <div id="timer" class="hidden"><i class="fa-regular fa-clock"></i><span id="timerText">00:00</span></div>
+ <button id="soundToggle" title="Mute sounds" aria-label="Mute sounds" aria-pressed="false"></button>
+ <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
+ <i class="fa-solid fa-bars"></i>
+ <i class="fa-solid fa-xmark"></i>
+ </button>
+ </div>
+</div>
+
+<div class="mobile-nav" id="mobileNav">
+ <div class="mobile-nav-panel">
+ <span class="nav-group-label">Navigate</span>
+ <a href="../dashboard.html"><i class="fa-solid fa-house"></i>Home / Dashboard</a>
+ <a href="../aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+ <span class="nav-group-label">DTZ TRIO</span>
+ <a href="../about.html"><i class="fa-solid fa-users"></i>About Us</a>
+ <a href="../social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+ <span class="nav-group-label">Account</span>
+ <a href="../set.html"><i class="fa-solid fa-gear"></i>Settings</a>
+ <a href="../help.html"><i class="fa-solid fa-circle-question"></i>Help &amp; FAQ</a>
+ </div>
+</div>
+
+<main>
+
+<!-- HOME SCREEN -->
+<div id="homeScreen">
+ <div class="hero-wrap">
+ <div class="hero-eyebrow"><i class="fa-solid fa-microchip"></i> COS101 Practice Quiz</div>
+ <h1 class="hero-title">100 questions,<br><span>two ways to train.</span></h1>
+ <p class="hero-desc">Covering Computer Fundamentals, Hardware &amp; Memory, System &amp; Application Software, Data Representation &amp; Logic Gates, Algorithms, and Programming Fundamentals — with full worked explanations for every question.</p>
+ </div>
+
+ <div id="statsBar" class="hidden"></div>
+
+ <div class="mode-grid">
+ <div class="mode-card" id="pickAuto">
+ <div class="mode-icon"><i class="fa-solid fa-gauge-high"></i></div>
+ <div class="mode-name">Automatic Timer</div>
+ <div class="mode-desc">All 100 questions, shuffled, with a timer the app sets for you. Get instant feedback the moment you answer, and pause any time you need a break.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-regular fa-clock"></i> Auto-set clock</span>
+ <span class="mode-tag"><i class="fa-solid fa-list-check"></i> 100 Qs</span>
+ <span class="mode-tag"><i class="fa-solid fa-pause"></i> Pausable</span>
+ </div>
+ </div>
+ <div class="mode-card" id="pickCustom">
+ <div class="mode-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="mode-name">Custom Timer</div>
+ <div class="mode-desc">Pick your own topics, time limit, and question count. Answer everything first — no pausing, and no feedback until you submit.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-solid fa-sliders"></i> Custom setup</span>
+ <span class="mode-tag"><i class="fa-solid fa-ban"></i> No pausing</span>
+ <span class="mode-tag"><i class="fa-solid fa-flag-checkered"></i> Results at end</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="section-heading">
+ <div class="section-heading-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+ <div class="section-heading-text">How each mode works</div>
+ </div>
+ <div class="rules-list">
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-gauge-high"></i></span>
+ <span class="rule-text"><strong>Automatic Timer</strong> runs all 100 questions with a clock the app manages for you. Tap an option and it's locked in immediately — correct turns green, wrong turns red, with a short explanation right away. Tap <strong>Pause</strong> any time to freeze the clock and blur the screen. You must answer at least <strong>30 questions</strong> before you can submit.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-sliders"></i></span>
+ <span class="rule-text"><strong>Custom Timer</strong> lets you choose specific topics, your own time limit (up to 120 min), and how many questions to include. It cannot be paused — answers stay hidden until you submit, then you get a full score breakdown and review.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-calculator"></i></span>
+ <span class="rule-text">A full <strong>scientific calculator</strong> — sin/cos/tan, log, ln, √, powers, π and e — is available as a draggable floating window in both modes.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-shield-halved"></i></span>
+ <span class="rule-text">Your progress is <strong>auto-saved</strong> as you go, so a refresh won't lose your place. For fairness, switching away from the tab is tracked — leaving 3 times in one quiz resets it.</span></div>
+ </div>
+</div>
+
+<!-- CONFIG SCREEN -->
+<div id="configScreen" class="hidden">
+ <div class="section-heading" style="margin-top:36px;">
+ <div class="section-heading-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="section-heading-text">Set up your Custom Timer exam</div>
+ </div>
+ <div class="card">
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-layer-group"></i> Topics to include</div>
+ <div class="topics-grid" id="topicsWrap"></div>
+ <div class="config-hint" id="topicsHint">Select at least one topic.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-regular fa-clock"></i> Time limit (minutes)</div>
+ <div class="config-input-row">
+ <input type="range" id="timeSlider" class="config-slider" min="5" max="120" step="5" value="60">
+ <span class="config-value" id="timeValue">60</span>
+ </div>
+ <div class="config-hint">Maximum 120 minutes. This clock cannot be paused once the exam starts.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-list-ol"></i> Number of questions</div>
+ <div class="config-input-row">
+ <input type="range" id="countSlider" class="config-slider" min="1" max="100" step="1" value="50">
+ <span class="config-value" id="countValue">50</span>
+ </div>
+ <div class="config-hint" id="countHint">Randomly picked from the selected topics.</div>
+ </div>
+ <div class="nav-row" style="margin-top:8px;">
+ <button class="btn-ghost" id="backToHomeFromConfig"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <button class="btn" id="startCustomBtn"><i class="fa-solid fa-play"></i> Start Custom Timer</button>
+ </div>
+ </div>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" class="hidden">
+ <div class="loader-ring"></div>
+ <div class="loader-text">Preparing your questions…</div>
+ <div class="loader-sub">Shuffling &amp; randomizing options</div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="quizScreen" class="hidden">
+ <div id="progressWrap">
+ <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+ <div class="dots-group" id="dotsRow"></div>
+ </div>
+ <div class="card">
+ <div class="q-meta">
+ <span class="q-section-tag" id="sectionTag"></span>
+ <span class="q-counter" id="qCounter"></span>
+ </div>
+ <div class="q-text" id="qText"></div>
+ <div id="optsWrap"></div>
+ <div id="inlineExplain" class="inline-explain"></div>
+ <div class="nav-row">
+ <button class="btn-ghost" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <div style="display:flex;gap:8px;">
+ <button class="btn" id="nextBtn">Next <i class="fa-solid fa-arrow-right"></i></button>
+ <button class="btn hidden" id="finishBtn"><i class="fa-solid fa-check"></i> Submit Quiz</button>
+ </div>
+ </div>
+ <div class="kbd-hint">Keyboard: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate &nbsp;·&nbsp; <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to select</div>
+ </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="hidden">
+ <div class="card">
+ <div class="result-hero">
+ <div class="result-ring"><div><div class="result-score" id="resultScore">0</div><div class="result-of" id="resultOf">/ 100</div></div></div>
+ <div class="result-pct" id="resultPct"></div>
+ <div class="result-msg" id="resultMsg"></div>
+ <div id="bestBadge"></div>
+ </div>
+ <div class="breakdown-grid" id="breakdownGrid"></div>
+ <div class="review-section-title"><i class="fa-solid fa-magnifying-glass"></i> Question Review</div>
+ <div id="reviewList"></div>
+ <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;">
+ <button class="btn-ghost" id="homeBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-house"></i> Home</button>
+ <button class="btn-ghost" id="printBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+ <button class="btn" id="retryBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-rotate-right"></i> Retake</button>
+ </div>
+ </div>
+</div>
+
+</main>
+
+<!-- FLOATING QUIZ TOOLS -->
+<div id="quizTools" class="hidden">
+ <button class="fab pause-fab hidden" id="pauseBtn" title="Pause"><i class="fa-solid fa-pause"></i></button>
+ <button class="fab" id="calcFab" title="Calculator"><i class="fa-solid fa-calculator"></i></button>
+</div>
+
+<!-- SCIENTIFIC CALCULATOR -->
+<div id="calcBackdrop" class="calc-backdrop hidden"></div>
+<div id="calcPanel" class="calc-panel hidden">
+ <div id="calcHeader" class="calc-header">
+ <div class="calc-header-title"><i class="fa-solid fa-calculator"></i> Calculator</div>
+ <div class="calc-mode-toggle">
+ <button type="button" id="calcModeDeg" class="calc-mode-btn active">DEG</button>
+ <button type="button" id="calcModeRad" class="calc-mode-btn">RAD</button>
+ </div>
+ <button type="button" id="calcClose" class="calc-close-btn"><i class="fa-solid fa-xmark"></i></button>
+ </div>
+ <div class="calc-display">
+ <div id="calcExpr" class="calc-expr">&nbsp;</div>
+ <div id="calcResult" class="calc-result">0</div>
+ </div>
+ <div id="calcGrid" class="calc-grid"></div>
+</div>
+
+<!-- PAUSE OVERLAY -->
+<div id="pauseOverlay" class="hidden">
+ <div class="modal-icon"><i class="fa-solid fa-pause"></i></div>
+ <h2>Quiz Paused</h2>
+ <p>The clock is frozen and nothing on this screen is visible or clickable until you resume.</p>
+ <button class="btn" id="resumeFromPauseBtn"><i class="fa-solid fa-play"></i> Resume Quiz</button>
+</div>
+
+<!-- LEAVE-WARNING MODAL -->
+<div id="leaveWarningModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></div>
+ <div class="modal-title">You left the quiz</div>
+ <div class="modal-text" id="leaveWarnText"></div>
+ <button class="btn" id="leaveWarnOk">Okay, continue</button>
+ </div>
+</div>
+
+<!-- RESUME AUTOSAVE MODAL -->
+<div id="resumeModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+ <div class="modal-title">Resume your quiz?</div>
+ <div class="modal-text">We found a quiz in progress:<br><strong id="resumeInfo" style="color:var(--ink);"></strong></div>
+ <div style="display:flex;gap:10px;">
+ <button class="btn-ghost" id="resumeNo" style="flex:1;justify-content:center;">Discard</button>
+ <button class="btn" id="resumeYes" style="flex:1;justify-content:center;">Resume</button>
+ </div>
+ </div>
+</div>
+
+<footer><i class="fa-solid fa-microchip"></i> COS101 &nbsp;·&nbsp; Computer Fundamentals Practice Quiz</footer>
+
+<script>
+/* ============================================================
+ HAMBURGER / MOBILE NAV
+ ============================================================ */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+function closeMobileNav(){mobileNav.classList.remove('open');hamburgerBtn.setAttribute('aria-expanded','false');}
+function toggleMobileNav(){const isOpen = mobileNav.classList.toggle('open');hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');}
+hamburgerBtn.addEventListener('click', toggleMobileNav);
+mobileNav.addEventListener('click', (e)=>{ if(e.target === mobileNav) closeMobileNav(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMobileNav(); });
+
+/* ============================================================
+ COS101 — 100-QUESTION BANK
+ ============================================================ */
+const QUESTIONS = [
+{sec:'Introduction to Computer Fundamentals', q:"What is the primary function of a computer?", opts:["Play games", "Process data into information", "Store physical files", "Generate electricity"], ans:1, ex:"A computer's core job is to take in data and process it into meaningful information."},
+{sec:'Introduction to Computer Fundamentals', q:"Which generation of computers used vacuum tubes?", opts:["First", "Second", "Third", "Fourth"], ans:0, ex:"First-generation computers (1940s-50s) relied on vacuum tubes for circuitry."},
+{sec:'Introduction to Computer Fundamentals', q:"The characteristic of a computer to work continuously without fatigue is called:", opts:["Speed", "Versatility", "Diligence", "Accuracy"], ans:2, ex:"Diligence describes a computer's ability to perform repetitive tasks without getting tired."},
+{sec:'Introduction to Computer Fundamentals', q:"Which of the following is considered raw facts and figures?", opts:["Information", "Data", "Output", "Knowledge"], ans:1, ex:"Data refers to unprocessed raw facts, which become information once processed."},
+{sec:'Introduction to Computer Fundamentals', q:"Who is known as the father of the computer?", opts:["Alan Turing", "Charles Babbage", "John von Neumann", "Bill Gates"], ans:1, ex:"Charles Babbage designed the Analytical Engine and is widely credited as the father of the computer."},
+{sec:'Introduction to Computer Fundamentals', q:"Second-generation computers were based on which technology?", opts:["Vacuum tubes", "Integrated Circuits", "Transistors", "Microprocessors"], ans:2, ex:"Second-generation computers replaced vacuum tubes with smaller, more reliable transistors."},
+{sec:'Introduction to Computer Fundamentals', q:"Which type of computer is used for weather forecasting and complex scientific research?", opts:["Microcomputer", "Minicomputer", "Mainframe", "Supercomputer"], ans:3, ex:"Supercomputers handle the massive calculations needed for tasks like weather modeling."},
+{sec:'Introduction to Computer Fundamentals', q:"The physical, tangible components of a computer are called:", opts:["Software", "Hardware", "Firmware", "Malware"], ans:1, ex:"Hardware refers to the physical parts of a computer you can touch."},
+{sec:'Introduction to Computer Fundamentals', q:"A laptop is an example of a:", opts:["Minicomputer", "Mainframe", "Microcomputer", "Supercomputer"], ans:2, ex:"Laptops are personal computers, a category of microcomputers."},
+{sec:'Introduction to Computer Fundamentals', q:"The ability of a computer to perform a variety of tasks is known as:", opts:["Diligence", "Accuracy", "Versatility", "Reliability"], ans:2, ex:"Versatility refers to a computer's ability to be used for many different kinds of tasks."},
+{sec:'Introduction to Computer Fundamentals', q:"Which generation of computers introduced Integrated Circuits (ICs)?", opts:["First", "Second", "Third", "Fourth"], ans:2, ex:"Third-generation computers (mid-1960s onward) introduced integrated circuits."},
+{sec:'Introduction to Computer Fundamentals', q:"Artificial Intelligence is associated with which computer generation?", opts:["Second", "Third", "Fourth", "Fifth"], ans:3, ex:"Fifth-generation computers are associated with AI and advanced parallel processing."},
+{sec:'Introduction to Computer Fundamentals', q:"Which of the following is NOT a characteristic of computers?", opts:["High speed", "High IQ", "High accuracy", "Massive storage"], ans:1, ex:"Computers don't possess IQ or independent intelligence — they follow instructions."},
+{sec:'Introduction to Computer Fundamentals', q:"First-generation computers relied on which language for programming?", opts:["Assembly", "High-level", "Machine language", "Natural language"], ans:2, ex:"First-generation computers were programmed directly in machine language."},
+{sec:'Introduction to Computer Fundamentals', q:"Which early computing device used beads on rods?", opts:["Pascaline", "Abacus", "Slide Rule", "Analytical Engine"], ans:1, ex:"The abacus is the ancient calculating tool that uses beads sliding on rods."},
+{sec:'Introduction to Computer Fundamentals', q:"John von Neumann introduced the concept of:", opts:["Stored-program architecture", "The mouse", "The internet", "The graphical user interface"], ans:0, ex:"Von Neumann's stored-program concept lets a computer store both instructions and data in memory."},
+{sec:'Computer Hardware & Memory Architecture', q:"Which component is the \"brain\" of the computer?", opts:["RAM", "Motherboard", "CPU", "Hard Drive"], ans:2, ex:"The CPU processes instructions and is often called the brain of the computer."},
+{sec:'Computer Hardware & Memory Architecture', q:"The CPU consists of the Control Unit, Registers, and the:", opts:["ALU", "BIOS", "ROM", "Bus"], ans:0, ex:"The Arithmetic Logic Unit (ALU) is the third core component of the CPU alongside the Control Unit and registers."},
+{sec:'Computer Hardware & Memory Architecture', q:"Which part of the CPU performs mathematical calculations?", opts:["Control Unit", "Arithmetic Logic Unit", "RAM", "Cache"], ans:1, ex:"The ALU is specifically responsible for arithmetic and logical operations."},
+{sec:'Computer Hardware & Memory Architecture', q:"Which memory is volatile?", opts:["ROM", "EPROM", "RAM", "Flash Drive"], ans:2, ex:"RAM loses its contents when power is removed, making it volatile."},
+{sec:'Computer Hardware & Memory Architecture', q:"What does ROM stand for?", opts:["Random Access Memory", "Read-Only Memory", "Rapid Output Module", "Remote Operating Memory"], ans:1, ex:"ROM stands for Read-Only Memory, which retains data without power."},
+{sec:'Computer Hardware & Memory Architecture', q:"Which type of memory sits between the CPU and RAM to speed up processing?", opts:["Hard Disk", "Cache memory", "Virtual memory", "Secondary storage"], ans:1, ex:"Cache memory is a small, fast memory layer between the CPU and RAM."},
+{sec:'Computer Hardware & Memory Architecture', q:"Which of the following is an input device?", opts:["Monitor", "Printer", "Keyboard", "Speaker"], ans:2, ex:"A keyboard sends data into the computer, making it an input device."},
+{sec:'Computer Hardware & Memory Architecture', q:"Which of the following is an output device?", opts:["Mouse", "Scanner", "Projector", "Microphone"], ans:2, ex:"A projector displays output from the computer, making it an output device."},
+{sec:'Computer Hardware & Memory Architecture', q:"What is the smallest unit of data in a computer?", opts:["Byte", "Bit", "Nibble", "Pixel"], ans:1, ex:"A bit (binary digit) is the smallest possible unit of data."},
+{sec:'Computer Hardware & Memory Architecture', q:"How many bits make up one Byte?", opts:["2", "4", "8", "16"], ans:2, ex:"A byte is defined as a group of 8 bits."},
+{sec:'Computer Hardware & Memory Architecture', q:"A half-byte (4 bits) is known as a:", opts:["Kilo", "Pixel", "Nibble", "Word"], ans:2, ex:"Four bits, or half a byte, is called a nibble."},
+{sec:'Computer Hardware & Memory Architecture', q:"Which of the following is a secondary storage device?", opts:["RAM", "Cache", "Hard Disk Drive", "Registers"], ans:2, ex:"A hard disk drive stores data permanently, making it secondary storage."},
+{sec:'Computer Hardware & Memory Architecture', q:"Which memory can be erased electronically and reprogrammed?", opts:["ROM", "PROM", "EEPROM", "Mask ROM"], ans:2, ex:"EEPROM (Electrically Erasable Programmable ROM) can be erased and rewritten electronically."},
+{sec:'Computer Hardware & Memory Architecture', q:"The physical pathways connecting components on the motherboard are called:", opts:["Bridges", "Buses", "Ports", "Slots"], ans:1, ex:"Buses are the pathways that carry data between components on the motherboard."},
+{sec:'Computer Hardware & Memory Architecture', q:"What is the function of the Control Unit (CU)?", opts:["Performs addition and subtraction", "Directs the operation of the processor", "Stores files permanently", "Displays graphics"], ans:1, ex:"The Control Unit directs and coordinates the operations of the processor."},
+{sec:'Computer Hardware & Memory Architecture', q:"Which device uses a laser to read and write data?", opts:["Magnetic Tape", "Floppy Disk", "Optical Disk (CD/DVD)", "Solid State Drive"], ans:2, ex:"Optical discs like CDs and DVDs are read and written using a laser."},
+{sec:'Computer Hardware & Memory Architecture', q:"Flash memory is a type of:", opts:["Volatile memory", "EEPROM", "SRAM", "DRAM"], ans:1, ex:"Flash memory is a form of EEPROM that retains data without power."},
+{sec:'System & Application Software', q:"What is software?", opts:["Physical computer parts", "A set of instructions that tells the hardware what to do", "The motherboard", "The power supply"], ans:1, ex:"Software is the set of instructions/programs that direct hardware operations."},
+{sec:'System & Application Software', q:"The two main categories of software are System Software and:", opts:["Utility Software", "Operating Systems", "Application Software", "Firmware"], ans:2, ex:"Software is broadly divided into System Software and Application Software."},
+{sec:'System & Application Software', q:"Which of the following is an Operating System?", opts:["Microsoft Word", "Windows 11", "Google Chrome", "Adobe Photoshop"], ans:1, ex:"Windows 11 is an operating system that manages hardware and software resources."},
+{sec:'System & Application Software', q:"Software designed to perform a specific task for the user is called:", opts:["Application Software", "System Software", "BIOS", "Kernel"], ans:0, ex:"Application software performs specific user-facing tasks, unlike system software."},
+{sec:'System & Application Software', q:"Which translator converts high-level language into machine code line by line?", opts:["Compiler", "Assembler", "Interpreter", "Linker"], ans:2, ex:"An interpreter translates and executes code one line at a time."},
+{sec:'System & Application Software', q:"Which translator converts an entire high-level program into machine code at once?", opts:["Interpreter", "Compiler", "Assembler", "Debugger"], ans:1, ex:"A compiler translates the entire program into machine code before execution."},
+{sec:'System & Application Software', q:"An Assembler translates which type of code into machine code?", opts:["High-level language", "Assembly language", "Python code", "Java bytecode"], ans:1, ex:"An assembler specifically converts assembly language into machine code."},
+{sec:'System & Application Software', q:"Antivirus programs are classified as:", opts:["Application Software", "Operating Systems", "Utility Software", "Firmware"], ans:2, ex:"Antivirus programs are utility software, helping maintain and protect the system."},
+{sec:'System & Application Software', q:"The core of the operating system that manages memory and processes is the:", opts:["Shell", "GUI", "Kernel", "BIOS"], ans:2, ex:"The kernel is the core OS component managing memory, processes, and hardware."},
+{sec:'System & Application Software', q:"Which software is used for creating formatted text documents?", opts:["Spreadsheet", "Word Processor", "Database", "Web Browser"], ans:1, ex:"Word processors are designed for creating and formatting text documents."},
+{sec:'System & Application Software', q:"Microsoft Excel is an example of:", opts:["Presentation software", "Word processing", "Spreadsheet software", "System software"], ans:2, ex:"Excel is a spreadsheet application used for organizing and calculating data."},
+{sec:'System & Application Software', q:"Open-source software means that:", opts:["It costs money", "The source code is freely available to modify", "It has no bugs", "It only runs on Windows"], ans:1, ex:"Open-source software makes its source code publicly available for modification."},
+{sec:'System & Application Software', q:"What does GUI stand for?", opts:["Graphical User Interface", "General Utility Integration", "Graphic Usage Index", "Global User Interaction"], ans:0, ex:"GUI stands for Graphical User Interface, a visual way to interact with software."},
+{sec:'System & Application Software', q:"Software permanently stored on a ROM chip is called:", opts:["Malware", "Freeware", "Firmware", "Shareware"], ans:2, ex:"Firmware is software embedded permanently on hardware such as ROM chips."},
+{sec:'System & Application Software', q:"A software bug is:", opts:["A hardware defect", "A virus", "An error or flaw in the program code", "A utility program"], ans:2, ex:"A bug is an unintended flaw or error within a program's code."},
+{sec:'System & Application Software', q:"Which operating system is commonly used on Apple smartphones?", opts:["Android", "macOS", "iOS", "Linux"], ans:2, ex:"iOS is Apple's mobile operating system used on iPhones."},
+{sec:'System & Application Software', q:"Disk defragmenter is a tool used to:", opts:["Delete files", "Optimize hard drive space", "Install operating systems", "Browse the web"], ans:1, ex:"Disk defragmenter reorganizes fragmented data to optimize drive performance."},
+{sec:'Data Representation & Logic Gates', q:"The binary number system has a base of:", opts:["2", "8", "10", "16"], ans:0, ex:"Binary is base-2, using only the digits 0 and 1."},
+{sec:'Data Representation & Logic Gates', q:"The decimal number system uses digits from:", opts:["1 to 10", "0 to 9", "0 to 8", "0 to 15"], ans:1, ex:"Decimal (base-10) uses the ten digits 0 through 9."},
+{sec:'Data Representation & Logic Gates', q:"What is the decimal equivalent of the binary number (1010)_2?", opts:["8", "10", "12", "14"], ans:1, ex:"1010₂ = 1×8 + 0×4 + 1×2 + 0×1 = 10 in decimal."},
+{sec:'Data Representation & Logic Gates', q:"The hexadecimal number system has a base of:", opts:["8", "10", "16", "32"], ans:2, ex:"Hexadecimal is base-16, using digits 0-9 and letters A-F."},
+{sec:'Data Representation & Logic Gates', q:"In hexadecimal, the letter 'A' represents which decimal number?", opts:["10", "11", "14", "15"], ans:0, ex:"In hex, A represents the decimal value 10."},
+{sec:'Data Representation & Logic Gates', q:"Which logic gate produces a HIGH output (1) only if ALL inputs are HIGH (1)?", opts:["OR", "AND", "NOT", "XOR"], ans:1, ex:"An AND gate outputs 1 only when every input is 1."},
+{sec:'Data Representation & Logic Gates', q:"Which logic gate is known as an inverter?", opts:["AND", "OR", "NOT", "NAND"], ans:2, ex:"The NOT gate inverts its single input, hence the name inverter."},
+{sec:'Data Representation & Logic Gates', q:"The Boolean expression Y = A + B represents which gate?", opts:["AND", "OR", "NOR", "XOR"], ans:1, ex:"The '+' symbol in Boolean algebra denotes the OR operation."},
+{sec:'Data Representation & Logic Gates', q:"Which logic gate produces a HIGH output if AT LEAST ONE input is HIGH?", opts:["AND", "OR", "NAND", "XNOR"], ans:1, ex:"An OR gate outputs 1 if any one (or more) of its inputs is 1."},
+{sec:'Data Representation & Logic Gates', q:"NAND and NOR gates are known as:", opts:["Basic gates", "Universal gates", "Exclusive gates", "Sequential gates"], ans:1, ex:"NAND and NOR are called universal gates because any logic function can be built from them alone."},
+{sec:'Data Representation & Logic Gates', q:"The Boolean expression Y = A · B represents which gate?", opts:["OR", "NAND", "AND", "NOT"], ans:2, ex:"The '·' (dot) symbol in Boolean algebra denotes the AND operation."},
+{sec:'Data Representation & Logic Gates', q:"What is the output of a NOT gate if the input is 0?", opts:["0", "1", "High impedance", "Undefined"], ans:1, ex:"A NOT gate inverts its input, so an input of 0 produces an output of 1."},
+{sec:'Data Representation & Logic Gates', q:"How many rows are in a truth table for 2 input variables?", opts:["2", "4", "8", "16"], ans:1, ex:"Two input variables give 2² = 4 possible combinations, hence 4 rows."},
+{sec:'Data Representation & Logic Gates', q:"Which gate produces a HIGH output only when inputs are DIFFERENT?", opts:["XOR", "XNOR", "NAND", "NOR"], ans:0, ex:"An XOR (exclusive OR) gate outputs 1 only when its inputs differ."},
+{sec:'Data Representation & Logic Gates', q:"Convert the octal number (12)_8 to decimal.", opts:["8", "10", "12", "14"], ans:1, ex:"12₈ = 1×8 + 2×1 = 10 in decimal."},
+{sec:'Data Representation & Logic Gates', q:"What is the binary representation of the decimal number 7?", opts:["0101", "0110", "0111", "1000"], ans:2, ex:"7 in binary is 0111 (4+2+1)."},
+{sec:'Data Representation & Logic Gates', q:"According to Boolean algebra, A + 0 equals:", opts:["0", "1", "A", "Not A"], ans:2, ex:"OR-ing any value with 0 leaves it unchanged, so A + 0 = A."},
+{sec:'Problem Solving & Algorithm Concepts', q:"A step-by-step procedure used to solve a problem is called:", opts:["Syntax", "Algorithm", "Loop", "Variable"], ans:1, ex:"An algorithm is a defined, step-by-step procedure for solving a problem."},
+{sec:'Problem Solving & Algorithm Concepts', q:"A graphical representation of an algorithm is known as a:", opts:["Source code", "Pseudo-code", "Flowchart", "Blueprint"], ans:2, ex:"A flowchart visually represents the steps of an algorithm using symbols."},
+{sec:'Problem Solving & Algorithm Concepts', q:"In a flowchart, an oval symbol represents:", opts:["Input/Output", "Processing", "Start/Stop (Terminal)", "Decision"], ans:2, ex:"The oval (terminal) symbol marks the start or end of a flowchart."},
+{sec:'Problem Solving & Algorithm Concepts', q:"Which flowchart symbol is used for a decision-making step?", opts:["Rectangle", "Parallelogram", "Diamond", "Circle"], ans:2, ex:"A diamond shape represents a decision point in a flowchart."},
+{sec:'Problem Solving & Algorithm Concepts', q:"What shape represents a process or action in a flowchart?", opts:["Rectangle", "Diamond", "Oval", "Arrow"], ans:0, ex:"A rectangle represents a processing step or action in a flowchart."},
+{sec:'Problem Solving & Algorithm Concepts', q:"A parallelogram in a flowchart represents:", opts:["Start/End", "Input/Output", "Decision", "Connector"], ans:1, ex:"The parallelogram symbol denotes input or output operations."},
+{sec:'Problem Solving & Algorithm Concepts', q:"Pseudo-code is written using:", opts:["Complex machine code", "Standard English-like statements", "Flowchart symbols", "Hexadecimal"], ans:1, ex:"Pseudo-code uses plain, English-like statements to describe logic informally."},
+{sec:'Problem Solving & Algorithm Concepts', q:"Which control structure executes instructions sequentially, one after another?", opts:["Sequence", "Selection", "Iteration", "Modular"], ans:0, ex:"The sequence structure runs instructions in order, one after the other."},
+{sec:'Problem Solving & Algorithm Concepts', q:"An if-else statement is an example of which control structure?", opts:["Sequence", "Selection (Decision)", "Iteration", "Recursion"], ans:1, ex:"If-else statements make decisions, placing them in the selection control structure."},
+{sec:'Problem Solving & Algorithm Concepts', q:"A structure that repeats a block of code multiple times is called a:", opts:["Branch", "Loop (Iteration)", "Sequence", "Array"], ans:1, ex:"A loop, or iteration structure, repeats a block of code multiple times."},
+{sec:'Problem Solving & Algorithm Concepts', q:"What connects different symbols in a flowchart?", opts:["Lines", "Flowlines (Arrows)", "Nodes", "Dashes"], ans:1, ex:"Flowlines (arrows) connect symbols and show the direction of flow."},
+{sec:'Problem Solving & Algorithm Concepts', q:"Before writing code, a programmer should first:", opts:["Compile the program", "Run the program", "Analyze the problem and design an algorithm", "Debug"], ans:2, ex:"Good practice is to analyze the problem and design an algorithm before coding."},
+{sec:'Problem Solving & Algorithm Concepts', q:"An algorithm must have a finite number of steps. This property is called:", opts:["Finiteness", "Definiteness", "Effectiveness", "Output"], ans:0, ex:"Finiteness requires that an algorithm terminates after a limited number of steps."},
+{sec:'Problem Solving & Algorithm Concepts', q:"Which flowchart symbol is used to connect different parts of a flowchart across pages?", opts:["Diamond", "Small circle (Connector)", "Rectangle", "Oval"], ans:1, ex:"A small circle is used as a connector linking flowchart parts, often across pages."},
+{sec:'Problem Solving & Algorithm Concepts', q:"A logical error in a program will cause:", opts:["The program to fail to compile", "The program to crash immediately", "The program to run but produce incorrect results", "A syntax warning"], ans:2, ex:"Logical errors let the program run but yield incorrect results."},
+{sec:'Problem Solving & Algorithm Concepts', q:"Testing an algorithm manually with sample data is called:", opts:["Compiling", "Dry running (Tracing)", "Executing", "Linking"], ans:1, ex:"Dry running (tracing) means manually stepping through an algorithm with sample data."},
+{sec:'Problem Solving & Algorithm Concepts', q:"What is the main advantage of using flowcharts?", opts:["They are directly executable by the CPU", "They are easy to understand visually", "They compile faster", "They take up less memory"], ans:1, ex:"Flowcharts make an algorithm's logic easy to follow visually."},
+{sec:'Fundamentals of Programming', q:"A named memory location used to store data that can change during execution is a:", opts:["Constant", "Variable", "Function", "Keyword"], ans:1, ex:"A variable is a named storage location whose value can change during execution."},
+{sec:'Fundamentals of Programming', q:"Words that have a predefined meaning in a programming language are called:", opts:["Variables", "Keywords (Reserved words)", "Comments", "Identifiers"], ans:1, ex:"Keywords (reserved words) have fixed, predefined meanings in a language."},
+{sec:'Fundamentals of Programming', q:"Which data type is used to store whole numbers?", opts:["Float", "Char", "Integer", "Boolean"], ans:2, ex:"The integer data type stores whole numbers without decimal points."},
+{sec:'Fundamentals of Programming', q:"A Boolean data type can hold which of the following values?", opts:["Any number", "Text", "True or False", "Decimals"], ans:2, ex:"A Boolean variable can only hold one of two values: true or false."},
+{sec:'Fundamentals of Programming', q:"The set of rules governing how code must be written in a programming language is its:", opts:["Syntax", "Logic", "Semantics", "Algorithm"], ans:0, ex:"Syntax defines the formal rules for how code must be structured and written."},
+{sec:'Fundamentals of Programming', q:"Text enclosed in quotes, such as \"Hello World\", is known as a:", opts:["Integer", "String", "Boolean", "Float"], ans:1, ex:"Quoted text like \"Hello World\" is a string data type."},
+{sec:'Fundamentals of Programming', q:"What symbol is commonly used as the assignment operator in many languages (like C/C++)?", opts:["==", "=", ":=", "=>"], ans:1, ex:"A single equals sign (=) is the standard assignment operator in C/C++."},
+{sec:'Fundamentals of Programming', q:"Which operator is used to check if two values are equal in C/C++?", opts:["=", "!=", "==", "<>"], ans:2, ex:"The double equals sign (==) checks for equality in C/C++."},
+{sec:'Fundamentals of Programming', q:"What is the result of the modulus operator (%)?", opts:["The quotient of division", "The remainder of division", "The product of multiplication", "The sum of addition"], ans:1, ex:"The modulus operator (%) returns the remainder of a division operation."},
+{sec:'Fundamentals of Programming', q:"A for loop is typically used when:", opts:["The number of iterations is known", "The loop must run forever", "The number of iterations is unknown", "An error occurs"], ans:0, ex:"For loops are best suited when the number of iterations is known in advance."},
+{sec:'Fundamentals of Programming', q:"A while loop checks its condition at the:", opts:["End of the loop", "Middle of the loop", "Beginning of the loop", "Random times"], ans:2, ex:"A while loop evaluates its condition before executing the loop body, at the beginning."},
+{sec:'Fundamentals of Programming', q:"Which of the following is an arithmetic operator?", opts:["&&", "||", "*", "=="], ans:2, ex:"The asterisk (*) is an arithmetic operator used for multiplication."},
+{sec:'Fundamentals of Programming', q:"Non-executable lines of text used to explain code to programmers are called:", opts:["Variables", "Loops", "Comments", "Syntax"], ans:2, ex:"Comments are non-executable notes added to explain code to readers."},
+{sec:'Fundamentals of Programming', q:"What type of error occurs when syntax rules are broken?", opts:["Runtime error", "Logical error", "Syntax error", "Execution error"], ans:2, ex:"Breaking the grammatical rules of a language produces a syntax error."},
+{sec:'Fundamentals of Programming', q:"An array is used to store:", opts:["A single variable", "Multiple values of different data types", "Multiple values of the same data type", "Only text"], ans:2, ex:"An array stores multiple values of the same data type under one variable name."},
+{sec:'Fundamentals of Programming', q:"Finding and fixing errors in a computer program is known as:", opts:["Compiling", "Debugging", "Interpreting", "Translating"], ans:1, ex:"Debugging is the process of finding and fixing errors in a program."},
+];
+
+const ALL_TOPICS = [
+ 'Introduction to Computer Fundamentals',
+ 'Computer Hardware & Memory Architecture',
+ 'System & Application Software',
+ 'Data Representation & Logic Gates',
+ 'Problem Solving & Algorithm Concepts',
+ 'Fundamentals of Programming'
+];
+
+/* ============================================================
+ STORAGE KEYS (persistent artifact storage, not localStorage)
+ ============================================================ */
+const MUTE_KEY = 'cos101-muted';
+const BEST_SCORE_KEY = 'cos101-best-score';
+const STORAGE_KEY = 'cos101-quiz-state';
+
+/* ============================================================
+ HELPERS
+ ============================================================ */
+
+/* Records this attempt into the same localStorage list the Settings
+   page (set.html) reads for Quiz History / Reset Progress / PDF export. */
+function saveResultToHistory(course, score, total){
+ try{
+  const raw = localStorage.getItem('dtz_quiz_results');
+  const list = raw ? JSON.parse(raw) : [];
+  list.push({ course, score, total, date: new Date().toISOString() });
+  localStorage.setItem('dtz_quiz_results', JSON.stringify(list));
+ }catch(e){ /* storage unavailable — silently skip, quiz still works */ }
+}
+
+function shuffle(arr){
+ const a=[...arr];
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+ return a;
+}
+function sectionIcon(sec){
+ return {
+  'Introduction to Computer Fundamentals':'fa-desktop',
+  'Computer Hardware & Memory Architecture':'fa-microchip',
+  'System & Application Software':'fa-window-restore',
+  'Data Representation & Logic Gates':'fa-code-branch',
+  'Problem Solving & Algorithm Concepts':'fa-diagram-project',
+  'Fundamentals of Programming':'fa-code'
+ }[sec] || 'fa-square-root-variable';
+}
+function randomizeOptions(item){
+ const pairs = item.opts.map((o,idx)=>({o, correct: idx===item.ans}));
+ const shuffled = shuffle(pairs);
+ return {...item, opts: shuffled.map(p=>p.o), ans: shuffled.findIndex(p=>p.correct)};
+}
+
+/* Safely read a value from persistent storage. Returns null if the key
+   doesn't exist or storage is unavailable, instead of throwing. */
+async function storageGet(key) {
+ try {
+  const result = await window.storage.get(key, false);
+  return result ? result.value : null;
+ } catch (e) {
+  return null;
+ }
+}
+async function storageSet(key, value) {
+ try {
+  await window.storage.set(key, value, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+async function storageDelete(key) {
+ try {
+  await window.storage.delete(key, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+
+/* SOUND ENGINE */
+const SoundEngine = (function() {
+ let ctx = null;
+ let muted = false;
+
+ async function init() {
+  const v = await storageGet(MUTE_KEY);
+  muted = v === '1';
+  return muted;
+ }
+
+ function getCtx() {
+ if (!ctx) {
+ const AC = window.AudioContext || window.webkitAudioContext;
+ if (!AC) return null;
+ ctx = new AC();
+ }
+ if (ctx.state === 'suspended') ctx.resume();
+ return ctx;
+ }
+
+ function isMuted() { return muted; }
+ async function setMuted(v) {
+ muted = v;
+ await storageSet(MUTE_KEY, v ? '1' : '0');
+ }
+
+ function playCorrect() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc1 = c.createOscillator();
+ const osc2 = c.createOscillator();
+ const gain = c.createGain();
+
+ osc1.type = 'sine'; osc1.frequency.setValueAtTime(880, t);
+ osc2.type = 'sine'; osc2.frequency.setValueAtTime(1760, t);
+
+ gain.gain.setValueAtTime(0.2, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+
+ osc1.connect(gain); osc2.connect(gain);
+ gain.connect(c.destination);
+
+ osc1.start(t); osc2.start(t);
+ osc1.stop(t + 0.6); osc2.stop(t + 0.6);
+ }
+
+ function playWrong() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc = c.createOscillator();
+ const gain = c.createGain();
+
+ osc.type = 'sawtooth';
+ osc.frequency.setValueAtTime(160, t);
+ osc.frequency.exponentialRampToValueAtTime(60, t + 0.35);
+
+ gain.gain.setValueAtTime(0.25, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+
+ osc.connect(gain);
+ gain.connect(c.destination);
+
+ osc.start(t);
+ osc.stop(t + 0.35);
+ }
+
+ return { init, isMuted, setMuted, playCorrect, playWrong };
+})();
+
+/* APP STATE */
+let quizMode = 'auto'; // 'auto' or 'custom'
+let activeQuestions = [];
+let userAnswers = []; // array of selected option indices
+let currentQ = 0;
+let timeRemaining = 0;
+let timerInterval = null;
+let isPaused = false;
+let leaveCount = 0;
+
+// DOM Elements
+const homeScreen = document.getElementById('homeScreen');
+const configScreen = document.getElementById('configScreen');
+const loadingScreen = document.getElementById('loadingScreen');
+const quizScreen = document.getElementById('quizScreen');
+const resultScreen = document.getElementById('resultScreen');
+
+const pickAuto = document.getElementById('pickAuto');
+const pickCustom = document.getElementById('pickCustom');
+const backToHomeFromConfig = document.getElementById('backToHomeFromConfig');
+const startCustomBtn = document.getElementById('startCustomBtn');
+
+const topicsWrap = document.getElementById('topicsWrap');
+const timeSlider = document.getElementById('timeSlider');
+const timeValue = document.getElementById('timeValue');
+const countSlider = document.getElementById('countSlider');
+const countValue = document.getElementById('countValue');
+
+const timerBox = document.getElementById('timer');
+const timerText = document.getElementById('timerText');
+const soundToggle = document.getElementById('soundToggle');
+
+const progressFill = document.getElementById('progressFill');
+const dotsRow = document.getElementById('dotsRow');
+const sectionTag = document.getElementById('sectionTag');
+const qCounter = document.getElementById('qCounter');
+const qText = document.getElementById('qText');
+const optsWrap = document.getElementById('optsWrap');
+const inlineExplain = document.getElementById('inlineExplain');
+
+const backBtn = document.getElementById('backBtn');
+const nextBtn = document.getElementById('nextBtn');
+const finishBtn = document.getElementById('finishBtn');
+
+const quizTools = document.getElementById('quizTools');
+const pauseBtn = document.getElementById('pauseBtn');
+const pauseOverlay = document.getElementById('pauseOverlay');
+const resumeFromPauseBtn = document.getElementById('resumeFromPauseBtn');
+
+const resumeModal = document.getElementById('resumeModal');
+const resumeInfo = document.getElementById('resumeInfo');
+const resumeYes = document.getElementById('resumeYes');
+const resumeNo = document.getElementById('resumeNo');
+
+const leaveWarningModal = document.getElementById('leaveWarningModal');
+const leaveWarnText = document.getElementById('leaveWarnText');
+const leaveWarnOk = document.getElementById('leaveWarnOk');
+
+const statsBar = document.getElementById('statsBar');
+
+/* INIT */
+window.addEventListener('load', async () => {
+ await SoundEngine.init();
+ updateSoundToggleUI();
+ setupConfigTopics();
+ await checkSavedState();
+ await updateHomeStats();
+});
+
+function updateSoundToggleUI() {
+ const muted = SoundEngine.isMuted();
+ soundToggle.classList.toggle('muted', muted);
+ soundToggle.setAttribute('aria-pressed', muted ? 'true' : 'false');
+ soundToggle.innerHTML = muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+}
+soundToggle.addEventListener('click', async () => {
+ await SoundEngine.setMuted(!SoundEngine.isMuted());
+ updateSoundToggleUI();
+});
+
+async function updateHomeStats() {
+ const best = await storageGet(BEST_SCORE_KEY);
+ if (best) {
+  statsBar.classList.remove('hidden');
+  statsBar.innerHTML = `<div class="stat-chip"><i class="fa-solid fa-trophy"></i> Best Score: <strong>${best}%</strong></div>`;
+ } else {
+  statsBar.classList.add('hidden');
+  statsBar.innerHTML = '';
+ }
+}
+
+/* CONFIG TOPICS BUILD */
+function setupConfigTopics() {
+ topicsWrap.innerHTML = '';
+ ALL_TOPICS.forEach((t) => {
+  const label = document.createElement('label');
+  label.className = 'topic-chip';
+  label.innerHTML = `<input type="checkbox" value="${t}" checked> <span><i class="fa-solid ${sectionIcon(t)}"></i> ${t}</span>`;
+  topicsWrap.appendChild(label);
+ });
+}
+
+timeSlider.addEventListener('input', () => { timeValue.textContent = timeSlider.value; });
+countSlider.addEventListener('input', () => { countValue.textContent = countSlider.value; });
+
+/* MODE SELECTION */
+pickAuto.addEventListener('click', () => {
+ startQuiz('auto', ALL_TOPICS, 60, QUESTIONS.length);
+});
+pickCustom.addEventListener('click', () => {
+ homeScreen.classList.add('hidden');
+ configScreen.classList.remove('hidden');
+});
+backToHomeFromConfig.addEventListener('click', () => {
+ configScreen.classList.add('hidden');
+ homeScreen.classList.remove('hidden');
+});
+
+startCustomBtn.addEventListener('click', () => {
+ const selectedTopics = Array.from(topicsWrap.querySelectorAll('input:checked')).map(i => i.value);
+ if (selectedTopics.length === 0) {
+  alert('Please select at least one topic.');
+  return;
+ }
+ const mins = parseInt(timeSlider.value, 10);
+ const count = parseInt(countSlider.value, 10);
+ configScreen.classList.add('hidden');
+ startQuiz('custom', selectedTopics, mins, count);
+});
+
+/* START QUIZ */
+function startQuiz(mode, topics, minutes, count) {
+ quizMode = mode;
+ showScreen(loadingScreen);
+ setTimeout(() => {
+  let filtered = QUESTIONS.filter(q => topics.includes(q.sec));
+  if (filtered.length === 0) filtered = [...QUESTIONS];
+  filtered = shuffle(filtered).map(randomizeOptions);
+  if (count < filtered.length) {
+   filtered = filtered.slice(0, count);
+  }
+  activeQuestions = filtered;
+  userAnswers = new Array(activeQuestions.length).fill(null);
+  currentQ = 0;
+  timeRemaining = minutes * 60;
+  isPaused = false;
+  leaveCount = 0;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') {
+   pauseBtn.classList.remove('hidden');
+  } else {
+   pauseBtn.classList.add('hidden');
+  }
+  timerBox.classList.remove('hidden');
+
+  startTimer();
+  renderQuestion();
+  saveState();
+ }, 600);
+}
+
+function showScreen(sc) {
+ [homeScreen, configScreen, loadingScreen, quizScreen, resultScreen].forEach(s => s.classList.add('hidden'));
+ sc.classList.remove('hidden');
+ if (sc === quizScreen) {
+  closeMobileNav();
+  hamburgerBtn.classList.add('hidden');
+ } else {
+  hamburgerBtn.classList.remove('hidden');
+ }
+}
+
+/* TIMER */
+function startTimer() {
+ clearInterval(timerInterval);
+ updateTimerDisplay();
+ timerInterval = setInterval(() => {
+  if (!isPaused) {
+   timeRemaining--;
+   updateTimerDisplay();
+   if (timeRemaining <= 0) {
+    clearInterval(timerInterval);
+    alert('Time is up! Submitting your answers.');
+    finishQuiz();
+   }
+  }
+ }, 1000);
+}
+
+function updateTimerDisplay() {
+ const m = Math.floor(Math.max(0, timeRemaining) / 60);
+ const s = Math.max(0, timeRemaining) % 60;
+ timerText.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+ if (timeRemaining < 300) {
+  timerBox.classList.add('warn');
+ } else {
+  timerBox.classList.remove('warn');
+ }
+}
+
+/* PAUSE ENGINE */
+pauseBtn.addEventListener('click', togglePause);
+resumeFromPauseBtn.addEventListener('click', togglePause);
+
+function togglePause() {
+ if (quizMode !== 'auto') return;
+ isPaused = !isPaused;
+ if (isPaused) {
+  pauseOverlay.classList.remove('hidden');
+ } else {
+  pauseOverlay.classList.add('hidden');
+ }
+}
+
+/* RENDER QUESTION */
+function renderQuestion() {
+ const q = activeQuestions[currentQ];
+ sectionTag.innerHTML = `<i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec}`;
+ qCounter.textContent = `Question ${currentQ + 1} of ${activeQuestions.length}`;
+ qText.textContent = q.q;
+
+ optsWrap.innerHTML = '';
+ inlineExplain.className = 'inline-explain';
+ inlineExplain.innerHTML = '';
+
+ const answered = userAnswers[currentQ] !== null;
+
+ q.opts.forEach((optStr, idx) => {
+  const optDiv = document.createElement('div');
+  optDiv.className = 'opt';
+  const letter = String.fromCharCode(65 + idx);
+
+  if (answered) {
+   optDiv.classList.add('locked');
+   if (quizMode === 'auto') {
+    if (idx === q.ans) optDiv.classList.add('correct');
+    if (userAnswers[currentQ] === idx && idx !== q.ans) optDiv.classList.add('wrong');
+   } else {
+    if (userAnswers[currentQ] === idx) optDiv.classList.add('selected');
+   }
+  }
+
+  optDiv.innerHTML = `<div class="opt-letter">${letter}</div><div class="opt-text">${optStr}</div>`;
+  optDiv.addEventListener('click', () => handleSelectOption(idx));
+  optsWrap.appendChild(optDiv);
+ });
+
+ if (answered && quizMode === 'auto') {
+  const isRight = userAnswers[currentQ] === q.ans;
+  inlineExplain.classList.add('show', isRight ? 'right' : 'wrong');
+  inlineExplain.innerHTML = `
+   <div class="ie-label">${isRight ? '<i class="fa-solid fa-circle-check"></i> Correct!' : '<i class="fa-solid fa-circle-xmark"></i> Incorrect'}</div>
+   <div>${q.ex}</div>
+  `;
+ }
+
+ // Navigation buttons state
+ backBtn.disabled = currentQ === 0;
+ if (currentQ === activeQuestions.length - 1) {
+  nextBtn.classList.add('hidden');
+  finishBtn.classList.remove('hidden');
+ } else {
+  nextBtn.classList.remove('hidden');
+  finishBtn.classList.add('hidden');
+ }
+
+ renderProgress();
+}
+
+function renderProgress() {
+ const pct = ((currentQ + 1) / activeQuestions.length) * 100;
+ progressFill.style.width = `${pct}%`;
+
+ dotsRow.innerHTML = '';
+ activeQuestions.forEach((q, idx) => {
+  const dot = document.createElement('div');
+  dot.className = 'dot';
+  if (idx === currentQ) dot.classList.add('current');
+
+  if (userAnswers[idx] !== null) {
+   if (quizMode === 'auto') {
+    if (userAnswers[idx] === q.ans) dot.classList.add('correct');
+    else dot.classList.add('wrong');
+   } else {
+    dot.classList.add('answered');
+   }
+  }
+  dot.addEventListener('click', () => {
+   currentQ = idx;
+   renderQuestion();
+  });
+  dotsRow.appendChild(dot);
+ });
+}
+
+/* OPTION SELECTION */
+function handleSelectOption(idx) {
+ if (userAnswers[currentQ] !== null && quizMode === 'auto') return; // locked in auto mode once picked
+
+ const prevAns = userAnswers[currentQ];
+ userAnswers[currentQ] = idx;
+
+ if (quizMode === 'auto' && prevAns === null) {
+  if (idx === activeQuestions[currentQ].ans) {
+   SoundEngine.playCorrect();
+  } else {
+   SoundEngine.playWrong();
+  }
+ }
+
+ renderQuestion();
+ saveState();
+}
+
+nextBtn.addEventListener('click', () => {
+ if (currentQ < activeQuestions.length - 1) {
+  currentQ++;
+  renderQuestion();
+ }
+});
+backBtn.addEventListener('click', () => {
+ if (currentQ > 0) {
+  currentQ--;
+  renderQuestion();
+ }
+});
+finishBtn.addEventListener('click', () => {
+ const answeredCount = userAnswers.filter(a => a !== null).length;
+ if (quizMode === 'auto' && answeredCount < Math.min(30, activeQuestions.length)) {
+  alert(`Please answer at least ${Math.min(30, activeQuestions.length)} questions before submitting.`);
+  return;
+ }
+ if (confirm('Are you sure you want to submit your quiz?')) {
+  finishQuiz();
+ }
+});
+
+/* KEYBOARD NAVIGATION */
+document.addEventListener('keydown', (e) => {
+ if (quizScreen.classList.contains('hidden')) return;
+ if (e.key === 'ArrowLeft' && currentQ > 0) {
+  currentQ--; renderQuestion();
+ } else if (e.key === 'ArrowRight' && currentQ < activeQuestions.length - 1) {
+  currentQ++; renderQuestion();
+ } else if (['1','2','3','4'].includes(e.key)) {
+  const idx = parseInt(e.key, 10) - 1;
+  if (idx < activeQuestions[currentQ].opts.length) {
+   handleSelectOption(idx);
+  }
+ }
+});
+
+/* FINISH QUIZ */
+function finishQuiz() {
+ clearInterval(timerInterval);
+ clearSavedState();
+ quizTools.classList.add('hidden');
+ timerBox.classList.add('hidden');
+
+ let correctCount = 0;
+ const breakdown = {};
+
+ activeQuestions.forEach((q, i) => {
+  if (!breakdown[q.sec]) breakdown[q.sec] = { correct: 0, total: 0 };
+  breakdown[q.sec].total++;
+
+  if (userAnswers[i] === q.ans) {
+   correctCount++;
+   breakdown[q.sec].correct++;
+  }
+ });
+
+ const total = activeQuestions.length;
+ const pct = Math.round((correctCount / total) * 100);
+
+ document.getElementById('resultScore').textContent = correctCount;
+ document.getElementById('resultOf').textContent = `/ ${total}`;
+ document.getElementById('resultPct').textContent = `${pct}% Overall Score`;
+
+ let msg = '';
+ if (pct >= 80) msg = '<i class="fa-solid fa-award" style="color:#facc15;"></i> Excellent Mastery! Outstanding Performance.';
+ else if (pct >= 60) msg = '<i class="fa-solid fa-thumbs-up" style="color:var(--accent);"></i> Good Job! Keep reviewing difficult topics.';
+ else msg = '<i class="fa-solid fa-book-open" style="color:var(--red);"></i> Keep Practicing! Review the explanations below.';
+ document.getElementById('resultMsg').innerHTML = msg;
+
+ saveResultToHistory('COS101', correctCount, total);
+
+ document.getElementById('bestBadge').innerHTML = '';
+ (async () => {
+  const oldBestRaw = await storageGet(BEST_SCORE_KEY);
+  const oldBest = oldBestRaw ? parseInt(oldBestRaw, 10) : 0;
+  if (pct > oldBest) {
+   await storageSet(BEST_SCORE_KEY, String(pct));
+   document.getElementById('bestBadge').innerHTML = `<div class="best-badge"><i class="fa-solid fa-star"></i> New Personal Best!</div>`;
+  }
+ })();
+
+ // Render breakdown grid
+ const breakdownGrid = document.getElementById('breakdownGrid');
+ breakdownGrid.innerHTML = '';
+ Object.keys(breakdown).forEach(sec => {
+  const item = breakdown[sec];
+  const bdCard = document.createElement('div');
+  bdCard.className = 'bd-card';
+  bdCard.innerHTML = `
+   <div class="bd-name"><i class="fa-solid ${sectionIcon(sec)}"></i> ${sec}</div>
+   <div class="bd-score">${item.correct} <span class="bd-total">/ ${item.total}</span></div>
+  `;
+  breakdownGrid.appendChild(bdCard);
+ });
+
+ // Render question review list
+ const reviewList = document.getElementById('reviewList');
+ reviewList.innerHTML = '';
+ activeQuestions.forEach((q, i) => {
+  const uAns = userAnswers[i];
+  const isRight = uAns === q.ans;
+  const revItem = document.createElement('div');
+  revItem.className = `review-item ${isRight ? 'right' : 'miss'}`;
+
+  const uAnsText = uAns !== null ? `${String.fromCharCode(65 + uAns)}) ${q.opts[uAns]}` : 'Not Answered';
+  const cAnsText = `${String.fromCharCode(65 + q.ans)}) ${q.opts[q.ans]}`;
+
+  revItem.innerHTML = `
+   <div class="ri-section"><i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec} · Q${i + 1}</div>
+   <div class="ri-q"><strong>${q.q}</strong></div>
+   <div class="ri-ans ${isRight ? 'right' : 'wrong'}">
+    <i class="fa-solid ${isRight ? 'fa-check' : 'fa-xmark'}"></i>
+    <span><strong>Your Answer:</strong> ${uAnsText}</span>
+   </div>
+   ${!isRight ? `<div class="ri-ans correct-reveal"><i class="fa-solid fa-bullseye"></i> <span><strong>Correct Answer:</strong> ${cAnsText}</span></div>` : ''}
+   <div class="ri-exp"><strong>Explanation:</strong> ${q.ex}</div>
+  `;
+  reviewList.appendChild(revItem);
+ });
+
+ showScreen(resultScreen);
+ updateHomeStats();
+}
+
+document.getElementById('homeBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('retryBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+/* AUTOSAVE ENGINE (persistent artifact storage) */
+function saveState() {
+ const state = { quizMode, activeQuestions, userAnswers, currentQ, timeRemaining };
+ storageSet(STORAGE_KEY, JSON.stringify(state));
+}
+
+function clearSavedState() {
+ storageDelete(STORAGE_KEY);
+}
+
+async function checkSavedState() {
+ const raw = await storageGet(STORAGE_KEY);
+ if (!raw) return;
+ let data;
+ try {
+  data = JSON.parse(raw);
+ } catch (e) {
+  return;
+ }
+ if (!data || !data.activeQuestions || data.activeQuestions.length === 0) return;
+
+ resumeInfo.textContent = `${data.activeQuestions.length} Questions (${data.quizMode.toUpperCase()} Mode)`;
+ resumeModal.classList.remove('hidden');
+
+ resumeYes.onclick = () => {
+  resumeModal.classList.add('hidden');
+  quizMode = data.quizMode;
+  activeQuestions = data.activeQuestions;
+  userAnswers = data.userAnswers;
+  currentQ = data.currentQ;
+  timeRemaining = data.timeRemaining;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') pauseBtn.classList.remove('hidden'); else pauseBtn.classList.add('hidden');
+  timerBox.classList.remove('hidden');
+  startTimer();
+  renderQuestion();
+ };
+
+ resumeNo.onclick = () => {
+  resumeModal.classList.add('hidden');
+  clearSavedState();
+ };
+}
+
+/* TAB SWITCH GUARDRAIL */
+document.addEventListener('visibilitychange', () => {
+ if (!quizScreen.classList.contains('hidden') && document.hidden) {
+  leaveCount++;
+  if (leaveCount >= 3) {
+   alert('You have left the quiz tab 3 times. The quiz will now reset.');
+   clearSavedState();
+   location.reload();
+  } else {
+   leaveWarnText.textContent = `You switched away from the quiz tab. Warning ${leaveCount} of 3. Leaving 3 times will reset your quiz.`;
+   leaveWarningModal.classList.remove('hidden');
+  }
+ }
+});
+leaveWarnOk.addEventListener('click', () => leaveWarningModal.classList.add('hidden'));
+
+/* SCIENTIFIC CALCULATOR ENGINE */
+(function setupCalculator(){
+ const calcFab = document.getElementById('calcFab');
+ const calcBackdrop = document.getElementById('calcBackdrop');
+ const calcPanel = document.getElementById('calcPanel');
+ const calcClose = document.getElementById('calcClose');
+ const calcExpr = document.getElementById('calcExpr');
+ const calcResult = document.getElementById('calcResult');
+ const calcGrid = document.getElementById('calcGrid');
+ const calcHeader = document.getElementById('calcHeader');
+ const calcModeDeg = document.getElementById('calcModeDeg');
+ const calcModeRad = document.getElementById('calcModeRad');
+
+ let expr = '';
+ let isRad = false;
+
+ calcFab.addEventListener('click', () => {
+  calcBackdrop.classList.remove('hidden');
+  calcPanel.classList.remove('hidden');
+ });
+ calcClose.addEventListener('click', closeCalc);
+ calcBackdrop.addEventListener('click', closeCalc);
+
+ function closeCalc(){
+  calcBackdrop.classList.add('hidden');
+  calcPanel.classList.add('hidden');
+ }
+
+ calcModeDeg.addEventListener('click', () => {
+  isRad = false;
+  calcModeDeg.classList.add('active'); calcModeRad.classList.remove('active');
+ });
+ calcModeRad.addEventListener('click', () => {
+  isRad = true;
+  calcModeRad.classList.add('active'); calcModeDeg.classList.remove('active');
+ });
+
+ const buttons = [
+  { label: 'C', cls: 'clear', action: 'clear' },
+  { label: '(', cls: 'op', action: 'append', val: '(' },
+  { label: ')', cls: 'op', action: 'append', val: ')' },
+  { label: '÷', cls: 'op', action: 'append', val: '/' },
+
+  { label: 'sin', cls: 'fn', action: 'fn', fn: 'sin' },
+  { label: '7', action: 'append', val: '7' },
+  { label: '8', action: 'append', val: '8' },
+  { label: '9', action: 'append', val: '9' },
+
+  { label: 'cos', cls: 'fn', action: 'fn', fn: 'cos' },
+  { label: '4', action: 'append', val: '4' },
+  { label: '5', action: 'append', val: '5' },
+  { label: '6', action: 'append', val: '6' },
+
+  { label: 'tan', cls: 'fn', action: 'fn', fn: 'tan' },
+  { label: '1', action: 'append', val: '1' },
+  { label: '2', action: 'append', val: '2' },
+  { label: '3', action: 'append', val: '3' },
+
+  { label: '√', cls: 'fn', action: 'fn', fn: 'sqrt' },
+  { label: '0', action: 'append', val: '0' },
+  { label: '.', action: 'append', val: '.' },
+  { label: '×', cls: 'op', action: 'append', val: '*' },
+
+  { label: 'ln', cls: 'fn', action: 'fn', fn: 'ln' },
+  { label: 'log', cls: 'fn', action: 'fn', fn: 'log10' },
+  { label: '^', cls: 'op', action: 'append', val: '**' },
+  { label: '-', cls: 'op', action: 'append', val: '-' },
+
+  { label: 'π', cls: 'fn', action: 'append', val: 'π' },
+  { label: 'e', cls: 'fn', action: 'append', val: 'e' },
+  { label: '+', cls: 'op', action: 'append', val: '+' },
+  { label: '=', cls: 'equals', action: 'calc' }
+ ];
+
+ calcGrid.innerHTML = '';
+ buttons.forEach(b => {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = `calc-btn ${b.cls || ''}`;
+  btn.textContent = b.label;
+  btn.addEventListener('click', () => handleCalc(b));
+  calcGrid.appendChild(btn);
+ });
+
+ function handleCalc(b) {
+  if (b.action === 'clear') {
+   expr = '';
+   calcExpr.innerHTML = '&nbsp;';
+   calcResult.textContent = '0';
+   calcResult.classList.remove('err');
+  } else if (b.action === 'append') {
+   expr += b.val;
+   calcExpr.textContent = expr;
+  } else if (b.action === 'fn') {
+   expr += `${b.fn}(`;
+   calcExpr.textContent = expr;
+  } else if (b.action === 'calc') {
+   try {
+    // Substitute π and standalone "e" for the constants passed into the
+    // evaluator scope. Using named helper functions (rather than a
+    // regex-based degree/radian post-process) avoids breaking on nested
+    // parentheses, e.g. sin(sqrt(4)).
+    let safeExpr = expr.replace(/π/g, 'PI').replace(/\be\b/g, 'E');
+
+    // Auto-close any open parentheses (e.g. "sin(30" -> "sin(30)") so
+    // pressing "=" works without manually typing the closing bracket.
+    const openCount = (safeExpr.match(/\(/g) || []).length;
+    const closeCount = (safeExpr.match(/\)/g) || []).length;
+    if (openCount > closeCount) {
+     safeExpr += ')'.repeat(openCount - closeCount);
+    }
+
+    const sinFn = x => isRad ? Math.sin(x) : Math.sin(x * Math.PI / 180);
+    const cosFn = x => isRad ? Math.cos(x) : Math.cos(x * Math.PI / 180);
+    const tanFn = x => isRad ? Math.tan(x) : Math.tan(x * Math.PI / 180);
+
+    const evaluator = new Function(
+     'sin', 'cos', 'tan', 'sqrt', 'ln', 'log10', 'PI', 'E',
+     `"use strict"; return (${safeExpr});`
+    );
+    const res = evaluator(sinFn, cosFn, tanFn, Math.sqrt, Math.log, Math.log10, Math.PI, Math.E);
+
+    calcResult.textContent = Number.isFinite(res) ? +res.toFixed(6) : 'Error';
+    calcResult.classList.remove('err');
+   } catch(e) {
+    calcResult.textContent = 'Error';
+    calcResult.classList.add('err');
+   }
+  }
+ }
+
+ // Draggable window logic
+ let isDragging = false, startX, startY, initialX, initialY;
+ calcHeader.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  calcPanel.classList.add('dragged');
+  startX = e.clientX; startY = e.clientY;
+  const rect = calcPanel.getBoundingClientRect();
+  initialX = rect.left; initialY = rect.top;
+ });
+ document.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  const dx = e.clientX - startX;
+  const dy = e.clientY - startY;
+  calcPanel.style.left = `${initialX + dx}px`;
+  calcPanel.style.top = `${initialY + dy}px`;
+ });
+ document.addEventListener('mouseup', () => isDragging = false);
+})();
+</script>
+</body>
+</html>
