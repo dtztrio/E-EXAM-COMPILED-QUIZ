@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYB121 · Introduction to Cyber Security Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script>
+(function(){
+  try{
+    var theme = localStorage.getItem('dtz_theme') || 'dark';
+    var scale = localStorage.getItem('dtz_font_scale') || '1';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.style.setProperty('--font-scale', scale);
+  }catch(e){}
+})();
+</script>
+<style>
+:root {
+ --bg:#0a0c12; --surface:#0f1117; --surface2:#141820; --surface3:#1a2030;
+ --border:#1e2640; --border2:#26304e; --ink:#e2e8f6; --ink2:#94a3c0; --ink3:#4a5878;
+ --accent:#4f8ef7; --accent2:#7c6fff; --accent-dim:#0d1630; --accent-glow:rgba(79,142,247,.14);
+ --green:#34d399; --green-dim:#0a1e14; --red:#f87171; --red-dim:#1e0a0a; --purple:#a78bfa;
+ --bar-bg:rgba(10,12,18,.92); --font-scale:1;
+ --r:16px;
+}
+:root[data-theme="light"] {
+ --bg:#f4f6fc; --surface:#ffffff; --surface2:#eef1fb; --surface3:#e4e9f9;
+ --border:#dde3f3; --border2:#c7cafb; --ink:#131a2c; --ink2:#5b6478; --ink3:#8a93ab;
+ --accent-dim:#e3e6fd; --accent-glow:rgba(79,142,247,.10);
+ --green-dim:#e2f9ef; --red-dim:#fdeaea;
+ --bar-bg:rgba(255,255,255,.92);
+}
+html{font-size:calc(16px * var(--font-scale, 1));}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Outfit',sans-serif;min-height:100vh;display:flex;flex-direction:column;
+ background-image:radial-gradient(ellipse 900px 600px at 10% 0%, rgba(79,142,247,.06) 0%, transparent 70%),
+ radial-gradient(ellipse 700px 500px at 90% 30%, rgba(124,111,255,.05) 0%, transparent 60%);
+ transition:background-color .2s ease, color .2s ease;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);
+ background:var(--bar-bg);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px;}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.brand-badge{background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;font-weight:800;font-size:.72rem;letter-spacing:2px;
+ padding:6px 14px;border-radius:50px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+.brand-sub{font-size:.7rem;color:var(--ink3);letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+#timer{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:600;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:7px 16px;border-radius:50px;letter-spacing:2px;min-width:96px;text-align:center;
+ display:flex;align-items:center;gap:8px;justify-content:center;}
+#timer.warn{color:var(--red);background:var(--red-dim);border-color:rgba(248,113,113,.3);animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+#soundToggle{width:38px;height:38px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);
+ color:var(--ink2);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;
+ transition:border-color .15s,color .15s,background .15s;flex-shrink:0;}
+#soundToggle:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+#soundToggle.muted{color:var(--ink3);}
+.hamburger{display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;cursor:pointer;padding:0;color:var(--ink);font-size:.95rem;transition:border-color .15s,color .15s;flex-shrink:0;}
+.hamburger:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+.hamburger .fa-xmark{display:none;} .hamburger[aria-expanded="true"] .fa-bars{display:none;} .hamburger[aria-expanded="true"] .fa-xmark{display:inline-block;}
+.mobile-nav{position:fixed;inset:0;z-index:99;background:transparent;opacity:0;pointer-events:none;transition:opacity .15s ease;}
+.mobile-nav.open{opacity:1;pointer-events:auto;}
+.mobile-nav-panel{position:absolute;top:70px;right:20px;width:250px;max-width:82vw;max-height:min(70vh,520px);background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:1px;transform:scale(.94) translateY(-8px);transform-origin:top right;opacity:0;transition:transform .16s ease,opacity .16s ease;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow-y:auto;}
+.mobile-nav.open .mobile-nav-panel{transform:scale(1) translateY(0);opacity:1;}
+.mobile-nav-panel a{display:flex;align-items:center;gap:12px;padding:11px 10px;font-size:.9rem;font-weight:600;color:var(--ink);text-decoration:none;border-radius:8px;}
+.mobile-nav-panel a:hover{background:var(--accent-glow);}
+.mobile-nav-panel a i{width:18px;text-align:center;color:var(--accent);font-size:.85rem;}
+.mobile-nav-panel a.active{color:var(--accent);background:var(--accent-dim);}
+.mobile-nav-panel .nav-group-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);padding:12px 10px 4px;}
+.mobile-nav-panel .nav-group-label:first-child{padding-top:6px;}
+main{flex:1;display:flex;justify-content:center;padding:0 16px 100px;}
+#homeScreen,#configScreen,#quizScreen,#resultScreen,#loadingScreen{width:100%;max-width:720px;}
+.hidden{display:none !important;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:32px 28px;margin-bottom:20px;}
+
+a { text-decoration: none; }
+#statsBar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;}
+.stat-chip{font-size:.78rem;color:var(--ink2);background:var(--surface2);border:1px solid var(--border);padding:8px 16px;
+ border-radius:50px;display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;}
+.stat-chip i{color:var(--accent);}
+.stat-chip strong{color:var(--ink);}
+
+/* HOME */
+.hero-wrap{padding:48px 0 8px;text-align:center;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
+ color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:500;margin-bottom:22px;background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.22);padding:7px 16px 7px 13px;border-radius:50px;}
+.hero-title{font-family:'Fraunces',serif;font-size:2.3rem;line-height:1.16;margin-bottom:16px;font-weight:600;letter-spacing:-.5px;}
+.hero-title span{color:var(--accent);font-style:italic;}
+.hero-desc{color:var(--ink2);font-size:.96rem;line-height:1.75;max-width:480px;margin:0 auto 34px;}
+
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:30px;}
+.mode-card{background:var(--surface2);border:1px solid var(--border2);border-radius:18px;padding:26px 22px;cursor:pointer;
+ transition:border-color .15s,transform .15s,background .15s;text-align:left;}
+.mode-card:hover{border-color:rgba(79,142,247,.4);transform:translateY(-3px);background:var(--surface3);}
+.mode-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;
+ display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:16px;}
+.mode-name{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;margin-bottom:8px;}
+.mode-desc{font-size:.85rem;color:var(--ink2);line-height:1.6;margin-bottom:14px;}
+.mode-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.mode-tag{font-size:.66rem;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ padding:3px 9px;border-radius:20px;font-family:'JetBrains Mono',monospace;}
+
+.section-heading{display:flex;align-items:center;gap:12px;margin:36px 0 18px;}
+.section-heading-icon{width:34px;height:34px;border-radius:10px;background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.85rem;flex-shrink:0;}
+.section-heading-text{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;}
+.rules-list{display:grid;gap:8px;}
+.rule-item{display:flex;gap:14px;align-items:flex-start;font-size:.86rem;color:var(--ink2);line-height:1.55;padding:14px 16px;
+ background:var(--surface2);border:1px solid var(--border);border-radius:10px;}
+.rule-icon{width:30px;height:30px;border-radius:8px;flex-shrink:0;background:var(--accent-dim);border:1px solid rgba(79,142,247,.2);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.78rem;margin-top:1px;}
+.rule-text strong{color:var(--ink);}
+
+/* CONFIG SCREEN */
+.config-field{margin-bottom:22px;}
+.config-label{font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.config-label i{color:var(--accent);}
+.config-input-row{display:flex;align-items:center;gap:14px;}
+.config-slider{flex:1;-webkit-appearance:none;height:6px;border-radius:6px;background:var(--border2);outline:none;}
+.config-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;box-shadow:0 2px 8px rgba(79,142,247,.4);}
+.config-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;border:none;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;}
+.config-value{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:6px 14px;border-radius:10px;min-width:74px;text-align:center;font-size:.9rem;}
+.config-hint{font-size:.74rem;color:var(--ink3);margin-top:8px;}
+.topics-grid{display:flex;flex-wrap:wrap;gap:10px;}
+.topic-chip{display:flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--border2);
+ padding:10px 16px;border-radius:12px;cursor:pointer;font-size:.85rem;transition:border-color .15s,background .15s;}
+.topic-chip:hover{border-color:rgba(79,142,247,.4);}
+.topic-chip input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);
+ color:#fff;border:none;padding:14px 28px;border-radius:50px;font-weight:700;font-size:.95rem;cursor:pointer;
+ font-family:'Outfit',sans-serif;transition:transform .15s,box-shadow .15s,opacity .2s;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(79,142,247,.3);}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--border2);padding:12px 22px;border-radius:50px;
+ font-weight:600;font-size:.9rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:border-color .15s,background .15s;
+ display:inline-flex;align-items:center;gap:8px;}
+.btn-ghost:hover{background:var(--accent-glow);border-color:rgba(79,142,247,.35);}
+.btn-ghost:disabled{opacity:.35;cursor:not-allowed;}
+
+/* LOADING SCREEN */
+#loadingScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 0;text-align:center;}
+.loader-ring{width:56px;height:56px;border-radius:50%;border:4px solid var(--border2);border-top-color:var(--accent);
+ animation:spin .8s linear infinite;margin-bottom:24px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader-text{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--ink2);}
+.loader-sub{font-size:.78rem;color:var(--ink3);margin-top:8px;font-family:'JetBrains Mono',monospace;}
+
+/* QUIZ */
+#progressWrap{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;padding-top:24px;}
+.progress-bar-track{height:4px;background:var(--border);border-radius:4px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .3s;}
+.dots-group{display:flex;gap:5px;flex-wrap:wrap;}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .15s,transform .1s;}
+.dot:hover{transform:scale(1.35);}
+.dot.answered{background:rgba(79,142,247,.4);border:1px solid var(--accent);}
+.dot.current{background:var(--accent);box-shadow:0 0 0 3px rgba(79,142,247,.25);}
+.dot.correct{background:var(--green);}
+.dot.wrong{background:var(--red);}
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.q-section-tag{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;
+ font-weight:600;background:var(--accent-dim);padding:4px 10px;border-radius:20px;border:1px solid rgba(79,142,247,.2);}
+.q-counter{font-size:.78rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;}
+.q-text{font-size:1.1rem;line-height:1.65;margin:0 0 26px;font-family:'Fraunces',serif;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.opt{display:flex;align-items:flex-start;gap:14px;padding:15px 18px;border-radius:12px;border:1px solid var(--border2);
+ margin-bottom:10px;background:var(--surface2);cursor:pointer;transition:border-color .15s,background .15s,transform .1s;}
+.opt:hover{border-color:rgba(79,142,247,.35);background:var(--surface3);}
+.opt.locked{cursor:default;}
+.opt.selected{border-color:var(--accent);background:var(--accent-dim);}
+.opt.correct{border-color:var(--green);background:var(--green-dim);}
+.opt.wrong{border-color:var(--red);background:var(--red-dim);}
+.opt-letter{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;
+ justify-content:center;font-size:.75rem;font-weight:700;color:var(--ink3);flex-shrink:0;font-family:'JetBrains Mono',monospace;
+ transition:all .15s;margin-top:1px;}
+.opt.selected .opt-letter{background:var(--accent);color:#fff;border-color:var(--accent);}
+.opt.correct .opt-letter{background:var(--green);color:#fff;border-color:var(--green);}
+.opt.wrong .opt-letter{background:var(--red);color:#fff;border-color:var(--red);}
+.opt-text{font-size:.92rem;line-height:1.55;padding-top:3px;}
+.inline-explain{display:none;margin-top:6px;margin-bottom:14px;padding:16px 18px;background:rgba(79,142,247,.05);
+ border:1px solid rgba(79,142,247,.15);border-radius:10px;font-size:.85rem;line-height:1.7;color:var(--ink2);animation:fadeUp .2s ease;}
+.inline-explain.show{display:block;}
+.inline-explain .ie-label{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;
+ margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.inline-explain.right .ie-label{color:var(--green);}
+.inline-explain.wrong .ie-label{color:var(--red);}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;}
+.kbd-hint{text-align:center;font-size:.68rem;color:var(--ink3);margin-top:14px;font-family:'JetBrains Mono',monospace;}
+.kbd-hint kbd{background:var(--surface3);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;font-family:'JetBrains Mono',monospace;}
+
+#quizTools{position:fixed;right:20px;bottom:24px;display:flex;flex-direction:column;gap:12px;z-index:60;}
+.fab{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;border:none;
+ cursor:pointer;font-size:1.05rem;box-shadow:0 8px 24px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;
+ transition:transform .15s;}
+.fab:hover{transform:translateY(-3px) scale(1.04);}
+.fab.pause-fab{background:linear-gradient(135deg,#f59e0b,#f97316);}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.72);backdrop-filter:blur(6px);z-index:200;
+ display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-card{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:26px 24px;max-width:380px;
+ width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.modal-icon{width:52px;height:52px;border-radius:50%;background:var(--accent-dim);border:1px solid rgba(79,142,247,.25);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.3rem;margin:0 auto 16px;}
+.modal-icon.warn{background:var(--red-dim);border-color:rgba(248,113,113,.3);color:var(--red);}
+.modal-title{font-family:'Fraunces',serif;font-size:1.2rem;margin-bottom:10px;}
+.modal-text{font-size:.87rem;color:var(--ink2);line-height:1.6;margin-bottom:20px;}
+
+#pauseOverlay{position:fixed;inset:0;background:rgba(6,8,14,.85);backdrop-filter:blur(16px);z-index:150;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
+#pauseOverlay .modal-icon{width:64px;height:64px;font-size:1.6rem;margin-bottom:20px;}
+#pauseOverlay h2{font-family:'Fraunces',serif;font-size:1.6rem;margin-bottom:10px;}
+#pauseOverlay p{color:var(--ink2);font-size:.9rem;max-width:320px;margin-bottom:26px;line-height:1.6;}
+
+.result-hero{text-align:center;padding:26px 0 22px;border-bottom:1px solid var(--border);margin-bottom:26px;}
+.result-ring{display:inline-flex;align-items:center;justify-content:center;width:124px;height:124px;border-radius:50%;
+ border:3px solid var(--accent);background:var(--accent-dim);margin-bottom:16px;}
+.result-score{font-family:'JetBrains Mono',monospace;font-size:2.3rem;font-weight:700;color:var(--accent);}
+.result-of{font-size:.8rem;color:var(--ink3);margin-top:2px;}
+.result-pct{font-family:'Fraunces',serif;font-size:1.5rem;margin-bottom:6px;}
+.result-msg{color:var(--ink2);font-size:.9rem;line-height:1.6;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.best-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;color:#facc15;background:rgba(250,204,21,.08);
+ border:1px solid rgba(250,204,21,.25);padding:4px 12px;border-radius:20px;margin-top:10px;font-family:'JetBrains Mono',monospace;}
+.breakdown-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:26px;}
+.bd-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.bd-name{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.bd-score{font-size:1.35rem;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.bd-total{font-size:.72rem;color:var(--ink3);}
+.review-section-title{font-family:'Fraunces',serif;font-size:1.1rem;border-bottom:1px solid var(--border);padding-bottom:12px;
+ margin:22px 0 16px;display:flex;align-items:center;gap:10px;}
+.review-item{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px;background:var(--surface2);}
+.review-item.right{border-left:3px solid var(--green);}
+.review-item.miss{border-left:3px solid var(--red);}
+.ri-q{font-size:.9rem;margin-bottom:10px;line-height:1.6;}
+.ri-section{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:5px;}
+.ri-ans{font-size:.83rem;margin-top:5px;display:flex;align-items:flex-start;gap:7px;}
+.ri-ans.right{color:var(--green);}
+.ri-ans.wrong{color:var(--red);}
+.ri-ans.correct-reveal{color:#2dd4bf;}
+.ri-exp{margin-top:10px;padding:12px 14px;background:rgba(79,142,247,.04);border:1px solid rgba(79,142,247,.12);
+ border-radius:9px;font-size:.82rem;line-height:1.65;color:var(--ink2);}
+
+footer{text-align:center;font-size:.7rem;color:var(--ink3);padding:18px;border-top:1px solid var(--border);
+ font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+footer i{color:var(--accent);}
+
+@media(max-width:560px){
+ .card{padding:22px 16px;}
+ .mode-grid{grid-template-columns:1fr;}
+ .hero-title{font-size:1.8rem;}
+ .breakdown-grid{grid-template-columns:repeat(2,1fr);}
+ #quizTools{right:14px;bottom:18px;}
+}
+
+@media print{
+ @page{ margin:14mm; }
+ *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
+ .topbar, footer, #quizTools, #homeBtn, #retryBtn, #printBtn, .kbd-hint, #statsBar,
+ #pauseOverlay, #leaveWarningModal, #resumeModal, #soundToggle, .hamburger, .mobile-nav { display:none !important; }
+ body{background:#fff;color:#000;}
+ main{padding:0;}
+ .card{border:1px solid #ccc;background:#fff;box-shadow:none;}
+ .bd-card, .review-item{background:#f6f6f6;border-color:#ddd;}
+ .ri-exp{background:#f0f4ff;border-color:#cfd9ff;color:#333;}
+ .result-hero, .bd-card, .review-item{ break-inside:avoid; page-break-inside:avoid; }
+ .review-item{ margin-bottom:14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+ <div class="brand">
+ <span class="brand-badge">CYB121</span>
+ <div class="brand-sub"><i class="fa-solid fa-shield-halved" style="margin-right:5px;"></i>Cyber Security Fundamentals · Nigerian Context · Career Domains</div>
+ </div>
+ <div style="display:flex;align-items:center;gap:10px;">
+ <div id="timer" class="hidden"><i class="fa-regular fa-clock"></i><span id="timerText">00:00</span></div>
+ <button id="soundToggle" title="Mute sounds" aria-label="Mute sounds" aria-pressed="false"></button>
+ <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
+ <i class="fa-solid fa-bars"></i>
+ <i class="fa-solid fa-xmark"></i>
+ </button>
+ </div>
+</div>
+
+<div class="mobile-nav" id="mobileNav">
+ <div class="mobile-nav-panel">
+ <span class="nav-group-label">Navigate</span>
+ <a href="../dashboard.html"><i class="fa-solid fa-house"></i>Home / Dashboard</a>
+ <a href="../aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+ <span class="nav-group-label">DTZ TRIO</span>
+ <a href="../about.html"><i class="fa-solid fa-users"></i>About Us</a>
+ <a href="../social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+ <span class="nav-group-label">Account</span>
+ <a href="../set.html"><i class="fa-solid fa-gear"></i>Settings</a>
+ <a href="../help.html"><i class="fa-solid fa-circle-question"></i>Help &amp; FAQ</a>
+ </div>
+</div>
+
+<main>
+
+<!-- HOME SCREEN -->
+<div id="homeScreen">
+ <div class="hero-wrap">
+ <div class="hero-eyebrow"><i class="fa-solid fa-shield-halved"></i> CYB121 Practice Quiz</div>
+ <h1 class="hero-title">100 questions,<br><span>two ways to train.</span></h1>
+ <p class="hero-desc">Covering core concepts, the CIAAN security pillars, the global and Nigerian history of cybercrime, regulatory agencies, modern threats, the security lifecycle, and cybersecurity career domains — with full worked explanations for every question.</p>
+ </div>
+
+ <div id="statsBar" class="hidden"></div>
+
+ <div class="mode-grid">
+ <div class="mode-card" id="pickAuto">
+ <div class="mode-icon"><i class="fa-solid fa-gauge-high"></i></div>
+ <div class="mode-name">Automatic Timer</div>
+ <div class="mode-desc">All 100 questions, shuffled, with a timer the app sets for you. Get instant feedback the moment you answer, and pause any time you need a break.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-regular fa-clock"></i> Auto-set clock</span>
+ <span class="mode-tag"><i class="fa-solid fa-list-check"></i> 100 Qs</span>
+ <span class="mode-tag"><i class="fa-solid fa-pause"></i> Pausable</span>
+ </div>
+ </div>
+ <div class="mode-card" id="pickCustom">
+ <div class="mode-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="mode-name">Custom Timer</div>
+ <div class="mode-desc">Pick your own topics, time limit, and question count. Answer everything first — no pausing, and no feedback until you submit.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-solid fa-sliders"></i> Custom setup</span>
+ <span class="mode-tag"><i class="fa-solid fa-ban"></i> No pausing</span>
+ <span class="mode-tag"><i class="fa-solid fa-flag-checkered"></i> Results at end</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="section-heading">
+ <div class="section-heading-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+ <div class="section-heading-text">How each mode works</div>
+ </div>
+ <div class="rules-list">
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-gauge-high"></i></span>
+ <span class="rule-text"><strong>Automatic Timer</strong> runs all 100 questions with a clock the app manages for you. Tap an option and it's locked in immediately — correct turns green, wrong turns red, with a short explanation right away. Tap <strong>Pause</strong> any time to freeze the clock and blur the screen. You must answer at least <strong>30 questions</strong> before you can submit.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-sliders"></i></span>
+ <span class="rule-text"><strong>Custom Timer</strong> lets you choose specific topics, your own time limit (up to 120 min), and how many questions to include. It cannot be paused — answers stay hidden until you submit, then you get a full score breakdown and review.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-shield-halved"></i></span>
+ <span class="rule-text">Your progress is <strong>auto-saved</strong> as you go, so a refresh won't lose your place. For fairness, switching away from the tab is tracked — leaving 3 times in one quiz resets it.</span></div>
+ </div>
+</div>
+
+<!-- CONFIG SCREEN -->
+<div id="configScreen" class="hidden">
+ <div class="section-heading" style="margin-top:36px;">
+ <div class="section-heading-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="section-heading-text">Set up your Custom Timer exam</div>
+ </div>
+ <div class="card">
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-layer-group"></i> Topics to include</div>
+ <div class="topics-grid" id="topicsWrap"></div>
+ <div class="config-hint" id="topicsHint">Select at least one topic.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-regular fa-clock"></i> Time limit (minutes)</div>
+ <div class="config-input-row">
+ <input type="range" id="timeSlider" class="config-slider" min="5" max="120" step="5" value="60">
+ <span class="config-value" id="timeValue">60</span>
+ </div>
+ <div class="config-hint">Maximum 120 minutes. This clock cannot be paused once the exam starts.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-list-ol"></i> Number of questions</div>
+ <div class="config-input-row">
+ <input type="range" id="countSlider" class="config-slider" min="1" max="100" step="1" value="50">
+ <span class="config-value" id="countValue">50</span>
+ </div>
+ <div class="config-hint" id="countHint">Randomly picked from the selected topics.</div>
+ </div>
+ <div class="nav-row" style="margin-top:8px;">
+ <button class="btn-ghost" id="backToHomeFromConfig"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <button class="btn" id="startCustomBtn"><i class="fa-solid fa-play"></i> Start Custom Timer</button>
+ </div>
+ </div>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" class="hidden">
+ <div class="loader-ring"></div>
+ <div class="loader-text">Preparing your questions…</div>
+ <div class="loader-sub">Shuffling &amp; randomizing options</div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="quizScreen" class="hidden">
+ <div id="progressWrap">
+ <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+ <div class="dots-group" id="dotsRow"></div>
+ </div>
+ <div class="card">
+ <div class="q-meta">
+ <span class="q-section-tag" id="sectionTag"></span>
+ <span class="q-counter" id="qCounter"></span>
+ </div>
+ <div class="q-text" id="qText"></div>
+ <div id="optsWrap"></div>
+ <div id="inlineExplain" class="inline-explain"></div>
+ <div class="nav-row">
+ <button class="btn-ghost" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <div style="display:flex;gap:8px;">
+ <button class="btn" id="nextBtn">Next <i class="fa-solid fa-arrow-right"></i></button>
+ <button class="btn hidden" id="finishBtn"><i class="fa-solid fa-check"></i> Submit Quiz</button>
+ </div>
+ </div>
+ <div class="kbd-hint">Keyboard: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate &nbsp;·&nbsp; <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to select</div>
+ </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="hidden">
+ <div class="card">
+ <div class="result-hero">
+ <div class="result-ring"><div><div class="result-score" id="resultScore">0</div><div class="result-of" id="resultOf">/ 100</div></div></div>
+ <div class="result-pct" id="resultPct"></div>
+ <div class="result-msg" id="resultMsg"></div>
+ <div id="bestBadge"></div>
+ </div>
+ <div class="breakdown-grid" id="breakdownGrid"></div>
+ <div class="review-section-title"><i class="fa-solid fa-magnifying-glass"></i> Question Review</div>
+ <div id="reviewList"></div>
+ <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;">
+ <button class="btn-ghost" id="homeBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-house"></i> Home</button>
+ <button class="btn-ghost" id="printBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+ <button class="btn" id="retryBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-rotate-right"></i> Retake</button>
+ </div>
+ </div>
+</div>
+
+</main>
+
+<!-- FLOATING QUIZ TOOLS -->
+<div id="quizTools" class="hidden">
+ <button class="fab pause-fab hidden" id="pauseBtn" title="Pause"><i class="fa-solid fa-pause"></i></button>
+</div>
+
+<!-- PAUSE OVERLAY -->
+<div id="pauseOverlay" class="hidden">
+ <div class="modal-icon"><i class="fa-solid fa-pause"></i></div>
+ <h2>Quiz Paused</h2>
+ <p>The clock is frozen and nothing on this screen is visible or clickable until you resume.</p>
+ <button class="btn" id="resumeFromPauseBtn"><i class="fa-solid fa-play"></i> Resume Quiz</button>
+</div>
+
+<!-- LEAVE-WARNING MODAL -->
+<div id="leaveWarningModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></div>
+ <div class="modal-title">You left the quiz</div>
+ <div class="modal-text" id="leaveWarnText"></div>
+ <button class="btn" id="leaveWarnOk">Okay, continue</button>
+ </div>
+</div>
+
+<!-- RESUME AUTOSAVE MODAL -->
+<div id="resumeModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+ <div class="modal-title">Resume your quiz?</div>
+ <div class="modal-text">We found a quiz in progress:<br><strong id="resumeInfo" style="color:var(--ink);"></strong></div>
+ <div style="display:flex;gap:10px;">
+ <button class="btn-ghost" id="resumeNo" style="flex:1;justify-content:center;">Discard</button>
+ <button class="btn" id="resumeYes" style="flex:1;justify-content:center;">Resume</button>
+ </div>
+ </div>
+</div>
+
+<footer><i class="fa-solid fa-shield-halved"></i> CYB121 &nbsp;·&nbsp; Introduction to Cyber Security Practice Quiz</footer>
+
+<script>
+/* ============================================================
+ HAMBURGER / MOBILE NAV
+ ============================================================ */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+function closeMobileNav(){mobileNav.classList.remove('open');hamburgerBtn.setAttribute('aria-expanded','false');}
+function toggleMobileNav(){const isOpen = mobileNav.classList.toggle('open');hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');}
+hamburgerBtn.addEventListener('click', toggleMobileNav);
+mobileNav.addEventListener('click', (e)=>{ if(e.target === mobileNav) closeMobileNav(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMobileNav(); });
+
+/* ============================================================
+ CYB121 — 100-QUESTION BANK
+ ============================================================ */
+const QUESTIONS = [
+// UNIT 1: Core Concepts & Security Pillars (Questions 1-20)
+{sec:'Core Concepts & Security Pillars', q:"In information technology, the term 'cyber' most precisely refers to:", opts:["Any form of electronic communication regardless of network","Systems, networks, and technology associated with computers and the internet","Only military-grade computing systems","The physical hardware components of a computer"], ans:1, ex:"'Cyber' is used as a prefix denoting anything related to computers, networks, and the digital environment they create."},
+{sec:'Core Concepts & Security Pillars', q:"Which best describes 'cyberspace'?", opts:["A physical location housing servers","The interconnected digital environment created by computer networks and the internet","A single national telecommunications network","The hardware layer of the internet only"], ans:1, ex:"Cyberspace is the notional, borderless environment formed by interconnected computer networks where digital communication and data exchange occur."},
+{sec:'Core Concepts & Security Pillars', q:"Cybersecurity exists fundamentally because:", opts:["Governments require it for taxation purposes","Digital systems and the data they hold are valuable and therefore targeted by malicious actors","Software companies need to sell more products","The internet was designed without any protective features from the start"], ans:1, ex:"Because digital systems store and transmit valuable data, they attract malicious actors, which creates the need to defend them."},
+{sec:'Core Concepts & Security Pillars', q:"Which is the most accurate formal definition of cybersecurity?", opts:["The study of computer hardware manufacturing","The practice of protecting systems, networks, and data from digital attacks","A branch of law dealing only with online fraud","The process of building faster computer networks"], ans:1, ex:"Cybersecurity is the practice of defending systems, networks, and programs from digital attacks that aim to access, alter, or destroy data."},
+{sec:'Core Concepts & Security Pillars', q:"Cybercrime is best defined as:", opts:["Any error made while using a computer","Criminal activity that targets or uses a computer, network, or networked device","Only crimes committed by government agencies","Legitimate business conducted online"], ans:1, ex:"Cybercrime involves criminal acts where a computer or network is either the target of the crime or the tool used to commit it."},
+{sec:'Core Concepts & Security Pillars', q:"Information and Communication Technologies (ICTs) refer to:", opts:["Only telephone networks","The combined technologies used to store, process, and communicate information","Paper-based record-keeping systems","Broadcast television exclusively"], ans:1, ex:"ICT encompasses the full range of technologies — computing, telecommunications, and networking — used to manage and exchange information."},
+{sec:'Core Concepts & Security Pillars', q:"How has the scope of ICT changed since the late 20th century?", opts:["It has narrowed to focus only on landline telephony","It expanded from isolated computing systems to interconnected, internet-based global networks","It remains unchanged since the 1970s","It shifted entirely away from digital technology"], ans:1, ex:"ICT grew from standalone computing and telephony into a vast, interconnected web of internet-based digital services."},
+{sec:'Core Concepts & Security Pillars', q:"Which three properties does cybersecurity primarily aim to protect in digital systems?", opts:["Speed, cost, and usability","Confidentiality, Integrity, and Availability","Popularity, scalability, and marketing reach","Hardware, software, and firmware"], ans:1, ex:"The core triad — confidentiality, integrity, and availability — represents the properties cybersecurity efforts are designed to preserve."},
+{sec:'Core Concepts & Security Pillars', q:"Malicious actors typically exploit digital systems for their benefit by:", opts:["Improving system performance for the owner","Taking advantage of vulnerabilities to steal data, disrupt services, or gain unauthorized control","Reporting bugs directly to developers only","Increasing a system's storage capacity"], ans:1, ex:"Attackers exploit weaknesses in systems to achieve unauthorized access, theft, disruption, or control for personal or financial gain."},
+{sec:'Core Concepts & Security Pillars', q:"In cybercrime, what distinguishes a computer used as a 'tool' from one used as a 'target'?", opts:["There is no meaningful distinction between the two","As a tool it facilitates an attack on something else; as a target it is the object being attacked","A tool is always hardware while a target is always software","A target can never also be a tool in the same incident"], ans:1, ex:"A computer acts as a tool when used to commit a crime elsewhere (e.g., sending phishing emails), and as a target when it is itself the object of attack (e.g., being hacked)."},
+{sec:'Core Concepts & Security Pillars', q:"Which five pillars make up the CIAAN model of cybersecurity?", opts:["Confidentiality, Integrity, Availability, Authentication, Non-repudiation","Confidentiality, Innovation, Availability, Authorization, Networking","Cost, Integrity, Access, Authentication, Notification","Confidentiality, Integrity, Accountability, Authentication, Network security"], ans:0, ex:"CIAAN stands for Confidentiality, Integrity, Availability, Authentication, and Non-repudiation."},
+{sec:'Core Concepts & Security Pillars', q:"The security pillar of Confidentiality is best illustrated by:", opts:["A website loading quickly for all visitors","A bank encrypting customer account details so only authorized parties can read them","A server logging every user login attempt","A system remaining online during a power outage"], ans:1, ex:"Confidentiality ensures information is accessible only to those authorized to view it, often enforced through encryption."},
+{sec:'Core Concepts & Security Pillars', q:"How does encryption support the Confidentiality pillar?", opts:["It speeds up data transmission across networks","It converts data into unreadable form so only authorized parties with the correct key can access it","It permanently deletes data after use","It duplicates data across multiple servers for backup"], ans:1, ex:"Encryption scrambles data so that only someone holding the correct decryption key can read it, preserving confidentiality."},
+{sec:'Core Concepts & Security Pillars', q:"In the context of data transmission, Integrity refers to:", opts:["The speed at which data travels between systems","Assurance that data has not been altered or tampered with during transit or storage","The number of users who can access the data at once","The cost of storing the data securely"], ans:1, ex:"Integrity means the data received is exactly what was sent or stored, with no unauthorized modification."},
+{sec:'Core Concepts & Security Pillars', q:"Why is it important that data remain 'not tampered with' during transmission?", opts:["So that recipients can trust the accuracy and reliability of the information they receive","So that the data transfers more quickly","So that fewer servers are needed to store it","So that the sender can charge a transmission fee"], ans:0, ex:"Untampered data preserves trust — recipients can rely on the information being accurate and unaltered."},
+{sec:'Core Concepts & Security Pillars', q:"The Availability pillar is critical for user satisfaction because it ensures:", opts:["Data is hidden from unauthorized users","Authorized users can access systems and data whenever they need them","All transactions are digitally signed","Every user has administrator-level access"], ans:1, ex:"Availability guarantees that systems and data remain accessible to legitimate users when needed, which directly affects user trust and satisfaction."},
+{sec:'Core Concepts & Security Pillars', q:"Which of these is a common threat to the Availability of a system?", opts:["Strong password policies","Distributed Denial-of-Service (DDoS) attacks","Data encryption at rest","Two-factor authentication"], ans:1, ex:"DDoS attacks flood a system with traffic, overwhelming it and preventing legitimate users from accessing it — directly undermining availability."},
+{sec:'Core Concepts & Security Pillars', q:"The purpose of the Authentication pillar in cybersecurity is to:", opts:["Back up data to prevent loss","Verify that a user or system is genuinely who or what it claims to be","Encrypt data during transmission only","Track how long a session has been active"], ans:1, ex:"Authentication confirms the identity of a user, device, or system before granting access to resources."},
+{sec:'Core Concepts & Security Pillars', q:"Which of the following is commonly used to verify a user's credentials during authentication?", opts:["Server uptime statistics","Something the user knows, has, or is (e.g., password, token, biometric)","The user's internet service provider","The physical location of the data center"], ans:1, ex:"Authentication typically relies on factors the user knows (password), has (token/device), or is (biometric)."},
+{sec:'Core Concepts & Security Pillars', q:"Non-repudiation in data transmission is important because it:", opts:["Allows a sender to later deny having sent a message","Provides proof that a specific party sent or received a message, preventing them from denying it","Speeds up encryption algorithms","Removes the need for authentication"], ans:1, ex:"Non-repudiation creates verifiable proof of an action (such as sending data), so the responsible party cannot later deny involvement."},
+
+// UNIT 2: Global History of Cybercrime (Questions 21-40)
+{sec:'Global History of Cybercrime', q:"The first recorded cyberattack is generally traced back to:", opts:["A 1988 university computer worm","An 1834 attack on the French telegraph system to steal financial market information","A 1962 MIT password theft","A 1994 bank wire fraud"], ans:1, ex:"In 1834, two thieves manipulated the French telegraph system to gain an unfair advantage in financial markets, an incident often cited as the earliest cyberattack."},
+{sec:'Global History of Cybercrime', q:"In the 1834 French telegraph attack, financial information was stolen by:", opts:["Intercepting encrypted stock market broadcasts","Bribing a telegraph operator to insert coded signals about bond prices into transmissions","Hacking into a mainframe computer","Cloning telegraph credentials"], ans:1, ex:"The perpetrators bribed an operator to slip extra, coded signals into legitimate telegraph transmissions, secretly relaying market-moving information ahead of official channels."},
+{sec:'Global History of Cybercrime', q:"Allen Scherr's 1962 attack on MIT was significant because it involved:", opts:["The first known theft of computer passwords to gain unauthorized access","The first commercial ransomware attack","The invention of the first antivirus program","The first use of a computer worm"], ans:0, ex:"Scherr extracted stored passwords from an MIT system, representing one of the earliest documented password-theft incidents."},
+{sec:'Global History of Cybercrime', q:"The Creeper program, created by Bob Thomas, is notable for being:", opts:["The first commercial antivirus software","One of the first self-replicating programs to move between computers on ARPANET","A Nigerian banking trojan","The first ransomware strain"], ans:1, ex:"Creeper was an experimental self-propagating program that moved across ARPANET, widely regarded as one of the earliest computer viruses."},
+{sec:'Global History of Cybercrime', q:"The Creeper virus was first detected on ARPANET in:", opts:["1971","1988","1995","1962"], ans:0, ex:"Creeper first appeared on ARPANET in 1971, making it one of the earliest known instances of self-replicating code."},
+{sec:'Global History of Cybercrime', q:"Who is often cited as the first person convicted of a cybercrime?", opts:["Kevin Mitnick","Ian Murphy ('Captain Zap')","Robert Tappan Morris","Vladimir Levin"], ans:1, ex:"Ian Murphy, known as 'Captain Zap,' was among the first individuals convicted of a computer crime after hacking AT&T's systems in 1981."},
+{sec:'Global History of Cybercrime', q:"What did Ian Murphy do to AT&T's systems in 1981?", opts:["He stole customer credit card numbers","He broke into AT&T's computers and altered internal billing clocks, disrupting rate schedules","He deployed the first email worm","He shut down AT&T's entire network permanently"], ans:1, ex:"Murphy hacked AT&T's internal computers and changed their billing clocks, causing confusion in call rate schedules."},
+{sec:'Global History of Cybercrime', q:"The 1988 Morris Worm is significant in cybersecurity history because it:", opts:["Was the first ransomware to demand payment","Was one of the first worms distributed via the internet, disrupting thousands of computers","Targeted only mobile phones","Was created by a foreign government for espionage"], ans:1, ex:"The Morris Worm spread rapidly across the early internet, slowing or crashing thousands of systems and prompting greater attention to network security."},
+{sec:'Global History of Cybercrime', q:"The Morris Worm primarily spread among which type of institutions?", opts:["Retail banks","Universities and research institutions connected to the early internet","Telecommunications regulators","Hospitals"], ans:1, ex:"Because ARPANET connected mostly academic and research institutions at the time, universities were heavily affected."},
+{sec:'Global History of Cybercrime', q:"The first known ransomware, which appeared in 1989, is commonly called:", opts:["WannaCry","The AIDS Trojan (PC Cyborg)","CryptoLocker","Petya"], ans:1, ex:"The AIDS Trojan, also known as PC Cyborg, is widely regarded as the first ransomware, encrypting file names and demanding payment in 1989."},
+{sec:'Global History of Cybercrime', q:"How was the AIDS Trojan distributed to its victims in 1989?", opts:["Through email attachments","Via floppy disks mailed to attendees of a World Health Organization AIDS conference","Through infected USB drives sold in stores","Through a fake antivirus download"], ans:1, ex:"Thousands of infected floppy disks were physically mailed to individuals, disguised as AIDS research information."},
+{sec:'Global History of Cybercrime', q:"The original AIDS Trojan is considered 'ineffective' by modern standards mainly because:", opts:["It used weak symmetric encryption that could be reversed relatively easily","It never actually encrypted any files","It required internet access, which was unavailable in 1989","It only affected Macintosh computers"], ans:0, ex:"Its encryption method was simple enough to be broken, unlike the strong, often unbreakable encryption used in modern ransomware."},
+{sec:'Global History of Cybercrime', q:"During the 1990s, AOL became a significant attack vector mainly through:", opts:["Malware embedded in dial-up modems","Widespread phishing and social engineering schemes targeting its large user base","State-sponsored espionage campaigns","Attacks on its physical data centers"], ans:1, ex:"AOL's massive, less tech-savvy user base made it a prime target for early phishing scams and account-theft schemes."},
+{sec:'Global History of Cybercrime', q:"Datastream Cowboy and Kuji were hackers known for their 1994 intrusion into:", opts:["A major European stock exchange","U.S. Air Force and other military/government computer networks","A Japanese automobile manufacturer","The Bank of England"], ans:1, ex:"The pair, both teenagers, breached sensitive U.S. military and government networks, prompting international investigation."},
+{sec:'Global History of Cybercrime', q:"Vladimir Levin's crime in 1995 involved:", opts:["Creating the first computer virus","Orchestrating one of the first major electronic bank heists, transferring millions from Citibank","Leaking classified government documents","Hacking a television broadcast signal"], ans:1, ex:"Levin led a scheme that fraudulently transferred millions of dollars out of Citibank accounts using stolen credentials."},
+{sec:'Global History of Cybercrime', q:"Kevin Mitnick is considered one of history's most notorious hackers largely because of his:", opts:["Development of the first firewall","Extensive social engineering skills and repeated breaches of corporate and telecom systems","Role in founding the first antivirus company","Work exposing government surveillance programs"], ans:1, ex:"Mitnick was renowned for combining technical skill with social engineering to repeatedly breach major corporate systems."},
+{sec:'Global History of Cybercrime', q:"Max Butler set a notable record in cybercrime history for:", opts:["Receiving the longest prison sentence, at the time, for a hacking-related offense in the U.S.","Being the first person acquitted of a cybercrime charge","Founding the first bug bounty program","Writing the first antivirus software"], ans:0, ex:"Butler, convicted for large-scale credit card data theft, received one of the longest hacking-related sentences recorded at the time."},
+{sec:'Global History of Cybercrime', q:"The Melissa Virus, released in 1999, caused widespread damage by:", opts:["Encrypting hard drives for ransom","Spreading rapidly via infected email attachments and overloading mail servers","Disabling ATMs across the U.S.","Hijacking domain name registrations"], ans:1, ex:"Melissa spread through infected Word documents emailed to contacts, overwhelming corporate and government mail servers."},
+{sec:'Global History of Cybercrime', q:"The hacker known as 'Mafiaboy' gained notoriety in 2000 for launching DDoS attacks against:", opts:["Government defense networks","Major websites including Yahoo, eBay, and CNN","International banking systems","Telecommunications satellites"], ans:1, ex:"Mafiaboy, a Canadian teenager, took down several high-profile websites using distributed denial-of-service attacks."},
+{sec:'Global History of Cybercrime', q:"The ILOVEYOU virus spread rapidly worldwide primarily by:", opts:["Exploiting a vulnerability in web browsers","Disguising itself as a love letter email attachment and emailing itself to the victim's contacts","Infecting USB drives","Attacking mobile phone networks"], ans:1, ex:"Disguised as a love letter, the worm emailed itself to everyone in a victim's address book, causing global damage in hours."},
+
+// UNIT 3: Nigeria's Cybersecurity Evolution & Law (Questions 41-60)
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"The evolution of cybersecurity in Nigeria is generally divided into three eras: pre-1990, the Y2K/early-2000s period, and:", opts:["The colonial era","The Modern Era (2015–Present)","The pre-independence era","The post-Biafra War era"], ans:1, ex:"The three recognized eras are: before 1990, the early-2000s Y2K period, and the Modern Era from 2015 to the present."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"Before 1990, security threats in Nigeria were primarily:", opts:["Sophisticated malware attacks on banking networks","Analog and physical in nature, such as document forgery and confidence scams","Ransomware attacks on government agencies","Attacks on mobile telecommunications networks"], ans:1, ex:"Before widespread computerization, threats were mostly non-digital — physical fraud, forged documents, and in-person deception."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"A key 'analog threat' in Nigeria's pre-digital era was:", opts:["Email phishing","Advance-fee fraud conducted through physical letters and in-person meetings","Ransomware","SIM card cloning"], ans:1, ex:"Before the internet, advance-fee fraud schemes were carried out through physical correspondence and face-to-face contact."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"The term '419' fraud originates from:", opts:["A postal code used by early scammers","Section 419 of the Nigerian Criminal Code, which addresses obtaining property by false pretenses","The year 1941, when the fraud type was first documented","A telephone area code"], ans:1, ex:"The name comes from Section 419 of the Nigerian Criminal Code, which criminalizes obtaining goods or money through false pretenses."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"Which of these was NOT a common non-electronic crime in Nigeria's pre-internet era?", opts:["Document forgery","Confidence tricks / social engineering scams","Ransomware deployment","Impersonation fraud"], ans:2, ex:"Ransomware requires digital systems to encrypt, so it belongs to the digital era rather than the pre-internet, analog period."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"In the context of early Nigerian crime, document forgery refers to:", opts:["Digitally editing a PDF file","Creating or altering physical documents, such as certificates or identification, to deceive others","Encrypting a document to hide its contents","Copying a document for personal record-keeping"], ans:1, ex:"Document forgery involved physically falsifying paper records, such as certificates or IDs, to mislead victims or authorities."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"Before the digital age, con artists practiced social engineering mainly through:", opts:["Deceptive phone calls and phishing emails","Building trust through in-person interaction to manipulate victims into handing over money or information","Malware distributed via floppy disks","Fake websites"], ans:1, ex:"Early social engineering relied on face-to-face persuasion and manufactured trust, since digital channels weren't yet widely available."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"The early 2000s were described as a 'pivotal moment' for Nigeria's cybersecurity landscape mainly because of:", opts:["The passage of the Cybercrime Act","The rapid growth of internet access and digital platforms, alongside the Y2K scare","The founding of NITDA","The launch of Nigeria's first satellite"], ans:1, ex:"Growing internet adoption combined with global anxiety over the Y2K bug pushed digital readiness to the forefront in Nigeria."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"The Y2K bug primarily concerned Nigerian organizations because of fears that:", opts:["Computers would be physically destroyed at midnight","Date-related software errors could disrupt banking, government, and business systems as the year changed to 2000","The internet would permanently shut down","All passwords would be reset automatically"], ans:1, ex:"Y2K fears centered on software that stored years as two digits, potentially misreading '00' as 1900 and disrupting critical systems."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"The Y2K scare served as a 'wake-up call' for Nigeria mainly by:", opts:["Ending the country's reliance on computers entirely","Highlighting the need for organizations to invest in digital readiness and IT infrastructure","Leading to a nationwide internet shutdown","Making cybersecurity a purely military concern"], ans:1, ex:"The scramble to fix Y2K-related issues pushed Nigerian institutions to recognize the importance of robust, well-maintained digital systems."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"Which two sectors are most associated with the genesis of digital platforms in Nigeria during the early 2000s?", opts:["Agriculture and mining","Banking and telecommunications","Tourism and hospitality","Manufacturing and construction"], ans:1, ex:"The banking sector's move to electronic transactions and the telecom sector's mobile expansion drove Nigeria's early digital growth."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"How did the internet amplify traditional '419' scams in the early 2000s?", opts:["It made scams illegal for the first time","It allowed scammers to reach a much larger, global pool of victims quickly and cheaply via email","It eliminated the need for scammers entirely","It restricted scams to only local victims"], ans:1, ex:"Email let fraudsters send advance-fee scam messages to vast numbers of people worldwide at almost no cost, scaling up the fraud."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"Which of the following emerged as a more sophisticated form of online fraud in Nigeria during the Y2K era?", opts:["Physical letter-based advance-fee scams only","Romance scams and fake lottery/inheritance emails","Analog telegraph fraud","Counterfeit currency printing"], ans:1, ex:"As internet access spread, scammers adapted 419-style fraud into romance scams and fake lottery or inheritance notifications sent by email."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"How did the adoption of online payments affect credit card fraud in Nigeria?", opts:["It eliminated credit card fraud entirely","It created new opportunities for card-not-present fraud and unauthorized online transactions","It only affected fraud involving physical card skimming","It made online payments impossible in Nigeria"], ans:1, ex:"As online payments grew, fraudsters found new ways to exploit stolen card details for unauthorized 'card-not-present' transactions."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"Nigeria's Modern Era of cybersecurity (2015–present) is primarily characterized by:", opts:["A complete absence of internet regulation","Formal legislation, dedicated agencies, and a growing structured response to cyber threats","A return to purely analog security measures","The banning of all online banking"], ans:1, ex:"This era saw the introduction of formal cybercrime law and specialized agencies dedicated to combating digital threats."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"What key shift occurred in Nigeria's cybersecurity approach starting in 2015?", opts:["A shift from proactive to entirely reactive policies","A shift from informal, ad-hoc responses to a formal legal and institutional framework","A shift away from international cooperation","A shift toward banning internet access nationwide"], ans:1, ex:"2015 marked a move from scattered, informal responses to a structured legal and institutional approach to cybersecurity."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"The primary legislation governing cybercrime in Nigeria is the:", opts:["Nigerian Communications Act","Cybercrime (Prohibition, Prevention, etc.) Act, 2015","Freedom of Information Act","Data Protection Regulation of 2013"], ans:1, ex:"The Cybercrime Act of 2015 is Nigeria's foundational law criminalizing and addressing cyber offenses."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"The Cybercrime Act of 2015 was enacted primarily to:", opts:["Regulate television broadcasting standards","Provide a legal framework for prohibiting, preventing, and prosecuting cybercrimes in Nigeria","Establish Nigeria's first internet service provider","Create Nigeria's national identity card system"], ans:1, ex:"The Act was designed to give Nigeria a clear legal basis for prosecuting cybercrime and protecting critical digital infrastructure."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"What does the acronym NPF-NCCC stand for?", opts:["Nigeria Police Force – National Cybercrime Centre","National Police Federation – Nigeria Cyber Command Center","Nigeria Public Forum – National Communications Control Center","Nigeria Prosecution Framework – National Case Coordination Committee"], ans:0, ex:"NPF-NCCC refers to the Nigeria Police Force's National Cybercrime Centre, dedicated to investigating cyber offenses."},
+{sec:"Nigeria's Cybersecurity Evolution & Law", q:"In Nigeria's cybersecurity landscape, the EFCC's primary role is to:", opts:["Regulate telecommunications spectrum","Investigate and prosecute financial crimes, including cyber-enabled fraud","Issue national identity numbers","Manage the national internet exchange point"], ans:1, ex:"The Economic and Financial Crimes Commission (EFCC) investigates and prosecutes financially motivated crimes, including many cyber-enabled frauds."},
+
+// UNIT 4: Modern Threats, Agencies & Security Lifecycle (Questions 61-80)
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"The acronym NITDA stands for:", opts:["National Information Technology Development Agency","Nigerian Internet Trade and Data Authority","National Investigative Technology Defense Agency","Nigeria IT Deployment Association"], ans:0, ex:"NITDA (National Information Technology Development Agency) regulates and promotes IT development and standards in Nigeria."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"ngCERT stands for the Nigeria Computer Emergency Response Team, and its main purpose is to:", opts:["Sell antivirus software to the public","Coordinate national responses to cybersecurity incidents and threats","Issue business registration certificates","Manage the country's mobile phone numbering system"], ans:1, ex:"ngCERT coordinates the detection, response, and mitigation of cybersecurity incidents affecting Nigeria's digital infrastructure."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"The Office of the National Security Adviser (ONSA) plays which role in Nigeria's cybersecurity framework?", opts:["It provides high-level coordination of national cybersecurity strategy and policy","It exclusively handles consumer complaints about internet billing","It manages Nigeria's postal service","It licenses individual cybersecurity consultants"], ans:0, ex:"ONSA plays a coordinating role at the national strategic level, overseeing cybersecurity policy alongside security agencies."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"Which agency is primarily responsible for handling corruption-related and independent corrupt practices offences in Nigeria?", opts:["NITDA","ICPC (Independent Corrupt Practices and Other Related Offences Commission)","ngCERT","EFCC exclusively"], ans:1, ex:"The ICPC investigates and prosecutes corruption-related offences, complementing the EFCC's focus on financial and economic crimes."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"Modern ransomware attacks affect Nigerian businesses primarily by:", opts:["Improving system backup routines automatically","Encrypting critical business data and demanding payment for its release","Increasing internet connection speeds","Providing free security audits"], ans:1, ex:"Ransomware locks organizations out of their own data, often halting operations until a ransom is paid or backups are restored."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"Cyber espionage typically targets:", opts:["Random individual social media accounts for entertainment","Governments, corporations, and organizations holding sensitive political, military, or trade secrets","Only personal home networks","Public library computer systems"], ans:1, ex:"Cyber espionage aims to covertly gather sensitive intelligence, often from government or corporate targets holding valuable secrets."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"Business Email Compromise (BEC) typically targets employees by:", opts:["Sending mass spam unrelated to the company","Impersonating executives or trusted partners via email to trick employees into transferring funds or data","Physically breaking into office buildings","Jamming a company's Wi-Fi signal"], ans:1, ex:"BEC scams impersonate a trusted figure, such as a CEO, to manipulate an employee into making a fraudulent payment or disclosing sensitive information."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"How do modern phishing attacks generally differ from early '419' emails?", opts:["Modern phishing is far more targeted and convincingly disguised as legitimate communication","Modern phishing no longer uses email at all","Early 419 emails were more technically sophisticated","There is no meaningful difference between the two"], ans:0, ex:"Unlike the often crude early 419 messages, modern phishing is highly targeted and closely mimics legitimate organizations to increase credibility."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"The growth of Nigeria's indigenous cybersecurity industry has mainly been driven by:", opts:["A decline in internet usage","Rising local demand for security services combined with homegrown talent and startups","A total absence of cyber threats","Government bans on foreign technology"], ans:1, ex:"As threats and digital adoption grew, local startups emerged to meet the rising demand for security expertise within Nigeria."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"Which of the following is a typical service offered by local Nigerian cybersecurity startups?", opts:["Manufacturing computer hardware exclusively","Penetration testing, incident response, and security consulting","Printing and postal services","Television broadcasting"], ans:1, ex:"Local firms now offer core services such as penetration testing, incident response, and general security consulting."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"The Cybersecurity Lifecycle is best described as:", opts:["A one-time checklist completed when a system is first installed","An ongoing, cyclical process of identifying, protecting, detecting, responding to, and recovering from threats","A single software update schedule","A hardware replacement plan"], ans:1, ex:"The lifecycle is a continuous, repeating process rather than a one-time event, covering the full span from risk identification to recovery."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"Which set best represents the five holistic stages often cited in the cybersecurity lifecycle?", opts:["Identify, Protect, Detect, Respond, Recover","Plan, Build, Sell, Ship, Retire","Design, Code, Test, Deploy, Archive","Hire, Train, Audit, Fire, Rehire"], ans:0, ex:"These five stages — Identify, Protect, Detect, Respond, Recover — form a widely used holistic model for managing cybersecurity risk."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"Which three stages are commonly discussed for cybersecurity implementation specifically?", opts:["Risk Management, Security Planning & Architecture Design, Implementation & Configuration Management","Marketing, Sales, and Customer Support","Hiring, Onboarding, and Termination","Budgeting, Auditing, and Liquidation"], ans:0, ex:"Implementation-focused discussions typically center on risk management, planning/architecture design, and configuration management."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"Which is the correct general order for the steps of risk management?", opts:["Identify risk, assess risk, prioritize risk, treat/mitigate risk, monitor risk, review risk","Treat risk, identify risk, ignore risk, escalate risk, close risk","Monitor risk, treat risk, identify risk, assess risk","Prioritize risk, treat risk, identify risk, review risk"], ans:0, ex:"Standard risk management follows a logical sequence: identify, assess, prioritize, treat, monitor, and review risks."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"The 'Identifying Risk' step in risk management primarily involves:", opts:["Immediately purchasing new security software","Recognizing and cataloging potential threats and vulnerabilities that could affect an organization","Terminating employees suspected of negligence","Publicly disclosing all security incidents"], ans:1, ex:"This step focuses on discovering and documenting possible threats and weaknesses before any mitigation begins."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"During the 'Security Planning and Architecture Design' stage, an organization primarily focuses on:", opts:["Designing the overall structure and strategy for securing systems and data","Terminating all internet access","Conducting employee performance reviews","Printing physical security badges only"], ans:0, ex:"This stage involves designing the security architecture and strategic plan that will guide later implementation."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"Organizations must understand their 'current security posture' during the planning stage mainly to:", opts:["Determine existing strengths and gaps so that planning addresses real, specific risks","Decide on office furniture layouts","Calculate employee salaries","Choose a company logo"], ans:0, ex:"Knowing the current state of security helps ensure that planning efforts target actual gaps rather than assumed ones."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"The 'Implementation and Configuration Management' stage mainly involves:", opts:["Deploying and correctly configuring the security tools and controls defined during planning","Writing the company's annual financial report","Designing a marketing campaign","Conducting customer satisfaction surveys"], ans:0, ex:"This stage puts planned security measures into practice, deploying and properly configuring the necessary tools and controls."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"Which of the following is typically deployed during the implementation stage of cybersecurity?", opts:["Firewalls, intrusion detection systems, and antivirus software","Payroll software only","Office scheduling calendars","Customer loyalty programs"], ans:0, ex:"Core technical defenses such as firewalls, intrusion detection systems, and antivirus tools are commonly deployed at this stage."},
+{sec:'Modern Threats, Agencies & Security Lifecycle', q:"Access controls and user permissions are established during the implementation stage mainly to:", opts:["Ensure only authorized individuals can access specific systems and data based on their role","Increase the number of administrator accounts across the board","Remove the need for authentication entirely","Allow unrestricted access to simplify usage"], ans:0, ex:"Access controls limit system and data access to those who need it for their role, reducing the risk of unauthorized use."},
+
+// UNIT 5: Career Domains & Academic Pioneers (Questions 81-100)
+{sec:'Career Domains & Academic Pioneers', q:"Continuous learning is essential for a cybersecurity career mainly because:", opts:["Certifications never expire","Threats, technologies, and defensive techniques evolve constantly, requiring professionals to keep their skills current","The field rarely changes once you're trained","Employers do not value new skills"], ans:1, ex:"Because attackers and technology are constantly evolving, cybersecurity professionals must continually update their knowledge and skills."},
+{sec:'Career Domains & Academic Pioneers', q:"The Computer Operations Security domain primarily focuses on:", opts:["Marketing a company's IT products","Securing the day-to-day operation of computer systems, including monitoring and maintenance","Designing company logos","Managing employee vacation schedules"], ans:1, ex:"This domain covers the ongoing, operational safeguarding of computer systems, from monitoring to routine maintenance."},
+{sec:'Career Domains & Academic Pioneers', q:"Cyber Forensics is best defined as:", opts:["The design of new computer hardware","The process of collecting, preserving, and analyzing digital evidence for investigative or legal purposes","The marketing of forensic software products","The physical repair of damaged servers"], ans:1, ex:"Cyber forensics involves gathering and analyzing digital evidence in a way that can support investigations and legal proceedings."},
+{sec:'Career Domains & Academic Pioneers', q:"Cyber forensics is important to law enforcement mainly because it:", opts:["Helps investigators reconstruct incidents and gather admissible digital evidence for prosecution","Eliminates the need for any other type of evidence","Prevents all future cybercrime automatically","Replaces the need for a legal system"], ans:0, ex:"Forensic analysis provides the digital evidence needed to reconstruct events and support prosecution of cybercrime."},
+{sec:'Career Domains & Academic Pioneers', q:"Enterprise Risk Management (ERM) involves:", opts:["Identifying and managing risks across an entire organization, not just IT systems","Only managing risks related to office supplies","Exclusively handling employee disputes","Marketing risk-related insurance products"], ans:0, ex:"ERM takes a holistic, organization-wide approach to identifying and managing risk, including but not limited to cyber risk."},
+{sec:'Career Domains & Academic Pioneers', q:"ERM is essential to an organization's decision-making process because it:", opts:["Guarantees zero risk at all times","Provides leadership with a clear picture of risk exposure to inform strategic choices","Removes the need for any security budget","Focuses solely on marketing decisions"], ans:1, ex:"By surfacing organizational risk exposure, ERM gives leadership the information needed to make informed strategic decisions."},
+{sec:'Career Domains & Academic Pioneers', q:"The Identity Management domain in cybersecurity focuses on:", opts:["Managing user identities, access rights, and authentication across systems","Designing company branding and identity","Managing physical office keys only","Handling customer complaints"], ans:0, ex:"Identity Management deals with controlling who has access to which systems and resources, and verifying user identities."},
+{sec:'Career Domains & Academic Pioneers', q:"Which of the following is a key activity in the Incident Response process?", opts:["Ignoring the incident until it resolves itself","Detecting, containing, eradicating, and recovering from a security incident","Publicly announcing the incident before investigating","Deleting all system logs immediately"], ans:1, ex:"Incident response follows a structured process of detection, containment, eradication, and recovery to manage security incidents effectively."},
+{sec:'Career Domains & Academic Pioneers', q:"Security Architecture, as a career domain, focuses on:", opts:["Designing the structural framework and controls that secure an organization's systems","Designing physical building architecture only","Managing a company's supply chain logistics","Handling customer billing disputes"], ans:0, ex:"Security architects design the overarching technical structure and controls that protect an organization's IT environment."},
+{sec:'Career Domains & Academic Pioneers', q:"Telecommunications Security primarily aims to protect:", opts:["Office furniture and equipment","Voice, data, and signaling infrastructure used for communication networks","Employee parking arrangements","Marketing communications strategy"], ans:1, ex:"This domain focuses on securing the infrastructure — voice, data, and signaling systems — that enables communication networks."},
+{sec:'Career Domains & Academic Pioneers', q:"User education is important in reducing security breaches mainly because:", opts:["Human error and lack of awareness are common causes of successful attacks","Educated users no longer need passwords","It eliminates the need for technical security controls","It guarantees systems will never be attacked"], ans:0, ex:"Many breaches result from human mistakes, such as clicking phishing links, so educating users helps reduce this risk factor."},
+{sec:'Career Domains & Academic Pioneers', q:"Building a 'culture of security awareness' benefits an organization mainly by:", opts:["Making every employee more likely to recognize and report suspicious activity","Eliminating the need for a dedicated security team","Guaranteeing regulatory compliance automatically","Reducing the cost of internet service"], ans:0, ex:"When security awareness becomes part of the organizational culture, employees are more alert and more likely to catch and report threats."},
+{sec:'Career Domains & Academic Pioneers', q:"Which Nigerian institution is recognized as the pioneer of Cyber Security Science as an academic discipline?", opts:["University of Lagos","Federal University of Technology, Minna (FUTMinna)","Ahmadu Bello University","Obafemi Awolowo University"], ans:1, ex:"FUT Minna was the first Nigerian university to introduce a full academic programme in Cyber Security Science, establishing its Department of Cyber Security Science within its School of ICT."},
+{sec:'Career Domains & Academic Pioneers', q:"Cyber Security Science emerged in Nigeria as a distinct course of study through the pioneering efforts of:", opts:["A private technology company","The Department of Cyber Security Science at FUT Minna, under its School of Information and Communication Technology","The Nigerian military exclusively","A foreign university partnership with no Nigerian involvement"], ans:1, ex:"FUT Minna's Department of Cyber Security Science, housed within the School of ICT, pioneered the discipline as a formal course of study in Nigeria."},
+{sec:'Career Domains & Academic Pioneers', q:"FUT Minna's Department of Cyber Security Science has been formally recognized for its contribution to cybersecurity education, including receiving an award from:", opts:["NITDA, as Cyber Security Academic Institution of the Year","The World Health Organization","The International Monetary Fund","The Nigerian Football Federation"], ans:0, ex:"FUT Minna's Department of Cyber Security Science received NITDA's Cyber Security Academic Institution of the Year award, recognizing its pioneering academic contributions."},
+{sec:'Career Domains & Academic Pioneers', q:"Which of the following best reflects the breadth of career domains available within cybersecurity?", opts:["Only penetration testing","A wide range including forensics, risk management, identity management, incident response, and security architecture, among others","Only network cabling installation","Only antivirus sales"], ans:1, ex:"Cybersecurity careers span many specialized domains, from technical fields like forensics and architecture to managerial fields like ERM and incident response."},
+{sec:'Career Domains & Academic Pioneers', q:"Professionals across most cybersecurity domains generally need a combination of:", opts:["Technical knowledge and analytical/problem-solving skills","Only graphic design skills","Only sales and marketing skills","No specialized skills at all"], ans:0, ex:"Whether in forensics, architecture, or risk management, cybersecurity roles typically require both technical understanding and strong analytical thinking."},
+{sec:'Career Domains & Academic Pioneers', q:"How does Incident Response generally differ from Cyber Forensics as a career focus?", opts:["Incident Response focuses on immediate containment and recovery, while Forensics focuses on detailed post-incident investigation and evidence analysis","They are identical disciplines with no distinction","Forensics only deals with hardware repair","Incident Response never involves any investigation"], ans:0, ex:"Incident Response prioritizes quickly containing and recovering from an active threat, while Forensics focuses on thoroughly investigating what happened afterward."},
+{sec:'Career Domains & Academic Pioneers', q:"Professional certifications in cybersecurity careers primarily serve to:", opts:["Guarantee a job regardless of skill level","Validate a professional's knowledge and skills in specific security domains","Replace the need for any practical experience","Eliminate the need for continuous learning"], ans:1, ex:"Certifications provide a recognized way to demonstrate competency in specific areas of cybersecurity knowledge and skill."},
+{sec:'Career Domains & Academic Pioneers', q:"Which statement best summarizes why a strong understanding of cybersecurity career domains matters for students?", opts:["It helps them identify which specialized path aligns with their interests and strengths within the broader field","It is only useful for people who want to become hackers","It has no practical value in the job market","It matters only for large multinational corporations"], ans:0, ex:"Understanding the range of domains allows students to make informed choices about which specialized career path to pursue."}
+];
+
+const ALL_TOPICS = [
+ 'Core Concepts & Security Pillars',
+ 'Global History of Cybercrime',
+ "Nigeria's Cybersecurity Evolution & Law",
+ 'Modern Threats, Agencies & Security Lifecycle',
+ 'Career Domains & Academic Pioneers'
+];
+
+/* ============================================================
+ STORAGE KEYS (persistent artifact storage, not localStorage)
+ ============================================================ */
+const MUTE_KEY = 'cyb121-muted';
+const BEST_SCORE_KEY = 'cyb121-best-score';
+const STORAGE_KEY = 'cyb121-quiz-state';
+
+/* ============================================================
+ HELPERS
+ ============================================================ */
+
+/* Records this attempt into the same localStorage list the Settings
+   page (set.html) reads for Quiz History / Reset Progress / PDF export. */
+function saveResultToHistory(course, score, total){
+ try{
+  const raw = localStorage.getItem('dtz_quiz_results');
+  const list = raw ? JSON.parse(raw) : [];
+  list.push({ course, score, total, date: new Date().toISOString() });
+  localStorage.setItem('dtz_quiz_results', JSON.stringify(list));
+ }catch(e){ /* storage unavailable — silently skip, quiz still works */ }
+}
+
+function shuffle(arr){
+ const a=[...arr];
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+ return a;
+}
+function sectionIcon(sec){
+ return {
+  'Core Concepts & Security Pillars':'fa-shield-halved',
+  'Global History of Cybercrime':'fa-clock-rotate-left',
+  "Nigeria's Cybersecurity Evolution & Law":'fa-scale-balanced',
+  'Modern Threats, Agencies & Security Lifecycle':'fa-triangle-exclamation',
+  'Career Domains & Academic Pioneers':'fa-graduation-cap'
+ }[sec] || 'fa-shield-halved';
+}
+function randomizeOptions(item){
+ const pairs = item.opts.map((o,idx)=>({o, correct: idx===item.ans}));
+ const shuffled = shuffle(pairs);
+ return {...item, opts: shuffled.map(p=>p.o), ans: shuffled.findIndex(p=>p.correct)};
+}
+
+/* Safely read a value from persistent storage. Returns null if the key
+   doesn't exist or storage is unavailable, instead of throwing. */
+async function storageGet(key) {
+ try {
+  const result = await window.storage.get(key, false);
+  return result ? result.value : null;
+ } catch (e) {
+  return null;
+ }
+}
+async function storageSet(key, value) {
+ try {
+  await window.storage.set(key, value, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+async function storageDelete(key) {
+ try {
+  await window.storage.delete(key, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+
+/* SOUND ENGINE */
+const SoundEngine = (function() {
+ let ctx = null;
+ let muted = false;
+
+ async function init() {
+  const v = await storageGet(MUTE_KEY);
+  muted = v === '1';
+  return muted;
+ }
+
+ function getCtx() {
+ if (!ctx) {
+ const AC = window.AudioContext || window.webkitAudioContext;
+ if (!AC) return null;
+ ctx = new AC();
+ }
+ if (ctx.state === 'suspended') ctx.resume();
+ return ctx;
+ }
+
+ function isMuted() { return muted; }
+ async function setMuted(v) {
+ muted = v;
+ await storageSet(MUTE_KEY, v ? '1' : '0');
+ }
+
+ function playCorrect() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc1 = c.createOscillator();
+ const osc2 = c.createOscillator();
+ const gain = c.createGain();
+
+ osc1.type = 'sine'; osc1.frequency.setValueAtTime(880, t);
+ osc2.type = 'sine'; osc2.frequency.setValueAtTime(1760, t);
+
+ gain.gain.setValueAtTime(0.2, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+
+ osc1.connect(gain); osc2.connect(gain);
+ gain.connect(c.destination);
+
+ osc1.start(t); osc2.start(t);
+ osc1.stop(t + 0.6); osc2.stop(t + 0.6);
+ }
+
+ function playWrong() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc = c.createOscillator();
+ const gain = c.createGain();
+
+ osc.type = 'sawtooth';
+ osc.frequency.setValueAtTime(160, t);
+ osc.frequency.exponentialRampToValueAtTime(60, t + 0.35);
+
+ gain.gain.setValueAtTime(0.25, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+
+ osc.connect(gain);
+ gain.connect(c.destination);
+
+ osc.start(t);
+ osc.stop(t + 0.35);
+ }
+
+ return { init, isMuted, setMuted, playCorrect, playWrong };
+})();
+
+/* APP STATE */
+let quizMode = 'auto'; // 'auto' or 'custom'
+let activeQuestions = [];
+let userAnswers = []; // array of selected option indices
+let currentQ = 0;
+let timeRemaining = 0;
+let timerInterval = null;
+let isPaused = false;
+let leaveCount = 0;
+
+// DOM Elements
+const homeScreen = document.getElementById('homeScreen');
+const configScreen = document.getElementById('configScreen');
+const loadingScreen = document.getElementById('loadingScreen');
+const quizScreen = document.getElementById('quizScreen');
+const resultScreen = document.getElementById('resultScreen');
+
+const pickAuto = document.getElementById('pickAuto');
+const pickCustom = document.getElementById('pickCustom');
+const backToHomeFromConfig = document.getElementById('backToHomeFromConfig');
+const startCustomBtn = document.getElementById('startCustomBtn');
+
+const topicsWrap = document.getElementById('topicsWrap');
+const timeSlider = document.getElementById('timeSlider');
+const timeValue = document.getElementById('timeValue');
+const countSlider = document.getElementById('countSlider');
+const countValue = document.getElementById('countValue');
+
+const timerBox = document.getElementById('timer');
+const timerText = document.getElementById('timerText');
+const soundToggle = document.getElementById('soundToggle');
+
+const progressFill = document.getElementById('progressFill');
+const dotsRow = document.getElementById('dotsRow');
+const sectionTag = document.getElementById('sectionTag');
+const qCounter = document.getElementById('qCounter');
+const qText = document.getElementById('qText');
+const optsWrap = document.getElementById('optsWrap');
+const inlineExplain = document.getElementById('inlineExplain');
+
+const backBtn = document.getElementById('backBtn');
+const nextBtn = document.getElementById('nextBtn');
+const finishBtn = document.getElementById('finishBtn');
+
+const quizTools = document.getElementById('quizTools');
+const pauseBtn = document.getElementById('pauseBtn');
+const pauseOverlay = document.getElementById('pauseOverlay');
+const resumeFromPauseBtn = document.getElementById('resumeFromPauseBtn');
+
+const resumeModal = document.getElementById('resumeModal');
+const resumeInfo = document.getElementById('resumeInfo');
+const resumeYes = document.getElementById('resumeYes');
+const resumeNo = document.getElementById('resumeNo');
+
+const leaveWarningModal = document.getElementById('leaveWarningModal');
+const leaveWarnText = document.getElementById('leaveWarnText');
+const leaveWarnOk = document.getElementById('leaveWarnOk');
+
+const statsBar = document.getElementById('statsBar');
+
+/* INIT */
+window.addEventListener('load', async () => {
+ await SoundEngine.init();
+ updateSoundToggleUI();
+ setupConfigTopics();
+ await checkSavedState();
+ await updateHomeStats();
+});
+
+function updateSoundToggleUI() {
+ const muted = SoundEngine.isMuted();
+ soundToggle.classList.toggle('muted', muted);
+ soundToggle.setAttribute('aria-pressed', muted ? 'true' : 'false');
+ soundToggle.innerHTML = muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+}
+soundToggle.addEventListener('click', async () => {
+ await SoundEngine.setMuted(!SoundEngine.isMuted());
+ updateSoundToggleUI();
+});
+
+async function updateHomeStats() {
+ const best = await storageGet(BEST_SCORE_KEY);
+ if (best) {
+  statsBar.classList.remove('hidden');
+  statsBar.innerHTML = `<div class="stat-chip"><i class="fa-solid fa-trophy"></i> Best Score: <strong>${best}%</strong></div>`;
+ } else {
+  statsBar.classList.add('hidden');
+  statsBar.innerHTML = '';
+ }
+}
+
+/* CONFIG TOPICS BUILD */
+function setupConfigTopics() {
+ topicsWrap.innerHTML = '';
+ ALL_TOPICS.forEach((t) => {
+  const label = document.createElement('label');
+  label.className = 'topic-chip';
+  label.innerHTML = `<input type="checkbox" value="${t}" checked> <span><i class="fa-solid ${sectionIcon(t)}"></i> ${t}</span>`;
+  topicsWrap.appendChild(label);
+ });
+}
+
+timeSlider.addEventListener('input', () => { timeValue.textContent = timeSlider.value; });
+countSlider.addEventListener('input', () => { countValue.textContent = countSlider.value; });
+
+/* MODE SELECTION */
+pickAuto.addEventListener('click', () => {
+ startQuiz('auto', ALL_TOPICS, 60, QUESTIONS.length);
+});
+pickCustom.addEventListener('click', () => {
+ homeScreen.classList.add('hidden');
+ configScreen.classList.remove('hidden');
+});
+backToHomeFromConfig.addEventListener('click', () => {
+ configScreen.classList.add('hidden');
+ homeScreen.classList.remove('hidden');
+});
+
+startCustomBtn.addEventListener('click', () => {
+ const selectedTopics = Array.from(topicsWrap.querySelectorAll('input:checked')).map(i => i.value);
+ if (selectedTopics.length === 0) {
+  alert('Please select at least one topic.');
+  return;
+ }
+ const mins = parseInt(timeSlider.value, 10);
+ const count = parseInt(countSlider.value, 10);
+ configScreen.classList.add('hidden');
+ startQuiz('custom', selectedTopics, mins, count);
+});
+
+/* START QUIZ */
+function startQuiz(mode, topics, minutes, count) {
+ quizMode = mode;
+ showScreen(loadingScreen);
+ setTimeout(() => {
+  let filtered = QUESTIONS.filter(q => topics.includes(q.sec));
+  if (filtered.length === 0) filtered = [...QUESTIONS];
+  filtered = shuffle(filtered).map(randomizeOptions);
+  if (count < filtered.length) {
+   filtered = filtered.slice(0, count);
+  }
+  activeQuestions = filtered;
+  userAnswers = new Array(activeQuestions.length).fill(null);
+  currentQ = 0;
+  timeRemaining = minutes * 60;
+  isPaused = false;
+  leaveCount = 0;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') {
+   pauseBtn.classList.remove('hidden');
+  } else {
+   pauseBtn.classList.add('hidden');
+  }
+  timerBox.classList.remove('hidden');
+
+  startTimer();
+  renderQuestion();
+  saveState();
+ }, 600);
+}
+
+function showScreen(sc) {
+ [homeScreen, configScreen, loadingScreen, quizScreen, resultScreen].forEach(s => s.classList.add('hidden'));
+ sc.classList.remove('hidden');
+ if (sc === quizScreen) {
+  closeMobileNav();
+  hamburgerBtn.classList.add('hidden');
+ } else {
+  hamburgerBtn.classList.remove('hidden');
+ }
+}
+
+/* TIMER */
+function startTimer() {
+ clearInterval(timerInterval);
+ updateTimerDisplay();
+ timerInterval = setInterval(() => {
+  if (!isPaused) {
+   timeRemaining--;
+   updateTimerDisplay();
+   if (timeRemaining <= 0) {
+    clearInterval(timerInterval);
+    alert('Time is up! Submitting your answers.');
+    finishQuiz();
+   }
+  }
+ }, 1000);
+}
+
+function updateTimerDisplay() {
+ const m = Math.floor(Math.max(0, timeRemaining) / 60);
+ const s = Math.max(0, timeRemaining) % 60;
+ timerText.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+ if (timeRemaining < 300) {
+  timerBox.classList.add('warn');
+ } else {
+  timerBox.classList.remove('warn');
+ }
+}
+
+/* PAUSE ENGINE */
+pauseBtn.addEventListener('click', togglePause);
+resumeFromPauseBtn.addEventListener('click', togglePause);
+
+function togglePause() {
+ if (quizMode !== 'auto') return;
+ isPaused = !isPaused;
+ if (isPaused) {
+  pauseOverlay.classList.remove('hidden');
+ } else {
+  pauseOverlay.classList.add('hidden');
+ }
+}
+
+/* RENDER QUESTION */
+function renderQuestion() {
+ const q = activeQuestions[currentQ];
+ sectionTag.innerHTML = `<i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec}`;
+ qCounter.textContent = `Question ${currentQ + 1} of ${activeQuestions.length}`;
+ qText.textContent = q.q;
+
+ optsWrap.innerHTML = '';
+ inlineExplain.className = 'inline-explain';
+ inlineExplain.innerHTML = '';
+
+ const answered = userAnswers[currentQ] !== null;
+
+ q.opts.forEach((optStr, idx) => {
+  const optDiv = document.createElement('div');
+  optDiv.className = 'opt';
+  const letter = String.fromCharCode(65 + idx);
+
+  if (answered) {
+   optDiv.classList.add('locked');
+   if (quizMode === 'auto') {
+    if (idx === q.ans) optDiv.classList.add('correct');
+    if (userAnswers[currentQ] === idx && idx !== q.ans) optDiv.classList.add('wrong');
+   } else {
+    if (userAnswers[currentQ] === idx) optDiv.classList.add('selected');
+   }
+  }
+
+  optDiv.innerHTML = `<div class="opt-letter">${letter}</div><div class="opt-text">${optStr}</div>`;
+  optDiv.addEventListener('click', () => handleSelectOption(idx));
+  optsWrap.appendChild(optDiv);
+ });
+
+ if (answered && quizMode === 'auto') {
+  const isRight = userAnswers[currentQ] === q.ans;
+  inlineExplain.classList.add('show', isRight ? 'right' : 'wrong');
+  inlineExplain.innerHTML = `
+   <div class="ie-label">${isRight ? '<i class="fa-solid fa-circle-check"></i> Correct!' : '<i class="fa-solid fa-circle-xmark"></i> Incorrect'}</div>
+   <div>${q.ex}</div>
+  `;
+ }
+
+ // Navigation buttons state
+ backBtn.disabled = currentQ === 0;
+ if (currentQ === activeQuestions.length - 1) {
+  nextBtn.classList.add('hidden');
+  finishBtn.classList.remove('hidden');
+ } else {
+  nextBtn.classList.remove('hidden');
+  finishBtn.classList.add('hidden');
+ }
+
+ renderProgress();
+}
+
+function renderProgress() {
+ const pct = ((currentQ + 1) / activeQuestions.length) * 100;
+ progressFill.style.width = `${pct}%`;
+
+ dotsRow.innerHTML = '';
+ activeQuestions.forEach((q, idx) => {
+  const dot = document.createElement('div');
+  dot.className = 'dot';
+  if (idx === currentQ) dot.classList.add('current');
+
+  if (userAnswers[idx] !== null) {
+   if (quizMode === 'auto') {
+    if (userAnswers[idx] === q.ans) dot.classList.add('correct');
+    else dot.classList.add('wrong');
+   } else {
+    dot.classList.add('answered');
+   }
+  }
+  dot.addEventListener('click', () => {
+   currentQ = idx;
+   renderQuestion();
+  });
+  dotsRow.appendChild(dot);
+ });
+}
+
+/* OPTION SELECTION */
+function handleSelectOption(idx) {
+ if (userAnswers[currentQ] !== null && quizMode === 'auto') return; // locked in auto mode once picked
+
+ const prevAns = userAnswers[currentQ];
+ userAnswers[currentQ] = idx;
+
+ if (quizMode === 'auto' && prevAns === null) {
+  if (idx === activeQuestions[currentQ].ans) {
+   SoundEngine.playCorrect();
+  } else {
+   SoundEngine.playWrong();
+  }
+ }
+
+ renderQuestion();
+ saveState();
+}
+
+nextBtn.addEventListener('click', () => {
+ if (currentQ < activeQuestions.length - 1) {
+  currentQ++;
+  renderQuestion();
+ }
+});
+backBtn.addEventListener('click', () => {
+ if (currentQ > 0) {
+  currentQ--;
+  renderQuestion();
+ }
+});
+finishBtn.addEventListener('click', () => {
+ const answeredCount = userAnswers.filter(a => a !== null).length;
+ if (quizMode === 'auto' && answeredCount < Math.min(30, activeQuestions.length)) {
+  alert(`Please answer at least ${Math.min(30, activeQuestions.length)} questions before submitting.`);
+  return;
+ }
+ if (confirm('Are you sure you want to submit your quiz?')) {
+  finishQuiz();
+ }
+});
+
+/* KEYBOARD NAVIGATION */
+document.addEventListener('keydown', (e) => {
+ if (quizScreen.classList.contains('hidden')) return;
+ if (e.key === 'ArrowLeft' && currentQ > 0) {
+  currentQ--; renderQuestion();
+ } else if (e.key === 'ArrowRight' && currentQ < activeQuestions.length - 1) {
+  currentQ++; renderQuestion();
+ } else if (['1','2','3','4'].includes(e.key)) {
+  const idx = parseInt(e.key, 10) - 1;
+  if (idx < activeQuestions[currentQ].opts.length) {
+   handleSelectOption(idx);
+  }
+ }
+});
+
+/* FINISH QUIZ */
+function finishQuiz() {
+ clearInterval(timerInterval);
+ clearSavedState();
+ quizTools.classList.add('hidden');
+ timerBox.classList.add('hidden');
+
+ let correctCount = 0;
+ const breakdown = {};
+
+ activeQuestions.forEach((q, i) => {
+  if (!breakdown[q.sec]) breakdown[q.sec] = { correct: 0, total: 0 };
+  breakdown[q.sec].total++;
+
+  if (userAnswers[i] === q.ans) {
+   correctCount++;
+   breakdown[q.sec].correct++;
+  }
+ });
+
+ const total = activeQuestions.length;
+ const pct = Math.round((correctCount / total) * 100);
+
+ document.getElementById('resultScore').textContent = correctCount;
+ document.getElementById('resultOf').textContent = `/ ${total}`;
+ document.getElementById('resultPct').textContent = `${pct}% Overall Score`;
+
+ let msg = '';
+ if (pct >= 80) msg = '<i class="fa-solid fa-award" style="color:#facc15;"></i> Excellent Mastery! Outstanding Performance.';
+ else if (pct >= 60) msg = '<i class="fa-solid fa-thumbs-up" style="color:var(--accent);"></i> Good Job! Keep reviewing difficult topics.';
+ else msg = '<i class="fa-solid fa-book-open" style="color:var(--red);"></i> Keep Practicing! Review the explanations below.';
+ document.getElementById('resultMsg').innerHTML = msg;
+
+ saveResultToHistory('CYB121', correctCount, total);
+
+ document.getElementById('bestBadge').innerHTML = '';
+ (async () => {
+  const oldBestRaw = await storageGet(BEST_SCORE_KEY);
+  const oldBest = oldBestRaw ? parseInt(oldBestRaw, 10) : 0;
+  if (pct > oldBest) {
+   await storageSet(BEST_SCORE_KEY, String(pct));
+   document.getElementById('bestBadge').innerHTML = `<div class="best-badge"><i class="fa-solid fa-star"></i> New Personal Best!</div>`;
+  }
+ })();
+
+ // Render breakdown grid
+ const breakdownGrid = document.getElementById('breakdownGrid');
+ breakdownGrid.innerHTML = '';
+ Object.keys(breakdown).forEach(sec => {
+  const item = breakdown[sec];
+  const bdCard = document.createElement('div');
+  bdCard.className = 'bd-card';
+  bdCard.innerHTML = `
+   <div class="bd-name"><i class="fa-solid ${sectionIcon(sec)}"></i> ${sec}</div>
+   <div class="bd-score">${item.correct} <span class="bd-total">/ ${item.total}</span></div>
+  `;
+  breakdownGrid.appendChild(bdCard);
+ });
+
+ // Render question review list
+ const reviewList = document.getElementById('reviewList');
+ reviewList.innerHTML = '';
+ activeQuestions.forEach((q, i) => {
+  const uAns = userAnswers[i];
+  const isRight = uAns === q.ans;
+  const revItem = document.createElement('div');
+  revItem.className = `review-item ${isRight ? 'right' : 'miss'}`;
+
+  const uAnsText = uAns !== null ? `${String.fromCharCode(65 + uAns)}) ${q.opts[uAns]}` : 'Not Answered';
+  const cAnsText = `${String.fromCharCode(65 + q.ans)}) ${q.opts[q.ans]}`;
+
+  revItem.innerHTML = `
+   <div class="ri-section"><i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec} · Q${i + 1}</div>
+   <div class="ri-q"><strong>${q.q}</strong></div>
+   <div class="ri-ans ${isRight ? 'right' : 'wrong'}">
+    <i class="fa-solid ${isRight ? 'fa-check' : 'fa-xmark'}"></i>
+    <span><strong>Your Answer:</strong> ${uAnsText}</span>
+   </div>
+   ${!isRight ? `<div class="ri-ans correct-reveal"><i class="fa-solid fa-bullseye"></i> <span><strong>Correct Answer:</strong> ${cAnsText}</span></div>` : ''}
+   <div class="ri-exp"><strong>Explanation:</strong> ${q.ex}</div>
+  `;
+  reviewList.appendChild(revItem);
+ });
+
+ showScreen(resultScreen);
+ updateHomeStats();
+}
+
+document.getElementById('homeBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('retryBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+/* AUTOSAVE ENGINE (persistent artifact storage) */
+function saveState() {
+ const state = { quizMode, activeQuestions, userAnswers, currentQ, timeRemaining };
+ storageSet(STORAGE_KEY, JSON.stringify(state));
+}
+
+function clearSavedState() {
+ storageDelete(STORAGE_KEY);
+}
+
+async function checkSavedState() {
+ const raw = await storageGet(STORAGE_KEY);
+ if (!raw) return;
+ let data;
+ try {
+  data = JSON.parse(raw);
+ } catch (e) {
+  return;
+ }
+ if (!data || !data.activeQuestions || data.activeQuestions.length === 0) return;
+
+ resumeInfo.textContent = `${data.activeQuestions.length} Questions (${data.quizMode.toUpperCase()} Mode)`;
+ resumeModal.classList.remove('hidden');
+
+ resumeYes.onclick = () => {
+  resumeModal.classList.add('hidden');
+  quizMode = data.quizMode;
+  activeQuestions = data.activeQuestions;
+  userAnswers = data.userAnswers;
+  currentQ = data.currentQ;
+  timeRemaining = data.timeRemaining;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') pauseBtn.classList.remove('hidden'); else pauseBtn.classList.add('hidden');
+  timerBox.classList.remove('hidden');
+  startTimer();
+  renderQuestion();
+ };
+
+ resumeNo.onclick = () => {
+  resumeModal.classList.add('hidden');
+  clearSavedState();
+ };
+}
+
+/* TAB SWITCH GUARDRAIL */
+document.addEventListener('visibilitychange', () => {
+ if (!quizScreen.classList.contains('hidden') && document.hidden) {
+  leaveCount++;
+  if (leaveCount >= 3) {
+   alert('You have left the quiz tab 3 times. The quiz will now reset.');
+   clearSavedState();
+   location.reload();
+  } else {
+   leaveWarnText.textContent = `You switched away from the quiz tab. Warning ${leaveCount} of 3. Leaving 3 times will reset your quiz.`;
+   leaveWarningModal.classList.remove('hidden');
+  }
+ }
+});
+leaveWarnOk.addEventListener('click', () => leaveWarningModal.classList.add('hidden'));
+
+</script>
+</body>
+</html>
