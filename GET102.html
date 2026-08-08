@@ -505,16 +505,25 @@ mobileNav.addEventListener('click', (e)=>{ if(e.target === mobileNav) closeMobil
 document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMobileNav(); });
 
 /* ============================================================
- DIAGRAM IMAGES (base64, extracted from the GET102 orthographic/
- isometric course notes) — referenced by question objects via q.img
+ DIAGRAM IMAGES (SVG source strings, extracted from the GET102
+ orthographic/isometric course notes) — referenced by question
+ objects via q.img. Encoded safely below via encodeURIComponent
+ so special characters (quotes, %, spaces) never break the
+ data: URI — this is the fix for the "broken image / alt text"
+ bug from the manual %23-only encoding used previously.
  ============================================================ */
-const DIAG_IMAGES = {
-  'fig1_step': 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background:%23fff"><path d="M200,50 L300,100 L300,150 L250,175 L250,225 L150,275 L50,225 L50,125 Z" fill="%23e2e8f6" stroke="%234a5878" stroke-width="2"/><path d="M200,50 L100,100 L150,125 L250,75 Z" fill="%23c7cafb" stroke="%234a5878" stroke-width="2"/><path d="M150,125 L50,175 L100,200 L200,150 Z" fill="%23c7cafb" stroke="%234a5878" stroke-width="2"/><text x="120" y="290" font-family="sans-serif" font-size="16" font-weight="bold">Figure 1: Stepped Block</text></svg>',
-  'fig2_lshape': 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background:%23fff"><path d="M100,200 L200,250 L300,200 L300,100 L250,75 L250,150 L150,100 L100,125 Z" fill="%23eef1fb" stroke="%231e2640" stroke-width="2"/><path d="M300,100 L200,50 L150,75 L250,125 Z" fill="%23c7cafb" stroke="%231e2640" stroke-width="2"/><path d="M250,150 L150,100 L100,125 L200,175 Z" fill="%23c7cafb" stroke="%231e2640" stroke-width="2"/><text x="140" y="280" font-family="sans-serif" font-size="16" font-weight="bold">Figure 2: L-Shape</text></svg>',
-  'fig3_ushape': 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background:%23fff"><path d="M50,150 L150,200 L350,100 L250,50 Z" fill="%23dde3f3" stroke="%23131a2c" stroke-width="2"/><path d="M150,200 L150,250 L350,150 L350,100 Z" fill="%23c7cafb" stroke="%23131a2c" stroke-width="2"/><path d="M50,150 L50,200 L150,250 L150,200 Z" fill="%23a78bfa" stroke="%23131a2c" stroke-width="2"/><text x="130" y="280" font-family="sans-serif" font-size="16" font-weight="bold">Figure 3: U-Channel</text></svg>',
-  'fig4_cone': 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background:%23fff"><ellipse cx="200" cy="80" rx="80" ry="30" fill="%23e3e6fd" stroke="%234f8ef7" stroke-width="2"/><path d="M120,80 L150,220 A50 20 0 0 0 250,220 L280,80 Z" fill="%23f4f6fc" stroke="%234f8ef7" stroke-width="2"/><ellipse cx="200" cy="220" rx="50" ry="20" fill="%23c7cafb" stroke="%234f8ef7" stroke-width="2"/><text x="110" y="280" font-family="sans-serif" font-size="16" font-weight="bold">Figure 4: Conical Frustum</text></svg>',
-  'fig5_wedge': 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background:%23fff"><path d="M50,200 L200,275 L350,200 L350,150 L50,50 Z" fill="%23dde3f3" stroke="%23131a2c" stroke-width="2"/><path d="M50,200 L50,50 L200,125 L200,275 Z" fill="%23c7cafb" stroke="%23131a2c" stroke-width="2"/><text x="150" y="290" font-family="sans-serif" font-size="16" font-weight="bold">Figure 5: Wedge</text></svg>'
+const DIAG_SVG = {
+  'fig1_step': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background:#fff"><path d="M200,50 L300,100 L300,150 L250,175 L250,225 L150,275 L50,225 L50,125 Z" fill="#e2e8f6" stroke="#4a5878" stroke-width="2"/><path d="M200,50 L100,100 L150,125 L250,75 Z" fill="#c7cafb" stroke="#4a5878" stroke-width="2"/><path d="M150,125 L50,175 L100,200 L200,150 Z" fill="#c7cafb" stroke="#4a5878" stroke-width="2"/><text x="120" y="290" font-family="sans-serif" font-size="16" font-weight="bold">Figure 1: Stepped Block</text></svg>',
+  'fig2_lshape': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background:#fff"><path d="M100,200 L200,250 L300,200 L300,100 L250,75 L250,150 L150,100 L100,125 Z" fill="#eef1fb" stroke="#1e2640" stroke-width="2"/><path d="M300,100 L200,50 L150,75 L250,125 Z" fill="#c7cafb" stroke="#1e2640" stroke-width="2"/><path d="M250,150 L150,100 L100,125 L200,175 Z" fill="#c7cafb" stroke="#1e2640" stroke-width="2"/><text x="140" y="280" font-family="sans-serif" font-size="16" font-weight="bold">Figure 2: L-Shape</text></svg>',
+  'fig3_ushape': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background:#fff"><path d="M50,150 L150,200 L350,100 L250,50 Z" fill="#dde3f3" stroke="#131a2c" stroke-width="2"/><path d="M150,200 L150,250 L350,150 L350,100 Z" fill="#c7cafb" stroke="#131a2c" stroke-width="2"/><path d="M50,150 L50,200 L150,250 L150,200 Z" fill="#a78bfa" stroke="#131a2c" stroke-width="2"/><text x="130" y="280" font-family="sans-serif" font-size="16" font-weight="bold">Figure 3: U-Channel</text></svg>',
+  'fig4_cone': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background:#fff"><ellipse cx="200" cy="80" rx="80" ry="30" fill="#e3e6fd" stroke="#4f8ef7" stroke-width="2"/><path d="M120,80 L150,220 A50 20 0 0 0 250,220 L280,80 Z" fill="#f4f6fc" stroke="#4f8ef7" stroke-width="2"/><ellipse cx="200" cy="220" rx="50" ry="20" fill="#c7cafb" stroke="#4f8ef7" stroke-width="2"/><text x="110" y="280" font-family="sans-serif" font-size="16" font-weight="bold">Figure 4: Conical Frustum</text></svg>',
+  'fig5_wedge': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background:#fff"><path d="M50,200 L200,275 L350,200 L350,150 L50,50 Z" fill="#dde3f3" stroke="#131a2c" stroke-width="2"/><path d="M50,200 L50,50 L200,125 L200,275 Z" fill="#c7cafb" stroke="#131a2c" stroke-width="2"/><text x="150" y="290" font-family="sans-serif" font-size="16" font-weight="bold">Figure 5: Wedge</text></svg>'
 };
+
+const DIAG_IMAGES = {};
+for (const key in DIAG_SVG) {
+  DIAG_IMAGES[key] = 'data:image/svg+xml;utf8,' + encodeURIComponent(DIAG_SVG[key]);
+}
 
 /* ============================================================
  OPTION-CHOICE DIAGRAMS
@@ -561,8 +570,7 @@ function optLayoutIcon(highlight, labels){
     const fill = isHi ? OPT_FILL2 : (isCenter ? OPT_FILL : '#f4f6fc');
     const stroke = (isHi || isCenter) ? OPT_STROKE : '#aab4d6';
     const sw = (isHi || isCenter) ? 3 : 1.5;
-    const dash = (isHi && !isCenter) ? '' : '';
-    svg += `<rect x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}"${dash}/>`;
+    svg += `<rect x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}"/>`;
     let label = isCenter ? (labels.center || 'FRONT') : (isHi ? (labels[highlight] || '?') : '');
     if (label) svg += `<text x="${b.x + b.w/2}" y="${b.y + b.h/2 + 4}" font-family="monospace" font-size="9" font-weight="700" fill="${OPT_STROKE}" text-anchor="middle">${label}</text>`;
   }
@@ -571,12 +579,12 @@ function optLayoutIcon(highlight, labels){
 function optDirIcon(dir){
   const label = { top:'TOP', front:'FRONT', side:'SIDE', bottom:'BOTTOM' }[dir];
   let arrow = '';
-  const cx = 80, cy = 60, cube = `<rect x="60" y="45" width="40" height="30" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="2.5"/>`;
+  const cube = `<rect x="60" y="45" width="40" height="30" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="2.5"/>`;
   if (dir === 'top') arrow = `<polyline points="80,10 80,38" stroke="${OPT_STROKE}" stroke-width="3"/><polygon points="80,42 73,30 87,30" fill="${OPT_STROKE}"/>`;
   if (dir === 'bottom') arrow = `<polyline points="80,110 80,82" stroke="${OPT_STROKE}" stroke-width="3"/><polygon points="80,78 73,90 87,90" fill="${OPT_STROKE}"/>`;
   if (dir === 'front') arrow = `<polyline points="150,60 103,60" stroke="${OPT_STROKE}" stroke-width="3"/><polygon points="99,60 111,53 111,67" fill="${OPT_STROKE}"/>`;
   if (dir === 'side') arrow = `<polyline points="10,60 57,60" stroke="${OPT_STROKE}" stroke-width="3"/><polygon points="61,60 49,53 49,67" fill="${OPT_STROKE}"/>`;
-  return `${cube}${arrow}<text x="80" y="105" font-family="monospace" font-size="11" font-weight="700" fill="${OPT_STROKE}" text-anchor="middle">${dir==='top'?'':''}</text><text x="80" y="20" font-family="monospace" font-size="10" font-weight="700" fill="${OPT_STROKE}" text-anchor="middle">${label}</text>`;
+  return `${cube}${arrow}<text x="80" y="20" font-family="monospace" font-size="10" font-weight="700" fill="${OPT_STROKE}" text-anchor="middle">${label}</text>`;
 }
 
 const OPTION_SHAPES = {
