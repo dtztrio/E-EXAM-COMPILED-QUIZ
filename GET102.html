@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GET102 · Engineering Graphics Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script>
+(function(){
+  try{
+    var theme = localStorage.getItem('dtz_theme') || 'dark';
+    var scale = localStorage.getItem('dtz_font_scale') || '1';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.style.setProperty('--font-scale', scale);
+  }catch(e){}
+})();
+</script>
+<style>
+:root {
+ --bg:#0a0c12; --surface:#0f1117; --surface2:#141820; --surface3:#1a2030;
+ --border:#1e2640; --border2:#26304e; --ink:#e2e8f6; --ink2:#94a3c0; --ink3:#4a5878;
+ --accent:#4f8ef7; --accent2:#7c6fff; --accent-dim:#0d1630; --accent-glow:rgba(79,142,247,.14);
+ --green:#34d399; --green-dim:#0a1e14; --red:#f87171; --red-dim:#1e0a0a; --purple:#a78bfa;
+ --bar-bg:rgba(10,12,18,.92); --font-scale:1;
+ --r:16px;
+}
+:root[data-theme="light"] {
+ --bg:#f4f6fc; --surface:#ffffff; --surface2:#eef1fb; --surface3:#e4e9f9;
+ --border:#dde3f3; --border2:#c7cafb; --ink:#131a2c; --ink2:#5b6478; --ink3:#8a93ab;
+ --accent-dim:#e3e6fd; --accent-glow:rgba(79,142,247,.10);
+ --green-dim:#e2f9ef; --red-dim:#fdeaea;
+ --bar-bg:rgba(255,255,255,.92);
+}
+html{font-size:calc(16px * var(--font-scale, 1));}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Outfit',sans-serif;min-height:100vh;display:flex;flex-direction:column;
+ background-image:radial-gradient(ellipse 900px 600px at 10% 0%, rgba(79,142,247,.06) 0%, transparent 70%),
+ radial-gradient(ellipse 700px 500px at 90% 30%, rgba(124,111,255,.05) 0%, transparent 60%);
+ transition:background-color .2s ease, color .2s ease;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);
+ background:var(--bar-bg);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px;}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.brand-badge{background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;font-weight:800;font-size:.72rem;letter-spacing:2px;
+ padding:6px 14px;border-radius:50px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+.brand-sub{font-size:.7rem;color:var(--ink3);letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+#timer{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:600;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:7px 16px;border-radius:50px;letter-spacing:2px;min-width:96px;text-align:center;
+ display:flex;align-items:center;gap:8px;justify-content:center;}
+#timer.warn{color:var(--red);background:var(--red-dim);border-color:rgba(248,113,113,.3);animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+#soundToggle{width:38px;height:38px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);
+ color:var(--ink2);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;
+ transition:border-color .15s,color .15s,background .15s;flex-shrink:0;}
+#soundToggle:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+#soundToggle.muted{color:var(--ink3);}
+.hamburger{display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;cursor:pointer;padding:0;color:var(--ink);font-size:.95rem;transition:border-color .15s,color .15s;flex-shrink:0;}
+.hamburger:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+.hamburger .fa-xmark{display:none;} .hamburger[aria-expanded="true"] .fa-bars{display:none;} .hamburger[aria-expanded="true"] .fa-xmark{display:inline-block;}
+.mobile-nav{position:fixed;inset:0;z-index:99;background:transparent;opacity:0;pointer-events:none;transition:opacity .15s ease;}
+.mobile-nav.open{opacity:1;pointer-events:auto;}
+.mobile-nav-panel{position:absolute;top:70px;right:20px;width:250px;max-width:82vw;max-height:min(70vh,520px);background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:1px;transform:scale(.94) translateY(-8px);transform-origin:top right;opacity:0;transition:transform .16s ease,opacity .16s ease;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow-y:auto;}
+.mobile-nav.open .mobile-nav-panel{transform:scale(1) translateY(0);opacity:1;}
+.mobile-nav-panel a{display:flex;align-items:center;gap:12px;padding:11px 10px;font-size:.9rem;font-weight:600;color:var(--ink);text-decoration:none;border-radius:8px;}
+.mobile-nav-panel a:hover{background:var(--accent-glow);}
+.mobile-nav-panel a i{width:18px;text-align:center;color:var(--accent);font-size:.85rem;}
+.mobile-nav-panel a.active{color:var(--accent);background:var(--accent-dim);}
+.mobile-nav-panel .nav-group-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);padding:12px 10px 4px;}
+.mobile-nav-panel .nav-group-label:first-child{padding-top:6px;}
+main{flex:1;display:flex;justify-content:center;padding:0 16px 100px;}
+#homeScreen,#configScreen,#quizScreen,#resultScreen,#loadingScreen{width:100%;max-width:720px;}
+.hidden{display:none !important;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:32px 28px;margin-bottom:20px;}
+
+a { text-decoration: none; }
+#statsBar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;}
+.stat-chip{font-size:.78rem;color:var(--ink2);background:var(--surface2);border:1px solid var(--border);padding:8px 16px;
+ border-radius:50px;display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;}
+.stat-chip i{color:var(--accent);}
+.stat-chip strong{color:var(--ink);}
+
+/* HOME */
+.hero-wrap{padding:48px 0 8px;text-align:center;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
+ color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:500;margin-bottom:22px;background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.22);padding:7px 16px 7px 13px;border-radius:50px;}
+.hero-title{font-family:'Fraunces',serif;font-size:2.3rem;line-height:1.16;margin-bottom:16px;font-weight:600;letter-spacing:-.5px;}
+.hero-title span{color:var(--accent);font-style:italic;}
+.hero-desc{color:var(--ink2);font-size:.96rem;line-height:1.75;max-width:480px;margin:0 auto 34px;}
+
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:30px;}
+.mode-card{background:var(--surface2);border:1px solid var(--border2);border-radius:18px;padding:26px 22px;cursor:pointer;
+ transition:border-color .15s,transform .15s,background .15s;text-align:left;}
+.mode-card:hover{border-color:rgba(79,142,247,.4);transform:translateY(-3px);background:var(--surface3);}
+.mode-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;
+ display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:16px;}
+.mode-name{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;margin-bottom:8px;}
+.mode-desc{font-size:.85rem;color:var(--ink2);line-height:1.6;margin-bottom:14px;}
+.mode-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.mode-tag{font-size:.66rem;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ padding:3px 9px;border-radius:20px;font-family:'JetBrains Mono',monospace;}
+
+.section-heading{display:flex;align-items:center;gap:12px;margin:36px 0 18px;}
+.section-heading-icon{width:34px;height:34px;border-radius:10px;background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.85rem;flex-shrink:0;}
+.section-heading-text{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;}
+.rules-list{display:grid;gap:8px;}
+.rule-item{display:flex;gap:14px;align-items:flex-start;font-size:.86rem;color:var(--ink2);line-height:1.55;padding:14px 16px;
+ background:var(--surface2);border:1px solid var(--border);border-radius:10px;}
+.rule-icon{width:30px;height:30px;border-radius:8px;flex-shrink:0;background:var(--accent-dim);border:1px solid rgba(79,142,247,.2);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.78rem;margin-top:1px;}
+.rule-text strong{color:var(--ink);}
+
+/* CONFIG SCREEN */
+.config-field{margin-bottom:22px;}
+.config-label{font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.config-label i{color:var(--accent);}
+.config-input-row{display:flex;align-items:center;gap:14px;}
+.config-slider{flex:1;-webkit-appearance:none;height:6px;border-radius:6px;background:var(--border2);outline:none;}
+.config-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;box-shadow:0 2px 8px rgba(79,142,247,.4);}
+.config-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;border:none;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;}
+.config-value{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:6px 14px;border-radius:10px;min-width:74px;text-align:center;font-size:.9rem;}
+.config-hint{font-size:.74rem;color:var(--ink3);margin-top:8px;}
+.topics-grid{display:flex;flex-wrap:wrap;gap:10px;}
+.topic-chip{display:flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--border2);
+ padding:10px 16px;border-radius:12px;cursor:pointer;font-size:.85rem;transition:border-color .15s,background .15s;}
+.topic-chip:hover{border-color:rgba(79,142,247,.4);}
+.topic-chip input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);
+ color:#fff;border:none;padding:14px 28px;border-radius:50px;font-weight:700;font-size:.95rem;cursor:pointer;
+ font-family:'Outfit',sans-serif;transition:transform .15s,box-shadow .15s,opacity .2s;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(79,142,247,.3);}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--border2);padding:12px 22px;border-radius:50px;
+ font-weight:600;font-size:.9rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:border-color .15s,background .15s;
+ display:inline-flex;align-items:center;gap:8px;}
+.btn-ghost:hover{background:var(--accent-glow);border-color:rgba(79,142,247,.35);}
+.btn-ghost:disabled{opacity:.35;cursor:not-allowed;}
+
+/* LOADING SCREEN */
+#loadingScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 0;text-align:center;}
+.loader-ring{width:56px;height:56px;border-radius:50%;border:4px solid var(--border2);border-top-color:var(--accent);
+ animation:spin .8s linear infinite;margin-bottom:24px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader-text{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--ink2);}
+.loader-sub{font-size:.78rem;color:var(--ink3);margin-top:8px;font-family:'JetBrains Mono',monospace;}
+
+/* QUIZ */
+#progressWrap{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;padding-top:24px;}
+.progress-bar-track{height:4px;background:var(--border);border-radius:4px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .3s;}
+.dots-group{display:flex;gap:5px;flex-wrap:wrap;}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .15s,transform .1s;}
+.dot:hover{transform:scale(1.35);}
+.dot.answered{background:rgba(79,142,247,.4);border:1px solid var(--accent);}
+.dot.current{background:var(--accent);box-shadow:0 0 0 3px rgba(79,142,247,.25);}
+.dot.correct{background:var(--green);}
+.dot.wrong{background:var(--red);}
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.q-section-tag{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;
+ font-weight:600;background:var(--accent-dim);padding:4px 10px;border-radius:20px;border:1px solid rgba(79,142,247,.2);}
+.q-counter{font-size:.78rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;}
+.q-diagram-wrap{margin-bottom:18px;animation:fadeUp .25s ease;}
+.q-diagram-wrap img{width:100%;display:block;border-radius:12px;border:1px solid var(--border2);background:#fff;}
+.q-diagram-caption{font-size:.68rem;color:var(--ink3);text-align:center;margin-top:6px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;}
+.q-text{font-size:1.1rem;line-height:1.65;margin:0 0 26px;font-family:'Fraunces',serif;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.opt{display:flex;align-items:flex-start;gap:14px;padding:15px 18px;border-radius:12px;border:1px solid var(--border2);
+ margin-bottom:10px;background:var(--surface2);cursor:pointer;transition:border-color .15s,background .15s,transform .1s;}
+.opt:hover{border-color:rgba(79,142,247,.35);background:var(--surface3);}
+.opt.locked{cursor:default;}
+.opt.selected{border-color:var(--accent);background:var(--accent-dim);}
+.opt.correct{border-color:var(--green);background:var(--green-dim);}
+.opt.wrong{border-color:var(--red);background:var(--red-dim);}
+.opt-letter{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;
+ justify-content:center;font-size:.75rem;font-weight:700;color:var(--ink3);flex-shrink:0;font-family:'JetBrains Mono',monospace;
+ transition:all .15s;margin-top:1px;}
+.opt.selected .opt-letter{background:var(--accent);color:#fff;border-color:var(--accent);}
+.opt.correct .opt-letter{background:var(--green);color:#fff;border-color:var(--green);}
+.opt.wrong .opt-letter{background:var(--red);color:#fff;border-color:var(--red);}
+.opt-body{flex:1;min-width:0;}
+.opt-text{font-size:.92rem;line-height:1.55;padding-top:3px;}
+.opt-thumb{width:100%;max-width:180px;margin-bottom:8px;border-radius:8px;overflow:hidden;border:1px solid var(--border2);background:#fff;}
+.opt-thumb img{display:block;width:100%;height:auto;}
+.opt.selected .opt-thumb{border-color:var(--accent);}
+.opt.correct .opt-thumb{border-color:var(--green);}
+.opt.wrong .opt-thumb{border-color:var(--red);}
+.inline-explain{display:none;margin-top:6px;margin-bottom:14px;padding:16px 18px;background:rgba(79,142,247,.05);
+ border:1px solid rgba(79,142,247,.15);border-radius:10px;font-size:.85rem;line-height:1.7;color:var(--ink2);animation:fadeUp .2s ease;}
+.inline-explain.show{display:block;}
+.inline-explain .ie-label{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;
+ margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.inline-explain.right .ie-label{color:var(--green);}
+.inline-explain.wrong .ie-label{color:var(--red);}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;}
+.kbd-hint{text-align:center;font-size:.68rem;color:var(--ink3);margin-top:14px;font-family:'JetBrains Mono',monospace;}
+.kbd-hint kbd{background:var(--surface3);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;font-family:'JetBrains Mono',monospace;}
+
+#quizTools{position:fixed;right:20px;bottom:24px;display:flex;flex-direction:column;gap:12px;z-index:60;}
+.fab{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;border:none;
+ cursor:pointer;font-size:1.05rem;box-shadow:0 8px 24px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;
+ transition:transform .15s;}
+.fab:hover{transform:translateY(-3px) scale(1.04);}
+.fab.pause-fab{background:linear-gradient(135deg,#f59e0b,#f97316);}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.72);backdrop-filter:blur(6px);z-index:200;
+ display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-card{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:26px 24px;max-width:380px;
+ width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.modal-icon{width:52px;height:52px;border-radius:50%;background:var(--accent-dim);border:1px solid rgba(79,142,247,.25);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.3rem;margin:0 auto 16px;}
+.modal-icon.warn{background:var(--red-dim);border-color:rgba(248,113,113,.3);color:var(--red);}
+.modal-title{font-family:'Fraunces',serif;font-size:1.2rem;margin-bottom:10px;}
+.modal-text{font-size:.87rem;color:var(--ink2);line-height:1.6;margin-bottom:20px;}
+
+#pauseOverlay{position:fixed;inset:0;background:rgba(6,8,14,.85);backdrop-filter:blur(16px);z-index:150;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
+#pauseOverlay .modal-icon{width:64px;height:64px;font-size:1.6rem;margin-bottom:20px;}
+#pauseOverlay h2{font-family:'Fraunces',serif;font-size:1.6rem;margin-bottom:10px;}
+#pauseOverlay p{color:var(--ink2);font-size:.9rem;max-width:320px;margin-bottom:26px;line-height:1.6;}
+
+.result-hero{text-align:center;padding:26px 0 22px;border-bottom:1px solid var(--border);margin-bottom:26px;}
+.result-ring{display:inline-flex;align-items:center;justify-content:center;width:124px;height:124px;border-radius:50%;
+ border:3px solid var(--accent);background:var(--accent-dim);margin-bottom:16px;}
+.result-score{font-family:'JetBrains Mono',monospace;font-size:2.3rem;font-weight:700;color:var(--accent);}
+.result-of{font-size:.8rem;color:var(--ink3);margin-top:2px;}
+.result-pct{font-family:'Fraunces',serif;font-size:1.5rem;margin-bottom:6px;}
+.result-msg{color:var(--ink2);font-size:.9rem;line-height:1.6;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.best-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;color:#facc15;background:rgba(250,204,21,.08);
+ border:1px solid rgba(250,204,21,.25);padding:4px 12px;border-radius:20px;margin-top:10px;font-family:'JetBrains Mono',monospace;}
+.breakdown-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:26px;}
+.bd-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.bd-name{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.bd-score{font-size:1.35rem;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.bd-total{font-size:.72rem;color:var(--ink3);}
+.review-section-title{font-family:'Fraunces',serif;font-size:1.1rem;border-bottom:1px solid var(--border);padding-bottom:12px;
+ margin:22px 0 16px;display:flex;align-items:center;gap:10px;}
+.review-item{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px;background:var(--surface2);}
+.review-item.right{border-left:3px solid var(--green);}
+.review-item.miss{border-left:3px solid var(--red);}
+.ri-img{width:100%;border-radius:10px;border:1px solid var(--border2);margin-bottom:12px;background:#fff;}
+.ri-q{font-size:.9rem;margin-bottom:10px;line-height:1.6;}
+.ri-section{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:5px;}
+.ri-ans{font-size:.83rem;margin-top:5px;display:flex;align-items:flex-start;gap:7px;}
+.ri-ans.right{color:var(--green);}
+.ri-ans.wrong{color:var(--red);}
+.ri-ans.correct-reveal{color:#2dd4bf;}
+.ri-optthumb{width:56px;height:42px;object-fit:contain;background:#fff;border:1px solid var(--border2);border-radius:6px;flex-shrink:0;}
+.ri-exp{margin-top:10px;padding:12px 14px;background:rgba(79,142,247,.04);border:1px solid rgba(79,142,247,.12);
+ border-radius:9px;font-size:.82rem;line-height:1.65;color:var(--ink2);}
+
+footer{text-align:center;font-size:.7rem;color:var(--ink3);padding:18px;border-top:1px solid var(--border);
+ font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+footer i{color:var(--accent);}
+
+@media(max-width:560px){
+ .card{padding:22px 16px;}
+ .mode-grid{grid-template-columns:1fr;}
+ .hero-title{font-size:1.8rem;}
+ .breakdown-grid{grid-template-columns:repeat(2,1fr);}
+ #quizTools{right:14px;bottom:18px;}
+ .opt-thumb{max-width:140px;}
+}
+
+@media print{
+ @page{ margin:14mm; }
+ *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
+ .topbar, footer, #quizTools, #homeBtn, #retryBtn, #printBtn, .kbd-hint, #statsBar,
+ #pauseOverlay, #leaveWarningModal, #resumeModal, #soundToggle, .hamburger, .mobile-nav { display:none !important; }
+ body{background:#fff;color:#000;}
+ main{padding:0;}
+ .card{border:1px solid #ccc;background:#fff;box-shadow:none;}
+ .bd-card, .review-item{background:#f6f6f6;border-color:#ddd;}
+ .ri-exp{background:#f0f4ff;border-color:#cfd9ff;color:#333;}
+ .result-hero, .bd-card, .review-item{ break-inside:avoid; page-break-inside:avoid; }
+ .review-item{ margin-bottom:14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+ <div class="brand">
+ <span class="brand-badge">GET102</span>
+ <div class="brand-sub"><i class="fa-solid fa-cube" style="margin-right:5px;"></i>Engineering Graphics · Orthographic &amp; Isometric Projection</div>
+ </div>
+ <div style="display:flex;align-items:center;gap:10px;">
+ <div id="timer" class="hidden"><i class="fa-regular fa-clock"></i><span id="timerText">00:00</span></div>
+ <button id="soundToggle" title="Mute sounds" aria-label="Mute sounds" aria-pressed="false"></button>
+ <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
+ <i class="fa-solid fa-bars"></i>
+ <i class="fa-solid fa-xmark"></i>
+ </button>
+ </div>
+</div>
+
+<div class="mobile-nav" id="mobileNav">
+ <div class="mobile-nav-panel">
+ <span class="nav-group-label">Navigate</span>
+ <a href="../dashboard.html"><i class="fa-solid fa-house"></i>Home / Dashboard</a>
+ <a href="../aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+ <span class="nav-group-label">DTZ TRIO</span>
+ <a href="../about.html"><i class="fa-solid fa-users"></i>About Us</a>
+ <a href="../social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+ <span class="nav-group-label">Account</span>
+ <a href="../set.html"><i class="fa-solid fa-gear"></i>Settings</a>
+ <a href="../help.html"><i class="fa-solid fa-circle-question"></i>Help &amp; FAQ</a>
+ </div>
+</div>
+
+<main>
+
+<!-- HOME SCREEN -->
+<div id="homeScreen">
+ <div class="hero-wrap">
+ <div class="hero-eyebrow"><i class="fa-solid fa-cube"></i> GET102 Practice Quiz</div>
+ <h1 class="hero-title">100 questions,<br><span>two ways to train.</span></h1>
+ <p class="hero-desc">Covering Drawing Fundamentals, Orthographic Projection, First &amp; Third Angle Projection, Isometric Drawing, Sectioning/Dimensioning — plus 30 image-based diagram questions built from real isometric-to-orthographic sketches, each with full worked explanations.</p>
+ </div>
+
+ <div id="statsBar" class="hidden"></div>
+
+ <div class="mode-grid">
+ <div class="mode-card" id="pickAuto">
+ <div class="mode-icon"><i class="fa-solid fa-gauge-high"></i></div>
+ <div class="mode-name">Automatic Timer</div>
+ <div class="mode-desc">All 100 questions, shuffled, with a timer the app sets for you. Get instant feedback the moment you answer, and pause any time you need a break.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-regular fa-clock"></i> Auto-set clock</span>
+ <span class="mode-tag"><i class="fa-solid fa-list-check"></i> 100 Qs</span>
+ <span class="mode-tag"><i class="fa-solid fa-pause"></i> Pausable</span>
+ </div>
+ </div>
+ <div class="mode-card" id="pickCustom">
+ <div class="mode-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="mode-name">Custom Timer</div>
+ <div class="mode-desc">Pick your own topics, time limit, and question count. Answer everything first — no pausing, and no feedback until you submit.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-solid fa-sliders"></i> Custom setup</span>
+ <span class="mode-tag"><i class="fa-solid fa-ban"></i> No pausing</span>
+ <span class="mode-tag"><i class="fa-solid fa-flag-checkered"></i> Results at end</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="section-heading">
+ <div class="section-heading-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+ <div class="section-heading-text">How each mode works</div>
+ </div>
+ <div class="rules-list">
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-gauge-high"></i></span>
+ <span class="rule-text"><strong>Automatic Timer</strong> runs all 100 questions with a clock the app manages for you. Tap an option and it's locked in immediately — correct turns green, wrong turns red, with a short explanation right away. Tap <strong>Pause</strong> any time to freeze the clock and blur the screen. You must answer at least <strong>30 questions</strong> before you can submit.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-sliders"></i></span>
+ <span class="rule-text"><strong>Custom Timer</strong> lets you choose specific topics, your own time limit (up to 120 min), and how many questions to include. It cannot be paused — answers stay hidden until you submit, then you get a full score breakdown and review.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-image"></i></span>
+ <span class="rule-text">30 questions are <strong>diagram-based</strong>: each shows an isometric sketch and asks you to identify the correct front, top (plan), or side (end) view — with the answer choices themselves drawn as little orthographic sketches, just like the freehand-sketching exercises in the notes.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-shield-halved"></i></span>
+ <span class="rule-text">Your progress is <strong>auto-saved</strong> as you go, so a refresh won't lose your place. For fairness, switching away from the tab is tracked — leaving 3 times in one quiz resets it.</span></div>
+ </div>
+</div>
+
+<!-- CONFIG SCREEN -->
+<div id="configScreen" class="hidden">
+ <div class="section-heading" style="margin-top:36px;">
+ <div class="section-heading-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="section-heading-text">Set up your Custom Timer exam</div>
+ </div>
+ <div class="card">
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-layer-group"></i> Topics to include</div>
+ <div class="topics-grid" id="topicsWrap"></div>
+ <div class="config-hint" id="topicsHint">Select at least one topic.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-regular fa-clock"></i> Time limit (minutes)</div>
+ <div class="config-input-row">
+ <input type="range" id="timeSlider" class="config-slider" min="5" max="120" step="5" value="60">
+ <span class="config-value" id="timeValue">60</span>
+ </div>
+ <div class="config-hint">Maximum 120 minutes. This clock cannot be paused once the exam starts.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-list-ol"></i> Number of questions</div>
+ <div class="config-input-row">
+ <input type="range" id="countSlider" class="config-slider" min="1" max="100" step="1" value="50">
+ <span class="config-value" id="countValue">50</span>
+ </div>
+ <div class="config-hint" id="countHint">Randomly picked from the selected topics.</div>
+ </div>
+ <div class="nav-row" style="margin-top:8px;">
+ <button class="btn-ghost" id="backToHomeFromConfig"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <button class="btn" id="startCustomBtn"><i class="fa-solid fa-play"></i> Start Custom Timer</button>
+ </div>
+ </div>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" class="hidden">
+ <div class="loader-ring"></div>
+ <div class="loader-text">Preparing your questions…</div>
+ <div class="loader-sub">Shuffling &amp; randomizing options</div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="quizScreen" class="hidden">
+ <div id="progressWrap">
+ <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+ <div class="dots-group" id="dotsRow"></div>
+ </div>
+ <div class="card">
+ <div class="q-meta">
+ <span class="q-section-tag" id="sectionTag"></span>
+ <span class="q-counter" id="qCounter"></span>
+ </div>
+ <div id="qDiagram" class="q-diagram-wrap hidden"></div>
+ <div class="q-text" id="qText"></div>
+ <div id="optsWrap"></div>
+ <div id="inlineExplain" class="inline-explain"></div>
+ <div class="nav-row">
+ <button class="btn-ghost" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <div style="display:flex;gap:8px;">
+ <button class="btn" id="nextBtn">Next <i class="fa-solid fa-arrow-right"></i></button>
+ <button class="btn hidden" id="finishBtn"><i class="fa-solid fa-check"></i> Submit Quiz</button>
+ </div>
+ </div>
+ <div class="kbd-hint">Keyboard: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate &nbsp;·&nbsp; <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to select</div>
+ </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="hidden">
+ <div class="card">
+ <div class="result-hero">
+ <div class="result-ring"><div><div class="result-score" id="resultScore">0</div><div class="result-of" id="resultOf">/ 100</div></div></div>
+ <div class="result-pct" id="resultPct"></div>
+ <div class="result-msg" id="resultMsg"></div>
+ <div id="bestBadge"></div>
+ </div>
+ <div class="breakdown-grid" id="breakdownGrid"></div>
+ <div class="review-section-title"><i class="fa-solid fa-magnifying-glass"></i> Question Review</div>
+ <div id="reviewList"></div>
+ <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;">
+ <button class="btn-ghost" id="homeBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-house"></i> Home</button>
+ <button class="btn-ghost" id="printBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+ <button class="btn" id="retryBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-rotate-right"></i> Retake</button>
+ </div>
+ </div>
+</div>
+
+</main>
+
+<!-- FLOATING QUIZ TOOLS -->
+<div id="quizTools" class="hidden">
+ <button class="fab pause-fab hidden" id="pauseBtn" title="Pause"><i class="fa-solid fa-pause"></i></button>
+</div>
+
+<!-- PAUSE OVERLAY -->
+<div id="pauseOverlay" class="hidden">
+ <div class="modal-icon"><i class="fa-solid fa-pause"></i></div>
+ <h2>Quiz Paused</h2>
+ <p>The clock is frozen and nothing on this screen is visible or clickable until you resume.</p>
+ <button class="btn" id="resumeFromPauseBtn"><i class="fa-solid fa-play"></i> Resume Quiz</button>
+</div>
+
+<!-- LEAVE-WARNING MODAL -->
+<div id="leaveWarningModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></div>
+ <div class="modal-title">You left the quiz</div>
+ <div class="modal-text" id="leaveWarnText"></div>
+ <button class="btn" id="leaveWarnOk">Okay, continue</button>
+ </div>
+</div>
+
+<!-- RESUME AUTOSAVE MODAL -->
+<div id="resumeModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+ <div class="modal-title">Resume your quiz?</div>
+ <div class="modal-text">We found a quiz in progress:<br><strong id="resumeInfo" style="color:var(--ink);"></strong></div>
+ <div style="display:flex;gap:10px;">
+ <button class="btn-ghost" id="resumeNo" style="flex:1;justify-content:center;">Discard</button>
+ <button class="btn" id="resumeYes" style="flex:1;justify-content:center;">Resume</button>
+ </div>
+ </div>
+</div>
+
+<footer><i class="fa-solid fa-cube"></i> GET102 &nbsp;·&nbsp; Engineering Graphics Practice Quiz</footer>
+
+<script>
+/* ============================================================
+ HAMBURGER / MOBILE NAV
+ ============================================================ */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+function closeMobileNav(){mobileNav.classList.remove('open');hamburgerBtn.setAttribute('aria-expanded','false');}
+function toggleMobileNav(){const isOpen = mobileNav.classList.toggle('open');hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');}
+hamburgerBtn.addEventListener('click', toggleMobileNav);
+mobileNav.addEventListener('click', (e)=>{ if(e.target === mobileNav) closeMobileNav(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMobileNav(); });
+
+/* ============================================================
+ DIAGRAM IMAGES (base64, extracted from the GET102 orthographic/
+ isometric course notes) — referenced by question objects via q.img
+ ============================================================ */
+const DIAG_IMAGES = {
+  'fig1_step': 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background:%23fff"><path d="M200,50 L300,100 L300,150 L250,175 L250,225 L150,275 L50,225 L50,125 Z" fill="%23e2e8f6" stroke="%234a5878" stroke-width="2"/><path d="M200,50 L100,100 L150,125 L250,75 Z" fill="%23c7cafb" stroke="%234a5878" stroke-width="2"/><path d="M150,125 L50,175 L100,200 L200,150 Z" fill="%23c7cafb" stroke="%234a5878" stroke-width="2"/><text x="120" y="290" font-family="sans-serif" font-size="16" font-weight="bold">Figure 1: Stepped Block</text></svg>',
+  'fig2_lshape': 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background:%23fff"><path d="M100,200 L200,250 L300,200 L300,100 L250,75 L250,150 L150,100 L100,125 Z" fill="%23eef1fb" stroke="%231e2640" stroke-width="2"/><path d="M300,100 L200,50 L150,75 L250,125 Z" fill="%23c7cafb" stroke="%231e2640" stroke-width="2"/><path d="M250,150 L150,100 L100,125 L200,175 Z" fill="%23c7cafb" stroke="%231e2640" stroke-width="2"/><text x="140" y="280" font-family="sans-serif" font-size="16" font-weight="bold">Figure 2: L-Shape</text></svg>',
+  'fig3_ushape': 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background:%23fff"><path d="M50,150 L150,200 L350,100 L250,50 Z" fill="%23dde3f3" stroke="%23131a2c" stroke-width="2"/><path d="M150,200 L150,250 L350,150 L350,100 Z" fill="%23c7cafb" stroke="%23131a2c" stroke-width="2"/><path d="M50,150 L50,200 L150,250 L150,200 Z" fill="%23a78bfa" stroke="%23131a2c" stroke-width="2"/><text x="130" y="280" font-family="sans-serif" font-size="16" font-weight="bold">Figure 3: U-Channel</text></svg>',
+  'fig4_cone': 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background:%23fff"><ellipse cx="200" cy="80" rx="80" ry="30" fill="%23e3e6fd" stroke="%234f8ef7" stroke-width="2"/><path d="M120,80 L150,220 A50 20 0 0 0 250,220 L280,80 Z" fill="%23f4f6fc" stroke="%234f8ef7" stroke-width="2"/><ellipse cx="200" cy="220" rx="50" ry="20" fill="%23c7cafb" stroke="%234f8ef7" stroke-width="2"/><text x="110" y="280" font-family="sans-serif" font-size="16" font-weight="bold">Figure 4: Conical Frustum</text></svg>',
+  'fig5_wedge': 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" style="background:%23fff"><path d="M50,200 L200,275 L350,200 L350,150 L50,50 Z" fill="%23dde3f3" stroke="%23131a2c" stroke-width="2"/><path d="M50,200 L50,50 L200,125 L200,275 Z" fill="%23c7cafb" stroke="%23131a2c" stroke-width="2"/><text x="150" y="290" font-family="sans-serif" font-size="16" font-weight="bold">Figure 5: Wedge</text></svg>'
+};
+
+/* ============================================================
+ OPTION-CHOICE DIAGRAMS
+ For the 30 diagram-based questions, several answer choices are
+ themselves small orthographic sketches (a rectangle, an L-shape,
+ concentric circles, a trapezoid, a mini 3-view layout, etc.)
+ rather than plain text — mirroring the freehand view-identification
+ exercises in the course notes. Built once, cached, reused.
+ ============================================================ */
+const OPT_STROKE = '#4a5878';
+const OPT_FILL   = '#e2e8f6';
+const OPT_FILL2  = '#c7cafb';
+
+function optBaseShape(kind){
+  switch(kind){
+    case 'L': return `<polygon points="30,25 95,25 95,60 130,60 130,95 30,95" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/>`;
+    case 'U': return `<polygon points="30,25 55,25 55,70 105,70 105,25 130,25 130,95 30,95" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/>`;
+    case 'triangle': return `<polygon points="30,95 30,25 130,95" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/>`;
+    case 'trapezoid': return `<polygon points="45,25 115,25 135,95 25,95" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/>`;
+    default: return '';
+  }
+}
+function optVariant(kind, rotate, mirror){
+  const base = optBaseShape(kind);
+  const t = [];
+  if (mirror) t.push('translate(160,0) scale(-1,1)');
+  if (rotate) t.push(`rotate(${rotate} 80 60)`);
+  return t.length ? `<g transform="${t.join(' ')}">${base}</g>` : base;
+}
+function optLayoutIcon(highlight, labels){
+  labels = labels || { center: 'FRONT' };
+  const boxes = {
+    center: { x: 55, y: 45, w: 50, h: 30 },
+    above:  { x: 55, y: 6,  w: 50, h: 26 },
+    below:  { x: 55, y: 88, w: 50, h: 26 },
+    left:   { x: 6,  y: 45, w: 40, h: 30 },
+    right:  { x: 114,y: 45, w: 40, h: 30 }
+  };
+  let svg = '';
+  for (const key in boxes){
+    const b = boxes[key];
+    const isHi = key === highlight;
+    const isCenter = key === 'center';
+    const fill = isHi ? OPT_FILL2 : (isCenter ? OPT_FILL : '#f4f6fc');
+    const stroke = (isHi || isCenter) ? OPT_STROKE : '#aab4d6';
+    const sw = (isHi || isCenter) ? 3 : 1.5;
+    const dash = (isHi && !isCenter) ? '' : '';
+    svg += `<rect x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}"${dash}/>`;
+    let label = isCenter ? (labels.center || 'FRONT') : (isHi ? (labels[highlight] || '?') : '');
+    if (label) svg += `<text x="${b.x + b.w/2}" y="${b.y + b.h/2 + 4}" font-family="monospace" font-size="9" font-weight="700" fill="${OPT_STROKE}" text-anchor="middle">${label}</text>`;
+  }
+  return svg;
+}
+function optDirIcon(dir){
+  const label = { top:'TOP', front:'FRONT', side:'SIDE', bottom:'BOTTOM' }[dir];
+  let arrow = '';
+  const cx = 80, cy = 60, cube = `<rect x="60" y="45" width="40" height="30" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="2.5"/>`;
+  if (dir === 'top') arrow = `<polyline points="80,10 80,38" stroke="${OPT_STROKE}" stroke-width="3"/><polygon points="80,42 73,30 87,30" fill="${OPT_STROKE}"/>`;
+  if (dir === 'bottom') arrow = `<polyline points="80,110 80,82" stroke="${OPT_STROKE}" stroke-width="3"/><polygon points="80,78 73,90 87,90" fill="${OPT_STROKE}"/>`;
+  if (dir === 'front') arrow = `<polyline points="150,60 103,60" stroke="${OPT_STROKE}" stroke-width="3"/><polygon points="99,60 111,53 111,67" fill="${OPT_STROKE}"/>`;
+  if (dir === 'side') arrow = `<polyline points="10,60 57,60" stroke="${OPT_STROKE}" stroke-width="3"/><polygon points="61,60 49,53 49,67" fill="${OPT_STROKE}"/>`;
+  return `${cube}${arrow}<text x="80" y="105" font-family="monospace" font-size="11" font-weight="700" fill="${OPT_STROKE}" text-anchor="middle">${dir==='top'?'':''}</text><text x="80" y="20" font-family="monospace" font-size="10" font-weight="700" fill="${OPT_STROKE}" text-anchor="middle">${label}</text>`;
+}
+
+const OPTION_SHAPES = {
+  'rect-wide':  `<rect x="25" y="35" width="110" height="50" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/>`,
+  'rect-square':`<rect x="45" y="25" width="70" height="70" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/>`,
+  'rect-tall':  `<rect x="55" y="15" width="50" height="90" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/>`,
+  'L-0': optVariant('L', 0, false),
+  'U-0': optVariant('U', 0, false),
+  'triangle-0': optVariant('triangle', 0, false),
+  'trapezoid-0': optVariant('trapezoid', 0, false),
+  'one-circle':  `<circle cx="80" cy="60" r="42" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/>`,
+  'two-circles': `<circle cx="80" cy="60" r="42" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/><circle cx="80" cy="60" r="20" fill="#fff" stroke="${OPT_STROKE}" stroke-width="3"/>`,
+  'ellipse': `<ellipse cx="80" cy="60" rx="48" ry="24" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/>`,
+  'two-rect-adjacent-diff':  `<rect x="18" y="55" width="55" height="35" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/><rect x="80" y="30" width="62" height="60" fill="${OPT_FILL2}" stroke="${OPT_STROKE}" stroke-width="3"/>`,
+  'two-rect-adjacent-equal': `<rect x="20" y="35" width="55" height="50" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/><rect x="83" y="35" width="55" height="50" fill="${OPT_FILL2}" stroke="${OPT_STROKE}" stroke-width="3"/>`,
+  'two-rect-long-thin': `<rect x="18" y="42" width="55" height="36" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/><rect x="86" y="42" width="55" height="36" fill="${OPT_FILL2}" stroke="${OPT_STROKE}" stroke-width="3"/>`,
+  'two-squares-adjacent': `<rect x="22" y="35" width="48" height="48" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/><rect x="90" y="35" width="48" height="48" fill="${OPT_FILL2}" stroke="${OPT_STROKE}" stroke-width="3"/>`,
+  'two-rect-stacked': `<rect x="45" y="18" width="70" height="35" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/><rect x="30" y="60" width="100" height="35" fill="${OPT_FILL2}" stroke="${OPT_STROKE}" stroke-width="3"/>`,
+  'three-rect-row': `<rect x="16" y="30" width="26" height="60" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/><rect x="55" y="55" width="50" height="35" fill="${OPT_FILL2}" stroke="${OPT_STROKE}" stroke-width="3"/><rect x="118" y="30" width="26" height="60" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/>`,
+  'three-squares-row': `<rect x="16" y="42" width="34" height="34" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/><rect x="63" y="42" width="34" height="34" fill="${OPT_FILL2}" stroke="${OPT_STROKE}" stroke-width="3"/><rect x="110" y="42" width="34" height="34" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/>`,
+  'rect-dash0': `<rect x="25" y="35" width="110" height="50" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/>`,
+  'rect-dash1h': `<rect x="25" y="35" width="110" height="50" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/><line x1="25" y1="60" x2="135" y2="60" stroke="${OPT_STROKE}" stroke-width="2.5" stroke-dasharray="7,5"/>`,
+  'rect-dash2v': `<rect x="25" y="35" width="110" height="50" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/><line x1="60" y1="35" x2="60" y2="85" stroke="${OPT_STROKE}" stroke-width="2.5" stroke-dasharray="7,5"/><line x1="100" y1="35" x2="100" y2="85" stroke="${OPT_STROKE}" stroke-width="2.5" stroke-dasharray="7,5"/>`,
+  'rect-dash3': `<rect x="25" y="35" width="110" height="50" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/><line x1="52" y1="35" x2="52" y2="85" stroke="${OPT_STROKE}" stroke-width="2.5" stroke-dasharray="7,5"/><line x1="80" y1="35" x2="80" y2="85" stroke="${OPT_STROKE}" stroke-width="2.5" stroke-dasharray="7,5"/><line x1="108" y1="35" x2="108" y2="85" stroke="${OPT_STROKE}" stroke-width="2.5" stroke-dasharray="7,5"/>`,
+  'L-dash0': optVariant('L', 0, false),
+  'L-dash1': `${optBaseShape('L')}<line x1="95" y1="60" x2="30" y2="60" stroke="${OPT_STROKE}" stroke-width="2.5" stroke-dasharray="6,4"/>`,
+  'L-dash2': `${optBaseShape('L')}<line x1="95" y1="60" x2="30" y2="60" stroke="${OPT_STROKE}" stroke-width="2.5" stroke-dasharray="6,4"/><line x1="95" y1="25" x2="95" y2="60" stroke="${OPT_STROKE}" stroke-width="2.5" stroke-dasharray="6,4"/>`,
+  'L-dashback': `${optBaseShape('L')}<rect x="60" y="40" width="35" height="20" fill="none" stroke="${OPT_STROKE}" stroke-width="2" stroke-dasharray="5,4"/>`,
+  'line-solid-thick': `<line x1="20" y1="60" x2="140" y2="60" stroke="${OPT_STROKE}" stroke-width="5"/>`,
+  'line-dashed-thin': `<line x1="20" y1="60" x2="140" y2="60" stroke="${OPT_STROKE}" stroke-width="2" stroke-dasharray="8,6"/>`,
+  'line-chain-thin': `<line x1="20" y1="60" x2="140" y2="60" stroke="${OPT_STROKE}" stroke-width="2" stroke-dasharray="14,4,3,4"/>`,
+  'line-zigzag': `<polyline points="20,60 45,50 55,70 75,50 85,70 105,50 115,70 140,60" fill="none" stroke="${OPT_STROKE}" stroke-width="2.5"/>`,
+  'line-straight': `<line x1="30" y1="60" x2="130" y2="60" stroke="${OPT_STROKE}" stroke-width="3"/>`,
+  'circle-solid': `<circle cx="80" cy="60" r="42" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3.5"/>`,
+  'circle-dashed': `<circle cx="80" cy="60" r="42" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="2.5" stroke-dasharray="8,6"/>`,
+  'circle-chain': `<circle cx="80" cy="60" r="42" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="2.5" stroke-dasharray="14,4,3,4"/>`,
+  'blank': `<text x="80" y="65" font-family="sans-serif" font-size="13" fill="${OPT_STROKE}" text-anchor="middle">(not drawn)</text>`,
+  'layout-above': optLayoutIcon('above'),
+  'layout-below': optLayoutIcon('below'),
+  'layout-left': optLayoutIcon('left'),
+  'layout-right': optLayoutIcon('right'),
+  'layout-replace': `${optLayoutIcon('below', {center:'FRONT', below:'PLAN'})}<line x1="58" y1="90" x2="104" y2="112" stroke="#f87171" stroke-width="3"/><line x1="104" y1="90" x2="58" y2="112" stroke="#f87171" stroke-width="3"/>`,
+  'comp-trapL-circR': `<g transform="translate(-6,6) scale(0.5)">${optBaseShape('trapezoid')}</g><g transform="translate(78,6) scale(0.5)"><circle cx="80" cy="60" r="42" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/><circle cx="80" cy="60" r="20" fill="#fff" stroke="${OPT_STROKE}" stroke-width="3"/></g>`,
+  'comp-circL-trapR': `<g transform="translate(-6,6) scale(0.5)"><circle cx="80" cy="60" r="42" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/><circle cx="80" cy="60" r="20" fill="#fff" stroke="${OPT_STROKE}" stroke-width="3"/></g><g transform="translate(78,6) scale(0.5)">${optBaseShape('trapezoid')}</g>`,
+  'comp-trapAboveCirc': `<g transform="translate(36,-14) scale(0.45)">${optBaseShape('trapezoid')}</g><g transform="translate(36,50) scale(0.45)"><circle cx="80" cy="60" r="42" fill="${OPT_FILL}" stroke="${OPT_STROKE}" stroke-width="3"/><circle cx="80" cy="60" r="20" fill="#fff" stroke="${OPT_STROKE}" stroke-width="3"/></g>`,
+  'comp-circInsideTrap': `${optBaseShape('trapezoid')}<circle cx="80" cy="65" r="16" fill="#fff" stroke="${OPT_STROKE}" stroke-width="2.5"/>`,
+  'dir-top': optDirIcon('top'),
+  'dir-front': optDirIcon('front'),
+  'dir-side': optDirIcon('side'),
+  'dir-bottom': optDirIcon('bottom')
+};
+
+const optImgCache = {};
+function optImgURI(key){
+  if (!key || !OPTION_SHAPES[key]) return null;
+  if (optImgCache[key]) return optImgCache[key];
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120"><rect x="0" y="0" width="160" height="120" fill="#ffffff"/>${OPTION_SHAPES[key]}</svg>`;
+  const uri = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  optImgCache[key] = uri;
+  return uri;
+}
+
+/* ============================================================
+ GET102 — 100-QUESTION BANK
+ (70 concept questions across 5 units + 30 diagram-based questions)
+ ============================================================ */
+const QUESTIONS = [
+  // Section 1: Design Thinking Fundamentals & Stages (1-20)
+  { sec: 'Design Thinking Fundamentals', q: 'How is design thinking best described in terms of its process flow?', opts: ['A linear sequence of strict steps', 'An iterative and non-linear process', 'A completely random approach to brainstorming', 'A standardized mathematical formula'], ans: 1, ex: 'Design thinking is an iterative, non-linear process where teams can move back and forth between stages to refine solutions.' },
+  { sec: 'Design Thinking Fundamentals', q: 'What are the five core stages of the design thinking process in their correct order?', opts: ['Define, Ideate, Empathize, Test, Prototype', 'Empathize, Define, Ideate, Prototype, Test', 'Prototype, Test, Empathize, Define, Ideate', 'Ideate, Empathize, Prototype, Define, Test'], ans: 1, ex: 'The standard five stages are Empathize, Define, Ideate, Prototype, and Test.' },
+  { sec: 'Design Thinking Fundamentals', q: 'Design thinking focuses primarily on collaboration between which two groups?', opts: ['Engineers and machines', 'Designers and users', 'Management and stakeholders', 'Software developers and testers'], ans: 1, ex: 'It is a human-centered approach focused heavily on empathy and collaboration between the designers and the end-users.' },
+  { sec: 'Design Thinking Fundamentals', q: 'Why is design thinking considered a "human-centered" approach?', opts: ['It focuses purely on biological human factors', 'It starts with understanding human needs and problems', 'It eliminates the use of technology in the design phase', 'It relies exclusively on manual labor for prototyping'], ans: 1, ex: 'It places human needs at the center of the problem-solving process.' },
+  { sec: 'Design Thinking Fundamentals', q: 'What is a "wicked problem" in the context of engineering design?', opts: ['A problem with an obvious mathematical solution', 'An ill-defined problem with complex, interdependent factors', 'A problem related to unethical engineering practices', 'A simple task that requires rapid prototyping'], ans: 1, ex: 'A wicked problem is a complex social or cultural problem that is highly ambiguous and difficult to solve.' },
+  { sec: 'Design Thinking Fundamentals', q: 'Which stage of design thinking is most concerned with understanding user needs and motivations before proposing solutions?', opts: ['Ideate', 'Prototype', 'Define', 'Empathize'], ans: 3, ex: 'The Empathize stage involves observing, engaging, and understanding the user to gather insights.' },
+  { sec: 'Design Thinking Fundamentals', q: 'How is design thinking different from a standard trial-and-error approach?', opts: ['It avoids user testing completely', 'It relies purely on guesswork', 'It uses structured empathy and problem definition to guide iterations', 'It requires more physical materials to start'], ans: 2, ex: 'Unlike blind trial and error, design thinking grounds its iterations in direct user feedback and structured problem definition.' },
+  { sec: 'Design Thinking Fundamentals', q: 'What is the primary risk for engineers who focus too much on complex details without using design thinking?', opts: ['They solve the wrong problem perfectly', 'They create products too quickly', 'They bypass safety regulations', 'They spend too little money on manufacturing'], ans: 0, ex: 'Without design thinking, engineers risk building technically perfect solutions for problems that users do not actually care about.' },
+  { sec: 'Design Thinking Fundamentals', q: 'What is the main objective of the Empathize stage?', opts: ['To draft the final blueprint', 'To set aside assumptions and gain real insight into users', 'To test a functional prototype', 'To brainstorm as many ideas as possible'], ans: 1, ex: 'Empathy requires designers to suspend their own worldview to truly understand the user\'s perspective.' },
+  { sec: 'Design Thinking Fundamentals', q: 'What is the primary task expected of a designer during the Define stage?', opts: ['Building a mock-up', 'Writing a human-centered problem statement', 'Conducting final user tests', 'Generating dozens of potential solutions'], ans: 1, ex: 'The Define stage synthesizes findings from the Empathize stage into a clear problem statement.' },
+  { sec: 'Design Thinking Fundamentals', q: 'The problem statement in the Define stage should be shaped solely from whose perspective?', opts: ['The company\'s executives', 'The manufacturing plant', 'The end-user', 'The financial investors'], ans: 2, ex: 'A good problem statement in design thinking is always user-centric.' },
+  { sec: 'Design Thinking Fundamentals', q: 'Which phrase is most famously associated with the Ideate stage?', opts: ['"Measure twice, cut once"', '"How might we...?"', '"Build it fast"', '"Test to destruction"'], ans: 1, ex: '"How might we...?" is a classic prompt used to trigger brainstorming during the Ideate phase.' },
+  { sec: 'Design Thinking Fundamentals', q: 'What is the main purpose of generating "several" ideas rather than just one during Ideate?', opts: ['To look busy for management', 'To push past obvious solutions and find innovative alternatives', 'To confuse the client', 'To increase the cost of prototyping'], ans: 1, ex: 'Generating many ideas ensures that the team explores a wide solution space rather than settling for the first idea.' },
+  { sec: 'Design Thinking Fundamentals', q: 'What is the primary aim of the Prototype stage?', opts: ['To produce a final, market-ready product', 'To create a scaled-down version to investigate solutions', 'To write the technical manual', 'To finalize the project budget'], ans: 1, ex: 'Prototypes are experimental models used to test ideas and gather feedback quickly.' },
+  { sec: 'Design Thinking Fundamentals', q: 'Why is it discouraged to build complex or costly prototypes early on?', opts: ['Because users prefer simple shapes', 'Because complex prototypes cannot be tested', 'Because engineers might become too attached to the idea, making iteration difficult', 'Because materials are too scarce'], ans: 2, ex: 'Low-fidelity prototyping prevents "sunk cost fallacy" where designers resist changing a design they spent too much time on.' },
+  { sec: 'Design Thinking Fundamentals', q: 'Who are the primary participants involved in the Test stage?', opts: ['Only the design team', 'The end-users interacting with the prototype', 'Only the marketing department', 'The manufacturing floor managers'], ans: 1, ex: 'The Test stage involves letting real users interact with the prototype to gather empirical feedback.' },
+  { sec: 'Design Thinking Fundamentals', q: 'How can the results of the Test stage lead a designer back to previous stages?', opts: ['Testing is the final step; it never leads back', 'It only leads back to prototyping if the product breaks', 'Feedback might reveal that the problem was defined incorrectly, requiring a return to the Define stage', 'It is a linear process, so teams must start a brand new project'], ans: 2, ex: 'Because design thinking is iterative, user feedback during testing often forces teams to redefine the problem or empathize further.' },
+  { sec: 'Design Thinking Fundamentals', q: 'How does design thinking impact customer retention?', opts: ['It lowers retention by constantly changing products', 'It increases retention by ensuring products deeply meet user needs', 'It has no effect on retention', 'It replaces customer service departments'], ans: 1, ex: 'By creating products that genuinely solve user pain points, companies foster stronger brand loyalty and retention.' },
+  { sec: 'Design Thinking Fundamentals', q: 'What ultimate value does design thinking increase for society?', opts: ['It maximizes corporate bureaucracy', 'It fosters innovation that solves real human challenges', 'It standardizes all products to look identical', 'It eliminates the need for theoretical engineering'], ans: 1, ex: 'Design thinking drives meaningful innovation by prioritizing human-centered solutions to wicked problems.' },
+  { sec: 'Design Thinking Fundamentals', q: 'Which real-world challenge is often cited as a classic example of a wicked problem?', opts: ['Calculating the trajectory of a projectile', 'Fixing a broken gear in a machine', 'Eradicating poverty or designing sustainable cities', 'Translating text from one language to another'], ans: 2, ex: 'Wicked problems lack clear boundaries and have multiple interconnected variables, like poverty or urban sustainability.' },
+
+  // Section 2: Engineering Graphics & Drawing Tools (21-40)
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'How is engineering graphics formally defined?', opts: ['The use of paint to make machines look aesthetic', 'A universal graphic language used to communicate technical ideas clearly and accurately', 'The study of computer monitors', 'A method of writing equations using symbols'], ans: 1, ex: 'Engineering graphics is the universal language of engineers, used to convey complex structural and mechanical ideas unambiguously.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'Why is engineering drawing considered a "universal language" for engineers?', opts: ['It uses standard visual symbols and conventions understood globally regardless of spoken language', 'Every engineer speaks English', 'It uses only numbers and no letters', 'It was invented by a single global committee'], ans: 0, ex: 'Because it relies on universally accepted line types, symbols, and projection rules, it bridges language barriers.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'When does a technical drawing officially become a contract document?', opts: ['As soon as it is sketched', 'When it is used to legally bind a manufacturer to produce a part exactly as specified', 'When it is colored', 'Only if drawn on a computer'], ans: 1, ex: 'In industry, an engineering drawing is a legal document that dictates the exact specifications a manufacturer must meet.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'Why are accurate drawings essential for the success of mass production?', opts: ['They ensure interchangeable parts can be manufactured reliably at different locations', 'They look better in manuals', 'They require less paper', 'They allow workers to guess dimensions'], ans: 0, ex: 'Mass production relies on strict tolerances and exact dimensions provided by accurate drawings to ensure parts fit together.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'What are the consequences of using unreliable speech or writing instead of graphic language for manufacturing?', opts: ['Parts are produced faster', 'High likelihood of misinterpretation, leading to faulty parts and wasted resources', 'It improves team communication', 'There are no negative consequences'], ans: 1, ex: 'Verbal descriptions of complex 3D objects are highly ambiguous and lead to costly manufacturing errors.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'Which complex machines would be impossible to produce without thousands of coordinated engineering drawings?', opts: ['A simple wooden chair', 'A paper airplane', 'A commercial jetliner or modern automobile', 'A clay pot'], ans: 2, ex: 'Complex assemblies like airplanes require thousands of precise drawings for their individual components.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'Which accessory provides a flat, stable surface for fixing drawing sheets?', opts: ['A T-square', 'A drawing board', 'A set square', 'A protractor'], ans: 1, ex: 'The drawing board provides the foundational flat surface required for drafting.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'What is the primary function of the T-square in manual drafting?', opts: ['To draw vertical lines', 'To draw perfectly horizontal lines and provide a base for set squares', 'To measure angles', 'To draw circles'], ans: 1, ex: 'The head of the T-square slides along the edge of the board to guarantee parallel horizontal lines.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'Which tool is essential for drawing accurate circles and arcs?', opts: ['A protractor', 'A French curve', 'A compass', 'A divider'], ans: 2, ex: 'A compass is explicitly designed to sweep precise circles and arcs of known radii.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'What is the specific use of a divider as opposed to a compass?', opts: ['To draw circles in ink', 'To transfer measurements or step off equal distances', 'To measure angles accurately', 'To draw thick border lines'], ans: 1, ex: 'A divider has two needle points and is used for transferring dimensions from a scale to the drawing, not for drawing lines.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'Which standard angles are typically produced using standard set squares?', opts: ['10° and 20°', '30°, 45°, 60°, and 90°', '15° and 75° exclusively', '50° and 100°'], ans: 1, ex: 'Drafting kits come with a 45°-45°-90° set square and a 30°-60°-90° set square.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'Which drawing accessory is used specifically to measure or lay out irregular angles?', opts: ['Set square', 'French curve', 'Protractor', 'T-square'], ans: 2, ex: 'A protractor allows the drafting of any angle from 0° to 180°.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'Why is a mechanical pencil often preferred over a standard wooden pencil for technical drawing?', opts: ['It maintains a consistent line thickness without needing to be sharpened', 'It holds more graphite', 'It is cheaper', 'It produces darker lines naturally'], ans: 0, ex: 'Mechanical pencils (e.g., 0.5mm) produce uniform lines which are crucial for neat technical drawings.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'Which tool is used to establish vertical lines relative to a horizontal T-square?', opts: ['A protractor', 'A compass', 'A set square placed on the T-square blade', 'A divider'], ans: 2, ex: 'By resting a set square on the T-square, perfect 90-degree vertical lines can be drawn.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'How are drawing sheets normally secured to a drawing board?', opts: ['With glue', 'With staples', 'With drafting tape or clips at the corners', 'With heavy weights'], ans: 2, ex: 'Drafting tape (or clips) secures the paper without tearing it or leaving residue.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'What is the designation for the standard drawing sheet size that measures 297 x 420 mm?', opts: ['A4', 'A3', 'A2', 'A1'], ans: 1, ex: 'An A3 sheet measures 297mm by 420mm.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'What is the designation for a standard drawing sheet that measures 210 x 297 mm?', opts: ['A4', 'A3', 'A2', 'A0'], ans: 0, ex: 'The standard A4 printer paper size is 210mm x 297mm.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'What type of tool is used for drawing smooth, non-circular curves?', opts: ['Compass', 'Protractor', 'French curve', 'Divider'], ans: 2, ex: 'A French curve acts as a template for drawing complex, irregular curves.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'What is the primary purpose of an eraser shield?', opts: ['To protect the user\'s eyes', 'To protect the drawing board from cuts', 'To allow precise erasing of small details without smudging adjacent lines', 'To sharpen pencils'], ans: 2, ex: 'It is a thin metal plate with slots used to isolate specific marks for erasure.' },
+  { sec: 'Engineering Graphics: Principles & Tools', q: 'Which grade of pencil lead is considered the hardest among the following?', opts: ['2B', 'HB', '2H', '6H'], ans: 3, ex: 'The "H" stands for Hardness. The higher the number preceding H, the harder the lead.' },
+
+  // Section 3: Lines, Lettering & Standards (41-55)
+  { sec: 'Lines, Lettering & Standards', q: 'What is the standard application for a continuous thick line (Type A)?', opts: ['Hidden outlines', 'Visible outlines and edges', 'Dimension lines', 'Center lines'], ans: 1, ex: 'Continuous thick lines are used to draw the visible borders and main outlines of an object.' },
+  { sec: 'Lines, Lettering & Standards', q: 'Which line type is used for dimension lines and extension lines?', opts: ['Continuous thick', 'Continuous thin', 'Dashed thick', 'Chain thin'], ans: 1, ex: 'Continuous thin lines are used for dimensions, extensions, and hatching.' },
+  { sec: 'Lines, Lettering & Standards', q: 'How are hidden outlines and hidden edges represented in a drawing?', opts: ['Continuous thin lines', 'Dashed thin lines', 'Chain thick lines', 'Zig-zag lines'], ans: 1, ex: 'Hidden features that cannot be seen from the current viewing angle are drawn using dashed lines.' },
+  { sec: 'Lines, Lettering & Standards', q: 'What is the correct application for a chain thin line (Type G)?', opts: ['Visible edges', 'Hidden edges', 'Center lines and axes of symmetry', 'Cutting planes'], ans: 2, ex: 'Chain thin lines (long dash, short dash) are used to indicate centerlines, pitch circles, and axes of symmetry.' },
+  { sec: 'Lines, Lettering & Standards', q: 'Which line type is used to show cutting planes?', opts: ['Continuous thick', 'Dashed thin', 'Chain thin, thickened at ends and changes of direction', 'Continuous thin zig-zag'], ans: 2, ex: 'Cutting planes indicate where a section is taken and use a chain line with thick ends.' },
+  { sec: 'Lines, Lettering & Standards', q: 'What is the purpose of a continuous thin zig-zag line?', opts: ['To show hidden electrical wires', 'To indicate long-break lines where a large part is cut short', 'To represent water', 'To show the axis of symmetry'], ans: 1, ex: 'Zig-zag lines denote a break in a long, uniform component to save space on the drawing sheet.' },
+  { sec: 'Lines, Lettering & Standards', q: 'Why is it critical to use standardized line types in engineering drawings?', opts: ['To make the drawing look artistic', 'To prevent misinterpretation by ensuring every line has a specific, universally understood meaning', 'To save ink', 'To make it harder for non-engineers to read'], ans: 1, ex: 'Standard line weights and types eliminate ambiguity. A dashed line always means hidden, regardless of who reads it.' },
+  { sec: 'Lines, Lettering & Standards', q: 'What are the four key qualities that engineering lettering must possess?', opts: ['Artistic, Colorful, Cursive, Bold', 'Legibility, Uniformity, Rapidity of execution, Suitability for reproduction', 'Thick, Thin, Spaced, Joined', 'Serif, San-serif, Slanted, Vertical'], ans: 1, ex: 'Good lettering must be easy to read, consistent, quick to write, and clear enough to be copied/microfilmed.' },
+  { sec: 'Lines, Lettering & Standards', q: 'What does "legibility" mean in the context of technical lettering?', opts: ['The letters look pretty', 'The letters can be read instantly without confusion', 'The letters are drawn using a computer', 'The letters are written in cursive'], ans: 1, ex: 'Legibility guarantees that numbers and letters cannot be mistaken for others (e.g., 5 vs S).' },
+  { sec: 'Lines, Lettering & Standards', q: 'How is "uniformity" achieved in engineering lettering?', opts: ['By making all letters different sizes', 'By maintaining consistent height, line thickness, and spacing', 'By using different pencil grades for different words', 'By mixing upper and lower case randomly'], ans: 1, ex: 'Uniformity implies a consistent structural style throughout the entire drawing block.' },
+  { sec: 'Lines, Lettering & Standards', q: 'What is meant by the quality "rapidity of execution"?', opts: ['Drawing letters as fast as possible, ignoring neatness', 'Using a stamp instead of writing', 'Using simple, single-stroke forms that can be lettered quickly but neatly', 'Writing in shorthand'], ans: 2, ex: 'Single-stroke Gothic lettering is standard because it balances neatness with speed of manual drafting.' },
+  { sec: 'Lines, Lettering & Standards', q: 'Why is artistic or decorative embellishment avoided in engineering lettering?', opts: ['It takes too much time and decreases legibility', 'It is too expensive to print', 'Engineers are not artists', 'It violates international copyright laws'], ans: 0, ex: 'Decorative elements distract the reader and increase the chance of misreading critical dimensions.' },
+  { sec: 'Lines, Lettering & Standards', q: 'What line type is used to draw hatching lines in a section view?', opts: ['Continuous thick', 'Dashed thin', 'Continuous thin drawn at an angle', 'Chain thick'], ans: 2, ex: 'Section lining (hatching) uses continuous thin lines, typically drawn at a 45° angle.' },
+  { sec: 'Lines, Lettering & Standards', q: 'What should be the spacing between words in standard technical lettering?', opts: ['Equal to the width of the letter O', 'No spacing', 'Equal to the height of the letters', 'Random spacing depending on line length'], ans: 0, ex: 'Standard practice dictates leaving the space of roughly one letter (like an \'O\') between words.' },
+  { sec: 'Lines, Lettering & Standards', q: 'What guidelines should be drawn before manual lettering?', opts: ['Dark thick lines that remain on the page', 'Very light horizontal guide lines to ensure uniform letter height', 'Vertical guidelines only', 'No guidelines should be used'], ans: 1, ex: 'Faint horizontal lines are drawn to ensure all letters have exactly the same height.' },
+
+  // Section 4: Orthographic Projection Concepts (56-70)
+  { sec: 'Orthographic Projection Concepts', q: 'What is the fundamental difference between an orthographic drawing and an isometric drawing?', opts: ['Orthographic is 3D; Isometric is 2D', 'Orthographic uses colors; Isometric uses black and white', 'Orthographic is a 2D representation of different views; Isometric is a 3D pictorial representation', 'Isometric is only used for architecture'], ans: 2, ex: 'Orthographic breaks an object down into flat 2D planes (Front, Top, Side), whereas Isometric shows 3 dimensions in a single view.' },
+  { sec: 'Orthographic Projection Concepts', q: 'How many total possible viewing planes exist in a complete orthographic projection box?', opts: ['3', '4', '6', '8'], ans: 2, ex: 'An object can be viewed from 6 directions: Top, Bottom, Front, Back, Left Side, Right Side.' },
+  { sec: 'Orthographic Projection Concepts', q: 'What are the three main views typically used to describe an object in engineering?', opts: ['Top, Bottom, and Back', 'Front, Plan (Top), and End (Side) Elevation', 'Left Side, Right Side, and Back', 'Isometric, Perspective, and Oblique'], ans: 1, ex: 'The standard three views are Front Elevation, End (Side) Elevation, and Plan (Top) view.' },
+  { sec: 'Orthographic Projection Concepts', q: 'What is another name commonly used for the top view in orthographic projection?', opts: ['Front Elevation', 'End Elevation', 'Plan', 'Section'], ans: 2, ex: 'The top view is referred to as the Plan view in technical drawing.' },
+  { sec: 'Orthographic Projection Concepts', q: 'When can engineers safely use only 2 views instead of 3?', opts: ['When the object is highly complex', 'When the object is symmetrical, such as a simple cylinder', 'When they run out of paper', 'When drawing in isometric'], ans: 1, ex: 'Symmetrical or simple objects (like cylinders) only require two views to fully define their geometry.' },
+  { sec: 'Orthographic Projection Concepts', q: 'In which theoretical quadrant is an object placed for First Angle Projection?', opts: ['First quadrant', 'Second quadrant', 'Third quadrant', 'Fourth quadrant'], ans: 0, ex: 'First Angle projection imagines the object resting in the first quadrant of the projection planes.' },
+  { sec: 'Orthographic Projection Concepts', q: 'In which theoretical quadrant is an object placed for Third Angle Projection?', opts: ['First quadrant', 'Second quadrant', 'Third quadrant', 'Fourth quadrant'], ans: 2, ex: 'Third Angle projection places the object in the third quadrant, meaning the projection plane is between the observer and the object.' },
+  { sec: 'Orthographic Projection Concepts', q: 'Which projection method is commonly used as the standard in the UK and Nigeria?', opts: ['First Angle Projection', 'Third Angle Projection', 'Second Angle Projection', 'Isometric Projection'], ans: 0, ex: 'The British Standard (BS 8888), traditionally followed in Nigeria, utilizes First Angle projection as the primary standard.' },
+  { sec: 'Orthographic Projection Concepts', q: 'What is the core rule for view placement in First Angle Projection?', opts: ['The view is placed on the same side as the viewing direction', 'The view is placed on the opposite side of the viewing direction (object first, then image)', 'All views are placed above the front view', 'The plan is always placed above the front view'], ans: 1, ex: 'In First Angle, looking from the left places the view on the right. The image is "pushed" through the object.' },
+  { sec: 'Orthographic Projection Concepts', q: 'What is the core rule for view placement in Third Angle Projection?', opts: ['The view is placed on the opposite side of the viewing direction', 'The view is placed on the same side as the viewing direction (image first, then object)', 'The plan is always placed below the front view', 'Views are arranged randomly'], ans: 1, ex: 'In Third Angle, the projection plane is between you and the object, so a top view appears on top.' },
+  { sec: 'Orthographic Projection Concepts', q: 'Where is the Plan view positioned relative to the Front Elevation in First Angle Projection?', opts: ['Above the Front Elevation', 'Below the Front Elevation', 'To the right of the Front Elevation', 'To the left of the Front Elevation'], ans: 1, ex: 'Because you view the object from the top, the image is projected downwards, placing the Plan below the Front view.' },
+  { sec: 'Orthographic Projection Concepts', q: 'Where is the Plan (Top) view positioned relative to the Front Elevation in Third Angle Projection?', opts: ['Above the Front Elevation', 'Below the Front Elevation', 'Next to the Front Elevation', 'Inside the Front Elevation'], ans: 0, ex: 'In Third Angle, you view from the top and the image stays on the top plane, placing it above the Front view.' },
+  { sec: 'Orthographic Projection Concepts', q: 'What does the Front Elevation of a conical frustum represent in the standard projection symbols?', opts: ['Two concentric circles', 'A trapezoid (larger end on one side, smaller on the other)', 'A perfect square', 'A triangle'], ans: 1, ex: 'The symbol uses a conical frustum; its front view looks like a trapezoid representing the shape of a binocular.' },
+  { sec: 'Orthographic Projection Concepts', q: 'What does the End Elevation of the conical frustum represent in the standard projection symbols?', opts: ['Two concentric circles', 'A trapezoid', 'A single dot', 'A rectangle'], ans: 0, ex: 'Looking down the axis of a truncated cone yields two concentric circles representing the large and small circular ends.' },
+  { sec: 'Orthographic Projection Concepts', q: 'What is the primary purpose of sectioning in an engineering drawing?', opts: ['To make the drawing smaller', 'To reveal hidden internal features by imagining the object is cut open', 'To add color to the drawing', 'To show the isometric view'], ans: 1, ex: 'Section views clarify complex internal details that would otherwise be confusing if drawn only with hidden dashed lines.' },
+
+  // Section 5: Diagram Interpretation (71-100)
+  // Fig 1: Stepped Block (6 questions)
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig1_step', q: 'Refer to Figure 1. If viewing the object directly from the front (the long side), how many distinct rectangular faces are visible?', opts: ['One', 'Two', 'Three', 'Four'], ans: 1, ex: 'The front elevation of this stepped block consists of two distinct rectangular faces, one for the lower step and one for the upper step.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig1_step', q: 'Refer to Figure 1. If viewing the object from the Plan (Top) direction, what overall shape do the visible surfaces form?', opts: ['An L-shape', 'A single large rectangle', 'Two adjacent rectangles of different sizes', 'A square'], ans: 2, optImg: ['L-0', 'rect-wide', 'two-rect-adjacent-diff', 'rect-square'], ex: 'Looking from the top down, you see the horizontal surface of the lower step and the top surface of the upper step, appearing as two adjacent rectangles.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig1_step', q: 'Refer to Figure 1. How many visible faces are seen when looking from the End Elevation (the right side)?', opts: ['One L-shaped face', 'Two rectangular faces', 'Three rectangular faces', 'One square face'], ans: 0, optImg: ['L-0', 'two-rect-stacked', 'three-rect-row', 'rect-square'], ex: 'Looking directly at the side profile of the stepped block, the outline forms a single L-shaped surface.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig1_step', q: 'Refer to Figure 1. If this object is projected in First Angle projection, where will the Plan view be located?', opts: ['Directly above the Front Elevation', 'Directly below the Front Elevation', 'To the right of the Front Elevation', 'To the left of the Front Elevation'], ans: 1, optImg: ['layout-above', 'layout-below', 'layout-right', 'layout-left'], ex: 'In First Angle projection, the view from the top is projected to the plane below the object.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig1_step', q: 'Refer to Figure 1. Assuming a standard Front view from the long side, are there any hidden (dashed) lines required in the Right Side view?', opts: ['Yes, one hidden line', 'Yes, two hidden lines', 'No, all edges are visible from the side', 'Yes, to show the back wall'], ans: 2, optImg: ['L-dash1', 'L-dash2', 'L-dash0', 'L-dashback'], ex: 'The L-shaped profile from the right side completely outlines the step, so no internal edges are hidden from that specific viewpoint.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig1_step', q: 'Refer to Figure 1. If this object were drawn in Third Angle projection, where would the Right Side view be placed?', opts: ['To the left of the Front Elevation', 'To the right of the Front Elevation', 'Below the Plan view', 'Above the Front Elevation'], ans: 1, optImg: ['layout-left', 'layout-right', 'layout-below', 'layout-above'], ex: 'In Third Angle projection, the image plane is between the observer and the object, so the right side view goes on the right side of the front elevation.' },
+
+  // Fig 2: L-Shape (6 questions)
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig2_lshape', q: 'Refer to Figure 2. Looking at the object from the front (the face showing the L-shape), how many faces are visible?', opts: ['One', 'Two', 'Three', 'Four'], ans: 0, ex: 'The front profile is a single continuous L-shaped surface.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig2_lshape', q: 'Refer to Figure 2. In the Plan (Top) view, what does the profile look like?', opts: ['An L-shape', 'Two rectangles sharing an edge', 'Three distinct squares', 'One solid large rectangle'], ans: 1, optImg: ['L-0', 'two-rect-adjacent-equal', 'three-squares-row', 'rect-wide'], ex: 'From the top, you see the top edge of the vertical leg and the flat surface of the horizontal base, forming two adjacent rectangles.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig2_lshape', q: 'Refer to Figure 2. If the viewing direction for the Front view is parallel to the long flat base, what will the Front view look like?', opts: ['An L-shape', 'Two stacked rectangles', 'One square', 'Two adjacent rectangles'], ans: 1, optImg: ['L-0', 'two-rect-stacked', 'rect-square', 'two-rect-adjacent-equal'], ex: 'If you look from the end of the base, you will see the front of the base block and the front of the vertical leg stacking above it.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig2_lshape', q: 'Refer to Figure 2. If the front view is the L-shape, how many hidden lines will be in the top view?', opts: ['Zero', 'One', 'Two', 'Three'], ans: 0, ex: 'Looking from the top down, all geometric edges of this simple L-bracket are visible; nothing overhangs to create a hidden edge.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig2_lshape', q: 'Refer to Figure 2. In First Angle projection, if the Front Elevation is the L-shape, where is the End Elevation (looking from the right) drawn?', opts: ['On the right side of the Front Elevation', 'On the left side of the Front Elevation', 'Below the Front Elevation', 'Above the Plan view'], ans: 1, optImg: ['layout-right', 'layout-left', 'layout-below', 'layout-above'], ex: 'In First Angle, viewing from the right side projects the image onto the left plane.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig2_lshape', q: 'Refer to Figure 2. How many dimensions (length, width, height) are represented in a single orthographic Plan view?', opts: ['One', 'Two (Length and Width)', 'Two (Width and Height)', 'Three (Length, Width, Height)'], ans: 1, ex: 'An orthographic plan view is a 2D projection showing only length and width; depth (height) is flattened out.' },
+
+  // Fig 3: U-Channel (6 questions)
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig3_ushape', q: 'Refer to Figure 3. When viewed from the front (showing the U-shape profile), how many distinct faces are visible?', opts: ['One', 'Two', 'Three', 'Four'], ans: 0, ex: 'The entire front face is a single, continuous U-shaped surface.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig3_ushape', q: 'Refer to Figure 3. What does the Plan (Top) view of this object consist of?', opts: ['One large rectangle', 'Two long rectangles', 'Three rectangles (the tops of the two side walls and the inner floor)', 'A U-shape'], ans: 2, optImg: ['rect-wide', 'two-rect-long-thin', 'three-rect-row', 'U-0'], ex: 'From the top, you see the tops of the two vertical walls and the flat interior base between them.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig3_ushape', q: 'Refer to Figure 3. If viewed from the End (Side) Elevation looking down the length of the channel, what shape is seen?', opts: ['A U-shape', 'A single rectangle', 'Two stacked rectangles', 'Three horizontal rectangles'], ans: 1, optImg: ['U-0', 'rect-tall', 'two-rect-stacked', 'three-rect-row'], ex: 'If looking from the side (perpendicular to the U face), you see the outer face of the side wall, which is a single solid rectangle.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig3_ushape', q: 'Refer to Figure 3. If the End (Side) Elevation is drawn, how many hidden lines are required to show the inner cutout?', opts: ['Zero', 'One horizontal dashed line', 'Two vertical dashed lines', 'Three dashed lines'], ans: 1, optImg: ['rect-dash0', 'rect-dash1h', 'rect-dash2v', 'rect-dash3'], ex: 'From the side view, the floor of the U-channel is hidden behind the outer wall, requiring one horizontal hidden line.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig3_ushape', q: 'Refer to Figure 3. In Third Angle projection, where would the Plan view be located relative to the Front U-shape view?', opts: ['Below it', 'Above it', 'To the right', 'To the left'], ans: 1, optImg: ['layout-below', 'layout-above', 'layout-right', 'layout-left'], ex: 'In Third Angle projection, the top (plan) view is always placed directly above the front view.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig3_ushape', q: 'Refer to Figure 3. If the object is rotated 90 degrees so the U-shape faces upward, what will the new Plan view look like?', opts: ['Three rectangles', 'A U-shape', 'A single rectangle', 'Two rectangles'], ans: 1, optImg: ['three-rect-row', 'U-0', 'rect-wide', 'two-rect-adjacent-equal'], ex: 'If the channel points upwards, looking down from the top will directly show the U-shape profile.' },
+
+  // Fig 4: Cone Frustum (6 questions)
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig4_cone', q: 'Refer to Figure 4. What shape does the Front Elevation of this conical frustum produce?', opts: ['A circle', 'A triangle', 'A trapezoid', 'A rectangle'], ans: 2, optImg: ['one-circle', 'triangle-0', 'trapezoid-0', 'rect-wide'], ex: 'Viewing a truncated cone directly from the side flattens it into a trapezoid.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig4_cone', q: 'Refer to Figure 4. What does the End Elevation (looking down the central axis) look like?', opts: ['One circle', 'Two concentric circles', 'A trapezoid', 'An oval'], ans: 1, optImg: ['one-circle', 'two-circles', 'trapezoid-0', 'ellipse'], ex: 'Looking into the wide or narrow end reveals the outer base circle and the inner top circle sharing the same center.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig4_cone', q: 'Refer to Figure 4. This specific setup (trapezoid and concentric circles) is famously used for what purpose in drawing boards?', opts: ['To indicate the scale of the drawing', 'To denote the projection symbol (First or Third Angle)', 'To show standard material properties', 'To mark the center of the paper'], ans: 1, ex: 'The conical frustum is the standard international symbol used to define First Angle or Third Angle projection blocks.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig4_cone', q: 'Refer to Figure 4. In the First Angle projection symbol, how are the views arranged?', opts: ['The concentric circles are on the left, trapezoid on the right', 'The trapezoid is on the left (wide end right), and the concentric circles are on the right', 'The trapezoid is above the circles', 'The circles are inside the trapezoid'], ans: 1, optImg: ['comp-circL-trapR', 'comp-trapL-circR', 'comp-trapAboveCirc', 'comp-circInsideTrap'], ex: 'For First Angle, looking at the small end on the left projects the two circles to the right side of the trapezoid.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig4_cone', q: 'Refer to Figure 4. What line type must be drawn passing exactly through the center of the concentric circles and the trapezoid?', opts: ['Continuous thick line', 'Dashed thin line', 'Chain thin line', 'Continuous zig-zag line'], ans: 2, optImg: ['line-solid-thick', 'line-dashed-thin', 'line-chain-thin', 'line-zigzag'], ex: 'A chain thin line is required to denote the axis of rotational symmetry for both the circular ends and the central body.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig4_cone', q: 'Refer to Figure 4. If viewing the frustum from the large end instead of the side, is the smaller circle drawn with a solid or hidden line?', opts: ['Solid thick line', 'Dashed thin line', 'Chain line', 'It is not drawn'], ans: 0, optImg: ['circle-solid', 'circle-dashed', 'circle-chain', 'blank'], ex: 'When viewing from the large end (assuming it is hollow or a flat face), the smaller circle is visible either as the opening or the flat end, so it is solid.' },
+
+  // Fig 5: Wedge (6 questions)
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig5_wedge', q: 'Refer to Figure 5. If the Front Elevation is taken looking at the sloped face, what does the resulting orthographic view look like?', opts: ['A triangle', 'A rectangle', 'A square', 'A trapezoid'], ans: 1, optImg: ['triangle-0', 'rect-wide', 'rect-square', 'trapezoid-0'], ex: 'Orthographic projection flattens angled surfaces. A sloped rectangular face viewed from the front appears as a regular rectangle, though foreshortened.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig5_wedge', q: 'Refer to Figure 5. What shape does the Side Elevation (looking at the triangular profile) produce?', opts: ['A rectangle', 'A right-angled triangle', 'A square', 'A circle'], ans: 1, optImg: ['rect-wide', 'triangle-0', 'rect-square', 'one-circle'], ex: 'Looking directly at the side profile of a basic wedge shows its true triangular shape.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig5_wedge', q: 'Refer to Figure 5. What does the Plan (Top) view of this wedge look like?', opts: ['A right-angled triangle', 'A simple rectangle', 'An oval', 'Two adjacent squares'], ans: 1, optImg: ['triangle-0', 'rect-wide', 'ellipse', 'two-squares-adjacent'], ex: 'Looking straight down on a wedge, the sloped surface flattens out into a standard rectangular shape in 2D.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig5_wedge', q: 'Refer to Figure 5. In First Angle projection, where is the triangular Side Elevation placed if the Front view is the sloped rectangle?', opts: ['Next to the Plan view', 'Directly aligned to the right or left of the Front rectangle', 'Above the Front rectangle', 'It replaces the Plan view'], ans: 1, optImg: ['layout-below', 'layout-right', 'layout-above', 'layout-replace'], ex: 'End elevations (side views) are always projected horizontally from the Front Elevation.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig5_wedge', q: 'Refer to Figure 5. If the wedge has a circular hole drilled straight through the sloped face, what shape does the hole appear as in the Plan (Top) view?', opts: ['A perfect circle', 'An ellipse', 'A square', 'A straight line'], ans: 1, optImg: ['one-circle', 'ellipse', 'rect-square', 'line-straight'], ex: 'A circle drilled on a sloped surface will project as an ellipse when viewed straight down in the Plan view.' },
+  { sec: 'Diagram Interpretation: Isometric to Orthographic', img: 'fig5_wedge', q: 'Refer to Figure 5. If the right-angled corner of the triangular profile is situated at the bottom left, which view is the hypotenuse visible as a slanted line?', opts: ['Plan view', 'Front view', 'Side view', 'Bottom view'], ans: 2, optImg: ['dir-top', 'dir-front', 'dir-side', 'dir-bottom'], ex: 'The slant (hypotenuse) is only visible as an angled line from the side profile; in top or front views, it projects as flat horizontal or vertical lines.' }
+];
+
+const ALL_TOPICS = [
+  'Design Thinking Fundamentals',
+  'Engineering Graphics: Principles & Tools',
+  'Lines, Lettering & Standards',
+  'Orthographic Projection Concepts',
+  'Diagram Interpretation: Isometric to Orthographic'
+];
+
+/* ============================================================
+ STORAGE KEYS (persistent artifact storage, not localStorage)
+ ============================================================ */
+const MUTE_KEY = 'get102-muted';
+const BEST_SCORE_KEY = 'get102-best-score';
+const STORAGE_KEY = 'get102-quiz-state';
+
+/* ============================================================
+ HELPERS
+ ============================================================ */
+
+/* Records this attempt into the same localStorage list the Settings
+   page (set.html) reads for Quiz History / Reset Progress / PDF export. */
+function saveResultToHistory(course, score, total){
+ try{
+  const raw = localStorage.getItem('dtz_quiz_results');
+  const list = raw ? JSON.parse(raw) : [];
+  list.push({ course, score, total, date: new Date().toISOString() });
+  localStorage.setItem('dtz_quiz_results', JSON.stringify(list));
+ }catch(e){ /* storage unavailable — silently skip, quiz still works */ }
+}
+
+function shuffle(arr){
+ const a=[...arr];
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+ return a;
+}
+function sectionIcon(sec){
+ return {
+  'Design Thinking Fundamentals':'fa-lightbulb',
+  'Engineering Graphics: Principles & Tools':'fa-compass-drafting',
+  'Lines, Lettering & Standards':'fa-pen-ruler',
+  'Orthographic Projection Concepts':'fa-cube',
+  'Diagram Interpretation: Isometric to Orthographic':'fa-image'
+ }[sec] || 'fa-drafting-compass';
+}
+function randomizeOptions(item){
+ const hasImg = Array.isArray(item.optImg);
+ const pairs = item.opts.map((o,idx)=>({o, img: hasImg ? item.optImg[idx] : null, correct: idx===item.ans}));
+ const shuffled = shuffle(pairs);
+ return {
+  ...item,
+  opts: shuffled.map(p=>p.o),
+  optImg: hasImg ? shuffled.map(p=>p.img) : null,
+  ans: shuffled.findIndex(p=>p.correct)
+ };
+}
+
+/* Safely read a value from persistent storage. Returns null if the key
+   doesn't exist or storage is unavailable, instead of throwing. */
+async function storageGet(key) {
+ try {
+  const result = await window.storage.get(key, false);
+  return result ? result.value : null;
+ } catch (e) {
+  return null;
+ }
+}
+async function storageSet(key, value) {
+ try {
+  await window.storage.set(key, value, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+async function storageDelete(key) {
+ try {
+  await window.storage.delete(key, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+
+/* SOUND ENGINE */
+const SoundEngine = (function() {
+ let ctx = null;
+ let muted = false;
+
+ async function init() {
+  const v = await storageGet(MUTE_KEY);
+  muted = v === '1';
+  return muted;
+ }
+
+ function getCtx() {
+ if (!ctx) {
+ const AC = window.AudioContext || window.webkitAudioContext;
+ if (!AC) return null;
+ ctx = new AC();
+ }
+ if (ctx.state === 'suspended') ctx.resume();
+ return ctx;
+ }
+
+ function isMuted() { return muted; }
+ async function setMuted(v) {
+ muted = v;
+ await storageSet(MUTE_KEY, v ? '1' : '0');
+ }
+
+ function playCorrect() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc1 = c.createOscillator();
+ const osc2 = c.createOscillator();
+ const gain = c.createGain();
+
+ osc1.type = 'sine'; osc1.frequency.setValueAtTime(880, t);
+ osc2.type = 'sine'; osc2.frequency.setValueAtTime(1760, t);
+
+ gain.gain.setValueAtTime(0.2, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+
+ osc1.connect(gain); osc2.connect(gain);
+ gain.connect(c.destination);
+
+ osc1.start(t); osc2.start(t);
+ osc1.stop(t + 0.6); osc2.stop(t + 0.6);
+ }
+
+ function playWrong() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc = c.createOscillator();
+ const gain = c.createGain();
+
+ osc.type = 'sawtooth';
+ osc.frequency.setValueAtTime(160, t);
+ osc.frequency.exponentialRampToValueAtTime(60, t + 0.35);
+
+ gain.gain.setValueAtTime(0.25, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+
+ osc.connect(gain);
+ gain.connect(c.destination);
+
+ osc.start(t);
+ osc.stop(t + 0.35);
+ }
+
+ return { init, isMuted, setMuted, playCorrect, playWrong };
+})();
+
+/* APP STATE */
+let quizMode = 'auto'; // 'auto' or 'custom'
+let activeQuestions = [];
+let userAnswers = []; // array of selected option indices
+let currentQ = 0;
+let timeRemaining = 0;
+let timerInterval = null;
+let isPaused = false;
+let leaveCount = 0;
+
+// DOM Elements
+const homeScreen = document.getElementById('homeScreen');
+const configScreen = document.getElementById('configScreen');
+const loadingScreen = document.getElementById('loadingScreen');
+const quizScreen = document.getElementById('quizScreen');
+const resultScreen = document.getElementById('resultScreen');
+
+const pickAuto = document.getElementById('pickAuto');
+const pickCustom = document.getElementById('pickCustom');
+const backToHomeFromConfig = document.getElementById('backToHomeFromConfig');
+const startCustomBtn = document.getElementById('startCustomBtn');
+
+const topicsWrap = document.getElementById('topicsWrap');
+const timeSlider = document.getElementById('timeSlider');
+const timeValue = document.getElementById('timeValue');
+const countSlider = document.getElementById('countSlider');
+const countValue = document.getElementById('countValue');
+
+const timerBox = document.getElementById('timer');
+const timerText = document.getElementById('timerText');
+const soundToggle = document.getElementById('soundToggle');
+
+const progressFill = document.getElementById('progressFill');
+const dotsRow = document.getElementById('dotsRow');
+const sectionTag = document.getElementById('sectionTag');
+const qCounter = document.getElementById('qCounter');
+const qDiagram = document.getElementById('qDiagram');
+const qText = document.getElementById('qText');
+const optsWrap = document.getElementById('optsWrap');
+const inlineExplain = document.getElementById('inlineExplain');
+
+const backBtn = document.getElementById('backBtn');
+const nextBtn = document.getElementById('nextBtn');
+const finishBtn = document.getElementById('finishBtn');
+
+const quizTools = document.getElementById('quizTools');
+const pauseBtn = document.getElementById('pauseBtn');
+const pauseOverlay = document.getElementById('pauseOverlay');
+const resumeFromPauseBtn = document.getElementById('resumeFromPauseBtn');
+
+const resumeModal = document.getElementById('resumeModal');
+const resumeInfo = document.getElementById('resumeInfo');
+const resumeYes = document.getElementById('resumeYes');
+const resumeNo = document.getElementById('resumeNo');
+
+const leaveWarningModal = document.getElementById('leaveWarningModal');
+const leaveWarnText = document.getElementById('leaveWarnText');
+const leaveWarnOk = document.getElementById('leaveWarnOk');
+
+const statsBar = document.getElementById('statsBar');
+
+/* INIT */
+window.addEventListener('load', async () => {
+ await SoundEngine.init();
+ updateSoundToggleUI();
+ setupConfigTopics();
+ await checkSavedState();
+ await updateHomeStats();
+});
+
+function updateSoundToggleUI() {
+ const muted = SoundEngine.isMuted();
+ soundToggle.classList.toggle('muted', muted);
+ soundToggle.setAttribute('aria-pressed', muted ? 'true' : 'false');
+ soundToggle.innerHTML = muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+}
+soundToggle.addEventListener('click', async () => {
+ await SoundEngine.setMuted(!SoundEngine.isMuted());
+ updateSoundToggleUI();
+});
+
+async function updateHomeStats() {
+ const best = await storageGet(BEST_SCORE_KEY);
+ if (best) {
+  statsBar.classList.remove('hidden');
+  statsBar.innerHTML = `<div class="stat-chip"><i class="fa-solid fa-trophy"></i> Best Score: <strong>${best}%</strong></div>`;
+ } else {
+  statsBar.classList.add('hidden');
+  statsBar.innerHTML = '';
+ }
+}
+
+/* CONFIG TOPICS BUILD */
+function setupConfigTopics() {
+ topicsWrap.innerHTML = '';
+ ALL_TOPICS.forEach((t) => {
+  const label = document.createElement('label');
+  label.className = 'topic-chip';
+  label.innerHTML = `<input type="checkbox" value="${t}" checked> <span><i class="fa-solid ${sectionIcon(t)}"></i> ${t}</span>`;
+  topicsWrap.appendChild(label);
+ });
+}
+
+timeSlider.addEventListener('input', () => { timeValue.textContent = timeSlider.value; });
+countSlider.addEventListener('input', () => { countValue.textContent = countSlider.value; });
+
+/* MODE SELECTION */
+pickAuto.addEventListener('click', () => {
+ startQuiz('auto', ALL_TOPICS, 60, QUESTIONS.length);
+});
+pickCustom.addEventListener('click', () => {
+ homeScreen.classList.add('hidden');
+ configScreen.classList.remove('hidden');
+});
+backToHomeFromConfig.addEventListener('click', () => {
+ configScreen.classList.add('hidden');
+ homeScreen.classList.remove('hidden');
+});
+
+startCustomBtn.addEventListener('click', () => {
+ const selectedTopics = Array.from(topicsWrap.querySelectorAll('input:checked')).map(i => i.value);
+ if (selectedTopics.length === 0) {
+  alert('Please select at least one topic.');
+  return;
+ }
+ const mins = parseInt(timeSlider.value, 10);
+ const count = parseInt(countSlider.value, 10);
+ configScreen.classList.add('hidden');
+ startQuiz('custom', selectedTopics, mins, count);
+});
+
+/* START QUIZ */
+function startQuiz(mode, topics, minutes, count) {
+ quizMode = mode;
+ showScreen(loadingScreen);
+ setTimeout(() => {
+  let filtered = QUESTIONS.filter(q => topics.includes(q.sec));
+  if (filtered.length === 0) filtered = [...QUESTIONS];
+  filtered = shuffle(filtered).map(randomizeOptions);
+  if (count < filtered.length) {
+   filtered = filtered.slice(0, count);
+  }
+  activeQuestions = filtered;
+  userAnswers = new Array(activeQuestions.length).fill(null);
+  currentQ = 0;
+  timeRemaining = minutes * 60;
+  isPaused = false;
+  leaveCount = 0;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') {
+   pauseBtn.classList.remove('hidden');
+  } else {
+   pauseBtn.classList.add('hidden');
+  }
+  timerBox.classList.remove('hidden');
+
+  startTimer();
+  renderQuestion();
+  saveState();
+ }, 600);
+}
+
+function showScreen(sc) {
+ [homeScreen, configScreen, loadingScreen, quizScreen, resultScreen].forEach(s => s.classList.add('hidden'));
+ sc.classList.remove('hidden');
+ if (sc === quizScreen) {
+  closeMobileNav();
+  hamburgerBtn.classList.add('hidden');
+ } else {
+  hamburgerBtn.classList.remove('hidden');
+ }
+}
+
+/* TIMER */
+function startTimer() {
+ clearInterval(timerInterval);
+ updateTimerDisplay();
+ timerInterval = setInterval(() => {
+  if (!isPaused) {
+   timeRemaining--;
+   updateTimerDisplay();
+   if (timeRemaining <= 0) {
+    clearInterval(timerInterval);
+    alert('Time is up! Submitting your answers.');
+    finishQuiz();
+   }
+  }
+ }, 1000);
+}
+
+function updateTimerDisplay() {
+ const m = Math.floor(Math.max(0, timeRemaining) / 60);
+ const s = Math.max(0, timeRemaining) % 60;
+ timerText.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+ if (timeRemaining < 300) {
+  timerBox.classList.add('warn');
+ } else {
+  timerBox.classList.remove('warn');
+ }
+}
+
+/* PAUSE ENGINE */
+pauseBtn.addEventListener('click', togglePause);
+resumeFromPauseBtn.addEventListener('click', togglePause);
+
+function togglePause() {
+ if (quizMode !== 'auto') return;
+ isPaused = !isPaused;
+ if (isPaused) {
+  pauseOverlay.classList.remove('hidden');
+ } else {
+  pauseOverlay.classList.add('hidden');
+ }
+}
+
+/* RENDER QUESTION */
+function renderQuestion() {
+ const q = activeQuestions[currentQ];
+ sectionTag.innerHTML = `<i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec}`;
+ qCounter.textContent = `Question ${currentQ + 1} of ${activeQuestions.length}`;
+ qText.textContent = q.q;
+
+ if (q.img && DIAG_IMAGES[q.img]) {
+  qDiagram.classList.remove('hidden');
+  qDiagram.innerHTML = `<img src="${DIAG_IMAGES[q.img]}" alt="Isometric diagram for this question"><div class="q-diagram-caption"><i class="fa-solid fa-image"></i> Diagram Question</div>`;
+ } else {
+  qDiagram.classList.add('hidden');
+  qDiagram.innerHTML = '';
+ }
+
+ optsWrap.innerHTML = '';
+ optsWrap.classList.toggle('has-img-opts', Array.isArray(q.optImg));
+ inlineExplain.className = 'inline-explain';
+ inlineExplain.innerHTML = '';
+
+ const answered = userAnswers[currentQ] !== null;
+
+ q.opts.forEach((optStr, idx) => {
+  const optDiv = document.createElement('div');
+  optDiv.className = 'opt';
+  const letter = String.fromCharCode(65 + idx);
+
+  if (answered) {
+   optDiv.classList.add('locked');
+   if (quizMode === 'auto') {
+    if (idx === q.ans) optDiv.classList.add('correct');
+    if (userAnswers[currentQ] === idx && idx !== q.ans) optDiv.classList.add('wrong');
+   } else {
+    if (userAnswers[currentQ] === idx) optDiv.classList.add('selected');
+   }
+  }
+
+  const imgKey = Array.isArray(q.optImg) ? q.optImg[idx] : null;
+  const imgUri = optImgURI(imgKey);
+  const thumbHtml = imgUri ? `<div class="opt-thumb"><img src="${imgUri}" alt="Option ${letter} diagram" loading="lazy"></div>` : '';
+
+  optDiv.innerHTML = `<div class="opt-letter">${letter}</div><div class="opt-body">${thumbHtml}<div class="opt-text">${optStr}</div></div>`;
+  optDiv.addEventListener('click', () => handleSelectOption(idx));
+  optsWrap.appendChild(optDiv);
+ });
+
+ if (answered && quizMode === 'auto') {
+  const isRight = userAnswers[currentQ] === q.ans;
+  inlineExplain.classList.add('show', isRight ? 'right' : 'wrong');
+  inlineExplain.innerHTML = `
+   <div class="ie-label">${isRight ? '<i class="fa-solid fa-circle-check"></i> Correct!' : '<i class="fa-solid fa-circle-xmark"></i> Incorrect'}</div>
+   <div>${q.ex}</div>
+  `;
+ }
+
+ // Navigation buttons state
+ backBtn.disabled = currentQ === 0;
+ if (currentQ === activeQuestions.length - 1) {
+  nextBtn.classList.add('hidden');
+  finishBtn.classList.remove('hidden');
+ } else {
+  nextBtn.classList.remove('hidden');
+  finishBtn.classList.add('hidden');
+ }
+
+ renderProgress();
+}
+
+function renderProgress() {
+ const pct = ((currentQ + 1) / activeQuestions.length) * 100;
+ progressFill.style.width = `${pct}%`;
+
+ dotsRow.innerHTML = '';
+ activeQuestions.forEach((q, idx) => {
+  const dot = document.createElement('div');
+  dot.className = 'dot';
+  if (idx === currentQ) dot.classList.add('current');
+
+  if (userAnswers[idx] !== null) {
+   if (quizMode === 'auto') {
+    if (userAnswers[idx] === q.ans) dot.classList.add('correct');
+    else dot.classList.add('wrong');
+   } else {
+    dot.classList.add('answered');
+   }
+  }
+  dot.addEventListener('click', () => {
+   currentQ = idx;
+   renderQuestion();
+  });
+  dotsRow.appendChild(dot);
+ });
+}
+
+/* OPTION SELECTION */
+function handleSelectOption(idx) {
+ if (userAnswers[currentQ] !== null && quizMode === 'auto') return; // locked in auto mode once picked
+
+ const prevAns = userAnswers[currentQ];
+ userAnswers[currentQ] = idx;
+
+ if (quizMode === 'auto' && prevAns === null) {
+  if (idx === activeQuestions[currentQ].ans) {
+   SoundEngine.playCorrect();
+  } else {
+   SoundEngine.playWrong();
+  }
+ }
+
+ renderQuestion();
+ saveState();
+}
+
+nextBtn.addEventListener('click', () => {
+ if (currentQ < activeQuestions.length - 1) {
+  currentQ++;
+  renderQuestion();
+ }
+});
+backBtn.addEventListener('click', () => {
+ if (currentQ > 0) {
+  currentQ--;
+  renderQuestion();
+ }
+});
+finishBtn.addEventListener('click', () => {
+ const answeredCount = userAnswers.filter(a => a !== null).length;
+ if (quizMode === 'auto' && answeredCount < Math.min(30, activeQuestions.length)) {
+  alert(`Please answer at least ${Math.min(30, activeQuestions.length)} questions before submitting.`);
+  return;
+ }
+ if (confirm('Are you sure you want to submit your quiz?')) {
+  finishQuiz();
+ }
+});
+
+/* KEYBOARD NAVIGATION */
+document.addEventListener('keydown', (e) => {
+ if (quizScreen.classList.contains('hidden')) return;
+ if (e.key === 'ArrowLeft' && currentQ > 0) {
+  currentQ--; renderQuestion();
+ } else if (e.key === 'ArrowRight' && currentQ < activeQuestions.length - 1) {
+  currentQ++; renderQuestion();
+ } else if (['1','2','3','4'].includes(e.key)) {
+  const idx = parseInt(e.key, 10) - 1;
+  if (idx < activeQuestions[currentQ].opts.length) {
+   handleSelectOption(idx);
+  }
+ }
+});
+
+/* FINISH QUIZ */
+function finishQuiz() {
+ clearInterval(timerInterval);
+ clearSavedState();
+ quizTools.classList.add('hidden');
+ timerBox.classList.add('hidden');
+
+ let correctCount = 0;
+ const breakdown = {};
+
+ activeQuestions.forEach((q, i) => {
+  if (!breakdown[q.sec]) breakdown[q.sec] = { correct: 0, total: 0 };
+  breakdown[q.sec].total++;
+
+  if (userAnswers[i] === q.ans) {
+   correctCount++;
+   breakdown[q.sec].correct++;
+  }
+ });
+
+ const total = activeQuestions.length;
+ const pct = Math.round((correctCount / total) * 100);
+
+ document.getElementById('resultScore').textContent = correctCount;
+ document.getElementById('resultOf').textContent = `/ ${total}`;
+ document.getElementById('resultPct').textContent = `${pct}% Overall Score`;
+
+ let msg = '';
+ if (pct >= 80) msg = '<i class="fa-solid fa-award" style="color:#facc15;"></i> Excellent Mastery! Outstanding Performance.';
+ else if (pct >= 60) msg = '<i class="fa-solid fa-thumbs-up" style="color:var(--accent);"></i> Good Job! Keep reviewing difficult topics.';
+ else msg = '<i class="fa-solid fa-book-open" style="color:var(--red);"></i> Keep Practicing! Review the explanations below.';
+ document.getElementById('resultMsg').innerHTML = msg;
+
+ saveResultToHistory('GET102', correctCount, total);
+
+ document.getElementById('bestBadge').innerHTML = '';
+ (async () => {
+  const oldBestRaw = await storageGet(BEST_SCORE_KEY);
+  const oldBest = oldBestRaw ? parseInt(oldBestRaw, 10) : 0;
+  if (pct > oldBest) {
+   await storageSet(BEST_SCORE_KEY, String(pct));
+   document.getElementById('bestBadge').innerHTML = `<div class="best-badge"><i class="fa-solid fa-star"></i> New Personal Best!</div>`;
+  }
+ })();
+
+ // Render breakdown grid
+ const breakdownGrid = document.getElementById('breakdownGrid');
+ breakdownGrid.innerHTML = '';
+ Object.keys(breakdown).forEach(sec => {
+  const item = breakdown[sec];
+  const bdCard = document.createElement('div');
+  bdCard.className = 'bd-card';
+  bdCard.innerHTML = `
+   <div class="bd-name"><i class="fa-solid ${sectionIcon(sec)}"></i> ${sec}</div>
+   <div class="bd-score">${item.correct} <span class="bd-total">/ ${item.total}</span></div>
+  `;
+  breakdownGrid.appendChild(bdCard);
+ });
+
+ // Render question review list
+ const reviewList = document.getElementById('reviewList');
+ reviewList.innerHTML = '';
+ activeQuestions.forEach((q, i) => {
+  const uAns = userAnswers[i];
+  const isRight = uAns === q.ans;
+  const revItem = document.createElement('div');
+  revItem.className = `review-item ${isRight ? 'right' : 'miss'}`;
+
+  const uAnsImgKey = Array.isArray(q.optImg) && uAns !== null ? q.optImg[uAns] : null;
+  const uAnsImgUri = optImgURI(uAnsImgKey);
+  const uAnsThumb = uAnsImgUri ? `<img class="ri-optthumb" src="${uAnsImgUri}" alt="Your answer diagram">` : '';
+  const uAnsText = uAns !== null ? `${String.fromCharCode(65 + uAns)}) ${q.opts[uAns]}` : 'Not Answered';
+
+  const cAnsImgKey = Array.isArray(q.optImg) ? q.optImg[q.ans] : null;
+  const cAnsImgUri = optImgURI(cAnsImgKey);
+  const cAnsThumb = cAnsImgUri ? `<img class="ri-optthumb" src="${cAnsImgUri}" alt="Correct answer diagram">` : '';
+  const cAnsText = `${String.fromCharCode(65 + q.ans)}) ${q.opts[q.ans]}`;
+
+  const imgHtml = (q.img && DIAG_IMAGES[q.img]) ? `<img class="ri-img" src="${DIAG_IMAGES[q.img]}" alt="Isometric diagram">` : '';
+
+  revItem.innerHTML = `
+   <div class="ri-section"><i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec} · Q${i + 1}</div>
+   ${imgHtml}
+   <div class="ri-q"><strong>${q.q}</strong></div>
+   <div class="ri-ans ${isRight ? 'right' : 'wrong'}">
+    ${uAnsThumb}
+    <i class="fa-solid ${isRight ? 'fa-check' : 'fa-xmark'}"></i>
+    <span><strong>Your Answer:</strong> ${uAnsText}</span>
+   </div>
+   ${!isRight ? `<div class="ri-ans correct-reveal">${cAnsThumb}<i class="fa-solid fa-bullseye"></i> <span><strong>Correct Answer:</strong> ${cAnsText}</span></div>` : ''}
+   <div class="ri-exp"><strong>Explanation:</strong> ${q.ex}</div>
+  `;
+  reviewList.appendChild(revItem);
+ });
+
+ showScreen(resultScreen);
+ updateHomeStats();
+}
+
+document.getElementById('homeBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('retryBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+/* AUTOSAVE ENGINE (persistent artifact storage) */
+function saveState() {
+ const state = { quizMode, activeQuestions, userAnswers, currentQ, timeRemaining };
+ storageSet(STORAGE_KEY, JSON.stringify(state));
+}
+
+function clearSavedState() {
+ storageDelete(STORAGE_KEY);
+}
+
+async function checkSavedState() {
+ const raw = await storageGet(STORAGE_KEY);
+ if (!raw) return;
+ let data;
+ try {
+  data = JSON.parse(raw);
+ } catch (e) {
+  return;
+ }
+ if (!data || !data.activeQuestions || data.activeQuestions.length === 0) return;
+
+ resumeInfo.textContent = `${data.activeQuestions.length} Questions (${data.quizMode.toUpperCase()} Mode)`;
+ resumeModal.classList.remove('hidden');
+
+ resumeYes.onclick = () => {
+  resumeModal.classList.add('hidden');
+  quizMode = data.quizMode;
+  activeQuestions = data.activeQuestions;
+  userAnswers = data.userAnswers;
+  currentQ = data.currentQ;
+  timeRemaining = data.timeRemaining;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') pauseBtn.classList.remove('hidden'); else pauseBtn.classList.add('hidden');
+  timerBox.classList.remove('hidden');
+  startTimer();
+  renderQuestion();
+ };
+
+ resumeNo.onclick = () => {
+  resumeModal.classList.add('hidden');
+  clearSavedState();
+ };
+}
+
+/* TAB SWITCH GUARDRAIL */
+document.addEventListener('visibilitychange', () => {
+ if (!quizScreen.classList.contains('hidden') && document.hidden) {
+  leaveCount++;
+  if (leaveCount >= 3) {
+   alert('You have left the quiz tab 3 times. The quiz will now reset.');
+   clearSavedState();
+   location.reload();
+  } else {
+   leaveWarnText.textContent = `You switched away from the quiz tab. Warning ${leaveCount} of 3. Leaving 3 times will reset your quiz.`;
+   leaveWarningModal.classList.remove('hidden');
+  }
+ }
+});
+leaveWarnOk.addEventListener('click', () => leaveWarningModal.classList.add('hidden'));
+
+</script>
+</body>
+</html>
