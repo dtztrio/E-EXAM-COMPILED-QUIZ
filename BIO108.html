@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIO108 · Biology Practice Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+ --bg:#0a0c12; --surface:#0f1117; --surface2:#141820; --surface3:#1a2030;
+ --border:#1e2640; --border2:#26304e; --ink:#e2e8f6; --ink2:#94a3c0; --ink3:#4a5878;
+ --accent:#4f8ef7; --accent2:#7c6fff; --accent-dim:#0d1630; --accent-glow:rgba(79,142,247,.14);
+ --green:#34d399; --green-dim:#0a1e14; --red:#f87171; --red-dim:#1e0a0a; --purple:#a78bfa;
+ --bar-bg:rgba(10,12,18,.92); --font-scale:1;
+ --r:16px;
+}
+html{font-size:calc(16px * var(--font-scale, 1));}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+sup{font-size:.7em;vertical-align:super;line-height:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Outfit',sans-serif;min-height:100vh;display:flex;flex-direction:column;
+ background-image:radial-gradient(ellipse 900px 600px at 10% 0%, rgba(79,142,247,.06) 0%, transparent 70%),
+ radial-gradient(ellipse 700px 500px at 90% 30%, rgba(124,111,255,.05) 0%, transparent 60%);
+ transition:background-color .2s ease, color .2s ease;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);
+ background:var(--bar-bg);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px;}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.brand-badge{background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;font-weight:800;font-size:.72rem;letter-spacing:2px;
+ padding:6px 14px;border-radius:50px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+.brand-sub{font-size:.7rem;color:var(--ink3);letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+#timer{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:600;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:7px 16px;border-radius:50px;letter-spacing:2px;min-width:96px;text-align:center;
+ display:flex;align-items:center;gap:8px;justify-content:center;}
+#timer.warn{color:var(--red);background:var(--red-dim);border-color:rgba(248,113,113,.3);animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+#soundToggle{width:38px;height:38px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);
+ color:var(--ink2);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;
+ transition:border-color .15s,color .15s,background .15s;flex-shrink:0;}
+#soundToggle:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+#soundToggle.muted{color:var(--ink3);}
+.hamburger{display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;cursor:pointer;padding:0;color:var(--ink);font-size:.95rem;transition:border-color .15s,color .15s;flex-shrink:0;}
+.hamburger:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+.hamburger .fa-xmark{display:none;} .hamburger[aria-expanded="true"] .fa-bars{display:none;} .hamburger[aria-expanded="true"] .fa-xmark{display:inline-block;}
+.mobile-nav{position:fixed;inset:0;z-index:99;background:transparent;opacity:0;pointer-events:none;transition:opacity .15s ease;}
+.mobile-nav.open{opacity:1;pointer-events:auto;}
+.mobile-nav-panel{position:absolute;top:70px;right:20px;width:250px;max-width:82vw;max-height:min(70vh,520px);background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:1px;transform:scale(.94) translateY(-8px);transform-origin:top right;opacity:0;transition:transform .16s ease,opacity .16s ease;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow-y:auto;}
+.mobile-nav.open .mobile-nav-panel{transform:scale(1) translateY(0);opacity:1;}
+.mobile-nav-panel a{display:flex;align-items:center;gap:12px;padding:11px 10px;font-size:.9rem;font-weight:600;color:var(--ink);text-decoration:none;border-radius:8px;}
+.mobile-nav-panel a:hover{background:var(--accent-glow);}
+.mobile-nav-panel a i{width:18px;text-align:center;color:var(--accent);font-size:.85rem;}
+.mobile-nav-panel a.active{color:var(--accent);background:var(--accent-dim);}
+.mobile-nav-panel .nav-group-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);padding:12px 10px 4px;}
+.mobile-nav-panel .nav-group-label:first-child{padding-top:6px;}
+main{flex:1;display:flex;justify-content:center;padding:0 16px 100px;}
+#homeScreen,#configScreen,#quizScreen,#resultScreen,#loadingScreen{width:100%;max-width:720px;}
+.hidden{display:none !important;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:32px 28px;margin-bottom:20px;}
+
+a { text-decoration: none; }
+#statsBar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;}
+.stat-chip{font-size:.78rem;color:var(--ink2);background:var(--surface2);border:1px solid var(--border);padding:8px 16px;
+ border-radius:50px;display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;}
+.stat-chip i{color:var(--accent);}
+.stat-chip strong{color:var(--ink);}
+
+/* HOME */
+.hero-wrap{padding:48px 0 8px;text-align:center;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
+ color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:500;margin-bottom:22px;background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.22);padding:7px 16px 7px 13px;border-radius:50px;}
+.hero-title{font-family:'Fraunces',serif;font-size:2.3rem;line-height:1.16;margin-bottom:16px;font-weight:600;letter-spacing:-.5px;}
+.hero-title span{color:var(--accent);font-style:italic;}
+.hero-desc{color:var(--ink2);font-size:.96rem;line-height:1.75;max-width:480px;margin:0 auto 34px;}
+
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:30px;}
+.mode-card{background:var(--surface2);border:1px solid var(--border2);border-radius:18px;padding:26px 22px;cursor:pointer;
+ transition:border-color .15s,transform .15s,background .15s;text-align:left;}
+.mode-card:hover{border-color:rgba(79,142,247,.4);transform:translateY(-3px);background:var(--surface3);}
+.mode-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;
+ display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:16px;}
+.mode-name{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;margin-bottom:8px;}
+.mode-desc{font-size:.85rem;color:var(--ink2);line-height:1.6;margin-bottom:14px;}
+.mode-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.mode-tag{font-size:.66rem;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ padding:3px 9px;border-radius:20px;font-family:'JetBrains Mono',monospace;}
+
+.section-heading{display:flex;align-items:center;gap:12px;margin:36px 0 18px;}
+.section-heading-icon{width:34px;height:34px;border-radius:10px;background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.85rem;flex-shrink:0;}
+.section-heading-text{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;}
+.rules-list{display:grid;gap:8px;}
+.rule-item{display:flex;gap:14px;align-items:flex-start;font-size:.86rem;color:var(--ink2);line-height:1.55;padding:14px 16px;
+ background:var(--surface2);border:1px solid var(--border);border-radius:10px;}
+.rule-icon{width:30px;height:30px;border-radius:8px;flex-shrink:0;background:var(--accent-dim);border:1px solid rgba(79,142,247,.2);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.78rem;margin-top:1px;}
+.rule-text strong{color:var(--ink);}
+
+/* CONFIG SCREEN */
+.config-field{margin-bottom:22px;}
+.config-label{font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.config-label i{color:var(--accent);}
+.config-input-row{display:flex;align-items:center;gap:14px;}
+.config-slider{flex:1;-webkit-appearance:none;height:6px;border-radius:6px;background:var(--border2);outline:none;}
+.config-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;box-shadow:0 2px 8px rgba(79,142,247,.4);}
+.config-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;border:none;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;}
+.config-value{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:6px 14px;border-radius:10px;min-width:74px;text-align:center;font-size:.9rem;}
+.config-hint{font-size:.74rem;color:var(--ink3);margin-top:8px;}
+.topics-grid{display:flex;flex-wrap:wrap;gap:10px;}
+.topic-chip{display:flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--border2);
+ padding:10px 16px;border-radius:12px;cursor:pointer;font-size:.85rem;transition:border-color .15s,background .15s;}
+.topic-chip:hover{border-color:rgba(79,142,247,.4);}
+.topic-chip input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);
+ color:#fff;border:none;padding:14px 28px;border-radius:50px;font-weight:700;font-size:.95rem;cursor:pointer;
+ font-family:'Outfit',sans-serif;transition:transform .15s,box-shadow .15s,opacity .2s;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(79,142,247,.3);}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--border2);padding:12px 22px;border-radius:50px;
+ font-weight:600;font-size:.9rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:border-color .15s,background .15s;
+ display:inline-flex;align-items:center;gap:8px;}
+.btn-ghost:hover{background:var(--accent-glow);border-color:rgba(79,142,247,.35);}
+.btn-ghost:disabled{opacity:.35;cursor:not-allowed;}
+
+/* LOADING SCREEN */
+#loadingScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 0;text-align:center;}
+.loader-ring{width:56px;height:56px;border-radius:50%;border:4px solid var(--border2);border-top-color:var(--accent);
+ animation:spin .8s linear infinite;margin-bottom:24px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader-text{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--ink2);}
+.loader-sub{font-size:.78rem;color:var(--ink3);margin-top:8px;font-family:'JetBrains Mono',monospace;}
+
+/* QUIZ */
+#progressWrap{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;padding-top:24px;}
+.progress-bar-track{height:4px;background:var(--border);border-radius:4px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .3s;}
+.dots-group{display:flex;gap:5px;flex-wrap:wrap;}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .15s,transform .1s;}
+.dot:hover{transform:scale(1.35);}
+.dot.answered{background:rgba(79,142,247,.4);border:1px solid var(--accent);}
+.dot.current{background:var(--accent);box-shadow:0 0 0 3px rgba(79,142,247,.25);}
+.dot.correct{background:var(--green);}
+.dot.wrong{background:var(--red);}
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.q-section-tag{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;
+ font-weight:600;background:var(--accent-dim);padding:4px 10px;border-radius:20px;border:1px solid rgba(79,142,247,.2);}
+.q-counter{font-size:.78rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;}
+.q-text{font-size:1.1rem;line-height:1.65;margin:0 0 26px;font-family:'Fraunces',serif;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.opt{display:flex;align-items:flex-start;gap:14px;padding:15px 18px;border-radius:12px;border:1px solid var(--border2);
+ margin-bottom:10px;background:var(--surface2);cursor:pointer;transition:border-color .15s,background .15s,transform .1s;}
+.opt:hover{border-color:rgba(79,142,247,.35);background:var(--surface3);}
+.opt.locked{cursor:default;}
+.opt.selected{border-color:var(--accent);background:var(--accent-dim);}
+.opt.correct{border-color:var(--green);background:var(--green-dim);}
+.opt.wrong{border-color:var(--red);background:var(--red-dim);}
+.opt-letter{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;
+ justify-content:center;font-size:.75rem;font-weight:700;color:var(--ink3);flex-shrink:0;font-family:'JetBrains Mono',monospace;
+ transition:all .15s;margin-top:1px;}
+.opt.selected .opt-letter{background:var(--accent);color:#fff;border-color:var(--accent);}
+.opt.correct .opt-letter{background:var(--green);color:#fff;border-color:var(--green);}
+.opt.wrong .opt-letter{background:var(--red);color:#fff;border-color:var(--red);}
+.opt-text{font-size:.92rem;line-height:1.55;padding-top:3px;}
+.inline-explain{display:none;margin-top:6px;margin-bottom:14px;padding:16px 18px;background:rgba(79,142,247,.05);
+ border:1px solid rgba(79,142,247,.15);border-radius:10px;font-size:.85rem;line-height:1.7;color:var(--ink2);animation:fadeUp .2s ease;}
+.inline-explain.show{display:block;}
+.inline-explain .ie-label{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;
+ margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.inline-explain.right .ie-label{color:var(--green);}
+.inline-explain.wrong .ie-label{color:var(--red);}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;}
+.kbd-hint{text-align:center;font-size:.68rem;color:var(--ink3);margin-top:14px;font-family:'JetBrains Mono',monospace;}
+.kbd-hint kbd{background:var(--surface3);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;font-family:'JetBrains Mono',monospace;}
+
+#quizTools{position:fixed;right:20px;bottom:24px;display:flex;flex-direction:column;gap:12px;z-index:60;}
+.fab{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;border:none;
+ cursor:pointer;font-size:1.05rem;box-shadow:0 8px 24px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;
+ transition:transform .15s;}
+.fab:hover{transform:translateY(-3px) scale(1.04);}
+.fab.pause-fab{background:linear-gradient(135deg,#f59e0b,#f97316);}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.72);backdrop-filter:blur(6px);z-index:200;
+ display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-card{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:26px 24px;max-width:380px;
+ width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.modal-icon{width:52px;height:52px;border-radius:50%;background:var(--accent-dim);border:1px solid rgba(79,142,247,.25);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.3rem;margin:0 auto 16px;}
+.modal-icon.warn{background:var(--red-dim);border-color:rgba(248,113,113,.3);color:var(--red);}
+.modal-title{font-family:'Fraunces',serif;font-size:1.2rem;margin-bottom:10px;}
+.modal-text{font-size:.87rem;color:var(--ink2);line-height:1.6;margin-bottom:20px;}
+
+#pauseOverlay{position:fixed;inset:0;background:rgba(6,8,14,.85);backdrop-filter:blur(16px);z-index:150;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
+#pauseOverlay .modal-icon{width:64px;height:64px;font-size:1.6rem;margin-bottom:20px;}
+#pauseOverlay h2{font-family:'Fraunces',serif;font-size:1.6rem;margin-bottom:10px;}
+#pauseOverlay p{color:var(--ink2);font-size:.9rem;max-width:320px;margin-bottom:26px;line-height:1.6;}
+
+.result-hero{text-align:center;padding:26px 0 22px;border-bottom:1px solid var(--border);margin-bottom:26px;}
+.result-ring{display:inline-flex;align-items:center;justify-content:center;width:124px;height:124px;border-radius:50%;
+ border:3px solid var(--accent);background:var(--accent-dim);margin-bottom:16px;}
+.result-score{font-family:'JetBrains Mono',monospace;font-size:2.3rem;font-weight:700;color:var(--accent);}
+.result-of{font-size:.8rem;color:var(--ink3);margin-top:2px;}
+.result-pct{font-family:'Fraunces',serif;font-size:1.5rem;margin-bottom:6px;}
+.result-msg{color:var(--ink2);font-size:.9rem;line-height:1.6;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.best-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;color:#facc15;background:rgba(250,204,21,.08);
+ border:1px solid rgba(250,204,21,.25);padding:4px 12px;border-radius:20px;margin-top:10px;font-family:'JetBrains Mono',monospace;}
+.breakdown-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:26px;}
+.bd-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.bd-name{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.bd-score{font-size:1.35rem;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.bd-total{font-size:.72rem;color:var(--ink3);}
+.review-section-title{font-family:'Fraunces',serif;font-size:1.1rem;border-bottom:1px solid var(--border);padding-bottom:12px;
+ margin:22px 0 16px;display:flex;align-items:center;gap:10px;}
+.review-item{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px;background:var(--surface2);}
+.review-item.right{border-left:3px solid var(--green);}
+.review-item.miss{border-left:3px solid var(--red);}
+.ri-q{font-size:.9rem;margin-bottom:10px;line-height:1.6;}
+.ri-section{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:5px;}
+.ri-ans{font-size:.83rem;margin-top:5px;display:flex;align-items:flex-start;gap:7px;}
+.ri-ans.right{color:var(--green);}
+.ri-ans.wrong{color:var(--red);}
+.ri-ans.correct-reveal{color:#2dd4bf;}
+.ri-exp{margin-top:10px;padding:12px 14px;background:rgba(79,142,247,.04);border:1px solid rgba(79,142,247,.12);
+ border-radius:9px;font-size:.82rem;line-height:1.65;color:var(--ink2);}
+
+footer{text-align:center;font-size:.7rem;color:var(--ink3);padding:18px;border-top:1px solid var(--border);
+ font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+footer i{color:var(--accent);}
+
+@media(max-width:560px){
+ .card{padding:22px 16px;}
+ .mode-grid{grid-template-columns:1fr;}
+ .hero-title{font-size:1.8rem;}
+ .breakdown-grid{grid-template-columns:repeat(2,1fr);}
+ #quizTools{right:14px;bottom:18px;}
+}
+
+@media print{
+ @page{ margin:14mm; }
+ *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
+ .topbar, footer, #quizTools, #homeBtn, #retryBtn, #printBtn, .kbd-hint, #statsBar,
+ #pauseOverlay, #leaveWarningModal, #resumeModal, #soundToggle, .hamburger, .mobile-nav { display:none !important; }
+ body{background:#fff;color:#000;}
+ main{padding:0;}
+ .card{border:1px solid #ccc;background:#fff;box-shadow:none;}
+ .bd-card, .review-item{background:#f6f6f6;border-color:#ddd;}
+ .ri-exp{background:#f0f4ff;border-color:#cfd9ff;color:#333;}
+ .result-hero, .bd-card, .review-item{ break-inside:avoid; page-break-inside:avoid; }
+ .review-item{ margin-bottom:14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+ <div class="brand">
+ <span class="brand-badge">BIO108</span>
+ <div class="brand-sub"><i class="fa-solid fa-microscope" style="margin-right:5px;"></i>Biology · Microscopy · Sterilization · Mendelian Genetics</div>
+ </div>
+ <div style="display:flex;align-items:center;gap:10px;">
+ <div id="timer" class="hidden"><i class="fa-regular fa-clock"></i><span id="timerText">00:00</span></div>
+ <button id="soundToggle" title="Mute sounds" aria-label="Mute sounds" aria-pressed="false"></button>
+ <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
+ <i class="fa-solid fa-bars"></i>
+ <i class="fa-solid fa-xmark"></i>
+ </button>
+ </div>
+</div>
+
+<div class="mobile-nav" id="mobileNav">
+ <div class="mobile-nav-panel">
+ <span class="nav-group-label">Navigate</span>
+ <a href="../dashboard.html"><i class="fa-solid fa-house"></i>Home / Dashboard</a>
+ <a href="../aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+ <span class="nav-group-label">DTZ TRIO</span>
+ <a href="../about.html"><i class="fa-solid fa-users"></i>About Us</a>
+ <a href="../social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+ <span class="nav-group-label">Account</span>
+ <a href="../set.html"><i class="fa-solid fa-gear"></i>Settings</a>
+ <a href="../help.html"><i class="fa-solid fa-circle-question"></i>Help &amp; FAQ</a>
+ </div>
+</div>
+
+<main>
+
+<!-- HOME SCREEN -->
+<div id="homeScreen">
+ <div class="hero-wrap">
+ <div class="hero-eyebrow"><i class="fa-solid fa-microscope"></i> BIO108 Practice Quiz</div>
+ <h1 class="hero-title">100 questions,<br><span>two ways to train.</span></h1>
+ <p class="hero-desc">Covering Microscopy Fundamentals, Microscope Maintenance &amp; Operation, Sterilization Techniques, and Mendelian Genetics — with full worked explanations for every question.</p>
+ </div>
+
+ <div id="statsBar" class="hidden"></div>
+
+ <div class="mode-grid">
+ <div class="mode-card" id="pickAuto">
+ <div class="mode-icon"><i class="fa-solid fa-gauge-high"></i></div>
+ <div class="mode-name">Automatic Timer</div>
+ <div class="mode-desc">All 100 questions, shuffled, with a timer the app sets for you. Get instant feedback the moment you answer, and pause any time you need a break.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-regular fa-clock"></i> Auto-set clock</span>
+ <span class="mode-tag"><i class="fa-solid fa-list-check"></i> 100 Qs</span>
+ <span class="mode-tag"><i class="fa-solid fa-pause"></i> Pausable</span>
+ </div>
+ </div>
+ <div class="mode-card" id="pickCustom">
+ <div class="mode-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="mode-name">Custom Timer</div>
+ <div class="mode-desc">Pick your own topics, time limit, and question count. Answer everything first — no pausing, and no feedback until you submit.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-solid fa-sliders"></i> Custom setup</span>
+ <span class="mode-tag"><i class="fa-solid fa-ban"></i> No pausing</span>
+ <span class="mode-tag"><i class="fa-solid fa-flag-checkered"></i> Results at end</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="section-heading">
+ <div class="section-heading-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+ <div class="section-heading-text">How each mode works</div>
+ </div>
+ <div class="rules-list">
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-gauge-high"></i></span>
+ <span class="rule-text"><strong>Automatic Timer</strong> runs all 100 questions with a clock the app manages for you. Tap an option and it's locked in immediately — correct turns green, wrong turns red, with a short explanation right away. Tap <strong>Pause</strong> any time to freeze the clock and blur the screen. You must answer at least <strong>30 questions</strong> before you can submit.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-sliders"></i></span>
+ <span class="rule-text"><strong>Custom Timer</strong> lets you choose specific topics, your own time limit (up to 120 min), and how many questions to include. It cannot be paused — answers stay hidden until you submit, then you get a full score breakdown and review.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-shield-halved"></i></span>
+ <span class="rule-text">Your progress is <strong>auto-saved</strong> as you go, so a refresh won't lose your place. For fairness, switching away from the tab is tracked — leaving 3 times in one quiz resets it.</span></div>
+ </div>
+</div>
+
+<!-- CONFIG SCREEN -->
+<div id="configScreen" class="hidden">
+ <div class="section-heading" style="margin-top:36px;">
+ <div class="section-heading-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="section-heading-text">Set up your Custom Timer exam</div>
+ </div>
+ <div class="card">
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-layer-group"></i> Topics to include</div>
+ <div class="topics-grid" id="topicsWrap"></div>
+ <div class="config-hint" id="topicsHint">Select at least one topic.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-regular fa-clock"></i> Time limit (minutes)</div>
+ <div class="config-input-row">
+ <input type="range" id="timeSlider" class="config-slider" min="5" max="120" step="5" value="60">
+ <span class="config-value" id="timeValue">60</span>
+ </div>
+ <div class="config-hint">Maximum 120 minutes. This clock cannot be paused once the exam starts.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-list-ol"></i> Number of questions</div>
+ <div class="config-input-row">
+ <input type="range" id="countSlider" class="config-slider" min="1" max="100" step="1" value="50">
+ <span class="config-value" id="countValue">50</span>
+ </div>
+ <div class="config-hint" id="countHint">Randomly picked from the selected topics.</div>
+ </div>
+ <div class="nav-row" style="margin-top:8px;">
+ <button class="btn-ghost" id="backToHomeFromConfig"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <button class="btn" id="startCustomBtn"><i class="fa-solid fa-play"></i> Start Custom Timer</button>
+ </div>
+ </div>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" class="hidden">
+ <div class="loader-ring"></div>
+ <div class="loader-text">Preparing your questions…</div>
+ <div class="loader-sub">Shuffling &amp; randomizing options</div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="quizScreen" class="hidden">
+ <div id="progressWrap">
+ <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+ <div class="dots-group" id="dotsRow"></div>
+ </div>
+ <div class="card">
+ <div class="q-meta">
+ <span class="q-section-tag" id="sectionTag"></span>
+ <span class="q-counter" id="qCounter"></span>
+ </div>
+ <div class="q-text" id="qText"></div>
+ <div id="optsWrap"></div>
+ <div id="inlineExplain" class="inline-explain"></div>
+ <div class="nav-row">
+ <button class="btn-ghost" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <div style="display:flex;gap:8px;">
+ <button class="btn" id="nextBtn">Next <i class="fa-solid fa-arrow-right"></i></button>
+ <button class="btn hidden" id="finishBtn"><i class="fa-solid fa-check"></i> Submit Quiz</button>
+ </div>
+ </div>
+ <div class="kbd-hint">Keyboard: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate &nbsp;·&nbsp; <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to select</div>
+ </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="hidden">
+ <div class="card">
+ <div class="result-hero">
+ <div class="result-ring"><div><div class="result-score" id="resultScore">0</div><div class="result-of" id="resultOf">/ 100</div></div></div>
+ <div class="result-pct" id="resultPct"></div>
+ <div class="result-msg" id="resultMsg"></div>
+ <div id="bestBadge"></div>
+ </div>
+ <div class="breakdown-grid" id="breakdownGrid"></div>
+ <div class="review-section-title"><i class="fa-solid fa-magnifying-glass"></i> Question Review</div>
+ <div id="reviewList"></div>
+ <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;">
+ <button class="btn-ghost" id="homeBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-house"></i> Home</button>
+ <button class="btn-ghost" id="printBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+ <button class="btn" id="retryBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-rotate-right"></i> Retake</button>
+ </div>
+ </div>
+</div>
+
+</main>
+
+<!-- FLOATING QUIZ TOOLS -->
+<div id="quizTools" class="hidden">
+ <button class="fab pause-fab hidden" id="pauseBtn" title="Pause"><i class="fa-solid fa-pause"></i></button>
+</div>
+
+<!-- PAUSE OVERLAY -->
+<div id="pauseOverlay" class="hidden">
+ <div class="modal-icon"><i class="fa-solid fa-pause"></i></div>
+ <h2>Quiz Paused</h2>
+ <p>The clock is frozen and nothing on this screen is visible or clickable until you resume.</p>
+ <button class="btn" id="resumeFromPauseBtn"><i class="fa-solid fa-play"></i> Resume Quiz</button>
+</div>
+
+<!-- LEAVE-WARNING MODAL -->
+<div id="leaveWarningModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></div>
+ <div class="modal-title">You left the quiz</div>
+ <div class="modal-text" id="leaveWarnText"></div>
+ <button class="btn" id="leaveWarnOk">Okay, continue</button>
+ </div>
+</div>
+
+<!-- RESUME AUTOSAVE MODAL -->
+<div id="resumeModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+ <div class="modal-title">Resume your quiz?</div>
+ <div class="modal-text">We found a quiz in progress:<br><strong id="resumeInfo" style="color:var(--ink);"></strong></div>
+ <div style="display:flex;gap:10px;">
+ <button class="btn-ghost" id="resumeNo" style="flex:1;justify-content:center;">Discard</button>
+ <button class="btn" id="resumeYes" style="flex:1;justify-content:center;">Resume</button>
+ </div>
+ </div>
+</div>
+
+<footer><i class="fa-solid fa-microscope"></i> BIO108 &nbsp;·&nbsp; Biology Practice Quiz — Microscopy, Sterilization &amp; Genetics</footer>
+
+<script>
+/* ============================================================
+ HAMBURGER / MOBILE NAV
+ ============================================================ */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+function closeMobileNav(){mobileNav.classList.remove('open');hamburgerBtn.setAttribute('aria-expanded','false');}
+function toggleMobileNav(){const isOpen = mobileNav.classList.toggle('open');hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');}
+hamburgerBtn.addEventListener('click', toggleMobileNav);
+mobileNav.addEventListener('click', (e)=>{ if(e.target === mobileNav) closeMobileNav(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMobileNav(); });
+
+/* ============================================================
+ BIO108 — 100-QUESTION BANK (Microscopy · Maintenance · Sterilization · Genetics)
+ ============================================================ */
+const QUESTIONS = [
+// MICROSCOPY FUNDAMENTALS
+{sec:'Microscopy Fundamentals', q:"Which part connects the base and the head of a microscope?", opts:["Stage","Arm","Condenser","Nosepiece"], ans:1, ex:"The arm links the base to the head and is also the part used for carrying the microscope."},
+{sec:'Microscopy Fundamentals', q:"How is total magnification calculated?", opts:["Ocular + Objective","Ocular ÷ Objective","Ocular × Objective","Objective ÷ Ocular"], ans:2, ex:"Total magnification is found by multiplying the ocular (eyepiece) power by the objective lens power."},
+{sec:'Microscopy Fundamentals', q:"Which lens offers the highest magnification (100x)?", opts:["Scanning","Low power","High dry","Oil immersion"], ans:3, ex:"The oil immersion lens, typically 100x, provides the highest magnification and uses oil to improve resolution."},
+{sec:'Microscopy Fundamentals', q:"The iris diaphragm is responsible for:", opts:["Magnification","Regulating light intensity","Moving the slide","Focusing"], ans:1, ex:"The iris diaphragm controls how much light passes through the condenser to the specimen."},
+{sec:'Microscopy Fundamentals', q:"Which part allows for precise movement of the slide?", opts:["Arm","Base","Mechanical stage","Revolving nosepiece"], ans:2, ex:"The mechanical stage, controlled by knobs, allows fine, precise positioning of the slide."},
+{sec:'Microscopy Fundamentals', q:"The coarse adjustment knob is used for:", opts:["Fine focusing","Rough focusing","Magnifying","Lighting"], ans:1, ex:"The coarse adjustment knob quickly brings the specimen into approximate (rough) focus."},
+{sec:'Microscopy Fundamentals', q:"What is the primary function of the condenser?", opts:["Magnify the image","Focus light on the specimen","Hold the slide","Rotate lenses"], ans:1, ex:"The condenser gathers and focuses light from the illuminator onto the specimen."},
+{sec:'Microscopy Fundamentals', q:"The correct way to carry a microscope is with:", opts:["One hand on the arm","One hand on the base","One hand on the arm and one on the base","Two hands on the stage"], ans:2, ex:"Proper carrying technique uses one hand supporting the arm and the other supporting the base."},
+{sec:'Microscopy Fundamentals', q:"Which component provides stability to the instrument?", opts:["Arm","Head","Base","Stage"], ans:2, ex:"The base is the heaviest, lowest part of the microscope and provides its stability."},
+{sec:'Microscopy Fundamentals', q:"The eyepiece is also known as the:", opts:["Ocular","Objective","Turret","Illuminator"], ans:0, ex:"The eyepiece, through which you look, is also called the ocular lens."},
+{sec:'Microscopy Fundamentals', q:"The revolving nosepiece is also called a:", opts:["Condenser","Turret","Diaphragm","Rack stop"], ans:1, ex:"The revolving nosepiece, which holds and rotates the objective lenses, is also called the turret."},
+{sec:'Microscopy Fundamentals', q:"If the ocular is 10x and the objective is 40x, total magnification is:", opts:["50x","400x","410x","30x"], ans:1, ex:"Total magnification = ocular × objective = 10 × 40 = 400x."},
+{sec:'Microscopy Fundamentals', q:"Which part prevents the objective lens from striking the slide?", opts:["Fine adjustment","Iris diaphragm","Rack stop","Stage clip"], ans:2, ex:"The rack stop limits how far the objective can travel downward, preventing it from crashing into the slide."},
+{sec:'Microscopy Fundamentals', q:"The fine adjustment knob is specifically intended for:", opts:["Low power lenses","High power/sharp focusing","Moving the stage","Adjusting light"], ans:1, ex:"The fine adjustment knob makes small focus corrections, essential for sharp focus under high power."},
+{sec:'Microscopy Fundamentals', q:"The aperture is located:", opts:["Above the stage","Below the stage (hole in the stage)","In the eyepiece","In the nosepiece"], ans:1, ex:"The aperture is the opening in the stage that lets condenser light reach the specimen from below."},
+{sec:'Microscopy Fundamentals', q:"Which of these is NOT an optical component?", opts:["Eyepiece","Objective lens","Condenser","Arm"], ans:3, ex:"The arm is a structural/support part, not one of the light-bending optical components."},
+{sec:'Microscopy Fundamentals', q:"A microscope should always be stored with a:", opts:["Slide on the stage","Dust cover","100x lens in place","Light on"], ans:1, ex:"A dust cover protects the lenses and mechanical parts from dust accumulation during storage."},
+{sec:'Microscopy Fundamentals', q:"The eyepiece tube's role is to:", opts:["Magnify","Support the eyepiece above objectives","Hold the slide","Focus light"], ans:1, ex:"The eyepiece (body) tube holds and supports the eyepiece in alignment above the objective lenses."},
+{sec:'Microscopy Fundamentals', q:"The head (body) of the microscope contains:", opts:["The base","The optical components","The light source","The stage clips"], ans:1, ex:"The head houses the optical components, including the eyepiece tube and nosepiece."},
+{sec:'Microscopy Fundamentals', q:"At what magnification does the condenser become vital for clarity?", opts:["40x","100x","400x and above","10x"], ans:2, ex:"Proper condenser adjustment becomes especially critical for image clarity at 400x magnification and above."},
+
+// MICROSCOPE MAINTENANCE & OPERATION
+{sec:'Microscope Maintenance & Operation', q:"The Abbe condenser is designed for:", opts:["Simple magnifying glasses","High-quality microscopes (>400x)","Mirrors","Low power only"], ans:1, ex:"The Abbe condenser is used in high-quality microscopes to provide strong, focused illumination above 400x."},
+{sec:'Microscope Maintenance & Operation', q:"What should you never do with an adjustable mirror and sunlight?", opts:["Face it toward the window","Face it directly into the sun","Use it for light","Move it"], ans:1, ex:"Pointing the mirror directly at the sun can cause intense, damaging light to enter the eye."},
+{sec:'Microscope Maintenance & Operation', q:"Before replacing a microscope bulb, you must:", opts:["Remove the lens","Unplug the power supply","Turn up the light","Clean the stage"], ans:1, ex:"Unplugging the power supply first prevents electric shock and protects against a hot bulb."},
+{sec:'Microscope Maintenance & Operation', q:"Avoid prolonged use of the microscope to prevent:", opts:["Lens wear","Eye strain","Bulb burnout","Slide breakage"], ans:1, ex:"Extended viewing sessions without breaks can cause significant eye strain and fatigue."},
+{sec:'Microscope Maintenance & Operation', q:"The first step in removing dust from lenses is using:", opts:["A cloth","A blower or soft brush","Water","Alcohol"], ans:1, ex:"A blower or soft brush removes loose dust particles first, preventing them from scratching the lens during wiping."},
+{sec:'Microscope Maintenance & Operation', q:"What is the recommended cleaning material for objectives?", opts:["Tissue paper","Lint-free cloth or cotton swab","Wool","Rough towel"], ans:1, ex:"A lint-free cloth or cotton swab cleans lenses without leaving fibers or scratching the glass."},
+{sec:'Microscope Maintenance & Operation', q:"Microscope lenses should be cleaned in:", opts:["Straight lines","Concentric circles from center to edge","Up and down motions","Random patterns"], ans:1, ex:"Wiping in concentric circles from the center outward evenly clears debris without regrinding dirt into the lens."},
+{sec:'Microscope Maintenance & Operation', q:"Why must a microscope be kept in a dry environment?", opts:["To prevent dust","To prevent mildew growth","To save power","To keep it cool"], ans:1, ex:"Humidity encourages mildew growth on the optical surfaces, which can permanently damage the lenses."},
+{sec:'Microscope Maintenance & Operation', q:"Before switching off, light intensity should be set to:", opts:["Brightest","Darkest setting","Halfway","Off immediately"], ans:1, ex:"Lowering the light to its darkest setting before switching off extends the life of the bulb."},
+{sec:'Microscope Maintenance & Operation', q:"Place the microscope how far from the bench edge?", opts:["1 cm","5 cm","15 cm","Right on the edge"], ans:1, ex:"Keeping the microscope about 5 cm from the bench edge helps prevent it from being accidentally knocked off."},
+{sec:'Microscope Maintenance & Operation', q:"Wipe the 100x oil immersion lens clean:", opts:["Once a week","Immediately after use","Before use only","Never"], ans:1, ex:"Oil left on the lens can harden and damage it, so it should be wiped clean immediately after use."},
+{sec:'Microscope Maintenance & Operation', q:"The dust cover should be applied after the light source cools for:", opts:["2 minutes","15 minutes","1 hour","24 hours"], ans:1, ex:"Waiting about 15 minutes lets the bulb cool, preventing heat damage or fire risk under the cover."},
+{sec:'Microscope Maintenance & Operation', q:"The condenser focus knob is used to:", opts:["Magnify","Raise or lower the condenser","Rotate objectives","Move the slide"], ans:1, ex:"The condenser focus knob adjusts the vertical position of the condenser to optimize light focus."},
+{sec:'Microscope Maintenance & Operation', q:"The mechanical stage (or clips) is used to:", opts:["Focus","Hold the slide firmly","Change light","Magnify"], ans:1, ex:"The mechanical stage and its clips secure the slide firmly in place during viewing."},
+{sec:'Microscope Maintenance & Operation', q:"The Turret is another name for the:", opts:["Eyepiece","Revolving nosepiece","Stage","Base"], ans:1, ex:"Turret is another common name for the revolving nosepiece that holds the objective lenses."},
+{sec:'Microscope Maintenance & Operation', q:"Primary magnification is provided by the:", opts:["Eyepiece","Objective lens","Condenser","Mirror"], ans:1, ex:"The objective lens provides the primary (first-stage) magnification of the specimen."},
+{sec:'Microscope Maintenance & Operation', q:"The illuminator in modern microscopes is the:", opts:["Focusing knob","Light source","Support arm","Stage hole"], ans:1, ex:"The illuminator is the built-in light source (often an LED or bulb) that replaces a mirror in modern scopes."},
+{sec:'Microscope Maintenance & Operation', q:"The coarse adjustment should NOT be used with:", opts:["Scanning power","Low power","High power objectives","The condenser"], ans:2, ex:"Using coarse adjustment at high power risks driving the objective into the slide, so it's avoided there."},
+{sec:'Microscope Maintenance & Operation', q:"The aperture allows light to:", opts:["Be magnified","Pass through the stage to the specimen","Be reflected away","Change color"], ans:1, ex:"The aperture is the hole that lets light from below the stage pass up through the specimen."},
+{sec:'Microscope Maintenance & Operation', q:"Which part connects the base to the head and is used for carrying?", opts:["Tube","Arm","Stage","Nosepiece"], ans:1, ex:"The arm connects base and head, and doubles as the safe carrying handle for the microscope."},
+
+// STERILIZATION TECHNIQUES
+{sec:'Sterilization Techniques', q:"Eliminating all microorganisms including spores is:", opts:["Cleaning","Sterilization","Disinfection","Pasteurization"], ans:1, ex:"Sterilization is the complete destruction of all forms of microbial life, including resistant spores."},
+{sec:'Sterilization Techniques', q:"The best method for sterilizing heat-sensitive liquids is:", opts:["Autoclaving","Dry heat","Filtration","Incineration"], ans:2, ex:"Filtration physically removes microorganisms without applying heat, protecting heat-sensitive liquids."},
+{sec:'Sterilization Techniques', q:"Autoclaving utilizes:", opts:["Hot air","Pressurized steam","Chemicals","UV rays"], ans:1, ex:"An autoclave sterilizes using pressurized, saturated steam, which transfers heat very effectively."},
+{sec:'Sterilization Techniques', q:"Standard autoclave conditions are:", opts:["100°C, 10 min","121°C, 15 psi, 15–20 min","180°C, 1 hr","80°C, 30 min"], ans:1, ex:"The standard autoclave cycle runs at 121°C and 15 psi for roughly 15 to 20 minutes."},
+{sec:'Sterilization Techniques', q:"A hot air oven uses:", opts:["Moist heat","Dry heat","Pressure","Steam"], ans:1, ex:"A hot air oven sterilizes using dry heat rather than moisture or pressure."},
+{sec:'Sterilization Techniques', q:"Oils and powders should be sterilized via:", opts:["Autoclave","Hot air oven","Filtration","Incineration"], ans:1, ex:"Moist heat from an autoclave cannot penetrate oils or powders well, so dry heat in a hot air oven is used instead."},
+{sec:'Sterilization Techniques', q:"The safety valve in an autoclave prevents:", opts:["Leaks","Explosions from excess pressure","Contamination","Overheating"], ans:1, ex:"The safety valve releases excess pressure to prevent a dangerous buildup that could cause an explosion."},
+{sec:'Sterilization Techniques', q:"Incineration is best for disposing of:", opts:["Glassware","Contaminated dressings/carcasses","Antibiotics","Metal tools"], ans:1, ex:"Incineration burns waste at very high temperatures, ideal for contaminated dressings and animal carcasses."},
+{sec:'Sterilization Techniques', q:"A 0.22 µm membrane filter effectively removes:", opts:["Viruses","Bacteria","Dust","Proteins"], ans:1, ex:"A 0.22 µm pore-size membrane filter is fine enough to trap and remove bacteria from a liquid."},
+{sec:'Sterilization Techniques', q:"Ethylene oxide gas is a form of:", opts:["Physical sterilization","Chemical sterilization","Heat sterilization","Filtration"], ans:1, ex:"Ethylene oxide is a gaseous chemical agent, making it a form of chemical sterilization."},
+{sec:'Sterilization Techniques', q:"Which material is NOT suitable for an autoclave?", opts:["Glassware","Media","Oils","Surgical tools"], ans:2, ex:"Oils are not suitable for autoclaving since moist steam cannot effectively penetrate and sterilize them."},
+{sec:'Sterilization Techniques', q:"The autoclave chamber is used to:", opts:["Produce steam","Hold materials for sterilization","Measure time","Release air"], ans:1, ex:"The chamber is the enclosed space where items are placed to be exposed to pressurized steam."},
+{sec:'Sterilization Techniques', q:"The temperature gauge (thermostat) indicates:", opts:["Pressure","Time","Heat level in the chamber","Water level"], ans:2, ex:"The temperature gauge or thermostat shows the current heat level inside the sterilization chamber."},
+{sec:'Sterilization Techniques', q:"Dry heat sterilization typically occurs at:", opts:["121°C","160–180°C","100°C","250°C"], ans:1, ex:"Dry heat sterilization requires higher temperatures than moist heat, typically 160–180°C."},
+{sec:'Sterilization Techniques', q:"The exhaust valve's function is to:", opts:["Generate heat","Release steam safely","Block air","Filter water"], ans:1, ex:"The exhaust valve safely vents built-up steam from the chamber at the end of a cycle."},
+{sec:'Sterilization Techniques', q:"Autoclaving is the preferred hospital method for:", opts:["Burning waste","Surgical instruments","Powder sterilization","Antibiotics"], ans:1, ex:"Autoclaving is the standard method hospitals use to sterilize reusable surgical instruments."},
+{sec:'Sterilization Techniques', q:"Ethylene oxide gas is commonly used for:", opts:["Glassware","Plastics and rubber","Metals","Media"], ans:1, ex:"Ethylene oxide gas sterilizes heat-sensitive items like plastics and rubber that can't withstand autoclaving."},
+{sec:'Sterilization Techniques', q:"Heat sterilization is divided into:", opts:["Fast and slow","Moist and dry heat","Chemical and physical","Gas and liquid"], ans:1, ex:"Heat-based sterilization methods are broadly grouped into moist heat (steam) and dry heat."},
+{sec:'Sterilization Techniques', q:"Dry heat sterilization duration is usually:", opts:["15 min","1–2 hours","5 hours","10 min"], ans:1, ex:"Because dry heat penetrates more slowly than steam, cycles typically run for 1 to 2 hours."},
+{sec:'Sterilization Techniques', q:"Glassware and metal instruments are suitable for:", opts:["Filtration","Hot air oven","Incineration","Moist heat only"], ans:1, ex:"Glassware and metal tools can withstand the high, dry temperatures used in a hot air oven."},
+{sec:'Sterilization Techniques', q:"The door (lid) of an autoclave prevents:", opts:["Overheating","Steam and pressure leaks","Contamination","Water drainage"], ans:1, ex:"The sealed door keeps steam and pressure contained inside the chamber during the sterilization cycle."},
+{sec:'Sterilization Techniques', q:"The pressure gauge displays:", opts:["Temperature","Time","Pressure inside the chamber","Water level"], ans:2, ex:"The pressure gauge shows the current pressure being maintained inside the autoclave chamber."},
+{sec:'Sterilization Techniques', q:"The steam generator (boiler) is responsible for:", opts:["Cooling","Producing steam","Filtering air","Drying tools"], ans:1, ex:"The steam generator, or boiler, heats water to produce the steam used for sterilization."},
+{sec:'Sterilization Techniques', q:"The air filter (air vent) removes:", opts:["Bacteria","Air before steam enters","Excess water","Dust"], ans:1, ex:"The air vent removes trapped air from the chamber before steam enters, ensuring even sterilization."},
+{sec:'Sterilization Techniques', q:"The drain pipe (drain valve) removes:", opts:["Steam","Used water and condensate","Air","Chemicals"], ans:1, ex:"The drain pipe carries away used water and condensed steam that collects during the cycle."},
+{sec:'Sterilization Techniques', q:"In an electric autoclave, heat is provided by:", opts:["Mirror","Heating element (electric heater)", "Pressure","Steam"], ans:1, ex:"An electric autoclave generates the necessary heat using a built-in electric heating element."},
+{sec:'Sterilization Techniques', q:"The control panel is used to set:", opts:["Light intensity","Time, temperature, and pressure","Magnification","Focus"], ans:1, ex:"The control panel lets the operator set and monitor the cycle's time, temperature, and pressure."},
+{sec:'Sterilization Techniques', q:"Chemical sterilization is preferred when:", opts:["Speed is needed","Heat and radiation are unsuitable","Only glassware is used","Cost is low"], ans:1, ex:"Chemical sterilization is chosen for materials that would be damaged by heat or radiation methods."},
+{sec:'Sterilization Techniques', q:"Formaldehyde and glutaraldehyde are:", opts:["Gases","Chemical sterilizing agents","Filtration types","Physical agents"], ans:1, ex:"Formaldehyde and glutaraldehyde are liquid or gaseous chemical agents used for sterilization."},
+{sec:'Sterilization Techniques', q:"Which method destroys waste by high-temperature burning?", opts:["Autoclaving","Incineration","Dry heat","Filtration"], ans:1, ex:"Incineration destroys waste and microorganisms alike by burning at very high temperatures."},
+
+// MENDELIAN GENETICS
+{sec:'Mendelian Genetics', q:"Who is the Father of Genetics?", opts:["Darwin","Gregor Mendel","Pasteur","Hooke"], ans:1, ex:"Gregor Mendel is known as the Father of Genetics for founding the study of heredity through his pea plant experiments."},
+{sec:'Mendelian Genetics', q:"Mendel's experiments were performed on:", opts:["Fruit flies","Pea plants (Pisum sativum)","Mice","Corn"], ans:1, ex:"Mendel conducted his famous heredity experiments using the garden pea plant, Pisum sativum."},
+{sec:'Mendelian Genetics', q:"The Law of Segregation states that:", opts:["Genes are linked","Each gamete carries only one allele","Traits blend","Mutation is rare"], ans:1, ex:"The Law of Segregation states that the two alleles for a trait separate so each gamete gets only one."},
+{sec:'Mendelian Genetics', q:"The Law of Independent Assortment applies when:", opts:["Genes are linked","Genes are on different chromosomes","Traits are recessive","Breeding is fast"], ans:1, ex:"Independent assortment holds for genes located on different chromosomes, which segregate independently of each other."},
+{sec:'Mendelian Genetics', q:"In a cross of TT × tt, the F1 genotype is:", opts:["TT","Tt","tt","Mixed"], ans:1, ex:"Crossing a homozygous dominant (TT) with a homozygous recessive (tt) produces all heterozygous (Tt) F1 offspring."},
+{sec:'Mendelian Genetics', q:"The monohybrid F2 phenotype ratio is:", opts:["1:1","2:1","3:1","9:3:3:1"], ans:2, ex:"In a monohybrid cross, the classic F2 phenotype ratio is 3 dominant to 1 recessive (3:1)."},
+{sec:'Mendelian Genetics', q:"The monohybrid F2 genotype ratio is:", opts:["3:1","2:1","1:2:1","1:1:1"], ans:2, ex:"The F2 genotype ratio in a monohybrid cross is 1 homozygous dominant : 2 heterozygous : 1 homozygous recessive."},
+{sec:'Mendelian Genetics', q:"A recessive trait is only expressed when:", opts:["One dominant allele exists","Both alleles are recessive","Genes assort","Mendel says so"], ans:1, ex:"A recessive trait only appears in the phenotype when an individual is homozygous recessive (has two copies)."},
+{sec:'Mendelian Genetics', q:"Genotype refers to an organism's:", opts:["Physical appearance","Genetic makeup","Environment","Health"], ans:1, ex:"Genotype describes an organism's actual genetic makeup, or the specific alleles it carries."},
+{sec:'Mendelian Genetics', q:"Phenotype refers to an organism's:", opts:["DNA sequence","Observable characteristics","Number of genes","Parentage"], ans:1, ex:"Phenotype is the observable physical or biochemical expression of an organism's genotype."},
+{sec:'Mendelian Genetics', q:"In Mendel's peas, tallness (T) was:", opts:["Recessive","Dominant","Codominant","Lethal"], ans:1, ex:"Tallness (T) was the dominant trait in Mendel's classic pea plant height experiments."},
+{sec:'Mendelian Genetics', q:"Dwarfness (t) in pea plants was:", opts:["Dominant","Recessive","Blended","Neutral"], ans:1, ex:"Dwarfness (t) was the recessive trait, only appearing when both alleles were the dwarf form."},
+{sec:'Mendelian Genetics', q:"The F1 phenotype of TT × tt is:", opts:["50% tall","100% tall","100% dwarf","Mixed"], ans:1, ex:"Since all F1 offspring are Tt and T is dominant, 100% of the F1 generation is phenotypically tall."},
+{sec:'Mendelian Genetics', q:"Independent assortment increases:", opts:["Mutation","Genetic variation","Uniformity","Cloning"], ans:1, ex:"Because different gene pairs sort independently into gametes, independent assortment increases genetic variation."},
+{sec:'Mendelian Genetics', q:"The unit of inheritance is the:", opts:["Chromosome","Gene","Protein","Cell"], ans:1, ex:"The gene is the basic unit of heredity, passed from parents to offspring."},
+{sec:'Mendelian Genetics', q:"An allele is defined as:", opts:["A protein","A variant form of a gene","A cell type","A chromosome arm"], ans:1, ex:"An allele is one of the alternative versions (variant forms) that a given gene can have."},
+{sec:'Mendelian Genetics', q:"The Punnett square is used to:", opts:["Count cells","Predict inheritance patterns","Sterilize tools","Focus light"], ans:1, ex:"A Punnett square is a diagram used to predict the possible genotypes and ratios of offspring from a cross."},
+{sec:'Mendelian Genetics', q:"Alleles segregate during:", opts:["Fertilization","Mitosis","Gamete formation (meiosis)","Growth"], ans:2, ex:"Allele pairs separate during meiosis, the process by which gametes are formed."},
+{sec:'Mendelian Genetics', q:"How many alleles does an individual have for each trait?", opts:["One","Two","Four","Variable"], ans:1, ex:"A diploid individual has two alleles for each trait, one inherited from each parent."},
+{sec:'Mendelian Genetics', q:"After fertilization, the offspring has:", opts:["One allele","Two alleles (one from each parent)","No alleles","Three alleles"], ans:1, ex:"Fertilization combines one allele from each parent's gamete, giving the offspring two alleles per gene."},
+{sec:'Mendelian Genetics', q:"A dominant trait is one that:", opts:["Is always better","Masks the expression of another trait","Is always rare","Changes every year"], ans:1, ex:"A dominant allele masks (hides) the expression of the recessive allele when both are present."},
+{sec:'Mendelian Genetics', q:"Which genotype results in a dwarf phenotype?", opts:["TT","Tt","tt","Both Tt and tt"], ans:2, ex:"Only the homozygous recessive genotype (tt) produces the dwarf phenotype in Mendel's pea plants."},
+{sec:'Mendelian Genetics', q:"How many heterozygous offspring are in the F2 of Tt × Tt?", opts:["One","Two","Three","Zero"], ans:1, ex:"Out of the four possible F2 genotype combinations (TT, Tt, Tt, tt), two are heterozygous (Tt)."},
+{sec:'Mendelian Genetics', q:"How many homozygous offspring are in the F2 of Tt × Tt?", opts:["One","Two (one TT, one tt)","Three","Four"], ans:1, ex:"Of the four F2 combinations, two are homozygous: one TT and one tt."},
+{sec:'Mendelian Genetics', q:"Mendel's laws are the foundation of:", opts:["Chemistry","Genetics","Physics","Anatomy"], ans:1, ex:"Mendel's Laws of Segregation and Independent Assortment form the foundation of classical genetics."},
+{sec:'Mendelian Genetics', q:"T represents ____ while t represents ____ in peas:", opts:["Dwarf, Tall","Tall, Dwarf","Green, Yellow","Round, Wrinkled"], ans:1, ex:"In Mendel's notation, capital T represents the dominant tall trait, and lowercase t represents recessive dwarfness."},
+{sec:'Mendelian Genetics', q:"Which principle explains allele separation during meiosis?", opts:["Law of Dominance","Law of Segregation","Law of Assortment","Law of Linkage"], ans:1, ex:"The Law of Segregation explains how paired alleles separate from one another during meiosis."},
+{sec:'Mendelian Genetics', q:"Suitable for sterilizing enzymes?", opts:["Autoclave","Filtration","Incineration","Hot air oven"], ans:1, ex:"Enzymes are heat-sensitive proteins, so filtration is used to sterilize them without denaturing them."},
+{sec:'Mendelian Genetics', q:"Sterilization unsuitable for plastic syringes?", opts:["Chemical","Autoclaving","Filtration","Gas"], ans:1, ex:"Autoclaving's high heat can melt or warp many plastics, making it unsuitable for plastic syringes."},
+{sec:'Mendelian Genetics', q:"The scientific name for the pea plant used by Mendel?", opts:["Zea mays","Pisum sativum","Drosophila","Oryza sativa"], ans:1, ex:"Pisum sativum is the scientific (binomial) name of the garden pea plant Mendel used in his experiments."}
+];
+
+const ALL_TOPICS = [
+ 'Microscopy Fundamentals',
+ 'Microscope Maintenance & Operation',
+ 'Sterilization Techniques',
+ 'Mendelian Genetics'
+];
+
+/* ============================================================
+ STORAGE KEYS (persistent artifact storage, not localStorage)
+ ============================================================ */
+const MUTE_KEY = 'bio108-muted';
+const BEST_SCORE_KEY = 'bio108-best-score';
+const STORAGE_KEY = 'bio108-quiz-state';
+
+/* ============================================================
+ HELPERS
+ ============================================================ */
+function shuffle(arr){
+ const a=[...arr];
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+ return a;
+}
+
+/* MATH RENDERING (kept for consistency, harmless if unused by biology text) */
+const SUPERSCRIPT_MAP = {
+ '⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9',
+ '⁺':'+','⁻':'-','⁼':'=','⁽':'(','⁾':')','ⁿ':'n','ⁱ':'i','ᵛ':'v'
+};
+const SUP_RUN_RE = new RegExp('[' + Object.keys(SUPERSCRIPT_MAP).join('') + ']+', 'g');
+
+function renderMath(str) {
+ if (!str) return str;
+ let out = String(str);
+ out = out.replace(/\^\(([^()]*)\)/g, (_, inner) => `<sup>${inner}</sup>`);
+ out = out.replace(/\^([A-Za-z0-9]+)/g, (_, inner) => `<sup>${inner}</sup>`);
+ out = out.replace(SUP_RUN_RE, (m) => {
+  const converted = m.split('').map(ch => SUPERSCRIPT_MAP[ch] || ch).join('');
+  return `<sup>${converted}</sup>`;
+ });
+ return out;
+}
+
+function sectionIcon(sec){
+ return {
+  'Microscopy Fundamentals':'fa-microscope',
+  'Microscope Maintenance & Operation':'fa-screwdriver-wrench',
+  'Sterilization Techniques':'fa-fire-burner',
+  'Mendelian Genetics':'fa-dna'
+ }[sec] || 'fa-flask';
+}
+function randomizeOptions(item){
+ const pairs = item.opts.map((o,idx)=>({o, correct: idx===item.ans}));
+ const shuffled = shuffle(pairs);
+ return {...item, opts: shuffled.map(p=>p.o), ans: shuffled.findIndex(p=>p.correct)};
+}
+
+/* Safely read a value from persistent storage. Returns null if the key
+   doesn't exist or storage is unavailable, instead of throwing. */
+async function storageGet(key) {
+ try {
+  const result = await window.storage.get(key, false);
+  return result ? result.value : null;
+ } catch (e) {
+  return null;
+ }
+}
+async function storageSet(key, value) {
+ try {
+  await window.storage.set(key, value, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+async function storageDelete(key) {
+ try {
+  await window.storage.delete(key, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+
+/* SOUND ENGINE */
+const SoundEngine = (function() {
+ let ctx = null;
+ let muted = false;
+
+ async function init() {
+  const v = await storageGet(MUTE_KEY);
+  muted = v === '1';
+  return muted;
+ }
+
+ function getCtx() {
+ if (!ctx) {
+ const AC = window.AudioContext || window.webkitAudioContext;
+ if (!AC) return null;
+ ctx = new AC();
+ }
+ if (ctx.state === 'suspended') ctx.resume();
+ return ctx;
+ }
+
+ function isMuted() { return muted; }
+ async function setMuted(v) {
+ muted = v;
+ await storageSet(MUTE_KEY, v ? '1' : '0');
+ }
+
+ function playCorrect() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc1 = c.createOscillator();
+ const osc2 = c.createOscillator();
+ const gain = c.createGain();
+
+ osc1.type = 'sine'; osc1.frequency.setValueAtTime(880, t);
+ osc2.type = 'sine'; osc2.frequency.setValueAtTime(1760, t);
+
+ gain.gain.setValueAtTime(0.2, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+
+ osc1.connect(gain); osc2.connect(gain);
+ gain.connect(c.destination);
+
+ osc1.start(t); osc2.start(t);
+ osc1.stop(t + 0.6); osc2.stop(t + 0.6);
+ }
+
+ function playWrong() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc = c.createOscillator();
+ const gain = c.createGain();
+
+ osc.type = 'sawtooth';
+ osc.frequency.setValueAtTime(160, t);
+ osc.frequency.exponentialRampToValueAtTime(60, t + 0.35);
+
+ gain.gain.setValueAtTime(0.25, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+
+ osc.connect(gain);
+ gain.connect(c.destination);
+
+ osc.start(t);
+ osc.stop(t + 0.35);
+ }
+
+ return { init, isMuted, setMuted, playCorrect, playWrong };
+})();
+
+/* APP STATE */
+let quizMode = 'auto'; // 'auto' or 'custom'
+let activeQuestions = [];
+let userAnswers = []; // array of selected option indices
+let currentQ = 0;
+let timeRemaining = 0;
+let timerInterval = null;
+let isPaused = false;
+let leaveCount = 0;
+
+// DOM Elements
+const homeScreen = document.getElementById('homeScreen');
+const configScreen = document.getElementById('configScreen');
+const loadingScreen = document.getElementById('loadingScreen');
+const quizScreen = document.getElementById('quizScreen');
+const resultScreen = document.getElementById('resultScreen');
+
+const pickAuto = document.getElementById('pickAuto');
+const pickCustom = document.getElementById('pickCustom');
+const backToHomeFromConfig = document.getElementById('backToHomeFromConfig');
+const startCustomBtn = document.getElementById('startCustomBtn');
+
+const topicsWrap = document.getElementById('topicsWrap');
+const timeSlider = document.getElementById('timeSlider');
+const timeValue = document.getElementById('timeValue');
+const countSlider = document.getElementById('countSlider');
+const countValue = document.getElementById('countValue');
+
+const timerBox = document.getElementById('timer');
+const timerText = document.getElementById('timerText');
+const soundToggle = document.getElementById('soundToggle');
+
+const progressFill = document.getElementById('progressFill');
+const dotsRow = document.getElementById('dotsRow');
+const sectionTag = document.getElementById('sectionTag');
+const qCounter = document.getElementById('qCounter');
+const qText = document.getElementById('qText');
+const optsWrap = document.getElementById('optsWrap');
+const inlineExplain = document.getElementById('inlineExplain');
+
+const backBtn = document.getElementById('backBtn');
+const nextBtn = document.getElementById('nextBtn');
+const finishBtn = document.getElementById('finishBtn');
+
+const quizTools = document.getElementById('quizTools');
+const pauseBtn = document.getElementById('pauseBtn');
+const pauseOverlay = document.getElementById('pauseOverlay');
+const resumeFromPauseBtn = document.getElementById('resumeFromPauseBtn');
+
+const resumeModal = document.getElementById('resumeModal');
+const resumeInfo = document.getElementById('resumeInfo');
+const resumeYes = document.getElementById('resumeYes');
+const resumeNo = document.getElementById('resumeNo');
+
+const leaveWarningModal = document.getElementById('leaveWarningModal');
+const leaveWarnText = document.getElementById('leaveWarnText');
+const leaveWarnOk = document.getElementById('leaveWarnOk');
+
+const statsBar = document.getElementById('statsBar');
+
+/* INIT */
+window.addEventListener('load', async () => {
+ await SoundEngine.init();
+ updateSoundToggleUI();
+ setupConfigTopics();
+ await checkSavedState();
+ await updateHomeStats();
+});
+
+function updateSoundToggleUI() {
+ const muted = SoundEngine.isMuted();
+ soundToggle.classList.toggle('muted', muted);
+ soundToggle.setAttribute('aria-pressed', muted ? 'true' : 'false');
+ soundToggle.innerHTML = muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+}
+soundToggle.addEventListener('click', async () => {
+ await SoundEngine.setMuted(!SoundEngine.isMuted());
+ updateSoundToggleUI();
+});
+
+async function updateHomeStats() {
+ const best = await storageGet(BEST_SCORE_KEY);
+ if (best) {
+  statsBar.classList.remove('hidden');
+  statsBar.innerHTML = `<div class="stat-chip"><i class="fa-solid fa-trophy"></i> Best Score: <strong>${best}%</strong></div>`;
+ } else {
+  statsBar.classList.add('hidden');
+  statsBar.innerHTML = '';
+ }
+}
+
+/* CONFIG TOPICS BUILD */
+function setupConfigTopics() {
+ topicsWrap.innerHTML = '';
+ ALL_TOPICS.forEach((t) => {
+  const label = document.createElement('label');
+  label.className = 'topic-chip';
+  label.innerHTML = `<input type="checkbox" value="${t}" checked> <span><i class="fa-solid ${sectionIcon(t)}"></i> ${t}</span>`;
+  topicsWrap.appendChild(label);
+ });
+}
+
+timeSlider.addEventListener('input', () => { timeValue.textContent = timeSlider.value; });
+countSlider.addEventListener('input', () => { countValue.textContent = countSlider.value; });
+
+/* MODE SELECTION */
+pickAuto.addEventListener('click', () => {
+ startQuiz('auto', ALL_TOPICS, 60, QUESTIONS.length);
+});
+pickCustom.addEventListener('click', () => {
+ homeScreen.classList.add('hidden');
+ configScreen.classList.remove('hidden');
+});
+backToHomeFromConfig.addEventListener('click', () => {
+ configScreen.classList.add('hidden');
+ homeScreen.classList.remove('hidden');
+});
+
+startCustomBtn.addEventListener('click', () => {
+ const selectedTopics = Array.from(topicsWrap.querySelectorAll('input:checked')).map(i => i.value);
+ if (selectedTopics.length === 0) {
+  alert('Please select at least one topic.');
+  return;
+ }
+ const mins = parseInt(timeSlider.value, 10);
+ const count = parseInt(countSlider.value, 10);
+ configScreen.classList.add('hidden');
+ startQuiz('custom', selectedTopics, mins, count);
+});
+
+/* START QUIZ */
+function startQuiz(mode, topics, minutes, count) {
+ quizMode = mode;
+ showScreen(loadingScreen);
+ setTimeout(() => {
+  let filtered = QUESTIONS.filter(q => topics.includes(q.sec));
+  if (filtered.length === 0) filtered = [...QUESTIONS];
+  filtered = shuffle(filtered).map(randomizeOptions);
+  if (count < filtered.length) {
+   filtered = filtered.slice(0, count);
+  }
+  activeQuestions = filtered;
+  userAnswers = new Array(activeQuestions.length).fill(null);
+  currentQ = 0;
+  timeRemaining = minutes * 60;
+  isPaused = false;
+  leaveCount = 0;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') {
+   pauseBtn.classList.remove('hidden');
+  } else {
+   pauseBtn.classList.add('hidden');
+  }
+  timerBox.classList.remove('hidden');
+
+  startTimer();
+  renderQuestion();
+  saveState();
+ }, 600);
+}
+
+function showScreen(sc) {
+ [homeScreen, configScreen, loadingScreen, quizScreen, resultScreen].forEach(s => s.classList.add('hidden'));
+ sc.classList.remove('hidden');
+ if (sc === quizScreen) {
+  closeMobileNav();
+  hamburgerBtn.classList.add('hidden');
+ } else {
+  hamburgerBtn.classList.remove('hidden');
+ }
+}
+
+/* TIMER */
+function startTimer() {
+ clearInterval(timerInterval);
+ updateTimerDisplay();
+ timerInterval = setInterval(() => {
+  if (!isPaused) {
+   timeRemaining--;
+   updateTimerDisplay();
+   if (timeRemaining <= 0) {
+    clearInterval(timerInterval);
+    alert('Time is up! Submitting your answers.');
+    finishQuiz();
+   }
+  }
+ }, 1000);
+}
+
+function updateTimerDisplay() {
+ const m = Math.floor(Math.max(0, timeRemaining) / 60);
+ const s = Math.max(0, timeRemaining) % 60;
+ timerText.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+ if (timeRemaining < 300) {
+  timerBox.classList.add('warn');
+ } else {
+  timerBox.classList.remove('warn');
+ }
+}
+
+/* PAUSE ENGINE */
+pauseBtn.addEventListener('click', togglePause);
+resumeFromPauseBtn.addEventListener('click', togglePause);
+
+function togglePause() {
+ if (quizMode !== 'auto') return;
+ isPaused = !isPaused;
+ if (isPaused) {
+  pauseOverlay.classList.remove('hidden');
+ } else {
+  pauseOverlay.classList.add('hidden');
+ }
+}
+
+/* RENDER QUESTION */
+function renderQuestion() {
+ const q = activeQuestions[currentQ];
+ sectionTag.innerHTML = `<i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec}`;
+ qCounter.textContent = `Question ${currentQ + 1} of ${activeQuestions.length}`;
+ qText.innerHTML = renderMath(q.q);
+
+ optsWrap.innerHTML = '';
+ inlineExplain.className = 'inline-explain';
+ inlineExplain.innerHTML = '';
+
+ const answered = userAnswers[currentQ] !== null;
+
+ q.opts.forEach((optStr, idx) => {
+  const optDiv = document.createElement('div');
+  optDiv.className = 'opt';
+  const letter = String.fromCharCode(65 + idx);
+
+  if (answered) {
+   optDiv.classList.add('locked');
+   if (quizMode === 'auto') {
+    if (idx === q.ans) optDiv.classList.add('correct');
+    if (userAnswers[currentQ] === idx && idx !== q.ans) optDiv.classList.add('wrong');
+   } else {
+    if (userAnswers[currentQ] === idx) optDiv.classList.add('selected');
+   }
+  }
+
+  optDiv.innerHTML = `<div class="opt-letter">${letter}</div><div class="opt-text">${renderMath(optStr)}</div>`;
+  optDiv.addEventListener('click', () => handleSelectOption(idx));
+  optsWrap.appendChild(optDiv);
+ });
+
+ if (answered && quizMode === 'auto') {
+  const isRight = userAnswers[currentQ] === q.ans;
+  inlineExplain.classList.add('show', isRight ? 'right' : 'wrong');
+  inlineExplain.innerHTML = `
+   <div class="ie-label">${isRight ? '<i class="fa-solid fa-circle-check"></i> Correct!' : '<i class="fa-solid fa-circle-xmark"></i> Incorrect'}</div>
+   <div>${renderMath(q.ex)}</div>
+  `;
+ }
+
+ // Navigation buttons state
+ backBtn.disabled = currentQ === 0;
+ if (currentQ === activeQuestions.length - 1) {
+  nextBtn.classList.add('hidden');
+  finishBtn.classList.remove('hidden');
+ } else {
+  nextBtn.classList.remove('hidden');
+  finishBtn.classList.add('hidden');
+ }
+
+ renderProgress();
+}
+
+function renderProgress() {
+ const pct = ((currentQ + 1) / activeQuestions.length) * 100;
+ progressFill.style.width = `${pct}%`;
+
+ dotsRow.innerHTML = '';
+ activeQuestions.forEach((q, idx) => {
+  const dot = document.createElement('div');
+  dot.className = 'dot';
+  if (idx === currentQ) dot.classList.add('current');
+
+  if (userAnswers[idx] !== null) {
+   if (quizMode === 'auto') {
+    if (userAnswers[idx] === q.ans) dot.classList.add('correct');
+    else dot.classList.add('wrong');
+   } else {
+    dot.classList.add('answered');
+   }
+  }
+  dot.addEventListener('click', () => {
+   currentQ = idx;
+   renderQuestion();
+  });
+  dotsRow.appendChild(dot);
+ });
+}
+
+/* OPTION SELECTION */
+function handleSelectOption(idx) {
+ if (userAnswers[currentQ] !== null && quizMode === 'auto') return; // locked in auto mode once picked
+
+ const prevAns = userAnswers[currentQ];
+ userAnswers[currentQ] = idx;
+
+ if (quizMode === 'auto' && prevAns === null) {
+  if (idx === activeQuestions[currentQ].ans) {
+   SoundEngine.playCorrect();
+  } else {
+   SoundEngine.playWrong();
+  }
+ }
+
+ renderQuestion();
+ saveState();
+}
+
+nextBtn.addEventListener('click', () => {
+ if (currentQ < activeQuestions.length - 1) {
+  currentQ++;
+  renderQuestion();
+ }
+});
+backBtn.addEventListener('click', () => {
+ if (currentQ > 0) {
+  currentQ--;
+  renderQuestion();
+ }
+});
+finishBtn.addEventListener('click', () => {
+ const answeredCount = userAnswers.filter(a => a !== null).length;
+ if (quizMode === 'auto' && answeredCount < Math.min(30, activeQuestions.length)) {
+  alert(`Please answer at least ${Math.min(30, activeQuestions.length)} questions before submitting.`);
+  return;
+ }
+ if (confirm('Are you sure you want to submit your quiz?')) {
+  finishQuiz();
+ }
+});
+
+/* KEYBOARD NAVIGATION */
+document.addEventListener('keydown', (e) => {
+ if (quizScreen.classList.contains('hidden')) return;
+ if (e.key === 'ArrowLeft' && currentQ > 0) {
+  currentQ--; renderQuestion();
+ } else if (e.key === 'ArrowRight' && currentQ < activeQuestions.length - 1) {
+  currentQ++; renderQuestion();
+ } else if (['1','2','3','4'].includes(e.key)) {
+  const idx = parseInt(e.key, 10) - 1;
+  if (idx < activeQuestions[currentQ].opts.length) {
+   handleSelectOption(idx);
+  }
+ }
+});
+
+/* FINISH QUIZ */
+function finishQuiz() {
+ clearInterval(timerInterval);
+ clearSavedState();
+ quizTools.classList.add('hidden');
+ timerBox.classList.add('hidden');
+
+ let correctCount = 0;
+ const breakdown = {};
+
+ activeQuestions.forEach((q, i) => {
+  if (!breakdown[q.sec]) breakdown[q.sec] = { correct: 0, total: 0 };
+  breakdown[q.sec].total++;
+
+  if (userAnswers[i] === q.ans) {
+   correctCount++;
+   breakdown[q.sec].correct++;
+  }
+ });
+
+ const total = activeQuestions.length;
+ const pct = Math.round((correctCount / total) * 100);
+
+ document.getElementById('resultScore').textContent = correctCount;
+ document.getElementById('resultOf').textContent = `/ ${total}`;
+ document.getElementById('resultPct').textContent = `${pct}% Overall Score`;
+
+ let msg = '';
+ if (pct >= 80) msg = '<i class="fa-solid fa-award" style="color:#facc15;"></i> Excellent Mastery! Outstanding Performance.';
+ else if (pct >= 60) msg = '<i class="fa-solid fa-thumbs-up" style="color:var(--accent);"></i> Good Job! Keep reviewing difficult topics.';
+ else msg = '<i class="fa-solid fa-book-open" style="color:var(--red);"></i> Keep Practicing! Review the explanations below.';
+ document.getElementById('resultMsg').innerHTML = msg;
+
+ document.getElementById('bestBadge').innerHTML = '';
+ (async () => {
+  const oldBestRaw = await storageGet(BEST_SCORE_KEY);
+  const oldBest = oldBestRaw ? parseInt(oldBestRaw, 10) : 0;
+  if (pct > oldBest) {
+   await storageSet(BEST_SCORE_KEY, String(pct));
+   document.getElementById('bestBadge').innerHTML = `<div class="best-badge"><i class="fa-solid fa-star"></i> New Personal Best!</div>`;
+  }
+ })();
+
+ // Render breakdown grid
+ const breakdownGrid = document.getElementById('breakdownGrid');
+ breakdownGrid.innerHTML = '';
+ Object.keys(breakdown).forEach(sec => {
+  const item = breakdown[sec];
+  const bdCard = document.createElement('div');
+  bdCard.className = 'bd-card';
+  bdCard.innerHTML = `
+   <div class="bd-name"><i class="fa-solid ${sectionIcon(sec)}"></i> ${sec}</div>
+   <div class="bd-score">${item.correct} <span class="bd-total">/ ${item.total}</span></div>
+  `;
+  breakdownGrid.appendChild(bdCard);
+ });
+
+ // Render question review list
+ const reviewList = document.getElementById('reviewList');
+ reviewList.innerHTML = '';
+ activeQuestions.forEach((q, i) => {
+  const uAns = userAnswers[i];
+  const isRight = uAns === q.ans;
+  const revItem = document.createElement('div');
+  revItem.className = `review-item ${isRight ? 'right' : 'miss'}`;
+
+  const uAnsText = uAns !== null ? `${String.fromCharCode(65 + uAns)}) ${renderMath(q.opts[uAns])}` : 'Not Answered';
+  const cAnsText = `${String.fromCharCode(65 + q.ans)}) ${renderMath(q.opts[q.ans])}`;
+
+  revItem.innerHTML = `
+   <div class="ri-section"><i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec} · Q${i + 1}</div>
+   <div class="ri-q"><strong>${renderMath(q.q)}</strong></div>
+   <div class="ri-ans ${isRight ? 'right' : 'wrong'}">
+    <i class="fa-solid ${isRight ? 'fa-check' : 'fa-xmark'}"></i>
+    <span><strong>Your Answer:</strong> ${uAnsText}</span>
+   </div>
+   ${!isRight ? `<div class="ri-ans correct-reveal"><i class="fa-solid fa-bullseye"></i> <span><strong>Correct Answer:</strong> ${cAnsText}</span></div>` : ''}
+   <div class="ri-exp"><strong>Explanation:</strong> ${renderMath(q.ex)}</div>
+  `;
+  reviewList.appendChild(revItem);
+ });
+
+ showScreen(resultScreen);
+ updateHomeStats();
+}
+
+document.getElementById('homeBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('retryBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+/* AUTOSAVE ENGINE (persistent artifact storage) */
+function saveState() {
+ const state = { quizMode, activeQuestions, userAnswers, currentQ, timeRemaining };
+ storageSet(STORAGE_KEY, JSON.stringify(state));
+}
+
+function clearSavedState() {
+ storageDelete(STORAGE_KEY);
+}
+
+async function checkSavedState() {
+ const raw = await storageGet(STORAGE_KEY);
+ if (!raw) return;
+ let data;
+ try {
+  data = JSON.parse(raw);
+ } catch (e) {
+  return;
+ }
+ if (!data || !data.activeQuestions || data.activeQuestions.length === 0) return;
+
+ resumeInfo.textContent = `${data.activeQuestions.length} Questions (${data.quizMode.toUpperCase()} Mode)`;
+ resumeModal.classList.remove('hidden');
+
+ resumeYes.onclick = () => {
+  resumeModal.classList.add('hidden');
+  quizMode = data.quizMode;
+  activeQuestions = data.activeQuestions;
+  userAnswers = data.userAnswers;
+  currentQ = data.currentQ;
+  timeRemaining = data.timeRemaining;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') pauseBtn.classList.remove('hidden'); else pauseBtn.classList.add('hidden');
+  timerBox.classList.remove('hidden');
+  startTimer();
+  renderQuestion();
+ };
+
+ resumeNo.onclick = () => {
+  resumeModal.classList.add('hidden');
+  clearSavedState();
+ };
+}
+
+/* TAB SWITCH GUARDRAIL */
+document.addEventListener('visibilitychange', () => {
+ if (!quizScreen.classList.contains('hidden') && document.hidden) {
+  leaveCount++;
+  if (leaveCount >= 3) {
+   alert('You have left the quiz tab 3 times. The quiz will now reset.');
+   clearSavedState();
+   location.reload();
+  } else {
+   leaveWarnText.textContent = `You switched away from the quiz tab. Warning ${leaveCount} of 3. Leaving 3 times will reset your quiz.`;
+   leaveWarningModal.classList.remove('hidden');
+  }
+ }
+});
+leaveWarnOk.addEventListener('click', () => leaveWarningModal.classList.add('hidden'));
+</script>
+</body>
+</html>
