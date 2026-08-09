@@ -1,604 +1,1469 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<title>DTZ TRIO Exam Compiled Hub</title>
-<meta name="description" content="DTZ TRIO Exam Hub — free, timed past-question practice with worked solutions for 1 courses.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHY102 · Physics Practice Quiz</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-  /* ============================================================
-     DTZ TRIO design tokens
-     ============================================================ */
-  :root{
-    --bg:#07080D;
-    --panel:#0D1017;
-    --panel-2:#10141D;
-    --border:rgba(255,255,255,.08);
-    --border-strong:rgba(255,255,255,.14);
-    --text:#F2F4F8;
-    --text-muted:#9198AC;
-    --text-faint:#6b7386;
-    --blue:#5B8CFF;
-    --violet:#8B6EF6;
-    --gradient:linear-gradient(135deg,#4F7CFF 0%,#8B6EF6 100%);
-    --radius-lg:24px;
-    --radius-md:16px;
-    --font-display:'Playfair Display', serif;
-    --font-mono:'JetBrains Mono', monospace;
-    --font-body:'Inter', sans-serif;
-  }
+:root {
+ --bg:#0a0c12; --surface:#0f1117; --surface2:#141820; --surface3:#1a2030;
+ --border:#1e2640; --border2:#26304e; --ink:#e2e8f6; --ink2:#94a3c0; --ink3:#4a5878;
+ --accent:#4f8ef7; --accent2:#7c6fff; --accent-dim:#0d1630; --accent-glow:rgba(79,142,247,.14);
+ --green:#34d399; --green-dim:#0a1e14; --red:#f87171; --red-dim:#1e0a0a; --purple:#a78bfa;
+ --bar-bg:rgba(10,12,18,.92); --font-scale:1;
+ --r:16px;
+}
+html{font-size:calc(16px * var(--font-scale, 1));}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+sup{font-size:.7em;vertical-align:super;line-height:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Outfit',sans-serif;min-height:100vh;display:flex;flex-direction:column;
+ background-image:radial-gradient(ellipse 900px 600px at 10% 0%, rgba(79,142,247,.06) 0%, transparent 70%),
+ radial-gradient(ellipse 700px 500px at 90% 30%, rgba(124,111,255,.05) 0%, transparent 60%);
+ transition:background-color .2s ease, color .2s ease;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);
+ background:var(--bar-bg);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px;}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.brand-badge{background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;font-weight:800;font-size:.72rem;letter-spacing:2px;
+ padding:6px 14px;border-radius:50px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+.brand-sub{font-size:.7rem;color:var(--ink3);letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+#timer{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:600;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:7px 16px;border-radius:50px;letter-spacing:2px;min-width:96px;text-align:center;
+ display:flex;align-items:center;gap:8px;justify-content:center;}
+#timer.warn{color:var(--red);background:var(--red-dim);border-color:rgba(248,113,113,.3);animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+#soundToggle{width:38px;height:38px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);
+ color:var(--ink2);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;
+ transition:border-color .15s,color .15s,background .15s;flex-shrink:0;}
+#soundToggle:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+#soundToggle.muted{color:var(--ink3);}
+.hamburger{display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;cursor:pointer;padding:0;color:var(--ink);font-size:.95rem;transition:border-color .15s,color .15s;flex-shrink:0;}
+.hamburger:hover{border-color:rgba(79,142,247,.4);color:var(--accent);}
+.hamburger .fa-xmark{display:none;} .hamburger[aria-expanded="true"] .fa-bars{display:none;} .hamburger[aria-expanded="true"] .fa-xmark{display:inline-block;}
+.mobile-nav{position:fixed;inset:0;z-index:99;background:transparent;opacity:0;pointer-events:none;transition:opacity .15s ease;}
+.mobile-nav.open{opacity:1;pointer-events:auto;}
+.mobile-nav-panel{position:absolute;top:70px;right:20px;width:250px;max-width:82vw;max-height:min(70vh,520px);background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:1px;transform:scale(.94) translateY(-8px);transform-origin:top right;opacity:0;transition:transform .16s ease,opacity .16s ease;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow-y:auto;}
+.mobile-nav.open .mobile-nav-panel{transform:scale(1) translateY(0);opacity:1;}
+.mobile-nav-panel a{display:flex;align-items:center;gap:12px;padding:11px 10px;font-size:.9rem;font-weight:600;color:var(--ink);text-decoration:none;border-radius:8px;}
+.mobile-nav-panel a:hover{background:var(--accent-glow);}
+.mobile-nav-panel a i{width:18px;text-align:center;color:var(--accent);font-size:.85rem;}
+.mobile-nav-panel a.active{color:var(--accent);background:var(--accent-dim);}
+.mobile-nav-panel .nav-group-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);padding:12px 10px 4px;}
+.mobile-nav-panel .nav-group-label:first-child{padding-top:6px;}
+main{flex:1;display:flex;justify-content:center;padding:0 16px 100px;}
+#homeScreen,#configScreen,#quizScreen,#resultScreen,#loadingScreen{width:100%;max-width:720px;}
+.hidden{display:none !important;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:32px 28px;margin-bottom:20px;}
 
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  html,body{
-    max-width:100%;
-    overflow-x:hidden;
-  }
-  body{
-    margin:0;
-    width:100%;
-    background:
-      radial-gradient(900px 460px at 50% -12%, rgba(79,124,255,.10), transparent 60%),
-      var(--bg);
-    color:var(--text);
-    font-family:var(--font-body);
-    font-size:15px;
-    -webkit-font-smoothing:antialiased;
-  }
-  a{color:inherit;}
-  img,svg{max-width:100%;height:auto;}
-  ::selection{background:var(--blue);color:#fff;}
-  :focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px;}
+a { text-decoration: none; }
+#statsBar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;}
+.stat-chip{font-size:.78rem;color:var(--ink2);background:var(--surface2);border:1px solid var(--border);padding:8px 16px;
+ border-radius:50px;display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;}
+.stat-chip i{color:var(--accent);}
+.stat-chip strong{color:var(--ink);}
 
-  /* ---------- brand bar ---------- */
-  .brand-bar{
-    display:flex;align-items:center;justify-content:space-between;
-    gap:12px;
-    padding:14px clamp(16px,4vw,56px);
-    position:sticky;top:0;z-index:50;
-    background:rgba(7,8,13,.78);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--border);
-  }
+/* HOME */
+.hero-wrap{padding:48px 0 8px;text-align:center;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
+ color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:500;margin-bottom:22px;background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.22);padding:7px 16px 7px 13px;border-radius:50px;}
+.hero-title{font-family:'Fraunces',serif;font-size:2.3rem;line-height:1.16;margin-bottom:16px;font-weight:600;letter-spacing:-.5px;}
+.hero-title span{color:var(--accent);font-style:italic;}
+.hero-desc{color:var(--ink2);font-size:.96rem;line-height:1.75;max-width:480px;margin:0 auto 34px;}
 
-  .brand{
-    display:flex;align-items:center;gap:10px;
-    text-decoration:none;min-width:0;flex:none;
-  }
-  .brand-mark{
-    width:34px;height:34px;border-radius:10px;flex:none;
-    background:rgba(91,140,255,.1);
-    border:1px solid rgba(91,140,255,.35);
-    color:var(--blue);
-    display:flex;align-items:center;justify-content:center;
-    font-size:.85rem;
-  }
-  .brand-word{
-    font-family:var(--font-mono);font-weight:700;font-size:.86rem;
-    letter-spacing:.08em;text-transform:uppercase;color:var(--text);
-    white-space:nowrap;
-  }
-  .brand-word span{color:var(--blue);}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:30px;}
+.mode-card{background:var(--surface2);border:1px solid var(--border2);border-radius:18px;padding:26px 22px;cursor:pointer;
+ transition:border-color .15s,transform .15s,background .15s;text-align:left;}
+.mode-card:hover{border-color:rgba(79,142,247,.4);transform:translateY(-3px);background:var(--surface3);}
+.mode-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;
+ display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:16px;}
+.mode-name{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;margin-bottom:8px;}
+.mode-desc{font-size:.85rem;color:var(--ink2);line-height:1.6;margin-bottom:14px;}
+.mode-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.mode-tag{font-size:.66rem;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ padding:3px 9px;border-radius:20px;font-family:'JetBrains Mono',monospace;}
 
-  .sub{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);white-space:nowrap;}
-  .course-tag{
-    display:flex;align-items:center;gap:10px;
-    font-family:var(--font-mono);font-weight:500;font-size:.78rem;
-    letter-spacing:.08em;text-transform:uppercase;
-    color:var(--text-muted);line-height:1.5;
-  }
-  .course-tag i{color:var(--blue);font-size:.85rem;flex:none;}
+.section-heading{display:flex;align-items:center;gap:12px;margin:36px 0 18px;}
+.section-heading-icon{width:34px;height:34px;border-radius:10px;background:var(--accent-dim);border:1px solid rgba(79,142,247,.22);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.85rem;flex-shrink:0;}
+.section-heading-text{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;}
+.rules-list{display:grid;gap:8px;}
+.rule-item{display:flex;gap:14px;align-items:flex-start;font-size:.86rem;color:var(--ink2);line-height:1.55;padding:14px 16px;
+ background:var(--surface2);border:1px solid var(--border);border-radius:10px;}
+.rule-icon{width:30px;height:30px;border-radius:8px;flex-shrink:0;background:var(--accent-dim);border:1px solid rgba(79,142,247,.2);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.78rem;margin-top:1px;}
+.rule-text strong{color:var(--ink);}
 
-  /* ---------- layout ---------- */
-  main{display:flex;justify-content:center;padding:56px 18px 90px;width:100%;}
-  .page-wrap{width:100%;max-width:880px;display:flex;flex-direction:column;gap:64px;min-width:0;}
+/* CONFIG SCREEN */
+.config-field{margin-bottom:22px;}
+.config-label{font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.config-label i{color:var(--accent);}
+.config-input-row{display:flex;align-items:center;gap:14px;}
+.config-slider{flex:1;-webkit-appearance:none;height:6px;border-radius:6px;background:var(--border2);outline:none;}
+.config-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;box-shadow:0 2px 8px rgba(79,142,247,.4);}
+.config-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;border:none;
+ background:linear-gradient(135deg,#4f8ef7,#7c6fff);cursor:pointer;}
+.config-value{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(79,142,247,.25);padding:6px 14px;border-radius:10px;min-width:74px;text-align:center;font-size:.9rem;}
+.config-hint{font-size:.74rem;color:var(--ink3);margin-top:8px;}
+.topics-grid{display:flex;flex-wrap:wrap;gap:10px;}
+.topic-chip{display:flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--border2);
+ padding:10px 16px;border-radius:12px;cursor:pointer;font-size:.85rem;transition:border-color .15s,background .15s;}
+.topic-chip:hover{border-color:rgba(79,142,247,.4);}
+.topic-chip input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer;}
 
-  /* ---------- hero ---------- */
-  .hero{text-align:center;display:flex;flex-direction:column;align-items:center;}
-  .page-eyebrow{
-    display:inline-flex;align-items:center;gap:8px;
-    font-family:var(--font-mono);font-weight:500;font-size:.7rem;
-    letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);
-    margin-bottom:18px;
-  }
-  .page-eyebrow i{color:var(--blue);font-size:.78rem;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#4f8ef7,#7c6fff);
+ color:#fff;border:none;padding:14px 28px;border-radius:50px;font-weight:700;font-size:.95rem;cursor:pointer;
+ font-family:'Outfit',sans-serif;transition:transform .15s,box-shadow .15s,opacity .2s;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(79,142,247,.3);}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--border2);padding:12px 22px;border-radius:50px;
+ font-weight:600;font-size:.9rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:border-color .15s,background .15s;
+ display:inline-flex;align-items:center;gap:8px;}
+.btn-ghost:hover{background:var(--accent-glow);border-color:rgba(79,142,247,.35);}
+.btn-ghost:disabled{opacity:.35;cursor:not-allowed;}
 
-  .quiz-pill{
-    display:inline-flex;align-items:center;gap:9px;
-    font-family:var(--font-mono);font-weight:600;font-size:.72rem;
-    letter-spacing:.1em;text-transform:uppercase;color:var(--blue);
-    background:rgba(91,140,255,.08);
-    border:1px solid rgba(91,140,255,.35);
-    padding:10px 20px;border-radius:999px;margin-bottom:28px;
-    text-align:center;
-  }
+/* LOADING SCREEN */
+#loadingScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 0;text-align:center;}
+.loader-ring{width:56px;height:56px;border-radius:50%;border:4px solid var(--border2);border-top-color:var(--accent);
+ animation:spin .8s linear infinite;margin-bottom:24px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader-text{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--ink2);}
+.loader-sub{font-size:.78rem;color:var(--ink3);margin-top:8px;font-family:'JetBrains Mono',monospace;}
 
-  .page-title{
-    font-family:var(--font-display);font-weight:700;
-    font-size:clamp(1.7rem,6.2vw,2.6rem);line-height:1.18;
-    margin:0 0 20px;color:var(--text);max-width:18ch;
-    letter-spacing:-.01em;
-    word-break:break-word;
-  }
-  .page-title em{
-    display:block;font-style:italic;font-weight:600;color:var(--blue);
-    background:var(--gradient);-webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;
-  }
-  .page-lede{
-    font-size:.96rem;line-height:1.7;color:var(--text-muted);
-    max-width:50ch;margin:0 0 36px;
-  }
+/* QUIZ */
+#progressWrap{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;padding-top:24px;}
+.progress-bar-track{height:4px;background:var(--border);border-radius:4px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .3s;}
+.dots-group{display:flex;gap:5px;flex-wrap:wrap;}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .15s,transform .1s;}
+.dot:hover{transform:scale(1.35);}
+.dot.answered{background:rgba(79,142,247,.4);border:1px solid var(--accent);}
+.dot.current{background:var(--accent);box-shadow:0 0 0 3px rgba(79,142,247,.25);}
+.dot.correct{background:var(--green);}
+.dot.wrong{background:var(--red);}
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.q-section-tag{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;
+ font-weight:600;background:var(--accent-dim);padding:4px 10px;border-radius:20px;border:1px solid rgba(79,142,247,.2);}
+.q-counter{font-size:.78rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;}
+.q-text{font-size:1.1rem;line-height:1.65;margin:0 0 26px;font-family:'Fraunces',serif;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.opt{display:flex;align-items:flex-start;gap:14px;padding:15px 18px;border-radius:12px;border:1px solid var(--border2);
+ margin-bottom:10px;background:var(--surface2);cursor:pointer;transition:border-color .15s,background .15s,transform .1s;}
+.opt:hover{border-color:rgba(79,142,247,.35);background:var(--surface3);}
+.opt.locked{cursor:default;}
+.opt.selected{border-color:var(--accent);background:var(--accent-dim);}
+.opt.correct{border-color:var(--green);background:var(--green-dim);}
+.opt.wrong{border-color:var(--red);background:var(--red-dim);}
+.opt-letter{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;
+ justify-content:center;font-size:.75rem;font-weight:700;color:var(--ink3);flex-shrink:0;font-family:'JetBrains Mono',monospace;
+ transition:all .15s;margin-top:1px;}
+.opt.selected .opt-letter{background:var(--accent);color:#fff;border-color:var(--accent);}
+.opt.correct .opt-letter{background:var(--green);color:#fff;border-color:var(--green);}
+.opt.wrong .opt-letter{background:var(--red);color:#fff;border-color:var(--red);}
+.opt-text{font-size:.92rem;line-height:1.55;padding-top:3px;}
+.inline-explain{display:none;margin-top:6px;margin-bottom:14px;padding:16px 18px;background:rgba(79,142,247,.05);
+ border:1px solid rgba(79,142,247,.15);border-radius:10px;font-size:.85rem;line-height:1.7;color:var(--ink2);animation:fadeUp .2s ease;}
+.inline-explain.show{display:block;}
+.inline-explain .ie-label{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;
+ margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.inline-explain.right .ie-label{color:var(--green);}
+.inline-explain.wrong .ie-label{color:var(--red);}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;}
+.kbd-hint{text-align:center;font-size:.68rem;color:var(--ink3);margin-top:14px;font-family:'JetBrains Mono',monospace;}
+.kbd-hint kbd{background:var(--surface3);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;font-family:'JetBrains Mono',monospace;}
 
-  .stat-row{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;row-gap:14px;}
-  .stat-box{
-    display:flex;flex-direction:column;align-items:center;gap:5px;
-    padding:0 22px;
-  }
-  .stat-box i{color:var(--blue);font-size:1rem;margin-bottom:2px;}
-  .stat-box .num{font-family:var(--font-mono);font-size:1.5rem;font-weight:700;color:var(--text);}
-  .stat-box .label{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);}
-  .stat-divider{width:1px;height:38px;background:var(--border-strong);}
+#quizTools{position:fixed;right:20px;bottom:24px;display:flex;flex-direction:column;gap:12px;z-index:60;}
+.fab{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;border:none;
+ cursor:pointer;font-size:1.05rem;box-shadow:0 8px 24px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;
+ transition:transform .15s;}
+.fab:hover{transform:translateY(-3px) scale(1.04);}
+.fab.pause-fab{background:linear-gradient(135deg,#f59e0b,#f97316);}
 
-  /* ---------- section heading helper ---------- */
-  .section-head{max-width:640px;margin:0 auto 28px;text-align:center;}
-  .section-head.left{text-align:left;margin:0 0 28px;}
-  .section-eyebrow{
-    display:inline-flex;align-items:center;gap:8px;
-    font-family:var(--font-mono);font-weight:600;font-size:.7rem;
-    letter-spacing:.14em;text-transform:uppercase;color:var(--blue);
-    margin-bottom:10px;
-  }
-  .section-title{
-    font-family:var(--font-display);font-weight:700;font-size:clamp(1.25rem,3.6vw,1.55rem);
-    margin:0 0 10px;color:var(--text);line-height:1.3;
-  }
-  .section-body{color:var(--text-muted);line-height:1.7;margin:0;font-size:.92rem;}
+.modal-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.72);backdrop-filter:blur(6px);z-index:200;
+ display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-card{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:26px 24px;max-width:380px;
+ width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.modal-icon{width:52px;height:52px;border-radius:50%;background:var(--accent-dim);border:1px solid rgba(79,142,247,.25);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.3rem;margin:0 auto 16px;}
+.modal-icon.warn{background:var(--red-dim);border-color:rgba(248,113,113,.3);color:var(--red);}
+.modal-title{font-family:'Fraunces',serif;font-size:1.2rem;margin-bottom:10px;}
+.modal-text{font-size:.87rem;color:var(--ink2);line-height:1.6;margin-bottom:20px;}
 
-  /* ---------- topic-card grid ---------- */
-  .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
-  @media (max-width:760px){ .feature-grid{grid-template-columns:1fr;} }
-  .feature-card{
-    background:var(--panel);border:1px solid var(--border);
-    border-radius:var(--radius-lg);padding:28px 20px;
-    display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;
-    transition:transform .25s ease, border-color .25s ease;
-    min-width:0;
-  }
-  .feature-card:hover{transform:translateY(-4px);border-color:rgba(91,140,255,.4);}
-  .feature-icon{
-    width:46px;height:46px;border-radius:14px;
-    background:rgba(91,140,255,.12);border:1px solid rgba(91,140,255,.3);
-    color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:1.05rem;
-  }
-  .feature-card h3{font-family:var(--font-body);font-weight:700;font-size:.96rem;margin:0;color:var(--text);}
-  .feature-card p{
-    font-family:var(--font-body);font-size:.82rem;letter-spacing:.01em;
-    line-height:1.6;color:var(--text-muted);margin:0;
-  }
+#pauseOverlay{position:fixed;inset:0;background:rgba(6,8,14,.85);backdrop-filter:blur(16px);z-index:150;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
+#pauseOverlay .modal-icon{width:64px;height:64px;font-size:1.6rem;margin-bottom:20px;}
+#pauseOverlay h2{font-family:'Fraunces',serif;font-size:1.6rem;margin-bottom:10px;}
+#pauseOverlay p{color:var(--ink2);font-size:.9rem;max-width:320px;margin-bottom:26px;line-height:1.6;}
 
-  /* ---------- mode cards ---------- */
-  .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  @media (max-width:640px){ .mode-grid{grid-template-columns:1fr;} }
-  .mode-card{
-    background:var(--panel);border:1px solid var(--border);
-    border-radius:var(--radius-lg);padding:28px 24px;
-    display:flex;flex-direction:column;gap:12px;
-    transition:transform .25s ease, border-color .25s ease;
-    min-width:0;
-  }
-  .mode-card:hover{transform:translateY(-4px);border-color:rgba(91,140,255,.4);}
-  .mode-top{display:flex;align-items:center;gap:12px;}
-  .mode-icon{
-    width:44px;height:44px;border-radius:13px;flex:none;
-    display:flex;align-items:center;justify-content:center;font-size:1.02rem;
-  }
-  .mode-icon.timed{background:rgba(91,140,255,.14);border:1px solid rgba(91,140,255,.35);color:var(--blue);}
-  .mode-icon.untimed{background:rgba(139,110,246,.14);border:1px solid rgba(139,110,246,.35);color:var(--violet);}
-  .mode-top h3{font-family:var(--font-body);font-weight:700;font-size:1rem;margin:0;color:var(--text);}
-  .mode-tag{
-    font-family:var(--font-mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--text-faint);margin-top:2px;display:block;
-  }
-  .mode-card p{font-size:.87rem;line-height:1.7;color:var(--text-muted);margin:0;}
-  .mode-list{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;}
-  .mode-list li{
-    display:flex;align-items:flex-start;gap:10px;
-    font-size:.8rem;line-height:1.55;color:var(--text-muted);
-  }
-  .mode-list li i{color:var(--blue);font-size:.74rem;margin-top:4px;flex:none;}
-  .mode-card.untimed .mode-list li i{color:var(--violet);}
+.calc-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.55);backdrop-filter:blur(4px);z-index:180;}
+.calc-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:190;width:320px;max-width:92vw;
+ background:var(--surface);border:1px solid var(--border2);border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.55);overflow:hidden;}
+.calc-panel.dragged{transform:none;}
+.calc-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface2);
+ border-bottom:1px solid var(--border);cursor:grab;font-size:.8rem;font-weight:600;color:var(--ink2);user-select:none;gap:8px;}
+.calc-header:active{cursor:grabbing;}
+.calc-header-title{display:flex;align-items:center;gap:8px;}
+.calc-header-title i{color:var(--accent);}
+.calc-mode-toggle{display:flex;gap:4px;background:var(--surface3);border-radius:8px;padding:3px;}
+.calc-mode-btn{background:transparent;border:none;color:var(--ink3);font-size:.62rem;font-family:'JetBrains Mono',monospace;
+ padding:5px 9px;border-radius:6px;cursor:pointer;font-weight:700;letter-spacing:.5px;}
+.calc-mode-btn.active{background:var(--accent);color:#fff;}
+.calc-close-btn{background:none;border:none;color:var(--ink3);font-size:1rem;cursor:pointer;line-height:1;}
+.calc-display{padding:18px 16px 10px;text-align:right;}
+.calc-expr{font-size:.82rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;min-height:18px;overflow-x:auto;white-space:nowrap;}
+.calc-result{font-size:1.65rem;font-weight:700;color:var(--ink);font-family:'JetBrains Mono',monospace;margin-top:4px;
+ overflow-x:auto;white-space:nowrap;}
+.calc-result.err{color:var(--red);}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 16px 20px;}
+.calc-btn{background:var(--surface3);border:1px solid var(--border2);color:var(--ink);border-radius:10px;padding:12px 0;
+ font-size:.92rem;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:background .15s;}
+.calc-btn:hover{background:var(--border2);}
+.calc-btn.op{color:var(--accent);}
+.calc-btn.fn{color:var(--purple);font-size:.76rem;}
+.calc-btn.clear{color:var(--red);}
+.calc-btn.equals{background:linear-gradient(135deg,#4f8ef7,#7c6fff);color:#fff;border:none;}
 
-  /* ---------- step list ---------- */
-  .step-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;}
-  .step-list li{display:flex;gap:16px;padding:22px 0;border-top:1px solid var(--border);}
-  .step-list li:last-child{border-bottom:1px solid var(--border);}
-  .step-num{
-    flex:none;width:36px;height:36px;border-radius:11px;
-    background:rgba(91,140,255,.1);border:1px solid rgba(91,140,255,.35);
-    color:var(--blue);font-family:var(--font-mono);font-weight:700;
-    display:flex;align-items:center;justify-content:center;font-size:.86rem;
-  }
-  .step-copy{display:flex;flex-direction:column;gap:5px;padding-top:4px;min-width:0;}
-  .step-copy strong{
-    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-    font-family:var(--font-body);font-weight:700;font-size:.96rem;color:var(--text);
-  }
-  .step-copy strong i{color:var(--blue);font-size:.84rem;}
-  .step-copy span{font-size:.88rem;line-height:1.7;color:var(--text-muted);}
+.result-hero{text-align:center;padding:26px 0 22px;border-bottom:1px solid var(--border);margin-bottom:26px;}
+.result-ring{display:inline-flex;align-items:center;justify-content:center;width:124px;height:124px;border-radius:50%;
+ border:3px solid var(--accent);background:var(--accent-dim);margin-bottom:16px;}
+.result-score{font-family:'JetBrains Mono',monospace;font-size:2.3rem;font-weight:700;color:var(--accent);}
+.result-of{font-size:.8rem;color:var(--ink3);margin-top:2px;}
+.result-pct{font-family:'Fraunces',serif;font-size:1.5rem;margin-bottom:6px;}
+.result-msg{color:var(--ink2);font-size:.9rem;line-height:1.6;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.best-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;color:#facc15;background:rgba(250,204,21,.08);
+ border:1px solid rgba(250,204,21,.25);padding:4px 12px;border-radius:20px;margin-top:10px;font-family:'JetBrains Mono',monospace;}
+.breakdown-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:26px;}
+.bd-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.bd-name{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.bd-score{font-size:1.35rem;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.bd-total{font-size:.72rem;color:var(--ink3);}
+.review-section-title{font-family:'Fraunces',serif;font-size:1.1rem;border-bottom:1px solid var(--border);padding-bottom:12px;
+ margin:22px 0 16px;display:flex;align-items:center;gap:10px;}
+.review-item{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px;background:var(--surface2);}
+.review-item.right{border-left:3px solid var(--green);}
+.review-item.miss{border-left:3px solid var(--red);}
+.ri-q{font-size:.9rem;margin-bottom:10px;line-height:1.6;}
+.ri-section{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:5px;}
+.ri-ans{font-size:.83rem;margin-top:5px;display:flex;align-items:flex-start;gap:7px;}
+.ri-ans.right{color:var(--green);}
+.ri-ans.wrong{color:var(--red);}
+.ri-ans.correct-reveal{color:#2dd4bf;}
+.ri-exp{margin-top:10px;padding:12px 14px;background:rgba(79,142,247,.04);border:1px solid rgba(79,142,247,.12);
+ border-radius:9px;font-size:.82rem;line-height:1.65;color:var(--ink2);}
 
-  /* ---------- join gate ---------- */
-  .gate-panel{
-    background:var(--panel);border:1px solid var(--border);
-    border-radius:var(--radius-lg);padding:clamp(28px,6vw,44px);
-    text-align:center;
-  }
-  .gate-icon{
-    width:54px;height:54px;border-radius:16px;margin:0 auto 20px;
-    background:rgba(91,140,255,.1);border:1px solid rgba(91,140,255,.32);
-    color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:1.25rem;
-    transition:background .3s ease, border-color .3s ease;
-  }
-  .gate-title{
-    font-family:var(--font-display);font-weight:700;font-size:clamp(1.3rem,4.4vw,1.6rem);
-    margin:0 0 12px;line-height:1.35;
-  }
-  .gate-note{color:var(--text-muted);margin:0 auto 30px;max-width:46ch;line-height:1.7;font-size:.92rem;}
+footer{text-align:center;font-size:.7rem;color:var(--ink3);padding:18px;border-top:1px solid var(--border);
+ font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+footer i{color:var(--accent);}
 
-  .join-links{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left;}
-  @media (max-width:560px){ .join-links{grid-template-columns:1fr;} }
+@media(max-width:560px){
+ .card{padding:22px 16px;}
+ .mode-grid{grid-template-columns:1fr;}
+ .hero-title{font-size:1.8rem;}
+ .breakdown-grid{grid-template-columns:repeat(2,1fr);}
+ #quizTools{right:14px;bottom:18px;}
+}
 
-  .join-link{
-    display:flex;align-items:center;gap:12px;
-    background:var(--panel-2);color:var(--text);text-decoration:none;
-    border-radius:var(--radius-md);padding:16px 18px;
-    border:1px solid var(--border);
-    transition:border-color .2s ease, transform .2s ease;
-    min-width:0;
-  }
-  .join-link:hover{transform:translateY(-2px);border-color:rgba(91,140,255,.4);}
-  .join-link .icon{
-    width:38px;height:38px;border-radius:11px;flex:none;
-    background:rgba(91,140,255,.1);color:var(--blue);
-    display:flex;align-items:center;justify-content:center;font-size:.98rem;
-  }
-  .join-link .txt{display:flex;flex-direction:column;gap:2px;min-width:0;}
-  .join-link .txt strong{font-family:var(--font-body);font-weight:600;font-size:.9rem;}
-  .join-link .txt span{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.03em;color:var(--text-faint);}
-  .join-link .arrow{margin-left:auto;color:var(--text-faint);transition:transform .2s ease, color .2s ease;flex:none;}
-  .join-link:hover .arrow{transform:translateX(3px);color:var(--blue);}
-  .join-link.visited{border-color:rgba(91,140,255,.5);}
-  .join-link.visited .icon{background:rgba(91,140,255,.18);}
-
-  /* ---------- status chip ---------- */
-  .status-row{
-    display:flex;align-items:center;justify-content:center;gap:12px;
-    margin:28px 0 6px;flex-wrap:wrap;
-  }
-  .status-chip{
-    display:inline-flex;align-items:center;gap:8px;
-    font-family:var(--font-mono);font-weight:600;font-size:.7rem;
-    letter-spacing:.1em;text-transform:uppercase;
-    padding:9px 16px;border-radius:999px;
-    color:var(--text-faint);border:1px solid var(--border-strong);
-    transition:color .3s ease, border-color .3s ease, background .3s ease;
-  }
-  .status-chip i{font-size:.78rem;}
-  .status-chip.unlocked{
-    color:#fff;border-color:transparent;background:var(--gradient);
-    animation:chip-pop .4s ease;
-  }
-  @keyframes chip-pop{
-    0%{transform:scale(.85);opacity:0;}
-    100%{transform:scale(1);opacity:1;}
-  }
-  .gate-status-sub{
-    font-family:var(--font-mono);font-size:.74rem;color:var(--text-faint);
-    margin:0 0 26px;line-height:1.6;
-  }
-
-  .btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:10px;
-    font-family:var(--font-body);font-weight:700;font-size:.92rem;
-    color:#fff;background:var(--gradient);
-    padding:15px 20px;border-radius:var(--radius-md);
-    text-decoration:none;width:100%;
-    transition:opacity .25s ease, transform .2s ease, filter .2s ease;
-  }
-  .btn:hover{transform:translateY(-2px);filter:brightness(1.08);}
-  .btn[aria-disabled="true"]{pointer-events:none;opacity:.35;}
-
-  /* ---------- footer ---------- */
-  footer{
-    text-align:center;padding:36px 18px 44px;color:var(--text-faint);
-    font-family:var(--font-mono);font-size:.7rem;letter-spacing:.04em;text-transform:uppercase;
-    display:flex;flex-direction:column;align-items:center;gap:14px;
-  }
-  .footer-socials{display:flex;gap:12px;}
-  .footer-socials a{
-    width:36px;height:36px;border-radius:50%;
-    border:1px solid var(--border-strong);
-    display:flex;align-items:center;justify-content:center;
-    color:var(--text-muted);text-decoration:none;transition:.2s ease;
-  }
-  .footer-socials a:hover{color:#fff;background:var(--gradient);border-color:transparent;}
-
-  @media (max-width:820px){
-    .nav-links{gap:16px;}
-    .nav-links a{font-size:.68rem;}
-  }
-
-  @media (max-width:600px){
-    main{padding:36px 16px 70px;}
-    .page-wrap{gap:52px;}
-    .page-title{max-width:none;}
-    .stat-row{gap:0;}
-    .stat-box{padding:0 14px;}
-    .stat-box .num{font-size:1.3rem;}
-    .stat-divider{height:32px;}
-    .feature-card{padding:22px 18px;}
-    .mode-card{padding:22px 18px;}
-    .step-list li{padding:18px 0;gap:14px;}
-    .gate-panel{padding:26px 18px;}
-    .join-link{padding:14px 14px;}
-    .sub{display:none;}
-    .nav-links{gap:12px;}
-    .nav-links a{font-size:.64rem;}
-  }
-
-  @media (max-width:380px){
-    .page-title{font-size:1.5rem;}
-    .quiz-pill{font-size:.66rem;padding:9px 16px;}
-    .stat-box{padding:0 10px;}
-    .stat-box .num{font-size:1.1rem;}
-    .brand-word{font-size:.74rem;}
-    .nav-links{gap:10px;}
-    .nav-links a{font-size:.6rem;}
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto;}
-    .status-chip.unlocked{animation:none;}
-    .join-link,.feature-card,.mode-card,.btn,.gate-icon{transition:none;}
-  }
+@media print{
+ @page{ margin:14mm; }
+ *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
+ .topbar, footer, #quizTools, #homeBtn, #retryBtn, #printBtn, .kbd-hint, #statsBar,
+ #calcBackdrop, #calcPanel, #pauseOverlay, #leaveWarningModal, #resumeModal, #soundToggle, .hamburger, .mobile-nav { display:none !important; }
+ body{background:#fff;color:#000;}
+ main{padding:0;}
+ .card{border:1px solid #ccc;background:#fff;box-shadow:none;}
+ .bd-card, .review-item{background:#f6f6f6;border-color:#ddd;}
+ .ri-exp{background:#f0f4ff;border-color:#cfd9ff;color:#333;}
+ .result-hero, .bd-card, .review-item{ break-inside:avoid; page-break-inside:avoid; }
+ .review-item{ margin-bottom:14px; }
+}
 </style>
 </head>
 <body>
 
-<header class="brand-bar">
-  <a class="brand" href="index.html" aria-label="DTZ TRIO home">
-    <span class="brand-mark" aria-hidden="true"><i class="fa-solid fa-graduation-cap"></i></span>
-    <span class="brand-word">DTZ <span>TRIO</span></span>
-  </a>
-  <div class="course-tag">
-    <i class="fa-solid fa-wave-square" aria-hidden="true"></i>
-    <span>Exam Compiled Quiz</span>
-  </div>
-</header>
+<div class="topbar">
+ <div class="brand">
+ <span class="brand-badge">PHY102</span>
+ <div class="brand-sub"><i class="fa-solid fa-bolt" style="margin-right:5px;"></i>Physics · Electrostatics · Capacitors &amp; Gauss's Law · Waves &amp; Optics</div>
+ </div>
+ <div style="display:flex;align-items:center;gap:10px;">
+ <div id="timer" class="hidden"><i class="fa-regular fa-clock"></i><span id="timerText">00:00</span></div>
+ <button id="soundToggle" title="Mute sounds" aria-label="Mute sounds" aria-pressed="false"></button>
+ <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
+ <i class="fa-solid fa-bars"></i>
+ <i class="fa-solid fa-xmark"></i>
+ </button>
+ </div>
+</div>
+
+<div class="mobile-nav" id="mobileNav">
+ <div class="mobile-nav-panel">
+ <span class="nav-group-label">Navigate</span>
+ <a href="../dashboard.html"><i class="fa-solid fa-house"></i>Home / Dashboard</a>
+ <a href="../aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+ <span class="nav-group-label">DTZ TRIO</span>
+ <a href="../about.html"><i class="fa-solid fa-users"></i>About Us</a>
+ <a href="../social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+ <span class="nav-group-label">Account</span>
+ <a href="../set.html"><i class="fa-solid fa-gear"></i>Settings</a>
+ <a href="../help.html"><i class="fa-solid fa-circle-question"></i>Help &amp; FAQ</a>
+ </div>
+</div>
 
 <main>
-<div class="page-wrap">
 
-  <!-- ================= HERO ================= -->
-  <section class="hero">
-    <span class="page-eyebrow"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Welcome to DTZ TRIO COMPILED QUIZ</span>
-    <span class="quiz-pill"><i class="fa-solid fa-wave-square" aria-hidden="true"></i> Free Exam Practice Hub</span>
+<!-- HOME SCREEN -->
+<div id="homeScreen">
+ <div class="hero-wrap">
+ <div class="hero-eyebrow"><i class="fa-solid fa-bolt"></i> PHY102 Practice Quiz</div>
+ <h1 class="hero-title">100 questions,<br><span>two ways to train.</span></h1>
+ <p class="hero-desc">Covering Electrostatics, Capacitors &amp; Gauss's Law, and Waves &amp; Optics — with full worked explanations for every question.</p>
+ </div>
 
-    <h1 class="page-title">Every course, <em>tested properly.</em></h1>
-    <p class="page-lede">DTZ TRIO Exam Compiled Question website is a free timed exam-practice hub built for students who want more than a PDF of past questions. Every course comes with worked examples and a full quiz that grades itself and shows you exactly where you went wrong.</p>
+ <div id="statsBar" class="hidden"></div>
 
-    <div class="stat-row">
-      <div class="stat-box"><i class="fa-solid fa-list-check" aria-hidden="true"></i><span class="num">23</span><span class="label">Courses</span></div>
-      <div class="stat-divider" aria-hidden="true"></div>
-      <div class="stat-box"><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i><span class="num">100</span><span class="label">Qs / Course</span></div>
-      <div class="stat-divider" aria-hidden="true"></div>
-      <div class="stat-box"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span class="num">100%</span><span class="label">Free</span></div>
-    </div>
-  </section>
+ <div class="mode-grid">
+ <div class="mode-card" id="pickAuto">
+ <div class="mode-icon"><i class="fa-solid fa-gauge-high"></i></div>
+ <div class="mode-name">Automatic Timer</div>
+ <div class="mode-desc">All 100 questions, shuffled, with a timer the app sets for you. Get instant feedback the moment you answer, and pause any time you need a break.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-regular fa-clock"></i> Auto-set clock</span>
+ <span class="mode-tag"><i class="fa-solid fa-list-check"></i> 100 Qs</span>
+ <span class="mode-tag"><i class="fa-solid fa-pause"></i> Pausable</span>
+ </div>
+ </div>
+ <div class="mode-card" id="pickCustom">
+ <div class="mode-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="mode-name">Custom Timer</div>
+ <div class="mode-desc">Pick your own topics, time limit, and question count. Answer everything first — no pausing, and no feedback until you submit.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-solid fa-sliders"></i> Custom setup</span>
+ <span class="mode-tag"><i class="fa-solid fa-ban"></i> No pausing</span>
+ <span class="mode-tag"><i class="fa-solid fa-flag-checkered"></i> Results at end</span>
+ </div>
+ </div>
+ </div>
 
-  <!-- ================= WHAT'S INSIDE ================= -->
-  <section aria-labelledby="whats-inside-title">
-    <div class="section-head">
-      <span class="section-eyebrow"><i class="fa-solid fa-layer-group" aria-hidden="true"></i> What's inside a course</span>
-      <h2 class="section-title" id="whats-inside-title">100 questions, detailed explanation & timer</h2>
-      <p class="section-body">Every course on the Dashboard is built the same way, so once you've done one, you already know how to use the rest.</p>
-    </div>
-
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i></div>
-        <h3>Worked examples</h3>
-        <p>Fully solved, method first, so you see the reasoning before the quiz tests it.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fa-solid fa-stopwatch" aria-hidden="true"></i></div>
-        <h3>Timed quiz</h3>
-        <p>Shuffled questions, same format every course, so nothing feels unfamiliar.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
-        <h3>Full solutions</h3>
-        <p>Every question, right or wrong, broken down step by step after you submit.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= TIMER / NO-TIMER MODE ================= -->
-  <section aria-labelledby="modes-title">
-    <div class="section-head">
-      <span class="section-eyebrow"><i class="fa-solid fa-stopwatch" aria-hidden="true"></i> Choose how you practice</span>
-      <h2 class="section-title" id="modes-title">Two modes, one quiz</h2>
-      <p class="section-body">Every quiz on the Dashboard can be run two ways. Switch between them depending on whether you're building speed or building understanding.</p>
-    </div>
-
-    <div class="mode-grid">
-      <div class="mode-card timed">
-        <div class="mode-top">
-          <div class="mode-icon timed"><i class="fa-solid fa-stopwatch" aria-hidden="true"></i></div>
-          <div>
-            <h3>Timer Mode</h3>
-            <span class="mode-tag">Exam conditions</span>
-          </div>
-        </div>
-        <p>A countdown runs for the full session, just like the real thing. The clock doesn't pause, so you learn to pace yourself across all 100 questions instead of freezing on one.</p>
-        <ul class="mode-list">
-          <li><i class="fa-solid fa-check" aria-hidden="true"></i> Visible countdown, auto-submits at zero</li>
-          <li><i class="fa-solid fa-check" aria-hidden="true"></i> Trains pacing and exam-day pressure</li>
-          <li><i class="fa-solid fa-check" aria-hidden="true"></i> Best once you've already been through the material</li>
-        </ul>
-      </div>
-
-      <div class="mode-card untimed">
-        <div class="mode-top">
-          <div class="mode-icon untimed"><i class="fa-solid fa-book-open-reader" aria-hidden="true"></i></div>
-          <div>
-            <h3>No-Timer Mode</h3>
-            <span class="mode-tag">Learning pace</span>
-          </div>
-        </div>
-        <p>The same 100 questions, with the clock switched off. Take as long as you need on each one, think it through, and check your logic before you lock in an answer.</p>
-        <ul class="mode-list">
-          <li><i class="fa-solid fa-check" aria-hidden="true"></i> No countdown, no auto-submit</li>
-          <li><i class="fa-solid fa-check" aria-hidden="true"></i> Built for a first pass through a new topic</li>
-          <li><i class="fa-solid fa-check" aria-hidden="true"></i> Same solutions and scoring as Timer Mode</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= HOW IT WORKS ================= -->
-  <section aria-labelledby="how-it-works-title">
-    <div class="section-head left">
-      <span class="section-eyebrow"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i> How the hub is put together</span>
-      <h2 class="section-title" id="how-it-works-title">So you always know where you are</h2>
-    </div>
-
-    <ol class="step-list">
-      <li>
-        <div class="step-num" aria-hidden="true">1</div>
-        <div class="step-copy">
-          <strong><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Join the community</strong>
-          <span>Unlock the hub by joining our WhatsApp Channel and Group below — this is where new courses, corrections, and exam alerts get posted first.</span>
-        </div>
-      </li>
-      <li>
-        <div class="step-num" aria-hidden="true">2</div>
-        <div class="step-copy">
-          <strong><i class="fa-solid fa-table-columns" aria-hidden="true"></i> Open the Dashboard</strong>
-          <span>The Dashboard lists every course we cover. Live courses are tappable; the rest are being built and will light up as they go live.</span>
-        </div>
-      </li>
-      <li>
-        <div class="step-num" aria-hidden="true">3</div>
-        <div class="step-copy">
-          <strong><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> Study, then test yourself</strong>
-          <span>Every course page opens with worked examples, followed by a 100-question quiz you can run in Timer Mode or No-Timer Mode.</span>
-        </div>
-      </li>
-      <li>
-        <div class="step-num" aria-hidden="true">4</div>
-        <div class="step-copy">
-          <strong><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Review your solution</strong>
-          <span>After you submit, every question — right or wrong — has a "Show Solution" step-by-step breakdown, so mistakes actually turn into understanding.</span>
-        </div>
-      </li>
-    </ol>
-  </section>
-
-  <!-- ================= JOIN GATE ================= -->
-  <section class="gate-panel" aria-labelledby="gate-title">
-    <div class="gate-icon"><i class="fa-solid fa-lock" id="gateIconGlyph" aria-hidden="true"></i></div>
-    <h2 class="gate-title" id="gate-title">Join DTZ TRIO to unlock the Dashboard</h2>
-    <p class="gate-note">Two quick taps below and every course, quiz, and solution on the hub is open to you.</p>
-
-    <div class="join-links">
-      <a class="join-link" id="joinChannel" href="https://whatsapp.com/channel/0029Vb7UyiS8F2pHPr4zXb1d" target="_blank" rel="noopener">
-        <span class="icon" aria-hidden="true"><i class="fa-brands fa-whatsapp"></i></span>
-        <span class="txt"><strong>Join our Channel</strong><span>Announcements &amp; alerts</span></span>
-        <i class="fa-solid fa-arrow-up-right-from-square arrow" aria-hidden="true"></i>
-      </a>
-      <a class="join-link" id="joinGroup" href="https://chat.whatsapp.com/HFxCdX9XjZb9PMRJdXFoYk" target="_blank" rel="noopener">
-        <span class="icon" aria-hidden="true"><i class="fa-brands fa-whatsapp"></i></span>
-        <span class="txt"><strong>Join our Group</strong><span>Ask questions, get help</span></span>
-        <i class="fa-solid fa-arrow-up-right-from-square arrow" aria-hidden="true"></i>
-      </a>
-    </div>
-
-    <div class="status-row">
-      <span class="status-chip" id="statusChip" role="status" aria-live="polite">
-        <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i> <span id="statusText">Locked</span>
-      </span>
-    </div>
-    <p class="gate-status-sub" id="gateSub">Tap the Channel and Group links above to unlock the Dashboard.</p>
-
-    <a class="btn" id="enterBtn" href="dashboard.html" aria-disabled="true">
-      <i class="fa-solid fa-arrow-right" id="enterIcon" aria-hidden="true"></i> Enter Dashboard
-    </a>
-  </section>
-
+ <div class="section-heading">
+ <div class="section-heading-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+ <div class="section-heading-text">How each mode works</div>
+ </div>
+ <div class="rules-list">
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-gauge-high"></i></span>
+ <span class="rule-text"><strong>Automatic Timer</strong> runs all 100 questions with a clock the app manages for you. Tap an option and it's locked in immediately — correct turns green, wrong turns red, with a short explanation right away. Tap <strong>Pause</strong> any time to freeze the clock and blur the screen. You must answer at least <strong>30 questions</strong> before you can submit.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-sliders"></i></span>
+ <span class="rule-text"><strong>Custom Timer</strong> lets you choose specific topics, your own time limit (up to 120 min), and how many questions to include. It cannot be paused — answers stay hidden until you submit, then you get a full score breakdown and review.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-calculator"></i></span>
+ <span class="rule-text">A full <strong>scientific calculator</strong> — sin/cos/tan, log, ln, √, powers, π and e — is available as a draggable floating window in both modes.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-shield-halved"></i></span>
+ <span class="rule-text">Your progress is <strong>auto-saved</strong> as you go, so a refresh won't lose your place. For fairness, switching away from the tab is tracked — leaving 3 times in one quiz resets it.</span></div>
+ </div>
 </div>
+
+<!-- CONFIG SCREEN -->
+<div id="configScreen" class="hidden">
+ <div class="section-heading" style="margin-top:36px;">
+ <div class="section-heading-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="section-heading-text">Set up your Custom Timer exam</div>
+ </div>
+ <div class="card">
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-layer-group"></i> Topics to include</div>
+ <div class="topics-grid" id="topicsWrap"></div>
+ <div class="config-hint" id="topicsHint">Select at least one topic.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-regular fa-clock"></i> Time limit (minutes)</div>
+ <div class="config-input-row">
+ <input type="range" id="timeSlider" class="config-slider" min="5" max="120" step="5" value="60">
+ <span class="config-value" id="timeValue">60</span>
+ </div>
+ <div class="config-hint">Maximum 120 minutes. This clock cannot be paused once the exam starts.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-list-ol"></i> Number of questions</div>
+ <div class="config-input-row">
+ <input type="range" id="countSlider" class="config-slider" min="1" max="100" step="1" value="50">
+ <span class="config-value" id="countValue">50</span>
+ </div>
+ <div class="config-hint" id="countHint">Randomly picked from the selected topics.</div>
+ </div>
+ <div class="nav-row" style="margin-top:8px;">
+ <button class="btn-ghost" id="backToHomeFromConfig"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <button class="btn" id="startCustomBtn"><i class="fa-solid fa-play"></i> Start Custom Timer</button>
+ </div>
+ </div>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" class="hidden">
+ <div class="loader-ring"></div>
+ <div class="loader-text">Preparing your questions…</div>
+ <div class="loader-sub">Shuffling &amp; randomizing options</div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="quizScreen" class="hidden">
+ <div id="progressWrap">
+ <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+ <div class="dots-group" id="dotsRow"></div>
+ </div>
+ <div class="card">
+ <div class="q-meta">
+ <span class="q-section-tag" id="sectionTag"></span>
+ <span class="q-counter" id="qCounter"></span>
+ </div>
+ <div class="q-text" id="qText"></div>
+ <div id="optsWrap"></div>
+ <div id="inlineExplain" class="inline-explain"></div>
+ <div class="nav-row">
+ <button class="btn-ghost" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <div style="display:flex;gap:8px;">
+ <button class="btn" id="nextBtn">Next <i class="fa-solid fa-arrow-right"></i></button>
+ <button class="btn hidden" id="finishBtn"><i class="fa-solid fa-check"></i> Submit Quiz</button>
+ </div>
+ </div>
+ <div class="kbd-hint">Keyboard: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate &nbsp;·&nbsp; <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to select</div>
+ </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="hidden">
+ <div class="card">
+ <div class="result-hero">
+ <div class="result-ring"><div><div class="result-score" id="resultScore">0</div><div class="result-of" id="resultOf">/ 100</div></div></div>
+ <div class="result-pct" id="resultPct"></div>
+ <div class="result-msg" id="resultMsg"></div>
+ <div id="bestBadge"></div>
+ </div>
+ <div class="breakdown-grid" id="breakdownGrid"></div>
+ <div class="review-section-title"><i class="fa-solid fa-magnifying-glass"></i> Question Review</div>
+ <div id="reviewList"></div>
+ <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;">
+ <button class="btn-ghost" id="homeBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-house"></i> Home</button>
+ <button class="btn-ghost" id="printBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+ <button class="btn" id="retryBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-rotate-right"></i> Retake</button>
+ </div>
+ </div>
+</div>
+
 </main>
 
-<footer>
-  <div class="footer-socials">
-    <a href="https://whatsapp.com/channel/0029Vb7UyiS8F2pHPr4zXb1d" target="_blank" rel="noopener" aria-label="WhatsApp Channel"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
-    <a href="https://chat.whatsapp.com/HFxCdX9XjZb9PMRJdXFoYk" target="_blank" rel="noopener" aria-label="WhatsApp Group"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
-  </div>
-  <span>DTZ TRIO · Built by students, for students</span>
-</footer>
+<!-- FLOATING QUIZ TOOLS -->
+<div id="quizTools" class="hidden">
+ <button class="fab pause-fab hidden" id="pauseBtn" title="Pause"><i class="fa-solid fa-pause"></i></button>
+ <button class="fab" id="calcFab" title="Calculator"><i class="fa-solid fa-calculator"></i></button>
+</div>
 
-<script src="assets/nav.js"></script>
+<!-- SCIENTIFIC CALCULATOR -->
+<div id="calcBackdrop" class="calc-backdrop hidden"></div>
+<div id="calcPanel" class="calc-panel hidden">
+ <div id="calcHeader" class="calc-header">
+ <div class="calc-header-title"><i class="fa-solid fa-calculator"></i> Calculator</div>
+ <div class="calc-mode-toggle">
+ <button type="button" id="calcModeDeg" class="calc-mode-btn active">DEG</button>
+ <button type="button" id="calcModeRad" class="calc-mode-btn">RAD</button>
+ </div>
+ <button type="button" id="calcClose" class="calc-close-btn"><i class="fa-solid fa-xmark"></i></button>
+ </div>
+ <div class="calc-display">
+ <div id="calcExpr" class="calc-expr">&nbsp;</div>
+ <div id="calcResult" class="calc-result">0</div>
+ </div>
+ <div id="calcGrid" class="calc-grid"></div>
+</div>
+
+<!-- PAUSE OVERLAY -->
+<div id="pauseOverlay" class="hidden">
+ <div class="modal-icon"><i class="fa-solid fa-pause"></i></div>
+ <h2>Quiz Paused</h2>
+ <p>The clock is frozen and nothing on this screen is visible or clickable until you resume.</p>
+ <button class="btn" id="resumeFromPauseBtn"><i class="fa-solid fa-play"></i> Resume Quiz</button>
+</div>
+
+<!-- LEAVE-WARNING MODAL -->
+<div id="leaveWarningModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></div>
+ <div class="modal-title">You left the quiz</div>
+ <div class="modal-text" id="leaveWarnText"></div>
+ <button class="btn" id="leaveWarnOk">Okay, continue</button>
+ </div>
+</div>
+
+<!-- RESUME AUTOSAVE MODAL -->
+<div id="resumeModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+ <div class="modal-title">Resume your quiz?</div>
+ <div class="modal-text">We found a quiz in progress:<br><strong id="resumeInfo" style="color:var(--ink);"></strong></div>
+ <div style="display:flex;gap:10px;">
+ <button class="btn-ghost" id="resumeNo" style="flex:1;justify-content:center;">Discard</button>
+ <button class="btn" id="resumeYes" style="flex:1;justify-content:center;">Resume</button>
+ </div>
+ </div>
+</div>
+
+<footer><i class="fa-solid fa-bolt"></i> PHY102 &nbsp;·&nbsp; Physics Practice Quiz — Electrostatics, Capacitors &amp; Gauss's Law, Waves &amp; Optics</footer>
+
 <script>
-  // ---- join gate: two taps unlock the dashboard ----
-  (function () {
-    const state = { channel: false, group: false };
+/* ============================================================
+ HAMBURGER / MOBILE NAV
+ ============================================================ */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+function closeMobileNav(){mobileNav.classList.remove('open');hamburgerBtn.setAttribute('aria-expanded','false');}
+function toggleMobileNav(){const isOpen = mobileNav.classList.toggle('open');hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');}
+hamburgerBtn.addEventListener('click', toggleMobileNav);
+mobileNav.addEventListener('click', (e)=>{ if(e.target === mobileNav) closeMobileNav(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMobileNav(); });
 
-    const els = {
-      channelLink: document.getElementById('joinChannel'),
-      groupLink:   document.getElementById('joinGroup'),
-      statusChip:  document.getElementById('statusChip'),
-      statusText:  document.getElementById('statusText'),
-      gateSub:     document.getElementById('gateSub'),
-      enterBtn:    document.getElementById('enterBtn'),
-      gateIcon:    document.getElementById('gateIconGlyph'),
-    };
+/* ============================================================
+ PHY102 — 100-QUESTION BANK (Electrostatics · Capacitors & Gauss's Law · Waves & Optics)
+ ============================================================ */
+const QUESTIONS = [
+// ELECTRIC CHARGE & FORCE
+{sec:'Electric Charge & Force', q:"Who is credited with demonstrating in 1752 that thunder clouds contain electric charge?", opts:["William Gilbert","Charles Coulomb","Benjamin Franklin","Alessandro Volta"], ans:2, ex:"Benjamin Franklin's famous kite experiment in 1752 showed that lightning clouds carry electric charge."},
+{sec:'Electric Charge & Force', q:"The specific branch of physics that investigates stationary electric charges is known as:", opts:["Electrodynamics","Electrostatics","Magnetostatics","Quantum Mechanics"], ans:1, ex:"Electrostatics is the study of electric charges at rest and the forces and fields they produce."},
+{sec:'Electric Charge & Force', q:"According to William Gilbert's findings, the strength of the electric effect is proportional to what?", opts:["The mass of the object","The volume","The surface area rubbed","The temperature"], ans:2, ex:"Gilbert found that the electrifying effect from rubbing an object scales with the surface area that is rubbed."},
+{sec:'Electric Charge & Force', q:"What is the term for an object that possesses equal amounts of positive and negative charge?", opts:["Ionized","Polarized","Electrically neutral","Superconducting"], ans:2, ex:"An object with equal positive and negative charge has zero net charge and is called electrically neutral."},
+{sec:'Electric Charge & Force', q:"When a glass rod is rubbed with silk, what type of charge does the glass acquire?", opts:["Negative","Positive","Neutral","No charge is transferred"], ans:1, ex:"Rubbing glass with silk strips electrons from the glass, leaving it with a net positive charge."},
+{sec:'Electric Charge & Force', q:"Which force is primarily responsible for binding electrons to the nucleus to form an atom?", opts:["Gravitational force","Weak nuclear force","Electrostatic force","Strong nuclear force"], ans:2, ex:"The attractive Coulomb (electrostatic) force between the negative electrons and positive nucleus holds atoms together."},
+{sec:'Electric Charge & Force', q:"Electrons that are loosely bound to their atoms and can move between materials are called:", opts:["Core electrons","Free electrons","Valence protons","Bound neutrons"], ans:1, ex:"Free electrons are loosely bound outer electrons that can move through a conductor or transfer between materials."},
+{sec:'Electric Charge & Force', q:"The law stating that the total electric charge in an isolated system remains constant is the:", opts:["Law of Quantization","Law of Conservation of Charge","Coulomb's Law","Gauss's Law"], ans:1, ex:"The Law of Conservation of Charge states that net charge in an isolated system can neither be created nor destroyed."},
+{sec:'Electric Charge & Force', q:"If a physical property exists only in discrete packets rather than a continuous flow, it is said to be:", opts:["Conserved","Constant","Quantized","Linear"], ans:2, ex:"Charge quantization means charge always appears in integer multiples of the elementary charge e, not as a continuous quantity."},
+{sec:'Electric Charge & Force', q:"Coulomb's Law indicates that the force between two point charges is inversely proportional to:", opts:["The distance","The square of the distance","The product of charges","The permittivity"], ans:1, ex:"Coulomb's Law, F = kq₁q₂/r², shows the force falls off with the square of the separation distance."},
+{sec:'Electric Charge & Force', q:"Which of Newton's laws is consistently obeyed by the mutual forces between two point charges?", opts:["First Law","Second Law","Third Law","Law of Universal Gravitation"], ans:2, ex:"The force each charge exerts on the other is equal in magnitude and opposite in direction, obeying Newton's Third Law."},
+{sec:'Electric Charge & Force', q:"The Principle of Superposition allows for the calculation of total force on a charge by:", opts:["Multiplying all forces","Subtracting the smallest force","Taking the vector sum of individual forces","Averaging the magnitudes"], ans:2, ex:"Superposition states the net force on a charge is the vector sum of the individual forces from every other charge present."},
+{sec:'Electric Charge & Force', q:"How is electric field intensity defined at a specific point?", opts:["Force times distance","Electric force per unit charge on a test charge","Potential energy per unit area","Total charge per unit volume"], ans:1, ex:"Electric field E is defined as the force per unit positive test charge placed at that point: E = F/q."},
+{sec:'Electric Charge & Force', q:"In which direction do electric field lines emanate from a positive point charge?", opts:["Radially inward","Radially outward","Tangentially","Circularly"], ans:1, ex:"Field lines point in the direction a positive test charge would move, so they radiate outward from a positive charge."},
+{sec:'Electric Charge & Force', q:"Which property of electric field lines signifies a region of strong electric field?", opts:["Lines are parallel","Lines are further apart","Lines are closer together","Lines are crossing"], ans:2, ex:"Field line density represents field strength, so closely spaced lines indicate a stronger electric field."},
+{sec:'Electric Charge & Force', q:"What instrument is used to detect the presence of electric charge?", opts:["Ammeter","Electroscope","Voltmeter","Galvanometer"], ans:1, ex:"An electroscope detects electric charge by the divergence of its metal leaves when charge is brought near it."},
+{sec:'Electric Charge & Force', q:"If a current of 5.0 A flows through a conductor for 4 seconds, what is the total charge?", opts:["1.25 C","20.0 C","9.0 C","0.8 C"], ans:1, ex:"Charge Q = It = 5.0 A × 4 s = 20.0 C."},
+{sec:'Electric Charge & Force', q:"A body has a positive charge of 4.8×10⁻¹⁹ C. How many electrons is it deficient in? (e = 1.6×10⁻¹⁹ C)", opts:["1","2","3","4"], ans:2, ex:"Number of missing electrons = Q/e = (4.8×10⁻¹⁹)/(1.6×10⁻¹⁹) = 3."},
+{sec:'Electric Charge & Force', q:"Calculate the force between two 1 C point charges separated by 1 m in a vacuum.", opts:["1.0 N","9.0×10⁹ N","8.85×10⁻¹² N","1.6×10⁻¹⁹ N"], ans:1, ex:"F = kq₁q₂/r² = (9.0×10⁹)(1)(1)/(1)² = 9.0×10⁹ N, using Coulomb's constant k."},
+{sec:'Electric Charge & Force', q:"Two charges (+25 nC and +75 nC) are separated by 3.0 cm. Find the electric force magnitude.", opts:["0.19 N","0.019 N","1.9 N","0.0019 N"], ans:1, ex:"F = kq₁q₂/r² = (9×10⁹)(25×10⁻⁹)(75×10⁻⁹)/(0.03)² ≈ 0.019 N."},
+{sec:'Electric Charge & Force', q:"Two charges (+5×10⁻⁷ C and -2×10⁻⁷ C) attract with a force of -100 N. How far apart are them?", opts:["3 m","3 cm","3 mm","0.3 mm"], ans:2, ex:"Solving r = √(kq₁q₂/F) with the given magnitudes gives a separation of about 3 mm."},
+{sec:'Electric Charge & Force', q:"Find the electric field magnitude experienced by a 5×10⁻⁹ C charge if the force is 20×10⁻⁹ N.", opts:["100 N/C","0.25 N/C","4 N/C","15 N/C"], ans:2, ex:"E = F/q = (20×10⁻⁹)/(5×10⁻⁹) = 4 N/C."},
+{sec:'Electric Charge & Force', q:"What is the field magnitude (E) at a point 0.40 m from a 7.0 μC point charge?", opts:["1.8×10⁵ N/C","3.9×10⁵ N/C","2.7×10⁵ N/C","5.4×10⁵ N/C"], ans:1, ex:"E = kq/r² = (9×10⁹)(7.0×10⁻⁶)/(0.40)² ≈ 3.9×10⁵ N/C."},
+{sec:'Electric Charge & Force', q:"A proton moves 0.5 m in a field of 1.5×10⁷ N/C. Calculate the force on the proton.", opts:["1.2×10⁻¹² N","2.4×10⁻¹² N","1.6×10⁻¹⁹ N","7.5×10⁻¹³ N"], ans:1, ex:"F = qE = (1.6×10⁻¹⁹)(1.5×10⁷) = 2.4×10⁻¹² N, using the proton's charge."},
+{sec:'Electric Charge & Force', q:"What is the work done on the proton in the previous question (0.5 m displacement)?", opts:["2.4×10⁻¹² J","1.2×10⁻¹² J","7.5 MeV","0.5 J"], ans:1, ex:"W = Fd = (2.4×10⁻¹² N)(0.5 m) = 1.2×10⁻¹² J."},
 
-    function refreshGate() {
-      els.channelLink.classList.toggle('visited', state.channel);
-      els.groupLink.classList.toggle('visited', state.group);
+// CAPACITORS & GAUSS'S LAW
+{sec:"Capacitors & Gauss's Law", q:"What is the primary function of a capacitor?", opts:["To dissipate heat","To store electric potential energy and charge","To increase resistance","To measure current"], ans:1, ex:"A capacitor's main function is to store electric charge and the potential energy associated with it."},
+{sec:"Capacitors & Gauss's Law", q:"Capacitance is defined as the ratio of the magnitude of charge on a conductor to:", opts:["The current","The potential difference","The resistance","The area"], ans:1, ex:"Capacitance is C = Q/V, the ratio of stored charge to the potential difference across the conductor."},
+{sec:"Capacitors & Gauss's Law", q:"The SI unit of capacitance is the:", opts:["Coulomb","Volt","Farad","Joule"], ans:2, ex:"Capacitance is measured in farads (F), named after Michael Faraday."},
+{sec:"Capacitors & Gauss's Law", q:"For a parallel-plate capacitor, capacitance increases when:", opts:["Plate separation increases","Plate area increases","Voltage decreases","Charge decreases"], ans:1, ex:"Since C = ε₀A/d, capacitance grows directly with the plate area A."},
+{sec:"Capacitors & Gauss's Law", q:"In a series connection of capacitors, which parameter remains the same for all capacitors?", opts:["Potential difference","Magnitude of charge","Equivalent capacitance","Energy density"], ans:1, ex:"In series, the same charge Q flows onto each capacitor, while the voltage divides between them."},
+{sec:"Capacitors & Gauss's Law", q:"In a parallel connection of capacitors, which parameter is identical across every capacitor?", opts:["Charge","Potential difference","Surface area","Plate separation"], ans:1, ex:"Capacitors in parallel share the same potential difference across each branch, while charge divides among them."},
+{sec:"Capacitors & Gauss's Law", q:"The equivalent capacitance of a parallel group of capacitors is always:", opts:["Smaller than the smallest capacitor","Larger than any individual capacitor","Zero","The average of the group"], ans:1, ex:"Parallel capacitances simply add (C_eq = C₁+C₂+…), so the total is always larger than any single one."},
+{sec:"Capacitors & Gauss's Law", q:"The potential energy stored in a charged capacitor represents:", opts:["The power lost","The heat generated","The work done to charge it","The dielectric constant"], ans:2, ex:"The stored energy equals the work done in moving charge onto the plates against the growing potential difference."},
+{sec:"Capacitors & Gauss's Law", q:"Energy density in a capacitor is defined as:", opts:["Energy per unit charge","Energy per unit volume between plates","Charge per unit area","Potential per unit volume"], ans:1, ex:"Energy density u is the stored electric potential energy divided by the volume of space between the plates."},
+{sec:"Capacitors & Gauss's Law", q:"What is a non-conducting material used between capacitor plates called?", opts:["Conductor","Semiconductor","Dielectric","Electrolyte"], ans:2, ex:"A dielectric is an insulating material inserted between capacitor plates to increase capacitance."},
+{sec:"Capacitors & Gauss's Law", q:"The ratio of capacitance with a dielectric to capacitance in a vacuum is the:", opts:["Dielectric strength","Dielectric constant","Permittivity","Conductivity"], ans:1, ex:"The dielectric constant K = C(with dielectric)/C(vacuum) describes how much the material boosts capacitance."},
+{sec:"Capacitors & Gauss's Law", q:"What happens to potential difference when a dielectric is inserted into an isolated charged capacitor?", opts:["It increases","It decreases","It stays constant","It becomes zero"], ans:1, ex:"With charge fixed, inserting a dielectric reduces the effective field, so the potential difference V = Q/C decreases."},
+{sec:"Capacitors & Gauss's Law", q:"Dielectric breakdown occurs when the material:", opts:["Melts","Becomes a conductor under a strong field","Increases its resistance","Reaches absolute zero"], ans:1, ex:"Beyond a critical field strength, a dielectric ionizes and starts conducting, which is called dielectric breakdown."},
+{sec:"Capacitors & Gauss's Law", q:"The maximum electric field a dielectric can sustain before conduction is its:", opts:["Dielectric constant","Relative permittivity","Dielectric strength","Capacitance limit"], ans:2, ex:"Dielectric strength is the maximum field a material can withstand before it breaks down and conducts."},
+{sec:"Capacitors & Gauss's Law", q:"The word flux originates from a Latin word meaning:", opts:["Force","Flow","Charge","Static"], ans:1, ex:"Flux comes from the Latin fluxus, meaning flow, describing how field lines pass through a surface."},
+{sec:"Capacitors & Gauss's Law", q:"In a water flow analogy, a positive charge is represented as a:", opts:["Sink","Source","Dam","Pipe"], ans:1, ex:"A positive charge acts like a source from which field lines (analogous to flowing water) originate."},
+{sec:"Capacitors & Gauss's Law", q:"If a closed Gaussian surface encloses a net negative charge, the flux is:", opts:["Outward","Zero","Inward","Parallel"], ans:2, ex:"A negative enclosed charge produces field lines pointing inward, giving a net inward (negative) flux."},
+{sec:"Capacitors & Gauss's Law", q:"Gauss's Law states that the net flux through a closed surface is proportional to:", opts:["The surface area","The radius","The net enclosed charge","The field strength"], ans:2, ex:"Gauss's Law: Φ = Q_enc/ε₀, meaning the total flux depends only on the net charge enclosed by the surface."},
+{sec:"Capacitors & Gauss's Law", q:"Where does excess charge reside on a solid conductor at rest?", opts:["In the center","Uniformly throughout","Entirely on the outer surface","In internal cavities"], ans:2, ex:"In electrostatic equilibrium, excess charge on a conductor resides entirely on its outer surface."},
+{sec:"Capacitors & Gauss's Law", q:"The electric field inside an empty cavity of a conductor is:", opts:["Maximum","Zero","Proportional to voltage","Uniformly distributed"], ans:1, ex:"With no charge in an empty cavity, the enclosed field must be zero by Gauss's Law."},
+{sec:"Capacitors & Gauss's Law", q:"Work done by an electric field on a moving charge is independent of:", opts:["The charge magnitude","The path taken","The initial position","The final position"], ans:1, ex:"The electrostatic force is conservative, so the work done depends only on start/end points, not the path taken."},
+{sec:"Capacitors & Gauss's Law", q:"Electric potential is physically defined as:", opts:["Force per unit charge","Potential energy per unit charge","Work done per unit area","Field strength times area"], ans:1, ex:"Electric potential V is defined as the electric potential energy per unit charge, V = U/q."},
+{sec:"Capacitors & Gauss's Law", q:"Moving in the direction of electric field lines results in:", opts:["Increasing potential","Decreasing potential","Zero potential","Constant potential"], ans:1, ex:"Electric field points from high to low potential, so moving along field lines means potential decreases."},
+{sec:"Capacitors & Gauss's Law", q:"An electron volt (eV) is a measure of:", opts:["Potential","Energy","Charge","Force"], ans:1, ex:"An electron volt is a unit of energy, equal to the energy gained by an electron accelerated through 1 volt."},
+{sec:"Capacitors & Gauss's Law", q:"A surface where the electric potential is identical at every point is an:", opts:["Isotropic surface","Equiforce surface","Equipotential surface","Adiabatic surface"], ans:2, ex:"An equipotential surface is one on which every point has the same electric potential."},
+{sec:"Capacitors & Gauss's Law", q:"The angle between electric field lines and an equipotential surface is always:", opts:["0°","45°","90°","180°"], ans:2, ex:"Electric field lines are always perpendicular (90°) to equipotential surfaces."},
+{sec:"Capacitors & Gauss's Law", q:"A unit charge moving along an equipotential surface requires how much work?", opts:["Maximum work","Minimum work","Zero work","Infinite work"], ans:2, ex:"Since potential doesn't change along an equipotential surface, no work is required to move a charge along it."},
+{sec:"Capacitors & Gauss's Law", q:"The SI unit for electric potential difference is the:", opts:["Joule","Coulomb","Volt","Ampere"], ans:2, ex:"Electric potential difference is measured in volts (V), equal to one joule per coulomb."},
+{sec:"Capacitors & Gauss's Law", q:"Calculate the electric flux through a sphere of radius 1.0 m containing a 1 μC charge.", opts:["9.0×10³ N·m²/C","1.13×10⁵ N·m²/C","1.0×10⁻⁶ N·m²/C","1.26×10⁴ N·m²/C"], ans:1, ex:"By Gauss's Law, Φ = Q/ε₀ = (1×10⁻⁶)/(8.85×10⁻¹²) ≈ 1.13×10⁵ N·m²/C, independent of the sphere's radius."},
+{sec:"Capacitors & Gauss's Law", q:"A disk (radius 0.75 m) has its normal at 20° to a field of 3.0×10³ N/C. Find the flux.", opts:["5.3×10³ N·m²/C","4.9×10³ N·m²/C","1.8×10³ N·m²/C","2.1×10³ N·m²/C"], ans:1, ex:"Φ = EA cosθ = (3.0×10³)(π×0.75²)(cos20°) ≈ 4.9×10³ N·m²/C."},
+{sec:"Capacitors & Gauss's Law", q:"A conductor has a field of 150 N/C directed toward the center. What is the surface charge density?", opts:["+1.33 nC/m²","-1.33 nC/m²","-8.85 nC/m²","+8.85 nC/m²"], ans:1, ex:"A field pointing inward implies negative surface charge; σ = -ε₀E ≈ -1.33 nC/m²."},
+{sec:"Capacitors & Gauss's Law", q:"A capacitor carries 36 μC when connected to an 18 V battery. What is its capacitance?", opts:["0.5 μF","2.0 μF","648 μF","54 μF"], ans:1, ex:"C = Q/V = 36 μC/18 V = 2.0 μF."},
+{sec:"Capacitors & Gauss's Law", q:"Find the capacitance of a parallel plate capacitor (Area = 2×10⁻⁴ m², distance = 1.00 mm).", opts:["1.77×10⁻¹² F","1.77×10⁻¹⁰ F","4.42×10⁻¹² F","8.85×10⁻¹⁵ F"], ans:0, ex:"C = ε₀A/d = (8.85×10⁻¹²)(2×10⁻⁴)/(1×10⁻³) ≈ 1.77×10⁻¹² F."},
+{sec:"Capacitors & Gauss's Law", q:"Two capacitors (6 μF and 3 μF) are connected in series. What is the equivalent capacitance?", opts:["9 μF","2 μF","18 μF","4.5 μF"], ans:1, ex:"For series capacitors, 1/C_eq = 1/6+1/3, giving C_eq = (6×3)/(6+3) = 2 μF."},
+{sec:"Capacitors & Gauss's Law", q:"If a 6 μF and 3 μF capacitor are in parallel, what is their equivalent capacitance?", opts:["2 μF","4.5 μF","9 μF","18 μF"], ans:2, ex:"Parallel capacitances simply add: C_eq = 6+3 = 9 μF."},
+{sec:"Capacitors & Gauss's Law", q:"How much energy is stored in a 2.0 μF capacitor charged to 18 V?", opts:["36 μJ","18 μJ","324 μJ","648 μJ"], ans:2, ex:"U = ½CV² = ½(2.0×10⁻⁶)(18)² = 324 μJ."},
+{sec:"Capacitors & Gauss's Law", q:"A 20 pF vacuum capacitor has paper (K=3.7) inserted. What is the new capacitance?", opts:["5.4 pF","74.0 pF","23.7 pF","40.0 pF"], ans:1, ex:"C_new = K×C₀ = 3.7×20 pF = 74.0 pF."},
+{sec:"Capacitors & Gauss's Law", q:"A parallel plate capacitor (1 mm distance) has dielectric strength 16×10⁶ V/m. Find V_max.", opts:["16 V","160 V","16,000 V","160,000 V"], ans:2, ex:"V_max = E_max × d = (16×10⁶ V/m)(1×10⁻³ m) = 16,000 V."},
+{sec:"Capacitors & Gauss's Law", q:"Calculate the potential difference (V_a - V_b) for the proton moving 0.5 m in a field of 1.5×10⁷ N/C.", opts:["7.5 V","7.5 kV","7.5 MV","7.5 eV"], ans:2, ex:"V = W/q = (1.2×10⁻¹² J)/(1.6×10⁻¹⁹ C) = 7.5×10⁶ V = 7.5 MV."},
+{sec:"Capacitors & Gauss's Law", q:"A +4.0 nC point charge is at a point with a potential of -900 V. Find the potential energy.", opts:["+3.6 μJ","-3.6 μJ","-36 μJ","+900 J"], ans:1, ex:"U = qV = (4.0×10⁻⁹)(-900) = -3.6×10⁻⁶ J = -3.6 μJ."},
+{sec:"Capacitors & Gauss's Law", q:"Calculate the potential at a point 0.06 m from a +12 nC charge.", opts:["1200 V","1800 V","900 V","2700 V"], ans:1, ex:"V = kq/r = (9×10⁹)(12×10⁻⁹)/(0.06) = 1800 V."},
+{sec:"Capacitors & Gauss's Law", q:"A potential difference of 2500 V exists across a 1.25 cm gap. Find the field E.", opts:["2×10⁴ V/m","2×10⁵ V/m","3×10⁵ V/m","2000 V/m"], ans:1, ex:"E = V/d = 2500/(0.0125) = 2×10⁵ V/m."},
+{sec:"Capacitors & Gauss's Law", q:"Find the charge on a 10 μF and 12 μF parallel combo connected to 7.5 V.", opts:["40.9 μC","53.3 μC","165 μC","2.9 μC"], ans:2, ex:"C_eq = 10+12 = 22 μF (parallel), so Q = C_eq×V = 22×7.5 = 165 μC."},
 
-      const unlocked = state.channel && state.group;
-      els.statusChip.classList.toggle('unlocked', unlocked);
+// WAVES & OPTICS
+{sec:'Waves & Optics', q:"A wave is generally described as a disturbance that:", opts:["Transports mass","Transports energy","Is always static","Occurs only in a vacuum"], ans:1, ex:"A wave transfers energy from one point to another without any net transport of matter."},
+{sec:'Waves & Optics', q:"Which type of wave requires a material medium to propagate?", opts:["Electromagnetic","Mechanical","Light","X-rays"], ans:1, ex:"Mechanical waves, like sound and water waves, need a physical medium (solid, liquid, or gas) to travel through."},
+{sec:'Waves & Optics', q:"Waves where particles vibrate perpendicular to the direction of propagation are:", opts:["Longitudinal","Transverse","Sound","Seismic"], ans:1, ex:"In transverse waves, the medium's particles oscillate at right angles to the direction the wave travels."},
+{sec:'Waves & Optics', q:"What is the number of wave cycles passing a point per second?", opts:["Period","Wavelength","Frequency","Amplitude"], ans:2, ex:"Frequency is defined as the number of complete wave cycles that pass a fixed point each second."},
+{sec:'Waves & Optics', q:"The highest point of displacement in a transverse wave is the:", opts:["Trough","Node","Crest","Antinode"], ans:2, ex:"The crest is the highest point of a transverse wave, while the trough is the lowest point."},
+{sec:'Waves & Optics', q:"The superposition of two waves with slightly different frequencies produces:", opts:["Resonance","Beats","Reflection","Refraction"], ans:1, ex:"When two waves of close but different frequencies overlap, they produce a periodic rise and fall in amplitude known as beats."},
+{sec:'Waves & Optics', q:"Bending of waves around the corners of an obstacle is called:", opts:["Reflection","Refraction","Diffraction","Interference"], ans:2, ex:"Diffraction is the bending and spreading of waves as they pass around obstacles or through openings."},
+{sec:'Waves & Optics', q:"Huygens' Principle states that every point on a wave-front acts as a source of:", opts:["Primary waves","Secondary wavelets","Reflected waves","Photons"], ans:1, ex:"Huygens' Principle treats every point on an existing wavefront as a source of new spherical secondary wavelets."},
+{sec:'Waves & Optics', q:"Which medium is the most efficient for sound propagation?", opts:["Gases","Liquids","Solids","Vacuum"], ans:2, ex:"Because their particles are tightly packed, solids transmit sound fastest and most efficiently of the three states."},
+{sec:'Waves & Optics', q:"The change in frequency due to the relative motion of a source and observer is:", opts:["Huygens effect","Doppler effect","Photoelectric effect","Compton effect"], ans:1, ex:"The Doppler effect describes the apparent shift in frequency caused by relative motion between source and observer."},
+{sec:'Waves & Optics', q:"The orientation of the electric field vector in a light wave is called:", opts:["Interference","Diffraction","Polarization","Dispersion"], ans:2, ex:"Polarization refers to the direction in which the electric field of a light wave oscillates."},
+{sec:'Waves & Optics', q:"What is the speed of light in a vacuum?", opts:["2×10⁸ m/s","3×10⁸ m/s","3×10⁷ m/s","1.5×10⁸ m/s"], ans:1, ex:"The speed of light in a vacuum is approximately 3×10⁸ m/s, a fundamental physical constant."},
+{sec:'Waves & Optics', q:"The separation of light into component colors by a prism is:", opts:["Reflection","Refraction","Dispersion","Polarization"], ans:2, ex:"Dispersion is the splitting of white light into its constituent colors due to wavelength-dependent refraction."},
+{sec:'Waves & Optics', q:"A converging lens is also known as a:", opts:["Concave lens","Convex lens","Diverging lens","Cylindrical lens"], ans:1, ex:"A convex lens bulges outward and bends parallel rays inward to converge them at a focal point."},
+{sec:'Waves & Optics', q:"The point where parallel rays meet after passing through a lens is the:", opts:["Center of curvature","Focal point","Optical center","Aperture"], ans:1, ex:"The focal point is where parallel incoming rays converge (or appear to diverge from) after refraction through a lens."},
+{sec:'Waves & Optics', q:"An image that can be projected onto a screen is a:", opts:["Virtual image","Real image","Optical illusion","Reflection"], ans:1, ex:"A real image is formed by actual convergence of light rays, so it can be captured or projected onto a screen."},
+{sec:'Waves & Optics', q:"Which device uses two convex lenses to observe very small objects?", opts:["Telescope","Compound microscope","Periscope","Camera"], ans:1, ex:"A compound microscope uses an objective and an eyepiece lens, both convex, to magnify tiny objects."},
+{sec:'Waves & Optics', q:"The near point of a normal human eye is approximately:", opts:["10 cm","25 cm","50 cm","100 cm"], ans:1, ex:"The standard near point for a normal healthy eye, where objects can be seen clearly, is about 25 cm."},
+{sec:'Waves & Optics', q:"Which law relates the angle of incidence to the angle of refraction?", opts:["Malus' Law","Brewster's Law","Snell's Law","Ohm's Law"], ans:2, ex:"Snell's Law, n₁sinθ₁ = n₂sinθ₂, relates the angles of incidence and refraction at an interface between media."},
+{sec:'Waves & Optics', q:"A surface that reflects all light back into the original medium is performing:", opts:["Refraction","Partial reflection","Total internal reflection","Diffraction"], ans:2, ex:"Total internal reflection occurs when light hits a boundary beyond the critical angle and is entirely reflected back."},
+{sec:'Waves & Optics', q:"What property of a sound wave determines its pitch?", opts:["Amplitude","Frequency","Speed","Phase"], ans:1, ex:"The pitch we perceive in a sound is determined by its frequency; higher frequency means higher pitch."},
+{sec:'Waves & Optics', q:"A wave has a frequency of 25 Hz and a speed of 50 m/s. What is its wavelength?", opts:["1 m","2 m","3 m","4 m"], ans:1, ex:"λ = v/f = 50/25 = 2 m."},
+{sec:'Waves & Optics', q:"A wave has a wavelength of 0.15 m and a speed of 30 m/s. What is its frequency?", opts:["50 Hz","150 Hz","200 Hz","300 Hz"], ans:2, ex:"f = v/λ = 30/0.15 = 200 Hz."},
+{sec:'Waves & Optics', q:"A wave travels at 100 m/s with a wavelength of 0.5 m. Find the time period.", opts:["5 s","0.5 s","0.005 s","0.05 s"], ans:2, ex:"T = λ/v = 0.5/100 = 0.005 s."},
+{sec:'Waves & Optics', q:"What is the kinetic energy of a wave with mass 0.5 kg and velocity 4 m/s?", opts:["2 J","4 J","6 J","8 J"], ans:1, ex:"KE = ½mv² = ½(0.5)(4)² = 4 J."},
+{sec:'Waves & Optics', q:"Calculate the phase velocity for a wave with ω = 3.0 rad/s and k = 0.5 m⁻¹.", opts:["2.0 m/s","4.0 m/s","6.0 m/s","8.0 m/s"], ans:2, ex:"Phase velocity v = ω/k = 3.0/0.5 = 6.0 m/s."},
+{sec:'Waves & Optics', q:"A photon has a mass of 4.42×10⁻³⁶ kg. Find its energy (E = mc²).", opts:["4.42×10⁻³⁵ J","4.42×10⁻³⁴ J","3.97×10⁻¹⁹ J","1.6×10⁻¹⁹ J"], ans:2, ex:"E = mc² = (4.42×10⁻³⁶)(3×10⁸)² ≈ 3.97×10⁻¹⁹ J."},
+{sec:'Waves & Optics', q:"An echo is heard 4 seconds later in a canyon (v = 340 m/s). How far is the wall?", opts:["170 m","340 m","510 m","680 m"], ans:3, ex:"The sound travels to the wall and back in 4 s, so distance = v×t/2... using round-trip time, d = v×t = 340×2 = 680 m for the total path, meaning the wall is 680 m away using the given round-trip convention."},
+{sec:'Waves & Optics', q:"A spring has k = mω². If m = 1 kg and ω = 2π rad/s, find k.", opts:["2π","39.4 N/m","6.28 N/m","1 N/m"], ans:1, ex:"k = mω² = 1×(2π)² ≈ 39.4 N/m."},
+{sec:'Waves & Optics', q:"Find the speed of a wave on a string (Tension = 50 N, μ = 0.1 kg/m).", opts:["20 m/s","22.36 m/s","500 m/s","50 m/s"], ans:1, ex:"v = √(T/μ) = √(50/0.1) = √500 ≈ 22.36 m/s."},
+{sec:'Waves & Optics', q:"Calculate the wavelength of light with f = 6×10¹⁴ Hz and v = 3×10⁸ m/s.", opts:["500 nm","600 nm","700 nm","800 nm"], ans:0, ex:"λ = v/f = (3×10⁸)/(6×10¹⁴) = 5×10⁻⁷ m = 500 nm."},
+{sec:'Waves & Optics', q:"If a wave travels 20 m/s at 50 Hz, find the wavelength.", opts:["0.4 m","0.5 m","2.5 m","1000 m"], ans:0, ex:"λ = v/f = 20/50 = 0.4 m."}
+];
 
-      if (unlocked) {
-        els.statusChip.innerHTML = '<i class="fa-solid fa-lock-open" aria-hidden="true"></i> Unlocked';
-        els.gateSub.textContent = "You're in all 23 courses are ready whenever you are.";
-        els.gateIcon.className = 'fa-solid fa-lock-open';
-        els.enterBtn.removeAttribute('aria-disabled');
-      } else {
-        const remaining = [];
-        if (!state.channel) remaining.push('Channel');
-        if (!state.group) remaining.push('Group');
-        const noun = remaining.length > 1 ? 'links' : 'link';
-        els.gateSub.textContent = `Tap the ${remaining.join(' and ')} ${noun} above to unlock the Dashboard.`;
-        els.enterBtn.setAttribute('aria-disabled', 'true');
-      }
-    }
+const ALL_TOPICS = [
+ 'Electric Charge & Force',
+ "Capacitors & Gauss's Law",
+ 'Waves & Optics'
+];
 
-    els.channelLink.addEventListener('click', () => {
-      state.channel = true;
-      setTimeout(refreshGate, 150);
-    });
-    els.groupLink.addEventListener('click', () => {
-      state.group = true;
-      setTimeout(refreshGate, 150);
-    });
-  })();
+/* ============================================================
+ STORAGE KEYS (persistent artifact storage, not localStorage)
+ ============================================================ */
+const MUTE_KEY = 'phy102-muted';
+const BEST_SCORE_KEY = 'phy102-best-score';
+const STORAGE_KEY = 'phy102-quiz-state';
+
+/* ============================================================
+ HELPERS
+ ============================================================ */
+function shuffle(arr){
+ const a=[...arr];
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+ return a;
+}
+
+/* MATH RENDERING
+   The question bank mixes two ways of writing exponents/subscripts:
+   (1) caret notation like x^(4/3) or ax^n — plain text, not visually raised
+   (2) unicode superscript glyphs like x⁴ or xⁿ — visually raised, but only
+       loosely supported by some fonts/weights
+   renderMath() normalizes both into real <sup> tags so every exponent
+   actually renders as superscript, consistently, in whatever font is active. */
+const SUPERSCRIPT_MAP = {
+ '⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9',
+ '⁺':'+','⁻':'-','⁼':'=','⁽':'(','⁾':')','ⁿ':'n','ⁱ':'i','ᵛ':'v'
+};
+const SUP_RUN_RE = new RegExp('[' + Object.keys(SUPERSCRIPT_MAP).join('') + ']+', 'g');
+
+function renderMath(str) {
+ if (!str) return str;
+ let out = String(str);
+ // 1) caret + parenthesised exponent: x^(n-1)  ->  x<sup>n-1</sup>
+ out = out.replace(/\^\(([^()]*)\)/g, (_, inner) => `<sup>${inner}</sup>`);
+ // 2) caret + bare token exponent: x^m  ->  x<sup>m</sup>
+ out = out.replace(/\^([A-Za-z0-9]+)/g, (_, inner) => `<sup>${inner}</sup>`);
+ // 3) collapse runs of unicode superscript characters into real <sup> tags
+ out = out.replace(SUP_RUN_RE, (m) => {
+  const converted = m.split('').map(ch => SUPERSCRIPT_MAP[ch] || ch).join('');
+  return `<sup>${converted}</sup>`;
+ });
+ return out;
+}
+
+function sectionIcon(sec){
+ return {
+  'Electric Charge & Force':'fa-bolt',
+  "Capacitors & Gauss's Law":'fa-layer-group',
+  'Waves & Optics':'fa-wave-square'
+ }[sec] || 'fa-atom';
+}
+function randomizeOptions(item){
+ const pairs = item.opts.map((o,idx)=>({o, correct: idx===item.ans}));
+ const shuffled = shuffle(pairs);
+ return {...item, opts: shuffled.map(p=>p.o), ans: shuffled.findIndex(p=>p.correct)};
+}
+
+/* Safely read a value from persistent storage. Returns null if the key
+   doesn't exist or storage is unavailable, instead of throwing. */
+async function storageGet(key) {
+ try {
+  const result = await window.storage.get(key, false);
+  return result ? result.value : null;
+ } catch (e) {
+  return null;
+ }
+}
+async function storageSet(key, value) {
+ try {
+  await window.storage.set(key, value, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+async function storageDelete(key) {
+ try {
+  await window.storage.delete(key, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+
+/* SOUND ENGINE */
+const SoundEngine = (function() {
+ let ctx = null;
+ let muted = false;
+
+ async function init() {
+  const v = await storageGet(MUTE_KEY);
+  muted = v === '1';
+  return muted;
+ }
+
+ function getCtx() {
+ if (!ctx) {
+ const AC = window.AudioContext || window.webkitAudioContext;
+ if (!AC) return null;
+ ctx = new AC();
+ }
+ if (ctx.state === 'suspended') ctx.resume();
+ return ctx;
+ }
+
+ function isMuted() { return muted; }
+ async function setMuted(v) {
+ muted = v;
+ await storageSet(MUTE_KEY, v ? '1' : '0');
+ }
+
+ function playCorrect() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc1 = c.createOscillator();
+ const osc2 = c.createOscillator();
+ const gain = c.createGain();
+
+ osc1.type = 'sine'; osc1.frequency.setValueAtTime(880, t);
+ osc2.type = 'sine'; osc2.frequency.setValueAtTime(1760, t);
+
+ gain.gain.setValueAtTime(0.2, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+
+ osc1.connect(gain); osc2.connect(gain);
+ gain.connect(c.destination);
+
+ osc1.start(t); osc2.start(t);
+ osc1.stop(t + 0.6); osc2.stop(t + 0.6);
+ }
+
+ function playWrong() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc = c.createOscillator();
+ const gain = c.createGain();
+
+ osc.type = 'sawtooth';
+ osc.frequency.setValueAtTime(160, t);
+ osc.frequency.exponentialRampToValueAtTime(60, t + 0.35);
+
+ gain.gain.setValueAtTime(0.25, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+
+ osc.connect(gain);
+ gain.connect(c.destination);
+
+ osc.start(t);
+ osc.stop(t + 0.35);
+ }
+
+ return { init, isMuted, setMuted, playCorrect, playWrong };
+})();
+
+/* APP STATE */
+let quizMode = 'auto'; // 'auto' or 'custom'
+let activeQuestions = [];
+let userAnswers = []; // array of selected option indices
+let currentQ = 0;
+let timeRemaining = 0;
+let timerInterval = null;
+let isPaused = false;
+let leaveCount = 0;
+
+// DOM Elements
+const homeScreen = document.getElementById('homeScreen');
+const configScreen = document.getElementById('configScreen');
+const loadingScreen = document.getElementById('loadingScreen');
+const quizScreen = document.getElementById('quizScreen');
+const resultScreen = document.getElementById('resultScreen');
+
+const pickAuto = document.getElementById('pickAuto');
+const pickCustom = document.getElementById('pickCustom');
+const backToHomeFromConfig = document.getElementById('backToHomeFromConfig');
+const startCustomBtn = document.getElementById('startCustomBtn');
+
+const topicsWrap = document.getElementById('topicsWrap');
+const timeSlider = document.getElementById('timeSlider');
+const timeValue = document.getElementById('timeValue');
+const countSlider = document.getElementById('countSlider');
+const countValue = document.getElementById('countValue');
+
+const timerBox = document.getElementById('timer');
+const timerText = document.getElementById('timerText');
+const soundToggle = document.getElementById('soundToggle');
+
+const progressFill = document.getElementById('progressFill');
+const dotsRow = document.getElementById('dotsRow');
+const sectionTag = document.getElementById('sectionTag');
+const qCounter = document.getElementById('qCounter');
+const qText = document.getElementById('qText');
+const optsWrap = document.getElementById('optsWrap');
+const inlineExplain = document.getElementById('inlineExplain');
+
+const backBtn = document.getElementById('backBtn');
+const nextBtn = document.getElementById('nextBtn');
+const finishBtn = document.getElementById('finishBtn');
+
+const quizTools = document.getElementById('quizTools');
+const pauseBtn = document.getElementById('pauseBtn');
+const pauseOverlay = document.getElementById('pauseOverlay');
+const resumeFromPauseBtn = document.getElementById('resumeFromPauseBtn');
+
+const resumeModal = document.getElementById('resumeModal');
+const resumeInfo = document.getElementById('resumeInfo');
+const resumeYes = document.getElementById('resumeYes');
+const resumeNo = document.getElementById('resumeNo');
+
+const leaveWarningModal = document.getElementById('leaveWarningModal');
+const leaveWarnText = document.getElementById('leaveWarnText');
+const leaveWarnOk = document.getElementById('leaveWarnOk');
+
+const statsBar = document.getElementById('statsBar');
+
+/* INIT */
+window.addEventListener('load', async () => {
+ await SoundEngine.init();
+ updateSoundToggleUI();
+ setupConfigTopics();
+ await checkSavedState();
+ await updateHomeStats();
+});
+
+function updateSoundToggleUI() {
+ const muted = SoundEngine.isMuted();
+ soundToggle.classList.toggle('muted', muted);
+ soundToggle.setAttribute('aria-pressed', muted ? 'true' : 'false');
+ soundToggle.innerHTML = muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+}
+soundToggle.addEventListener('click', async () => {
+ await SoundEngine.setMuted(!SoundEngine.isMuted());
+ updateSoundToggleUI();
+});
+
+async function updateHomeStats() {
+ const best = await storageGet(BEST_SCORE_KEY);
+ if (best) {
+  statsBar.classList.remove('hidden');
+  statsBar.innerHTML = `<div class="stat-chip"><i class="fa-solid fa-trophy"></i> Best Score: <strong>${best}%</strong></div>`;
+ } else {
+  statsBar.classList.add('hidden');
+  statsBar.innerHTML = '';
+ }
+}
+
+/* CONFIG TOPICS BUILD */
+function setupConfigTopics() {
+ topicsWrap.innerHTML = '';
+ ALL_TOPICS.forEach((t) => {
+  const label = document.createElement('label');
+  label.className = 'topic-chip';
+  label.innerHTML = `<input type="checkbox" value="${t}" checked> <span><i class="fa-solid ${sectionIcon(t)}"></i> ${t}</span>`;
+  topicsWrap.appendChild(label);
+ });
+}
+
+timeSlider.addEventListener('input', () => { timeValue.textContent = timeSlider.value; });
+countSlider.addEventListener('input', () => { countValue.textContent = countSlider.value; });
+
+/* MODE SELECTION */
+pickAuto.addEventListener('click', () => {
+ startQuiz('auto', ALL_TOPICS, 60, QUESTIONS.length);
+});
+pickCustom.addEventListener('click', () => {
+ homeScreen.classList.add('hidden');
+ configScreen.classList.remove('hidden');
+});
+backToHomeFromConfig.addEventListener('click', () => {
+ configScreen.classList.add('hidden');
+ homeScreen.classList.remove('hidden');
+});
+
+startCustomBtn.addEventListener('click', () => {
+ const selectedTopics = Array.from(topicsWrap.querySelectorAll('input:checked')).map(i => i.value);
+ if (selectedTopics.length === 0) {
+  alert('Please select at least one topic.');
+  return;
+ }
+ const mins = parseInt(timeSlider.value, 10);
+ const count = parseInt(countSlider.value, 10);
+ configScreen.classList.add('hidden');
+ startQuiz('custom', selectedTopics, mins, count);
+});
+
+/* START QUIZ */
+function startQuiz(mode, topics, minutes, count) {
+ quizMode = mode;
+ showScreen(loadingScreen);
+ setTimeout(() => {
+  let filtered = QUESTIONS.filter(q => topics.includes(q.sec));
+  if (filtered.length === 0) filtered = [...QUESTIONS];
+  filtered = shuffle(filtered).map(randomizeOptions);
+  if (count < filtered.length) {
+   filtered = filtered.slice(0, count);
+  }
+  activeQuestions = filtered;
+  userAnswers = new Array(activeQuestions.length).fill(null);
+  currentQ = 0;
+  timeRemaining = minutes * 60;
+  isPaused = false;
+  leaveCount = 0;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') {
+   pauseBtn.classList.remove('hidden');
+  } else {
+   pauseBtn.classList.add('hidden');
+  }
+  timerBox.classList.remove('hidden');
+
+  startTimer();
+  renderQuestion();
+  saveState();
+ }, 600);
+}
+
+function showScreen(sc) {
+ [homeScreen, configScreen, loadingScreen, quizScreen, resultScreen].forEach(s => s.classList.add('hidden'));
+ sc.classList.remove('hidden');
+ if (sc === quizScreen) {
+  closeMobileNav();
+  hamburgerBtn.classList.add('hidden');
+ } else {
+  hamburgerBtn.classList.remove('hidden');
+ }
+}
+
+/* TIMER */
+function startTimer() {
+ clearInterval(timerInterval);
+ updateTimerDisplay();
+ timerInterval = setInterval(() => {
+  if (!isPaused) {
+   timeRemaining--;
+   updateTimerDisplay();
+   if (timeRemaining <= 0) {
+    clearInterval(timerInterval);
+    alert('Time is up! Submitting your answers.');
+    finishQuiz();
+   }
+  }
+ }, 1000);
+}
+
+function updateTimerDisplay() {
+ const m = Math.floor(Math.max(0, timeRemaining) / 60);
+ const s = Math.max(0, timeRemaining) % 60;
+ timerText.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+ if (timeRemaining < 300) {
+  timerBox.classList.add('warn');
+ } else {
+  timerBox.classList.remove('warn');
+ }
+}
+
+/* PAUSE ENGINE */
+pauseBtn.addEventListener('click', togglePause);
+resumeFromPauseBtn.addEventListener('click', togglePause);
+
+function togglePause() {
+ if (quizMode !== 'auto') return;
+ isPaused = !isPaused;
+ if (isPaused) {
+  pauseOverlay.classList.remove('hidden');
+ } else {
+  pauseOverlay.classList.add('hidden');
+ }
+}
+
+/* RENDER QUESTION */
+function renderQuestion() {
+ const q = activeQuestions[currentQ];
+ sectionTag.innerHTML = `<i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec}`;
+ qCounter.textContent = `Question ${currentQ + 1} of ${activeQuestions.length}`;
+ qText.innerHTML = renderMath(q.q);
+
+ optsWrap.innerHTML = '';
+ inlineExplain.className = 'inline-explain';
+ inlineExplain.innerHTML = '';
+
+ const answered = userAnswers[currentQ] !== null;
+
+ q.opts.forEach((optStr, idx) => {
+  const optDiv = document.createElement('div');
+  optDiv.className = 'opt';
+  const letter = String.fromCharCode(65 + idx);
+
+  if (answered) {
+   optDiv.classList.add('locked');
+   if (quizMode === 'auto') {
+    if (idx === q.ans) optDiv.classList.add('correct');
+    if (userAnswers[currentQ] === idx && idx !== q.ans) optDiv.classList.add('wrong');
+   } else {
+    if (userAnswers[currentQ] === idx) optDiv.classList.add('selected');
+   }
+  }
+
+  optDiv.innerHTML = `<div class="opt-letter">${letter}</div><div class="opt-text">${renderMath(optStr)}</div>`;
+  optDiv.addEventListener('click', () => handleSelectOption(idx));
+  optsWrap.appendChild(optDiv);
+ });
+
+ if (answered && quizMode === 'auto') {
+  const isRight = userAnswers[currentQ] === q.ans;
+  inlineExplain.classList.add('show', isRight ? 'right' : 'wrong');
+  inlineExplain.innerHTML = `
+   <div class="ie-label">${isRight ? '<i class="fa-solid fa-circle-check"></i> Correct!' : '<i class="fa-solid fa-circle-xmark"></i> Incorrect'}</div>
+   <div>${renderMath(q.ex)}</div>
+  `;
+ }
+
+ // Navigation buttons state
+ backBtn.disabled = currentQ === 0;
+ if (currentQ === activeQuestions.length - 1) {
+  nextBtn.classList.add('hidden');
+  finishBtn.classList.remove('hidden');
+ } else {
+  nextBtn.classList.remove('hidden');
+  finishBtn.classList.add('hidden');
+ }
+
+ renderProgress();
+}
+
+function renderProgress() {
+ const pct = ((currentQ + 1) / activeQuestions.length) * 100;
+ progressFill.style.width = `${pct}%`;
+
+ dotsRow.innerHTML = '';
+ activeQuestions.forEach((q, idx) => {
+  const dot = document.createElement('div');
+  dot.className = 'dot';
+  if (idx === currentQ) dot.classList.add('current');
+
+  if (userAnswers[idx] !== null) {
+   if (quizMode === 'auto') {
+    if (userAnswers[idx] === q.ans) dot.classList.add('correct');
+    else dot.classList.add('wrong');
+   } else {
+    dot.classList.add('answered');
+   }
+  }
+  dot.addEventListener('click', () => {
+   currentQ = idx;
+   renderQuestion();
+  });
+  dotsRow.appendChild(dot);
+ });
+}
+
+/* OPTION SELECTION */
+function handleSelectOption(idx) {
+ if (userAnswers[currentQ] !== null && quizMode === 'auto') return; // locked in auto mode once picked
+
+ const prevAns = userAnswers[currentQ];
+ userAnswers[currentQ] = idx;
+
+ if (quizMode === 'auto' && prevAns === null) {
+  if (idx === activeQuestions[currentQ].ans) {
+   SoundEngine.playCorrect();
+  } else {
+   SoundEngine.playWrong();
+  }
+ }
+
+ renderQuestion();
+ saveState();
+}
+
+nextBtn.addEventListener('click', () => {
+ if (currentQ < activeQuestions.length - 1) {
+  currentQ++;
+  renderQuestion();
+ }
+});
+backBtn.addEventListener('click', () => {
+ if (currentQ > 0) {
+  currentQ--;
+  renderQuestion();
+ }
+});
+finishBtn.addEventListener('click', () => {
+ const answeredCount = userAnswers.filter(a => a !== null).length;
+ if (quizMode === 'auto' && answeredCount < Math.min(30, activeQuestions.length)) {
+  alert(`Please answer at least ${Math.min(30, activeQuestions.length)} questions before submitting.`);
+  return;
+ }
+ if (confirm('Are you sure you want to submit your quiz?')) {
+  finishQuiz();
+ }
+});
+
+/* KEYBOARD NAVIGATION */
+document.addEventListener('keydown', (e) => {
+ if (quizScreen.classList.contains('hidden')) return;
+ if (e.key === 'ArrowLeft' && currentQ > 0) {
+  currentQ--; renderQuestion();
+ } else if (e.key === 'ArrowRight' && currentQ < activeQuestions.length - 1) {
+  currentQ++; renderQuestion();
+ } else if (['1','2','3','4'].includes(e.key)) {
+  const idx = parseInt(e.key, 10) - 1;
+  if (idx < activeQuestions[currentQ].opts.length) {
+   handleSelectOption(idx);
+  }
+ }
+});
+
+/* FINISH QUIZ */
+function finishQuiz() {
+ clearInterval(timerInterval);
+ clearSavedState();
+ quizTools.classList.add('hidden');
+ timerBox.classList.add('hidden');
+
+ let correctCount = 0;
+ const breakdown = {};
+
+ activeQuestions.forEach((q, i) => {
+  if (!breakdown[q.sec]) breakdown[q.sec] = { correct: 0, total: 0 };
+  breakdown[q.sec].total++;
+
+  if (userAnswers[i] === q.ans) {
+   correctCount++;
+   breakdown[q.sec].correct++;
+  }
+ });
+
+ const total = activeQuestions.length;
+ const pct = Math.round((correctCount / total) * 100);
+
+ document.getElementById('resultScore').textContent = correctCount;
+ document.getElementById('resultOf').textContent = `/ ${total}`;
+ document.getElementById('resultPct').textContent = `${pct}% Overall Score`;
+
+ let msg = '';
+ if (pct >= 80) msg = '<i class="fa-solid fa-award" style="color:#facc15;"></i> Excellent Mastery! Outstanding Performance.';
+ else if (pct >= 60) msg = '<i class="fa-solid fa-thumbs-up" style="color:var(--accent);"></i> Good Job! Keep reviewing difficult topics.';
+ else msg = '<i class="fa-solid fa-book-open" style="color:var(--red);"></i> Keep Practicing! Review the explanations below.';
+ document.getElementById('resultMsg').innerHTML = msg;
+
+ document.getElementById('bestBadge').innerHTML = '';
+ (async () => {
+  const oldBestRaw = await storageGet(BEST_SCORE_KEY);
+  const oldBest = oldBestRaw ? parseInt(oldBestRaw, 10) : 0;
+  if (pct > oldBest) {
+   await storageSet(BEST_SCORE_KEY, String(pct));
+   document.getElementById('bestBadge').innerHTML = `<div class="best-badge"><i class="fa-solid fa-star"></i> New Personal Best!</div>`;
+  }
+ })();
+
+ // Render breakdown grid
+ const breakdownGrid = document.getElementById('breakdownGrid');
+ breakdownGrid.innerHTML = '';
+ Object.keys(breakdown).forEach(sec => {
+  const item = breakdown[sec];
+  const bdCard = document.createElement('div');
+  bdCard.className = 'bd-card';
+  bdCard.innerHTML = `
+   <div class="bd-name"><i class="fa-solid ${sectionIcon(sec)}"></i> ${sec}</div>
+   <div class="bd-score">${item.correct} <span class="bd-total">/ ${item.total}</span></div>
+  `;
+  breakdownGrid.appendChild(bdCard);
+ });
+
+ // Render question review list
+ const reviewList = document.getElementById('reviewList');
+ reviewList.innerHTML = '';
+ activeQuestions.forEach((q, i) => {
+  const uAns = userAnswers[i];
+  const isRight = uAns === q.ans;
+  const revItem = document.createElement('div');
+  revItem.className = `review-item ${isRight ? 'right' : 'miss'}`;
+
+  const uAnsText = uAns !== null ? `${String.fromCharCode(65 + uAns)}) ${renderMath(q.opts[uAns])}` : 'Not Answered';
+  const cAnsText = `${String.fromCharCode(65 + q.ans)}) ${renderMath(q.opts[q.ans])}`;
+
+  revItem.innerHTML = `
+   <div class="ri-section"><i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec} · Q${i + 1}</div>
+   <div class="ri-q"><strong>${renderMath(q.q)}</strong></div>
+   <div class="ri-ans ${isRight ? 'right' : 'wrong'}">
+    <i class="fa-solid ${isRight ? 'fa-check' : 'fa-xmark'}"></i>
+    <span><strong>Your Answer:</strong> ${uAnsText}</span>
+   </div>
+   ${!isRight ? `<div class="ri-ans correct-reveal"><i class="fa-solid fa-bullseye"></i> <span><strong>Correct Answer:</strong> ${cAnsText}</span></div>` : ''}
+   <div class="ri-exp"><strong>Explanation:</strong> ${renderMath(q.ex)}</div>
+  `;
+  reviewList.appendChild(revItem);
+ });
+
+ showScreen(resultScreen);
+ updateHomeStats();
+}
+
+document.getElementById('homeBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('retryBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+/* AUTOSAVE ENGINE (persistent artifact storage) */
+function saveState() {
+ const state = { quizMode, activeQuestions, userAnswers, currentQ, timeRemaining };
+ storageSet(STORAGE_KEY, JSON.stringify(state));
+}
+
+function clearSavedState() {
+ storageDelete(STORAGE_KEY);
+}
+
+async function checkSavedState() {
+ const raw = await storageGet(STORAGE_KEY);
+ if (!raw) return;
+ let data;
+ try {
+  data = JSON.parse(raw);
+ } catch (e) {
+  return;
+ }
+ if (!data || !data.activeQuestions || data.activeQuestions.length === 0) return;
+
+ resumeInfo.textContent = `${data.activeQuestions.length} Questions (${data.quizMode.toUpperCase()} Mode)`;
+ resumeModal.classList.remove('hidden');
+
+ resumeYes.onclick = () => {
+  resumeModal.classList.add('hidden');
+  quizMode = data.quizMode;
+  activeQuestions = data.activeQuestions;
+  userAnswers = data.userAnswers;
+  currentQ = data.currentQ;
+  timeRemaining = data.timeRemaining;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') pauseBtn.classList.remove('hidden'); else pauseBtn.classList.add('hidden');
+  timerBox.classList.remove('hidden');
+  startTimer();
+  renderQuestion();
+ };
+
+ resumeNo.onclick = () => {
+  resumeModal.classList.add('hidden');
+  clearSavedState();
+ };
+}
+
+/* TAB SWITCH GUARDRAIL */
+document.addEventListener('visibilitychange', () => {
+ if (!quizScreen.classList.contains('hidden') && document.hidden) {
+  leaveCount++;
+  if (leaveCount >= 3) {
+   alert('You have left the quiz tab 3 times. The quiz will now reset.');
+   clearSavedState();
+   location.reload();
+  } else {
+   leaveWarnText.textContent = `You switched away from the quiz tab. Warning ${leaveCount} of 3. Leaving 3 times will reset your quiz.`;
+   leaveWarningModal.classList.remove('hidden');
+  }
+ }
+});
+leaveWarnOk.addEventListener('click', () => leaveWarningModal.classList.add('hidden'));
+
+/* SCIENTIFIC CALCULATOR ENGINE */
+(function setupCalculator(){
+ const calcFab = document.getElementById('calcFab');
+ const calcBackdrop = document.getElementById('calcBackdrop');
+ const calcPanel = document.getElementById('calcPanel');
+ const calcClose = document.getElementById('calcClose');
+ const calcExpr = document.getElementById('calcExpr');
+ const calcResult = document.getElementById('calcResult');
+ const calcGrid = document.getElementById('calcGrid');
+ const calcHeader = document.getElementById('calcHeader');
+ const calcModeDeg = document.getElementById('calcModeDeg');
+ const calcModeRad = document.getElementById('calcModeRad');
+
+ let expr = '';
+ let isRad = false;
+
+ function resetPanelPosition() {
+  // Clear any position left over from a previous drag so the calculator
+  // reopens centered instead of wherever it was last left/jumped to.
+  calcPanel.classList.remove('dragged');
+  calcPanel.style.left = '';
+  calcPanel.style.top = '';
+ }
+
+ calcFab.addEventListener('click', () => {
+  resetPanelPosition();
+  calcBackdrop.classList.remove('hidden');
+  calcPanel.classList.remove('hidden');
+ });
+ calcClose.addEventListener('click', closeCalc);
+ calcBackdrop.addEventListener('click', closeCalc);
+
+ function closeCalc(){
+  calcBackdrop.classList.add('hidden');
+  calcPanel.classList.add('hidden');
+ }
+
+ calcModeDeg.addEventListener('click', () => {
+  isRad = false;
+  calcModeDeg.classList.add('active'); calcModeRad.classList.remove('active');
+ });
+ calcModeRad.addEventListener('click', () => {
+  isRad = true;
+  calcModeRad.classList.add('active'); calcModeDeg.classList.remove('active');
+ });
+
+ const buttons = [
+  { label: 'C', cls: 'clear', action: 'clear' },
+  { label: '(', cls: 'op', action: 'append', val: '(' },
+  { label: ')', cls: 'op', action: 'append', val: ')' },
+  { label: '÷', cls: 'op', action: 'append', val: '/' },
+
+  { label: 'sin', cls: 'fn', action: 'fn', fn: 'sin' },
+  { label: '7', action: 'append', val: '7' },
+  { label: '8', action: 'append', val: '8' },
+  { label: '9', action: 'append', val: '9' },
+
+  { label: 'cos', cls: 'fn', action: 'fn', fn: 'cos' },
+  { label: '4', action: 'append', val: '4' },
+  { label: '5', action: 'append', val: '5' },
+  { label: '6', action: 'append', val: '6' },
+
+  { label: 'tan', cls: 'fn', action: 'fn', fn: 'tan' },
+  { label: '1', action: 'append', val: '1' },
+  { label: '2', action: 'append', val: '2' },
+  { label: '3', action: 'append', val: '3' },
+
+  { label: '√', cls: 'fn', action: 'fn', fn: 'sqrt' },
+  { label: '0', action: 'append', val: '0' },
+  { label: '.', action: 'append', val: '.' },
+  { label: '×', cls: 'op', action: 'append', val: '*' },
+
+  { label: 'ln', cls: 'fn', action: 'fn', fn: 'ln' },
+  { label: 'log', cls: 'fn', action: 'fn', fn: 'log10' },
+  { label: '^', cls: 'op', action: 'append', val: '**' },
+  { label: '-', cls: 'op', action: 'append', val: '-' },
+
+  { label: 'π', cls: 'fn', action: 'append', val: 'π' },
+  { label: 'e', cls: 'fn', action: 'append', val: 'e' },
+  { label: '+', cls: 'op', action: 'append', val: '+' },
+  { label: '=', cls: 'equals', action: 'calc' }
+ ];
+
+ calcGrid.innerHTML = '';
+ buttons.forEach(b => {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = `calc-btn ${b.cls || ''}`;
+  btn.textContent = b.label;
+  btn.addEventListener('click', () => handleCalc(b));
+  calcGrid.appendChild(btn);
+ });
+
+ function handleCalc(b) {
+  if (b.action === 'clear') {
+   expr = '';
+   calcExpr.innerHTML = '&nbsp;';
+   calcResult.textContent = '0';
+   calcResult.classList.remove('err');
+  } else if (b.action === 'append') {
+   expr += b.val;
+   calcExpr.textContent = expr;
+  } else if (b.action === 'fn') {
+   expr += `${b.fn}(`;
+   calcExpr.textContent = expr;
+  } else if (b.action === 'calc') {
+   try {
+    // Substitute π and standalone "e" for the constants passed into the
+    // evaluator scope. Using named helper functions (rather than a
+    // regex-based degree/radian post-process) avoids breaking on nested
+    // parentheses, e.g. sin(sqrt(4)).
+    const safeExpr = expr.replace(/π/g, 'PI').replace(/\be\b/g, 'E');
+
+    const sinFn = x => isRad ? Math.sin(x) : Math.sin(x * Math.PI / 180);
+    const cosFn = x => isRad ? Math.cos(x) : Math.cos(x * Math.PI / 180);
+    const tanFn = x => isRad ? Math.tan(x) : Math.tan(x * Math.PI / 180);
+
+    const evaluator = new Function(
+     'sin', 'cos', 'tan', 'sqrt', 'ln', 'log10', 'PI', 'E',
+     `"use strict"; return (${safeExpr});`
+    );
+    const res = evaluator(sinFn, cosFn, tanFn, Math.sqrt, Math.log, Math.log10, Math.PI, Math.E);
+
+    calcResult.textContent = Number.isFinite(res) ? +res.toFixed(6) : 'Error';
+    calcResult.classList.remove('err');
+   } catch(e) {
+    calcResult.textContent = 'Error';
+    calcResult.classList.add('err');
+   }
+  }
+ }
+
+ // Draggable window logic
+ let isDragging = false, startX, startY, initialX, initialY;
+ calcHeader.addEventListener('mousedown', (e) => {
+  // Ignore drags started on the header's own controls (DEG/RAD toggle,
+  // close button) so clicking them doesn't also kick off a "drag" that
+  // relocates the panel.
+  if (e.target.closest('button')) return;
+
+  // Capture the panel's current on-screen position *before* switching it
+  // from the centered (transform-based) anchor to an absolute left/top
+  // anchor. Writing that position back immediately means the removal of
+  // the centering transform (via the .dragged class) doesn't cause the
+  // panel to visually jump.
+  const rect = calcPanel.getBoundingClientRect();
+  initialX = rect.left; initialY = rect.top;
+  calcPanel.style.left = `${initialX}px`;
+  calcPanel.style.top = `${initialY}px`;
+  calcPanel.classList.add('dragged');
+
+  isDragging = true;
+  startX = e.clientX; startY = e.clientY;
+ });
+ document.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  const dx = e.clientX - startX;
+  const dy = e.clientY - startY;
+  calcPanel.style.left = `${initialX + dx}px`;
+  calcPanel.style.top = `${initialY + dy}px`;
+ });
+ document.addEventListener('mouseup', () => { isDragging = false; });
+})();
 </script>
 </body>
 </html>
