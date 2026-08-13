@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHM108 · Chemistry Practice Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+ --bg:#0a0c12; --surface:#0f1117; --surface2:#141820; --surface3:#1a2030;
+ --border:#1e2640; --border2:#26304e; --ink:#e2e8f6; --ink2:#94a3c0; --ink3:#4a5878;
+ --accent:#22c58e; --accent2:#4f8ef7; --accent-dim:#0d2018; --accent-glow:rgba(34,197,142,.14);
+ --green:#34d399; --green-dim:#0a1e14; --red:#f87171; --red-dim:#1e0a0a; --purple:#a78bfa;
+ --bar-bg:rgba(10,12,18,.92); --font-scale:1;
+ --r:16px;
+}
+html{font-size:calc(16px * var(--font-scale, 1));}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+sup{font-size:.7em;vertical-align:super;line-height:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Outfit',sans-serif;min-height:100vh;display:flex;flex-direction:column;
+ background-image:radial-gradient(ellipse 900px 600px at 10% 0%, rgba(34,197,142,.06) 0%, transparent 70%),
+ radial-gradient(ellipse 700px 500px at 90% 30%, rgba(79,142,247,.05) 0%, transparent 60%);
+ transition:background-color .2s ease, color .2s ease;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);
+ background:var(--bar-bg);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px;}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.brand-badge{background:linear-gradient(135deg,#22c58e,#4f8ef7);color:#fff;font-weight:800;font-size:.72rem;letter-spacing:2px;
+ padding:6px 14px;border-radius:50px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+.brand-sub{font-size:.7rem;color:var(--ink3);letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+#timer{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:600;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(34,197,142,.25);padding:7px 16px;border-radius:50px;letter-spacing:2px;min-width:96px;text-align:center;
+ display:flex;align-items:center;gap:8px;justify-content:center;}
+#timer.warn{color:var(--red);background:var(--red-dim);border-color:rgba(248,113,113,.3);animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+#soundToggle{width:38px;height:38px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);
+ color:var(--ink2);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;
+ transition:border-color .15s,color .15s,background .15s;flex-shrink:0;}
+#soundToggle:hover{border-color:rgba(34,197,142,.4);color:var(--accent);}
+#soundToggle.muted{color:var(--ink3);}
+.hamburger{display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;cursor:pointer;padding:0;color:var(--ink);font-size:.95rem;transition:border-color .15s,color .15s;flex-shrink:0;}
+.hamburger:hover{border-color:rgba(34,197,142,.4);color:var(--accent);}
+.hamburger .fa-xmark{display:none;} .hamburger[aria-expanded="true"] .fa-bars{display:none;} .hamburger[aria-expanded="true"] .fa-xmark{display:inline-block;}
+.mobile-nav{position:fixed;inset:0;z-index:99;background:transparent;opacity:0;pointer-events:none;transition:opacity .15s ease;}
+.mobile-nav.open{opacity:1;pointer-events:auto;}
+.mobile-nav-panel{position:absolute;top:70px;right:20px;width:250px;max-width:82vw;max-height:min(70vh,520px);background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:1px;transform:scale(.94) translateY(-8px);transform-origin:top right;opacity:0;transition:transform .16s ease,opacity .16s ease;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow-y:auto;}
+.mobile-nav.open .mobile-nav-panel{transform:scale(1) translateY(0);opacity:1;}
+.mobile-nav-panel a{display:flex;align-items:center;gap:12px;padding:11px 10px;font-size:.9rem;font-weight:600;color:var(--ink);text-decoration:none;border-radius:8px;}
+.mobile-nav-panel a:hover{background:var(--accent-glow);}
+.mobile-nav-panel a i{width:18px;text-align:center;color:var(--accent);font-size:.85rem;}
+.mobile-nav-panel a.active{color:var(--accent);background:var(--accent-dim);}
+.mobile-nav-panel .nav-group-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);padding:12px 10px 4px;}
+.mobile-nav-panel .nav-group-label:first-child{padding-top:6px;}
+main{flex:1;display:flex;justify-content:center;padding:0 16px 100px;}
+#homeScreen,#configScreen,#quizScreen,#resultScreen,#loadingScreen{width:100%;max-width:720px;}
+.hidden{display:none !important;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:32px 28px;margin-bottom:20px;}
+
+a { text-decoration: none; }
+#statsBar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;}
+.stat-chip{font-size:.78rem;color:var(--ink2);background:var(--surface2);border:1px solid var(--border);padding:8px 16px;
+ border-radius:50px;display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;}
+.stat-chip i{color:var(--accent);}
+.stat-chip strong{color:var(--ink);}
+
+/* HOME */
+.hero-wrap{padding:48px 0 8px;text-align:center;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
+ color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:500;margin-bottom:22px;background:var(--accent-dim);
+ border:1px solid rgba(34,197,142,.22);padding:7px 16px 7px 13px;border-radius:50px;}
+.hero-title{font-family:'Fraunces',serif;font-size:2.3rem;line-height:1.16;margin-bottom:16px;font-weight:600;letter-spacing:-.5px;}
+.hero-title span{color:var(--accent);font-style:italic;}
+.hero-desc{color:var(--ink2);font-size:.96rem;line-height:1.75;max-width:480px;margin:0 auto 34px;}
+
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:30px;}
+.mode-card{background:var(--surface2);border:1px solid var(--border2);border-radius:18px;padding:26px 22px;cursor:pointer;
+ transition:border-color .15s,transform .15s,background .15s;text-align:left;}
+.mode-card:hover{border-color:rgba(34,197,142,.4);transform:translateY(-3px);background:var(--surface3);}
+.mode-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#22c58e,#4f8ef7);color:#fff;
+ display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:16px;}
+.mode-name{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;margin-bottom:8px;}
+.mode-desc{font-size:.85rem;color:var(--ink2);line-height:1.6;margin-bottom:14px;}
+.mode-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.mode-tag{font-size:.66rem;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(34,197,142,.22);
+ padding:3px 9px;border-radius:20px;font-family:'JetBrains Mono',monospace;}
+
+.section-heading{display:flex;align-items:center;gap:12px;margin:36px 0 18px;}
+.section-heading-icon{width:34px;height:34px;border-radius:10px;background:var(--accent-dim);border:1px solid rgba(34,197,142,.22);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.85rem;flex-shrink:0;}
+.section-heading-text{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;}
+.rules-list{display:grid;gap:8px;}
+.rule-item{display:flex;gap:14px;align-items:flex-start;font-size:.86rem;color:var(--ink2);line-height:1.55;padding:14px 16px;
+ background:var(--surface2);border:1px solid var(--border);border-radius:10px;}
+.rule-icon{width:30px;height:30px;border-radius:8px;flex-shrink:0;background:var(--accent-dim);border:1px solid rgba(34,197,142,.2);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.78rem;margin-top:1px;}
+.rule-text strong{color:var(--ink);}
+
+/* CONFIG SCREEN */
+.config-field{margin-bottom:22px;}
+.config-label{font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.config-label i{color:var(--accent);}
+.config-input-row{display:flex;align-items:center;gap:14px;}
+.config-slider{flex:1;-webkit-appearance:none;height:6px;border-radius:6px;background:var(--border2);outline:none;}
+.config-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+ background:linear-gradient(135deg,#22c58e,#4f8ef7);cursor:pointer;box-shadow:0 2px 8px rgba(34,197,142,.4);}
+.config-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;border:none;
+ background:linear-gradient(135deg,#22c58e,#4f8ef7);cursor:pointer;}
+.config-value{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);background:var(--accent-dim);
+ border:1px solid rgba(34,197,142,.25);padding:6px 14px;border-radius:10px;min-width:74px;text-align:center;font-size:.9rem;}
+.config-hint{font-size:.74rem;color:var(--ink3);margin-top:8px;}
+.topics-grid{display:flex;flex-wrap:wrap;gap:10px;}
+.topic-chip{display:flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--border2);
+ padding:10px 16px;border-radius:12px;cursor:pointer;font-size:.85rem;transition:border-color .15s,background .15s;}
+.topic-chip:hover{border-color:rgba(34,197,142,.4);}
+.topic-chip input{accent-color:var(--accent);width:16px;height:16px;cursor:pointer;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#22c58e,#4f8ef7);
+ color:#fff;border:none;padding:14px 28px;border-radius:50px;font-weight:700;font-size:.95rem;cursor:pointer;
+ font-family:'Outfit',sans-serif;transition:transform .15s,box-shadow .15s,opacity .2s;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(34,197,142,.3);}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--border2);padding:12px 22px;border-radius:50px;
+ font-weight:600;font-size:.9rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:border-color .15s,background .15s;
+ display:inline-flex;align-items:center;gap:8px;}
+.btn-ghost:hover{background:var(--accent-glow);border-color:rgba(34,197,142,.35);}
+.btn-ghost:disabled{opacity:.35;cursor:not-allowed;}
+
+/* LOADING SCREEN */
+#loadingScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 0;text-align:center;}
+.loader-ring{width:56px;height:56px;border-radius:50%;border:4px solid var(--border2);border-top-color:var(--accent);
+ animation:spin .8s linear infinite;margin-bottom:24px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader-text{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--ink2);}
+.loader-sub{font-size:.78rem;color:var(--ink3);margin-top:8px;font-family:'JetBrains Mono',monospace;}
+
+/* QUIZ */
+#progressWrap{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;padding-top:24px;}
+.progress-bar-track{height:4px;background:var(--border);border-radius:4px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .3s;}
+.dots-group{display:flex;gap:5px;flex-wrap:wrap;}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .15s,transform .1s;}
+.dot:hover{transform:scale(1.35);}
+.dot.answered{background:rgba(34,197,142,.4);border:1px solid var(--accent);}
+.dot.current{background:var(--accent);box-shadow:0 0 0 3px rgba(34,197,142,.25);}
+.dot.correct{background:var(--green);}
+.dot.wrong{background:var(--red);}
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.q-section-tag{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;
+ font-weight:600;background:var(--accent-dim);padding:4px 10px;border-radius:20px;border:1px solid rgba(34,197,142,.2);}
+.q-counter{font-size:.78rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;}
+.q-text{font-size:1.1rem;line-height:1.65;margin:0 0 26px;font-family:'Fraunces',serif;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.opt{display:flex;align-items:flex-start;gap:14px;padding:15px 18px;border-radius:12px;border:1px solid var(--border2);
+ margin-bottom:10px;background:var(--surface2);cursor:pointer;transition:border-color .15s,background .15s,transform .1s;}
+.opt:hover{border-color:rgba(34,197,142,.35);background:var(--surface3);}
+.opt.locked{cursor:default;}
+.opt.selected{border-color:var(--accent);background:var(--accent-dim);}
+.opt.correct{border-color:var(--green);background:var(--green-dim);}
+.opt.wrong{border-color:var(--red);background:var(--red-dim);}
+.opt-letter{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;
+ justify-content:center;font-size:.75rem;font-weight:700;color:var(--ink3);flex-shrink:0;font-family:'JetBrains Mono',monospace;
+ transition:all .15s;margin-top:1px;}
+.opt.selected .opt-letter{background:var(--accent);color:#fff;border-color:var(--accent);}
+.opt.correct .opt-letter{background:var(--green);color:#fff;border-color:var(--green);}
+.opt.wrong .opt-letter{background:var(--red);color:#fff;border-color:var(--red);}
+.opt-text{font-size:.92rem;line-height:1.55;padding-top:3px;}
+.inline-explain{display:none;margin-top:6px;margin-bottom:14px;padding:16px 18px;background:rgba(34,197,142,.05);
+ border:1px solid rgba(34,197,142,.15);border-radius:10px;font-size:.85rem;line-height:1.7;color:var(--ink2);animation:fadeUp .2s ease;}
+.inline-explain.show{display:block;}
+.inline-explain .ie-label{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;
+ margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.inline-explain.right .ie-label{color:var(--green);}
+.inline-explain.wrong .ie-label{color:var(--red);}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;}
+.kbd-hint{text-align:center;font-size:.68rem;color:var(--ink3);margin-top:14px;font-family:'JetBrains Mono',monospace;}
+.kbd-hint kbd{background:var(--surface3);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;font-family:'JetBrains Mono',monospace;}
+
+#quizTools{position:fixed;right:20px;bottom:24px;display:flex;flex-direction:column;gap:12px;z-index:60;}
+.fab{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#22c58e,#4f8ef7);color:#fff;border:none;
+ cursor:pointer;font-size:1.05rem;box-shadow:0 8px 24px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;
+ transition:transform .15s;}
+.fab:hover{transform:translateY(-3px) scale(1.04);}
+.fab.pause-fab{background:linear-gradient(135deg,#f59e0b,#f97316);}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.72);backdrop-filter:blur(6px);z-index:200;
+ display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-card{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:26px 24px;max-width:380px;
+ width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.modal-icon{width:52px;height:52px;border-radius:50%;background:var(--accent-dim);border:1px solid rgba(34,197,142,.25);
+ display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.3rem;margin:0 auto 16px;}
+.modal-icon.warn{background:var(--red-dim);border-color:rgba(248,113,113,.3);color:var(--red);}
+.modal-title{font-family:'Fraunces',serif;font-size:1.2rem;margin-bottom:10px;}
+.modal-text{font-size:.87rem;color:var(--ink2);line-height:1.6;margin-bottom:20px;}
+
+#pauseOverlay{position:fixed;inset:0;background:rgba(6,8,14,.85);backdrop-filter:blur(16px);z-index:150;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
+#pauseOverlay .modal-icon{width:64px;height:64px;font-size:1.6rem;margin-bottom:20px;}
+#pauseOverlay h2{font-family:'Fraunces',serif;font-size:1.6rem;margin-bottom:10px;}
+#pauseOverlay p{color:var(--ink2);font-size:.9rem;max-width:320px;margin-bottom:26px;line-height:1.6;}
+
+.calc-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.55);backdrop-filter:blur(4px);z-index:180;}
+.calc-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:190;width:320px;max-width:92vw;
+ background:var(--surface);border:1px solid var(--border2);border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.55);overflow:hidden;}
+.calc-panel.dragged{transform:none;}
+.calc-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface2);
+ border-bottom:1px solid var(--border);cursor:grab;font-size:.8rem;font-weight:600;color:var(--ink2);user-select:none;gap:8px;}
+.calc-header:active{cursor:grabbing;}
+.calc-header-title{display:flex;align-items:center;gap:8px;}
+.calc-header-title i{color:var(--accent);}
+.calc-mode-toggle{display:flex;gap:4px;background:var(--surface3);border-radius:8px;padding:3px;}
+.calc-mode-btn{background:transparent;border:none;color:var(--ink3);font-size:.62rem;font-family:'JetBrains Mono',monospace;
+ padding:5px 9px;border-radius:6px;cursor:pointer;font-weight:700;letter-spacing:.5px;}
+.calc-mode-btn.active{background:var(--accent);color:#fff;}
+.calc-close-btn{background:none;border:none;color:var(--ink3);font-size:1rem;cursor:pointer;line-height:1;}
+.calc-display{padding:18px 16px 10px;text-align:right;}
+.calc-expr{font-size:.82rem;color:var(--ink3);font-family:'JetBrains Mono',monospace;min-height:18px;overflow-x:auto;white-space:nowrap;}
+.calc-result{font-size:1.65rem;font-weight:700;color:var(--ink);font-family:'JetBrains Mono',monospace;margin-top:4px;
+ overflow-x:auto;white-space:nowrap;}
+.calc-result.err{color:var(--red);}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 16px 20px;}
+.calc-btn{background:var(--surface3);border:1px solid var(--border2);color:var(--ink);border-radius:10px;padding:12px 0;
+ font-size:.92rem;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:background .15s;}
+.calc-btn:hover{background:var(--border2);}
+.calc-btn.op{color:var(--accent);}
+.calc-btn.fn{color:var(--purple);font-size:.76rem;}
+.calc-btn.clear{color:var(--red);}
+.calc-btn.equals{background:linear-gradient(135deg,#22c58e,#4f8ef7);color:#fff;border:none;}
+
+.result-hero{text-align:center;padding:26px 0 22px;border-bottom:1px solid var(--border);margin-bottom:26px;}
+.result-ring{display:inline-flex;align-items:center;justify-content:center;width:124px;height:124px;border-radius:50%;
+ border:3px solid var(--accent);background:var(--accent-dim);margin-bottom:16px;}
+.result-score{font-family:'JetBrains Mono',monospace;font-size:2.3rem;font-weight:700;color:var(--accent);}
+.result-of{font-size:.8rem;color:var(--ink3);margin-top:2px;}
+.result-pct{font-family:'Fraunces',serif;font-size:1.5rem;margin-bottom:6px;}
+.result-msg{color:var(--ink2);font-size:.9rem;line-height:1.6;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+.best-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;color:#facc15;background:rgba(250,204,21,.08);
+ border:1px solid rgba(250,204,21,.25);padding:4px 12px;border-radius:20px;margin-top:10px;font-family:'JetBrains Mono',monospace;}
+.breakdown-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:26px;}
+.bd-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.bd-name{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.bd-score{font-size:1.35rem;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.bd-total{font-size:.72rem;color:var(--ink3);}
+.review-section-title{font-family:'Fraunces',serif;font-size:1.1rem;border-bottom:1px solid var(--border);padding-bottom:12px;
+ margin:22px 0 16px;display:flex;align-items:center;gap:10px;}
+.review-item{border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px;background:var(--surface2);}
+.review-item.right{border-left:3px solid var(--green);}
+.review-item.miss{border-left:3px solid var(--red);}
+.ri-q{font-size:.9rem;margin-bottom:10px;line-height:1.6;}
+.ri-section{font-size:.63rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:5px;}
+.ri-ans{font-size:.83rem;margin-top:5px;display:flex;align-items:flex-start;gap:7px;}
+.ri-ans.right{color:var(--green);}
+.ri-ans.wrong{color:var(--red);}
+.ri-ans.correct-reveal{color:#2dd4bf;}
+.ri-exp{margin-top:10px;padding:12px 14px;background:rgba(34,197,142,.04);border:1px solid rgba(34,197,142,.12);
+ border-radius:9px;font-size:.82rem;line-height:1.65;color:var(--ink2);}
+
+footer{text-align:center;font-size:.7rem;color:var(--ink3);padding:18px;border-top:1px solid var(--border);
+ font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
+footer i{color:var(--accent);}
+
+@media(max-width:560px){
+ .card{padding:22px 16px;}
+ .mode-grid{grid-template-columns:1fr;}
+ .hero-title{font-size:1.8rem;}
+ .breakdown-grid{grid-template-columns:repeat(2,1fr);}
+ #quizTools{right:14px;bottom:18px;}
+}
+
+@media print{
+ @page{ margin:14mm; }
+ *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
+ .topbar, footer, #quizTools, #homeBtn, #retryBtn, #printBtn, .kbd-hint, #statsBar,
+ #calcBackdrop, #calcPanel, #pauseOverlay, #leaveWarningModal, #resumeModal, #soundToggle, .hamburger, .mobile-nav { display:none !important; }
+ body{background:#fff;color:#000;}
+ main{padding:0;}
+ .card{border:1px solid #ccc;background:#fff;box-shadow:none;}
+ .bd-card, .review-item{background:#f6f6f6;border-color:#ddd;}
+ .ri-exp{background:#f0fff8;border-color:#cfe9db;color:#333;}
+ .result-hero, .bd-card, .review-item{ break-inside:avoid; page-break-inside:avoid; }
+ .review-item{ margin-bottom:14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+ <div class="brand">
+ <span class="brand-badge">CHM108</span>
+ <div class="brand-sub"><i class="fa-solid fa-flask" style="margin-right:5px;"></i>Chemistry · Alcohols &amp; Lucas' Test · Iodoform &amp; Phenol Tests · Carbohydrates</div>
+ </div>
+ <div style="display:flex;align-items:center;gap:10px;">
+ <div id="timer" class="hidden"><i class="fa-regular fa-clock"></i><span id="timerText">00:00</span></div>
+ <button id="soundToggle" title="Mute sounds" aria-label="Mute sounds" aria-pressed="false"></button>
+ <button class="hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
+ <i class="fa-solid fa-bars"></i>
+ <i class="fa-solid fa-xmark"></i>
+ </button>
+ </div>
+</div>
+
+<div class="mobile-nav" id="mobileNav">
+ <div class="mobile-nav-panel">
+ <span class="nav-group-label">Navigate</span>
+ <a href="../index.html"><i class="fa-solid fa-house"></i>Home / Dashboard</a>
+ <a href="../aim.html"><i class="fa-solid fa-bullseye"></i>Our Aim</a>
+ <span class="nav-group-label">DTZ TRIO</span>
+ <a href="../about.html"><i class="fa-solid fa-users"></i>About Us</a>
+ <a href="../social.html"><i class="fa-solid fa-share-nodes"></i>Social Media</a>
+ <span class="nav-group-label">Account</span>
+ <a href="../set.html"><i class="fa-solid fa-gear"></i>Settings</a>
+ <a href="../help.html"><i class="fa-solid fa-circle-question"></i>Help &amp; FAQ</a>
+ </div>
+</div>
+
+<main>
+
+<!-- HOME SCREEN -->
+<div id="homeScreen">
+ <div class="hero-wrap">
+ <div class="hero-eyebrow"><i class="fa-solid fa-flask"></i> CHM108 Practice Quiz</div>
+ <h1 class="hero-title">100 questions,<br><span>two ways to train.</span></h1>
+ <p class="hero-desc">Covering Lucas' Test for alcohols, iodoform preparation &amp; ethanol detection, the ferric chloride phenol test, and carbohydrate tests — with full worked explanations for every question.</p>
+ </div>
+
+ <div id="statsBar" class="hidden"></div>
+
+ <div class="mode-grid">
+ <div class="mode-card" id="pickAuto">
+ <div class="mode-icon"><i class="fa-solid fa-gauge-high"></i></div>
+ <div class="mode-name">Automatic Timer</div>
+ <div class="mode-desc">All 100 questions, shuffled, with a timer the app sets for you. Get instant feedback the moment you answer, and pause any time you need a break.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-regular fa-clock"></i> Auto-set clock</span>
+ <span class="mode-tag"><i class="fa-solid fa-list-check"></i> 100 Qs</span>
+ <span class="mode-tag"><i class="fa-solid fa-pause"></i> Pausable</span>
+ </div>
+ </div>
+ <div class="mode-card" id="pickCustom">
+ <div class="mode-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="mode-name">Custom Timer</div>
+ <div class="mode-desc">Pick your own topics, time limit, and question count. Answer everything first — no pausing, and no feedback until you submit.</div>
+ <div class="mode-tags">
+ <span class="mode-tag"><i class="fa-solid fa-sliders"></i> Custom setup</span>
+ <span class="mode-tag"><i class="fa-solid fa-ban"></i> No pausing</span>
+ <span class="mode-tag"><i class="fa-solid fa-flag-checkered"></i> Results at end</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="section-heading">
+ <div class="section-heading-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+ <div class="section-heading-text">How each mode works</div>
+ </div>
+ <div class="rules-list">
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-gauge-high"></i></span>
+ <span class="rule-text"><strong>Automatic Timer</strong> runs all 100 questions with a clock the app manages for you. Tap an option and it's locked in immediately — correct turns green, wrong turns red, with a short explanation right away. Tap <strong>Pause</strong> any time to freeze the clock and blur the screen. You must answer at least <strong>30 questions</strong> before you can submit.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-sliders"></i></span>
+ <span class="rule-text"><strong>Custom Timer</strong> lets you choose specific topics, your own time limit (up to 120 min), and how many questions to include. It cannot be paused — answers stay hidden until you submit, then you get a full score breakdown and review.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-calculator"></i></span>
+ <span class="rule-text">A full <strong>scientific calculator</strong> — sin/cos/tan, log, ln, √, powers, π and e — is available as a draggable floating window in both modes.</span></div>
+ <div class="rule-item"><span class="rule-icon"><i class="fa-solid fa-shield-halved"></i></span>
+ <span class="rule-text">Your progress is <strong>auto-saved</strong> as you go, so a refresh won't lose your place. For fairness, switching away from the tab is tracked — leaving 3 times in one quiz resets it.</span></div>
+ </div>
+</div>
+
+<!-- CONFIG SCREEN -->
+<div id="configScreen" class="hidden">
+ <div class="section-heading" style="margin-top:36px;">
+ <div class="section-heading-icon"><i class="fa-solid fa-sliders"></i></div>
+ <div class="section-heading-text">Set up your Custom Timer exam</div>
+ </div>
+ <div class="card">
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-layer-group"></i> Topics to include</div>
+ <div class="topics-grid" id="topicsWrap"></div>
+ <div class="config-hint" id="topicsHint">Select at least one topic.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-regular fa-clock"></i> Time limit (minutes)</div>
+ <div class="config-input-row">
+ <input type="range" id="timeSlider" class="config-slider" min="5" max="120" step="5" value="60">
+ <span class="config-value" id="timeValue">60</span>
+ </div>
+ <div class="config-hint">Maximum 120 minutes. This clock cannot be paused once the exam starts.</div>
+ </div>
+ <div class="config-field">
+ <div class="config-label"><i class="fa-solid fa-list-ol"></i> Number of questions</div>
+ <div class="config-input-row">
+ <input type="range" id="countSlider" class="config-slider" min="1" max="100" step="1" value="50">
+ <span class="config-value" id="countValue">50</span>
+ </div>
+ <div class="config-hint" id="countHint">Randomly picked from the selected topics.</div>
+ </div>
+ <div class="nav-row" style="margin-top:8px;">
+ <button class="btn-ghost" id="backToHomeFromConfig"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <button class="btn" id="startCustomBtn"><i class="fa-solid fa-play"></i> Start Custom Timer</button>
+ </div>
+ </div>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" class="hidden">
+ <div class="loader-ring"></div>
+ <div class="loader-text">Preparing your questions…</div>
+ <div class="loader-sub">Shuffling &amp; randomizing options</div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="quizScreen" class="hidden">
+ <div id="progressWrap">
+ <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+ <div class="dots-group" id="dotsRow"></div>
+ </div>
+ <div class="card">
+ <div class="q-meta">
+ <span class="q-section-tag" id="sectionTag"></span>
+ <span class="q-counter" id="qCounter"></span>
+ </div>
+ <div class="q-text" id="qText"></div>
+ <div id="optsWrap"></div>
+ <div id="inlineExplain" class="inline-explain"></div>
+ <div class="nav-row">
+ <button class="btn-ghost" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+ <div style="display:flex;gap:8px;">
+ <button class="btn" id="nextBtn">Next <i class="fa-solid fa-arrow-right"></i></button>
+ <button class="btn hidden" id="finishBtn"><i class="fa-solid fa-check"></i> Submit Quiz</button>
+ </div>
+ </div>
+ <div class="kbd-hint">Keyboard: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate &nbsp;·&nbsp; <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to select</div>
+ </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="hidden">
+ <div class="card">
+ <div class="result-hero">
+ <div class="result-ring"><div><div class="result-score" id="resultScore">0</div><div class="result-of" id="resultOf">/ 100</div></div></div>
+ <div class="result-pct" id="resultPct"></div>
+ <div class="result-msg" id="resultMsg"></div>
+ <div id="bestBadge"></div>
+ </div>
+ <div class="breakdown-grid" id="breakdownGrid"></div>
+ <div class="review-section-title"><i class="fa-solid fa-magnifying-glass"></i> Question Review</div>
+ <div id="reviewList"></div>
+ <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;">
+ <button class="btn-ghost" id="homeBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-house"></i> Home</button>
+ <button class="btn-ghost" id="printBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+ <button class="btn" id="retryBtn" style="flex:1;justify-content:center;"><i class="fa-solid fa-rotate-right"></i> Retake</button>
+ </div>
+ </div>
+</div>
+
+</main>
+
+<!-- FLOATING QUIZ TOOLS -->
+<div id="quizTools" class="hidden">
+ <button class="fab pause-fab hidden" id="pauseBtn" title="Pause"><i class="fa-solid fa-pause"></i></button>
+ <button class="fab" id="calcFab" title="Calculator"><i class="fa-solid fa-calculator"></i></button>
+</div>
+
+<!-- SCIENTIFIC CALCULATOR -->
+<div id="calcBackdrop" class="calc-backdrop hidden"></div>
+<div id="calcPanel" class="calc-panel hidden">
+ <div id="calcHeader" class="calc-header">
+ <div class="calc-header-title"><i class="fa-solid fa-calculator"></i> Calculator</div>
+ <div class="calc-mode-toggle">
+ <button type="button" id="calcModeDeg" class="calc-mode-btn active">DEG</button>
+ <button type="button" id="calcModeRad" class="calc-mode-btn">RAD</button>
+ </div>
+ <button type="button" id="calcClose" class="calc-close-btn"><i class="fa-solid fa-xmark"></i></button>
+ </div>
+ <div class="calc-display">
+ <div id="calcExpr" class="calc-expr">&nbsp;</div>
+ <div id="calcResult" class="calc-result">0</div>
+ </div>
+ <div id="calcGrid" class="calc-grid"></div>
+</div>
+
+<!-- PAUSE OVERLAY -->
+<div id="pauseOverlay" class="hidden">
+ <div class="modal-icon"><i class="fa-solid fa-pause"></i></div>
+ <h2>Quiz Paused</h2>
+ <p>The clock is frozen and nothing on this screen is visible or clickable until you resume.</p>
+ <button class="btn" id="resumeFromPauseBtn"><i class="fa-solid fa-play"></i> Resume Quiz</button>
+</div>
+
+<!-- LEAVE-WARNING MODAL -->
+<div id="leaveWarningModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon warn"><i class="fa-solid fa-triangle-exclamation"></i></div>
+ <div class="modal-title">You left the quiz</div>
+ <div class="modal-text" id="leaveWarnText"></div>
+ <button class="btn" id="leaveWarnOk">Okay, continue</button>
+ </div>
+</div>
+
+<!-- RESUME AUTOSAVE MODAL -->
+<div id="resumeModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+ <div class="modal-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+ <div class="modal-title">Resume your quiz?</div>
+ <div class="modal-text">We found a quiz in progress:<br><strong id="resumeInfo" style="color:var(--ink);"></strong></div>
+ <div style="display:flex;gap:10px;">
+ <button class="btn-ghost" id="resumeNo" style="flex:1;justify-content:center;">Discard</button>
+ <button class="btn" id="resumeYes" style="flex:1;justify-content:center;">Resume</button>
+ </div>
+ </div>
+</div>
+
+<footer><i class="fa-solid fa-flask"></i> CHM108 &nbsp;·&nbsp; Chemistry Practice Quiz — Lucas' Test, Iodoform &amp; Phenol Tests, Carbohydrate Tests</footer>
+
+<script>
+/* ============================================================
+ HAMBURGER / MOBILE NAV
+ ============================================================ */
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const mobileNav = document.getElementById('mobileNav');
+function closeMobileNav(){mobileNav.classList.remove('open');hamburgerBtn.setAttribute('aria-expanded','false');}
+function toggleMobileNav(){const isOpen = mobileNav.classList.toggle('open');hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');}
+hamburgerBtn.addEventListener('click', toggleMobileNav);
+mobileNav.addEventListener('click', (e)=>{ if(e.target === mobileNav) closeMobileNav(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeMobileNav(); });
+
+/* ============================================================
+ CHM108 — 100-QUESTION BANK
+ (Lucas' Test · Iodoform & Ethanol · Phenol Test · Carbohydrates · General Lab Knowledge)
+ ============================================================ */
+const QUESTIONS = [
+// LUCAS' TEST (ALCOHOLS)
+{sec:"Lucas' Test (Alcohols)", q:"The Lucas reagent is prepared by dissolving:", opts:["ZnO in concentrated HCl","Anhydrous ZnCl2 in concentrated HCl","ZnSO4 in dilute HCl","ZnCO3 in concentrated H2SO4"], ans:1, ex:"Lucas reagent is made by dissolving anhydrous zinc chloride in concentrated hydrochloric acid; the ZnCl2 acts as a Lewis-acid catalyst."},
+{sec:"Lucas' Test (Alcohols)", q:"Which alcohol gives immediate turbidity with Lucas reagent at room temperature?", opts:["Primary alcohol","Secondary alcohol","Tertiary alcohol","Polyhydric alcohol"], ans:2, ex:"Tertiary alcohols form the most stable carbocation, so they react (and cloud up) almost instantly."},
+{sec:"Lucas' Test (Alcohols)", q:"The cloudiness observed in the Lucas test is due to the formation of:", opts:["Alcohol","Ester","Alkyl chloride","Aldehyde"], ans:2, ex:"The insoluble alkyl chloride product separates out of solution, producing the characteristic turbidity."},
+{sec:"Lucas' Test (Alcohols)", q:"The major function of anhydrous ZnCl2 in the Lucas reagent is to:", opts:["Oxidize alcohols","Act as a catalyst","Neutralize HCl","Produce hydrogen gas"], ans:1, ex:"ZnCl2 is a Lewis acid catalyst that coordinates with the hydroxyl oxygen, making it a better leaving group."},
+{sec:"Lucas' Test (Alcohols)", q:"Which alcohol reacts slowest with Lucas reagent?", opts:["Tertiary alcohol","Secondary alcohol","Primary alcohol","Benzyl alcohol"], ans:2, ex:"Primary alcohols form the least stable carbocation, so they react slowest, often needing heat to show any reaction."},
+{sec:"Lucas' Test (Alcohols)", q:"A sample remains clear after 20 minutes with Lucas reagent. The sample is most likely:", opts:["Tertiary alcohol","Secondary alcohol","Primary alcohol","Phenol"], ans:2, ex:"Primary alcohols react so slowly at room temperature that the mixture can stay clear for a long time."},
+{sec:"Lucas' Test (Alcohols)", q:"In the Lucas test, concentrated HCl acts mainly as:", opts:["Reducing agent","Source of chloride ions","Drying agent","Indicator"], ans:1, ex:"The concentrated HCl supplies the chloride nucleophile that ultimately displaces water from the protonated alcohol."},
+{sec:"Lucas' Test (Alcohols)", q:"The order of reactivity of alcohols in the Lucas test is:", opts:["1° > 2° > 3°", "3° > 2° > 1°", "2° > 3° > 1°", "1° > 3° > 2°"], ans:1, ex:"Reactivity follows carbocation stability, so tertiary alcohols react fastest and primary alcohols slowest (3°>2°>1°)."},
+{sec:"Lucas' Test (Alcohols)", q:"What is the functional group of alcohols?", opts:["Hydroxyl (-OH)", "Carboxyl (-COOH)", "Carbonyl (C=O)", "Amino (-NH2)"], ans:0, ex:"Alcohols are defined by the hydroxyl (-OH) functional group attached to a saturated carbon."},
+{sec:"Lucas' Test (Alcohols)", q:"The first two members of the homologous series of alcohols are:", opts:["Ethanol and Propanol","Methanol and Ethanol","Butanol and Pentanol","Methanol and Propanol"], ans:1, ex:"The alcohol homologous series begins with methanol (CH3OH) followed by ethanol (C2H5OH)."},
+{sec:"Lucas' Test (Alcohols)", q:"Alcohols are classified as primary, secondary, or tertiary based on:", opts:["The number of carbon atoms in the chain","The number of alkyl groups on the carbon bearing the –OH group","Their boiling points","Their solubility in water"], ans:1, ex:"Classification depends on how many alkyl groups are attached to the carbon that carries the hydroxyl group."},
+{sec:"Lucas' Test (Alcohols)", q:"What is the general formula for a secondary alcohol?", opts:["RCH2OH","R2CHOH","R3COH","CH3OH"], ans:1, ex:"A secondary alcohol has the hydroxyl-bearing carbon attached to two alkyl groups, giving the formula R2CHOH."},
+{sec:"Lucas' Test (Alcohols)", q:"Why are alcohols soluble in water?", opts:["Ionic bonding","Covalent bonding","Hydrogen bonding with water molecules","Metallic bonding"], ans:2, ex:"The polar -OH group can hydrogen bond with water molecules, giving smaller alcohols good water solubility."},
+{sec:"Lucas' Test (Alcohols)", q:"Which observation is expected for a secondary alcohol with Lucas reagent?", opts:["Immediate turbidity","No reaction even after 2 hours","Turbidity after about 1 hour 30 minutes","Formation of a blue complex"], ans:2, ex:"Secondary alcohols react at an intermediate rate, typically clouding up within roughly an hour to 90 minutes."},
+{sec:"Lucas' Test (Alcohols)", q:"What type of chemical reaction occurs during the Lucas test?", opts:["Addition","Elimination","Substitution","Oxidation"], ans:2, ex:"The hydroxyl group is substituted by a chloride ion, making this a nucleophilic substitution reaction."},
+{sec:"Lucas' Test (Alcohols)", q:"Tertiary alcohols react fastest because they form a:", opts:["Stable carbanion","Stable carbocation","Stable radical","Stable ester"], ans:1, ex:"The three alkyl groups on a tertiary carbon stabilize the intermediate carbocation through electron donation, speeding the reaction."},
+{sec:"Lucas' Test (Alcohols)", q:"What is the specific role of anhydrous ZnCl2 besides being a catalyst?", opts:["Oxidizing agent","Dehydrating agent","Lewis acid","Base"], ans:2, ex:"Beyond catalysis, ZnCl2 functions specifically as a Lewis acid that coordinates to the alcohol's oxygen lone pair."},
+{sec:"Lucas' Test (Alcohols)", q:"What happens if you react a tertiary alcohol with concentrated HCl without ZnCl2?", opts:["The reaction still occurs quickly","No reaction occurs","It takes 24 hours to react","The solution turns blue"], ans:0, ex:"Tertiary alcohols are reactive enough that concentrated HCl alone can react with them quickly, without needing ZnCl2."},
+{sec:"Lucas' Test (Alcohols)", q:"The Lucas' test is specifically used to distinguish between:", opts:["Alcohols and Phenols","Alcohols and Ethers","Primary, secondary, and tertiary alcohols","Reducing and non-reducing sugars"], ans:2, ex:"The Lucas test's whole purpose is to differentiate primary, secondary, and tertiary alcohols by their reaction rate."},
+{sec:"Lucas' Test (Alcohols)", q:"If a primary alcohol is used in a Lucas test, the solution will:", opts:["Turn cloudy immediately","Remain clear","Turn yellow","Form a precipitate after 5 minutes"], ans:1, ex:"Primary alcohols react so slowly at room temperature that the solution stays clear over the normal test period."},
+
+// IODOFORM & ETHANOL DETECTION
+{sec:"Iodoform & Ethanol Detection", q:"Iodoform is recognized by its:", opts:["Blue crystals","Green precipitate","Yellow crystalline precipitate","White precipitate"], ans:2, ex:"Iodoform (CHI3) is identified by the formation of a bright yellow crystalline precipitate."},
+{sec:"Iodoform & Ethanol Detection", q:"Iodoform has the chemical formula:", opts:["CHCl3","CHI3","CCl4","CH2I2"], ans:1, ex:"Iodoform is triiodomethane, with the formula CHI3."},
+{sec:"Iodoform & Ethanol Detection", q:"During iodoform preparation, the alkali commonly used is:", opts:["HCl","NaOH","NH4OH","HNO3"], ans:1, ex:"Sodium hydroxide provides the alkaline conditions needed for the haloform reaction to proceed."},
+{sec:"Iodoform & Ethanol Detection", q:"Acetone produces iodoform because it contains a:", opts:["Carboxyl group","Methyl ketone group","Hydroxyl group","Ether linkage"], ans:1, ex:"Acetone's methyl ketone group (CH3-CO-) is exactly the structural feature the iodoform test detects."},
+{sec:"Iodoform & Ethanol Detection", q:"Which reagent provides iodine in the iodoform experiment?", opts:["Bromine water","Iodine solution (Lugol's)","KMnO4","FeCl3"], ans:1, ex:"Lugol's iodine solution supplies the iodine needed for the halogenation step of the reaction."},
+{sec:"Iodoform & Ethanol Detection", q:"The characteristic smell of iodoform is best described as:", opts:["Fruity","Sweet","Antiseptic or hospital-like","Ammoniacal"], ans:2, ex:"Iodoform has a distinctive antiseptic, hospital-like odor, historically linked to its use as a wound dressing."},
+{sec:"Iodoform & Ethanol Detection", q:"The main objective of Experiment 7 is to prepare:", opts:["Chloroform","Iodoform","Ethanol","Phenol"], ans:1, ex:"This experiment centers on synthesizing iodoform from a suitable methyl ketone or alcohol precursor."},
+{sec:"Iodoform & Ethanol Detection", q:"The starting organic compound often used to synthesize iodoform in the lab is:", opts:["Ethanol","Acetone","Benzene","Methanol"], ans:1, ex:"Acetone, a simple methyl ketone, is a common and convenient starting material for iodoform synthesis."},
+{sec:"Iodoform & Ethanol Detection", q:"Which observation confirms the successful preparation of iodoform?", opts:["Blue-black solution","Violet coloration","Yellow crystalline precipitate","White fumes"], ans:2, ex:"A yellow crystalline precipitate forming out of the reaction mixture confirms iodoform has been produced."},
+{sec:"Iodoform & Ethanol Detection", q:"Which functional group is NOT detected by the iodoform test?", opts:["Carboxylic acid","Methyl ketone","Ethanol (primary alcohol)","Isopropyl alcohol"], ans:0, ex:"Carboxylic acids lack the CH3-CO- or CH3-CH(OH)- pattern needed to give a positive iodoform test."},
+{sec:"Iodoform & Ethanol Detection", q:"The iodoform reaction is mainly used in organic chemistry to identify:", opts:["All alcohols","Methyl ketones and related compounds","Primary amines","Unsaturated fats"], ans:1, ex:"The test is a diagnostic tool for methyl ketones and compounds that oxidize to them, such as ethanol and isopropanol."},
+{sec:"Iodoform & Ethanol Detection", q:"The yellow color observed in the test is specifically due to:", opts:["Copper(II) oxide","Iodoform crystals","Sodium iodide","Remaining iodine"], ans:1, ex:"The yellow solid that precipitates out of solution is the iodoform product itself."},
+{sec:"Iodoform & Ethanol Detection", q:"The precipitate formed during the iodoform experiment should be separated by:", opts:["Distillation","Filtration","Sublimation","Evaporation"], ans:1, ex:"Since iodoform is an insoluble solid, filtration is the standard way to separate it from the liquid mixture."},
+{sec:"Iodoform & Ethanol Detection", q:"Why is sodium hydroxide added in the iodoform test?", opts:["To acidify the mixture","To provide an alkaline medium","To act as an indicator","To boil the solution"], ans:1, ex:"NaOH creates the alkaline environment required for the halogenation and cleavage steps of the haloform reaction."},
+{sec:"Iodoform & Ethanol Detection", q:"Excess iodine remaining after the reaction may cause the mixture to appear:", opts:["Colorless","Brown","Blue","Green"], ans:1, ex:"Unreacted iodine imparts a brown color to the solution until it is fully consumed or titrated away."},
+{sec:"Iodoform & Ethanol Detection", q:"Which medical use is associated with iodoform?", opts:["Antiseptic","Antibiotic","Anesthetic","Analgesic"], ans:0, ex:"Iodoform was historically used as an antiseptic dressing for wounds, owing to its iodine content."},
+{sec:"Iodoform & Ethanol Detection", q:"Iodoform is volatile because it is a:", opts:["High molecular weight liquid","Low molecular weight crystalline compound","Gas at room temperature","Stable polymer"], ans:1, ex:"Iodoform is a low molecular weight crystalline solid, which allows it to sublime and volatilize noticeably at room temperature."},
+{sec:"Iodoform & Ethanol Detection", q:"What is the oxidation product of ethanol before it gives a positive iodoform test?", opts:["Acetone","Acetaldehyde","Acetic acid","Formaldehyde"], ans:1, ex:"Ethanol is first oxidized by the iodine/base system to acetaldehyde, which then undergoes the haloform reaction."},
+{sec:"Iodoform & Ethanol Detection", q:"Name two alcohols that give a positive iodoform test.", opts:["Methanol and Ethanol","Ethanol and Isopropyl alcohol","Butanol and Pentanol","Propanol and Butanol"], ans:1, ex:"Ethanol and isopropyl alcohol both contain the CH3-CH(OH)- pattern needed to give a positive iodoform result."},
+{sec:"Iodoform & Ethanol Detection", q:"Lugol's solution used in this test is composed of:", opts:["Iodine in potassium iodide","Iodine in sodium hydroxide","Iodine in water","Iodine in ethanol"], ans:0, ex:"Lugol's solution is elemental iodine dissolved in aqueous potassium iodide, which keeps the iodine soluble."},
+
+// PHENOL TEST (FERRIC CHLORIDE)
+{sec:"Phenol Test (Ferric Chloride)", q:"Ferric chloride is used to detect:", opts:["Alcohols","Phenols","Carboxylic acids","Amines"], ans:1, ex:"The ferric chloride test is a classic qualitative test for the presence of phenolic -OH groups."},
+{sec:"Phenol Test (Ferric Chloride)", q:"A positive ferric chloride test is indicated by the formation of:", opts:["Blue solution","Violet or purple coloration","Orange precipitate","White crystals"], ans:1, ex:"Phenols form a colored iron complex with FeCl3, typically producing a violet or purple color."},
+{sec:"Phenol Test (Ferric Chloride)", q:"The color observed in the ferric chloride test results from the:", opts:["Formation of an iron-phenol complex","Formation of iodine","Oxidation of iron","Liberation of chlorine"], ans:0, ex:"The characteristic color comes from a coordination complex formed between the Fe3+ ion and the phenol's oxygen."},
+{sec:"Phenol Test (Ferric Chloride)", q:"The main aim of Experiment 8 is to identify:", opts:["Alcohols","Aldehydes","Phenols","Esters"], ans:2, ex:"Experiment 8 uses ferric chloride specifically to test samples for the presence of phenols."},
+{sec:"Phenol Test (Ferric Chloride)", q:"The chemical formula of ferric chloride is:", opts:["FeCl2","FeCl3","FeSO4","Fe2O3"], ans:1, ex:"Ferric chloride is iron(III) chloride, with the formula FeCl3."},
+{sec:"Phenol Test (Ferric Chloride)", q:"Phenol differs from ordinary alcohols because it contains the –OH group attached to:", opts:["An alkyl carbon","A carbonyl carbon","A benzene ring","An ether oxygen"], ans:2, ex:"In phenol, the hydroxyl group is bonded directly to an aromatic (benzene) ring carbon, not an alkyl carbon."},
+{sec:"Phenol Test (Ferric Chloride)", q:"Which of the following gives a positive ferric chloride test?", opts:["Ethanol","Methanol","Phenol","Propanol"], ans:2, ex:"Only phenol among these options has the aromatic -OH group needed to form the colored complex with FeCl3."},
+{sec:"Phenol Test (Ferric Chloride)", q:"Which of the following is least likely to react with ferric chloride in this test?", opts:["Phenol","Cresol","Ethanol","Hydroquinone"], ans:2, ex:"Ethanol is a simple aliphatic alcohol, not a phenol, so it does not give the characteristic color reaction."},
+{sec:"Phenol Test (Ferric Chloride)", q:"Before adding ferric chloride, the test solution should preferably be:", opts:["Strongly acidic","Strongly alkaline","Neutral","Boiling"], ans:2, ex:"A neutral solution gives the clearest, most reliable color response when ferric chloride is added."},
+{sec:"Phenol Test (Ferric Chloride)", q:"The ferric chloride test is primarily a:", opts:["Quantitative test","Qualitative test","Gravimetric analysis","Volumetric analysis"], ans:1, ex:"The test simply indicates the presence or absence of phenol through a color change, making it qualitative."},
+{sec:"Phenol Test (Ferric Chloride)", q:"If no violet color appears after adding ferric chloride, the sample:", opts:["Contains no phenol","Contains excess starch","Contains glucose","Is unsaturated"], ans:0, ex:"The absence of the violet/purple color is taken as a negative result, indicating no phenol is present."},
+{sec:"Phenol Test (Ferric Chloride)", q:"What property of phenol allows it to react differently from aliphatic alcohols?", opts:["Presence of chlorine","Aromatic ring attached to the hydroxyl group","Presence of nitrogen","Triple bond"], ans:1, ex:"The attached aromatic ring changes the electronic environment of the -OH group, letting it form a distinct colored complex."},
+{sec:"Phenol Test (Ferric Chloride)", q:"Ferric chloride should be added to the sample:", opts:["All at once in excess","Dropwise while observing color change","After boiling the mixture","Only after filtration"], ans:1, ex:"Adding FeCl3 dropwise lets you watch the color develop and avoid masking a subtle positive result."},
+{sec:"Phenol Test (Ferric Chloride)", q:"Which observation represents a negative ferric chloride test?", opts:["Purple solution","Violet color","No significant color change","Greenish-violet solution"], ans:2, ex:"A negative result shows little to no color change after the ferric chloride is added."},
+{sec:"Phenol Test (Ferric Chloride)", q:"The color in a positive ferric chloride test may disappear over time because:", opts:["The complex becomes unstable","Bromine evaporates","Iodine is released","Water boils away"], ans:0, ex:"The iron-phenolate complex is not perfectly stable and can break down, causing the color to fade over time."},
+{sec:"Phenol Test (Ferric Chloride)", q:"A student accidentally uses ethanol instead of phenol. The observation will be:", opts:["Immediate violet color","Blue-black color","No characteristic violet color","Yellow crystals"], ans:2, ex:"Ethanol lacks a phenolic -OH group, so it will not produce the violet color characteristic of a positive result."},
+{sec:"Phenol Test (Ferric Chloride)", q:"Phenols are more acidic than aliphatic alcohols due to:", opts:["The size of the oxygen atom","Resonance stabilization of the phenoxide ion","Inductive effect of the alkyl group","Their high boiling point"], ans:1, ex:"The negative charge on the phenoxide ion is delocalized into the aromatic ring, stabilizing it and increasing acidity."},
+{sec:"Phenol Test (Ferric Chloride)", q:"What is the name of the complex formed between phenol and ferric chloride?", opts:["Ferric alcoholate","Ferric phenolate complex","Ferrous phenolate","Iron oxide complex"], ans:1, ex:"The colored species formed is known as a ferric phenolate complex."},
+{sec:"Phenol Test (Ferric Chloride)", q:"What happens to the violet color after adding 1.0 M H2SO4?", opts:["It becomes darker","It disappears","It turns green","It turns red"], ans:1, ex:"Adding dilute sulfuric acid protonates and breaks apart the complex, so the violet color disappears."},
+{sec:"Phenol Test (Ferric Chloride)", q:"The disappearance of color upon adding acid is caused by:", opts:["Reduction of iron","Protonation breaking the complex","Oxidation of phenol","Dehydration"], ans:1, ex:"The added acid protonates the complex, disrupting the coordination bonds that produced the color."},
+
+// CARBOHYDRATE TESTS
+{sec:"Carbohydrate Tests", q:"Which reagent is commonly used to test for starch?", opts:["Fehling's solution","Benedict's solution","Iodine solution","Lucas reagent"], ans:2, ex:"Iodine solution is the standard reagent for detecting starch through a color change."},
+{sec:"Carbohydrate Tests", q:"A blue-black color with iodine solution confirms the presence of:", opts:["Glucose","Sucrose","Starch","Fructose"], ans:2, ex:"Starch forms a characteristic blue-black complex with iodine, unlike simple sugars."},
+{sec:"Carbohydrate Tests", q:"Fehling's solution is mainly used to test for:", opts:["Reducing sugars","Proteins","Lipids","Phenols"], ans:0, ex:"Fehling's solution is used to detect reducing sugars, which reduce the Cu2+ ions in the reagent."},
+{sec:"Carbohydrate Tests", q:"The main objective of Experiment 10 is to:", opts:["Detect phenols","Detect carbohydrates","Prepare iodoform","Test for unsaturation"], ans:1, ex:"Experiment 10 focuses on identifying carbohydrates using the iodine and Fehling's tests."},
+{sec:"Carbohydrate Tests", q:"The blue-black color in the iodine test is due to the formation of:", opts:["An iodine–starch complex","Glucose","Starch oxide","Potassium iodide"], ans:0, ex:"Iodine molecules slot into the helical structure of starch, forming a complex responsible for the blue-black color."},
+{sec:"Carbohydrate Tests", q:"Which of the following is a reducing sugar?", opts:["Glucose","Starch","Cellulose","Sucrose"], ans:0, ex:"Glucose has a free aldehyde/hemiacetal group that can reduce Cu2+ ions, making it a reducing sugar."},
+{sec:"Carbohydrate Tests", q:"Fehling's solution consists of:", opts:["Fehling's A only","Fehling's B only","Fehling's A and Fehling's B mixed before use","Iodine and NaOH"], ans:2, ex:"Fehling's reagent is made by mixing Fehling's A and Fehling's B solutions together just before the test."},
+{sec:"Carbohydrate Tests", q:"Fehling's A solution contains:", opts:["Copper(II) sulfate","Sodium hydroxide","Potassium iodide","Ferric chloride"], ans:0, ex:"Fehling's A is an aqueous solution of copper(II) sulfate, which supplies the Cu2+ ion."},
+{sec:"Carbohydrate Tests", q:"Fehling's B solution contains:", opts:["Copper(II) sulfate only","Alkaline sodium potassium tartrate (Rochelle salt)","Dilute hydrochloric acid","Iodine solution"], ans:1, ex:"Fehling's B is an alkaline sodium potassium tartrate solution that keeps the copper ions in solution."},
+{sec:"Carbohydrate Tests", q:"A positive Fehling's test is indicated by the formation of a:", opts:["Blue-black solution","Brick-red precipitate","White precipitate","Violet color"], ans:1, ex:"A positive result gives a brick-red precipitate as Cu2+ is reduced to Cu2O by the reducing sugar."},
+{sec:"Carbohydrate Tests", q:"The brick-red precipitate formed in Fehling's test is:", opts:["Copper(I) oxide (Cu2O)","Copper(II) sulfate","Sodium oxide","Iron oxide"], ans:0, ex:"The brick-red solid is copper(I) oxide, formed when the reducing sugar reduces Cu2+ to Cu+."},
+{sec:"Carbohydrate Tests", q:"Before a positive Fehling's result is obtained, the reaction mixture must be:", opts:["Frozen","Heated gently","Kept in the dark","Diluted with water"], ans:1, ex:"Gentle heating drives the redox reaction between the reducing sugar and copper(II) ions to completion."},
+{sec:"Carbohydrate Tests", q:"If a solution remains blue after heating with Fehling's reagent, it indicates:", opts:["Presence of reducing sugar","Absence of reducing sugar","Presence of starch","Presence of phenol"], ans:1, ex:"No color change (staying blue) means the sugar failed to reduce the copper ions, so no reducing sugar is present."},
+{sec:"Carbohydrate Tests", q:"Which pair of tests is used together in Experiment 10?", opts:["Lucas and Bromine tests","Iodine and Fehling's tests","Ferric chloride and Lucas tests","Bromine and Ferric chloride tests"], ans:1, ex:"Experiment 10 uses the iodine test for starch alongside Fehling's test for reducing sugars."},
+{sec:"Carbohydrate Tests", q:"The purpose of heating in Fehling's test is to:", opts:["Increase reaction rate and allow reduction of Cu2+","Evaporate the water","Dissolve iodine crystals","Sterilize the solution"], ans:0, ex:"Heat provides the energy needed to speed up the redox reaction that reduces Cu2+ to Cu2O."},
+{sec:"Carbohydrate Tests", q:"A student obtains a blue-black color with iodine but no brick-red precipitate with Fehling's. The sample is:", opts:["Glucose","Fructose","Starch","Acetone"], ans:2, ex:"Starch gives a positive iodine test but, as a non-reducing polysaccharide, a negative Fehling's test."},
+{sec:"Carbohydrate Tests", q:"What is the general formula for carbohydrates?", opts:["CnH2nOn","(CH2O)n","Cx(H2O)y","R-CHO"], ans:1, ex:"Carbohydrates are traditionally described by the general formula (CH2O)n, reflecting their carbon-water composition."},
+{sec:"Carbohydrate Tests", q:"State the three main classes of carbohydrates.", opts:["Monosaccharides, Disaccharides, Polysaccharides","Fats, Proteins, Sugars","Acids, Bases, Salts","Alcohols, Ethers, Ketones"], ans:0, ex:"Carbohydrates are classified into monosaccharides, disaccharides, and polysaccharides based on their size."},
+{sec:"Carbohydrate Tests", q:"Give an example of a disaccharide.", opts:["Glucose","Sucrose","Starch","Fructose"], ans:1, ex:"Sucrose, made of glucose and fructose joined together, is a classic example of a disaccharide."},
+{sec:"Carbohydrate Tests", q:"What is the major role of carbohydrates in living systems?", opts:["Catalysts","Source of energy","Genetic coding","Oxygen transport"], ans:1, ex:"Carbohydrates primarily serve as a key source of metabolic energy for living organisms."},
+
+// GENERAL LAB KNOWLEDGE
+{sec:"General Lab Knowledge", q:"What structural feature classifies alcohols into primary, secondary, or tertiary?", opts:["Total carbon count","Number of alkyl groups on the alpha-carbon","Number of hydroxyl groups","Molecular weight"], ans:1, ex:"Classification depends on how many alkyl groups are bonded to the carbon that bears the hydroxyl group."},
+{sec:"General Lab Knowledge", q:"Lucas' reagent is a mixture of concentrated HCl and which anhydrous salt?", opts:["NaCl","ZnCl2","CaCl2","FeCl3"], ans:1, ex:"Lucas reagent is anhydrous zinc chloride dissolved in concentrated hydrochloric acid."},
+{sec:"General Lab Knowledge", q:"In Experiment 7, iodoform crystals are formed after heating the solution to what temperature?", opts:["30°C","60°C","100°C","0°C"], ans:1, ex:"Gentle warming to around 60°C is typically used to drive the haloform reaction and crystallize the iodoform."},
+{sec:"General Lab Knowledge", q:"What happens to the blue-black color of the starch-iodine complex on heating?", opts:["It darkens","It disappears","It turns red","No change"], ans:1, ex:"Heating disrupts the iodine-starch complex, so the characteristic blue-black color disappears."},
+{sec:"General Lab Knowledge", q:"What happens to the starch-iodine solution upon cooling after heating?", opts:["It turns clear permanently","The blue-black color reappears","It forms a yellow precipitate","It becomes gaseous"], ans:1, ex:"As the solution cools, the iodine-starch complex reforms and the blue-black color returns."},
+{sec:"General Lab Knowledge", q:"Phenol is activated by its hydroxyl group at which benzene positions?", opts:["Meta only","Ortho and Para","Ortho only","Para only"], ans:1, ex:"The -OH group on phenol is an ortho/para director, activating those ring positions toward electrophilic substitution."},
+{sec:"General Lab Knowledge", q:"Which reagent is an \"alkaline degradation reaction using iodine treatment\"?", opts:["Lucas test","Iodoform test","Fehling's test","Ferric chloride test"], ans:1, ex:"The iodoform test is a haloform reaction that uses iodine under alkaline conditions to degrade the substrate."},
+{sec:"General Lab Knowledge", q:"What color is Lugol's solution before the reaction?", opts:["Blue","Brown/Reddish-brown","Clear","Green"], ans:1, ex:"Lugol's iodine solution has a characteristic brown to reddish-brown color before it reacts."},
+{sec:"General Lab Knowledge", q:"What is the role of the hydroxyl group in the ferric chloride test?", opts:["It accepts protons","It donates electrons to form a complex","It acts as an acid catalyst","It reduces the iron"], ans:1, ex:"The phenolic -OH group donates electron density to coordinate with Fe3+, forming the colored complex."},
+{sec:"General Lab Knowledge", q:"Why should you avoid direct contact with iodine and sodium hydroxide?", opts:["They can cause skin/eye irritation or burns","They are extremely flammable","They are radioactive","They will turn your skin blue permanently"], ans:0, ex:"Both iodine and concentrated sodium hydroxide are corrosive/irritating and can cause skin and eye injuries on contact."},
+{sec:"General Lab Knowledge", q:"What is the appearance of pure phenol?", opts:["Blue liquid","Colorless-to-white crystalline solid","Yellow gas","Green powder"], ans:1, ex:"Pure phenol is a colorless-to-white crystalline solid at room temperature, which often darkens on exposure to air."},
+{sec:"General Lab Knowledge", q:"Which of these is a medicinal use for phenol?", opts:["Antiseptic","Painkiller","Antacid","Vitamin supplement"], ans:0, ex:"Phenol has historically been used as an antiseptic, notably in early antiseptic surgery."},
+{sec:"General Lab Knowledge", q:"Which carbohydrate class is starch?", opts:["Monosaccharide","Disaccharide","Polysaccharide","Oligosaccharide"], ans:2, ex:"Starch is made of many linked glucose units, making it a polysaccharide."},
+{sec:"General Lab Knowledge", q:"Which carbohydrate class is glucose?", opts:["Monosaccharide","Disaccharide","Polysaccharide","Lipid"], ans:0, ex:"Glucose is a single sugar unit, classifying it as a monosaccharide."},
+{sec:"General Lab Knowledge", q:"What type of reaction is the formation of the iodoform precipitate?", opts:["Only halogenation","Halogenation and oxidation","Only reduction","Dehydration"], ans:1, ex:"The haloform reaction combines oxidation of the substrate with halogenation steps to ultimately form iodoform."},
+{sec:"General Lab Knowledge", q:"Which ion is responsible for the violet color in the phenol test?", opts:["Fe2+","Fe3+","Cu2+","OH-"], ans:1, ex:"The Fe3+ ion from ferric chloride coordinates with phenol to produce the violet-colored complex."},
+{sec:"General Lab Knowledge", q:"The formula for acetaldehyde, the oxidation product of ethanol, is:", opts:["CH3OH","CH3CHO","CH3COOH","C2H5OH"], ans:1, ex:"Acetaldehyde, the mild oxidation product of ethanol, has the formula CH3CHO."},
+{sec:"General Lab Knowledge", q:"Which of these is a methyl ketone?", opts:["Acetone (CH3COCH3)","Ethanol","Methanol","Benzene"], ans:0, ex:"Acetone has a methyl group directly attached to a carbonyl carbon, making it the classic methyl ketone."},
+{sec:"General Lab Knowledge", q:"The term \"turbidity\" in the Lucas test refers to:", opts:["Color change","Cloudiness or muddiness","Bubbling","Solid precipitate at the bottom"], ans:1, ex:"Turbidity describes the cloudy, hazy appearance the solution takes on as insoluble alkyl chloride forms."},
+{sec:"General Lab Knowledge", q:"Which reagent is used dropwise to ethanol until the iodine color disappears?", opts:["HCl","NaOH","Na2CO3 (Sodium carbonate)","FeCl3"], ans:2, ex:"Dilute sodium carbonate solution is added dropwise to neutralize excess iodine until its color just disappears."}
+];
+
+const ALL_TOPICS = [
+ "Lucas' Test (Alcohols)",
+ "Iodoform & Ethanol Detection",
+ "Phenol Test (Ferric Chloride)",
+ "Carbohydrate Tests",
+ "General Lab Knowledge"
+];
+
+/* ============================================================
+ STORAGE KEYS (persistent artifact storage, not localStorage)
+ ============================================================ */
+const MUTE_KEY = 'chm108-muted';
+const BEST_SCORE_KEY = 'chm108-best-score';
+const STORAGE_KEY = 'chm108-quiz-state';
+
+/* ============================================================
+ HELPERS
+ ============================================================ */
+function shuffle(arr){
+ const a=[...arr];
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+ return a;
+}
+
+/* MATH RENDERING
+   Normalizes caret notation like x^(4/3) or ax^n, and unicode superscript
+   glyphs like x⁴ or xⁿ, into real <sup> tags so exponents render as
+   superscript consistently in whatever font is active. */
+const SUPERSCRIPT_MAP = {
+ '⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9',
+ '⁺':'+','⁻':'-','⁼':'=','⁽':'(','⁾':')','ⁿ':'n','ⁱ':'i','ᵛ':'v'
+};
+const SUP_RUN_RE = new RegExp('[' + Object.keys(SUPERSCRIPT_MAP).join('') + ']+', 'g');
+
+function renderMath(str) {
+ if (!str) return str;
+ let out = String(str);
+ // 1) caret + parenthesised exponent: x^(n-1)  ->  x<sup>n-1</sup>
+ out = out.replace(/\^\(([^()]*)\)/g, (_, inner) => `<sup>${inner}</sup>`);
+ // 2) caret + bare token exponent: x^m  ->  x<sup>m</sup>
+ out = out.replace(/\^([A-Za-z0-9]+)/g, (_, inner) => `<sup>${inner}</sup>`);
+ // 3) collapse runs of unicode superscript characters into real <sup> tags
+ out = out.replace(SUP_RUN_RE, (m) => {
+  const converted = m.split('').map(ch => SUPERSCRIPT_MAP[ch] || ch).join('');
+  return `<sup>${converted}</sup>`;
+ });
+ return out;
+}
+
+function sectionIcon(sec){
+ return {
+  "Lucas' Test (Alcohols)":'fa-flask',
+  "Iodoform & Ethanol Detection":'fa-vial',
+  "Phenol Test (Ferric Chloride)":'fa-droplet',
+  "Carbohydrate Tests":'fa-wheat-awn',
+  "General Lab Knowledge":'fa-clipboard-list'
+ }[sec] || 'fa-flask-vial';
+}
+function randomizeOptions(item){
+ const pairs = item.opts.map((o,idx)=>({o, correct: idx===item.ans}));
+ const shuffled = shuffle(pairs);
+ return {...item, opts: shuffled.map(p=>p.o), ans: shuffled.findIndex(p=>p.correct)};
+}
+
+/* Safely read a value from persistent storage. Returns null if the key
+   doesn't exist or storage is unavailable, instead of throwing. */
+async function storageGet(key) {
+ try {
+  const result = await window.storage.get(key, false);
+  return result ? result.value : null;
+ } catch (e) {
+  return null;
+ }
+}
+async function storageSet(key, value) {
+ try {
+  await window.storage.set(key, value, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+async function storageDelete(key) {
+ try {
+  await window.storage.delete(key, false);
+  return true;
+ } catch (e) {
+  return false;
+ }
+}
+
+/* SOUND ENGINE */
+const SoundEngine = (function() {
+ let ctx = null;
+ let muted = false;
+
+ async function init() {
+  const v = await storageGet(MUTE_KEY);
+  muted = v === '1';
+  return muted;
+ }
+
+ function getCtx() {
+ if (!ctx) {
+ const AC = window.AudioContext || window.webkitAudioContext;
+ if (!AC) return null;
+ ctx = new AC();
+ }
+ if (ctx.state === 'suspended') ctx.resume();
+ return ctx;
+ }
+
+ function isMuted() { return muted; }
+ async function setMuted(v) {
+ muted = v;
+ await storageSet(MUTE_KEY, v ? '1' : '0');
+ }
+
+ function playCorrect() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc1 = c.createOscillator();
+ const osc2 = c.createOscillator();
+ const gain = c.createGain();
+
+ osc1.type = 'sine'; osc1.frequency.setValueAtTime(880, t);
+ osc2.type = 'sine'; osc2.frequency.setValueAtTime(1760, t);
+
+ gain.gain.setValueAtTime(0.2, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+
+ osc1.connect(gain); osc2.connect(gain);
+ gain.connect(c.destination);
+
+ osc1.start(t); osc2.start(t);
+ osc1.stop(t + 0.6); osc2.stop(t + 0.6);
+ }
+
+ function playWrong() {
+ if (muted) return;
+ const c = getCtx(); if (!c) return;
+ const t = c.currentTime;
+ const osc = c.createOscillator();
+ const gain = c.createGain();
+
+ osc.type = 'sawtooth';
+ osc.frequency.setValueAtTime(160, t);
+ osc.frequency.exponentialRampToValueAtTime(60, t + 0.35);
+
+ gain.gain.setValueAtTime(0.25, t);
+ gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+
+ osc.connect(gain);
+ gain.connect(c.destination);
+
+ osc.start(t);
+ osc.stop(t + 0.35);
+ }
+
+ return { init, isMuted, setMuted, playCorrect, playWrong };
+})();
+
+/* APP STATE */
+let quizMode = 'auto'; // 'auto' or 'custom'
+let activeQuestions = [];
+let userAnswers = []; // array of selected option indices
+let currentQ = 0;
+let timeRemaining = 0;
+let timerInterval = null;
+let isPaused = false;
+let leaveCount = 0;
+
+// DOM Elements
+const homeScreen = document.getElementById('homeScreen');
+const configScreen = document.getElementById('configScreen');
+const loadingScreen = document.getElementById('loadingScreen');
+const quizScreen = document.getElementById('quizScreen');
+const resultScreen = document.getElementById('resultScreen');
+
+const pickAuto = document.getElementById('pickAuto');
+const pickCustom = document.getElementById('pickCustom');
+const backToHomeFromConfig = document.getElementById('backToHomeFromConfig');
+const startCustomBtn = document.getElementById('startCustomBtn');
+
+const topicsWrap = document.getElementById('topicsWrap');
+const timeSlider = document.getElementById('timeSlider');
+const timeValue = document.getElementById('timeValue');
+const countSlider = document.getElementById('countSlider');
+const countValue = document.getElementById('countValue');
+
+const timerBox = document.getElementById('timer');
+const timerText = document.getElementById('timerText');
+const soundToggle = document.getElementById('soundToggle');
+
+const progressFill = document.getElementById('progressFill');
+const dotsRow = document.getElementById('dotsRow');
+const sectionTag = document.getElementById('sectionTag');
+const qCounter = document.getElementById('qCounter');
+const qText = document.getElementById('qText');
+const optsWrap = document.getElementById('optsWrap');
+const inlineExplain = document.getElementById('inlineExplain');
+
+const backBtn = document.getElementById('backBtn');
+const nextBtn = document.getElementById('nextBtn');
+const finishBtn = document.getElementById('finishBtn');
+
+const quizTools = document.getElementById('quizTools');
+const pauseBtn = document.getElementById('pauseBtn');
+const pauseOverlay = document.getElementById('pauseOverlay');
+const resumeFromPauseBtn = document.getElementById('resumeFromPauseBtn');
+
+const resumeModal = document.getElementById('resumeModal');
+const resumeInfo = document.getElementById('resumeInfo');
+const resumeYes = document.getElementById('resumeYes');
+const resumeNo = document.getElementById('resumeNo');
+
+const leaveWarningModal = document.getElementById('leaveWarningModal');
+const leaveWarnText = document.getElementById('leaveWarnText');
+const leaveWarnOk = document.getElementById('leaveWarnOk');
+
+const statsBar = document.getElementById('statsBar');
+
+/* INIT */
+window.addEventListener('load', async () => {
+ await SoundEngine.init();
+ updateSoundToggleUI();
+ setupConfigTopics();
+ await checkSavedState();
+ await updateHomeStats();
+});
+
+function updateSoundToggleUI() {
+ const muted = SoundEngine.isMuted();
+ soundToggle.classList.toggle('muted', muted);
+ soundToggle.setAttribute('aria-pressed', muted ? 'true' : 'false');
+ soundToggle.innerHTML = muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+}
+soundToggle.addEventListener('click', async () => {
+ await SoundEngine.setMuted(!SoundEngine.isMuted());
+ updateSoundToggleUI();
+});
+
+async function updateHomeStats() {
+ const best = await storageGet(BEST_SCORE_KEY);
+ if (best) {
+  statsBar.classList.remove('hidden');
+  statsBar.innerHTML = `<div class="stat-chip"><i class="fa-solid fa-trophy"></i> Best Score: <strong>${best}%</strong></div>`;
+ } else {
+  statsBar.classList.add('hidden');
+  statsBar.innerHTML = '';
+ }
+}
+
+/* CONFIG TOPICS BUILD */
+function setupConfigTopics() {
+ topicsWrap.innerHTML = '';
+ ALL_TOPICS.forEach((t) => {
+  const label = document.createElement('label');
+  label.className = 'topic-chip';
+  label.innerHTML = `<input type="checkbox" value="${t}" checked> <span><i class="fa-solid ${sectionIcon(t)}"></i> ${t}</span>`;
+  topicsWrap.appendChild(label);
+ });
+}
+
+timeSlider.addEventListener('input', () => { timeValue.textContent = timeSlider.value; });
+countSlider.addEventListener('input', () => { countValue.textContent = countSlider.value; });
+
+/* MODE SELECTION */
+pickAuto.addEventListener('click', () => {
+ startQuiz('auto', ALL_TOPICS, 60, QUESTIONS.length);
+});
+pickCustom.addEventListener('click', () => {
+ homeScreen.classList.add('hidden');
+ configScreen.classList.remove('hidden');
+});
+backToHomeFromConfig.addEventListener('click', () => {
+ configScreen.classList.add('hidden');
+ homeScreen.classList.remove('hidden');
+});
+
+startCustomBtn.addEventListener('click', () => {
+ const selectedTopics = Array.from(topicsWrap.querySelectorAll('input:checked')).map(i => i.value);
+ if (selectedTopics.length === 0) {
+  alert('Please select at least one topic.');
+  return;
+ }
+ const mins = parseInt(timeSlider.value, 10);
+ const count = parseInt(countSlider.value, 10);
+ configScreen.classList.add('hidden');
+ startQuiz('custom', selectedTopics, mins, count);
+});
+
+/* START QUIZ */
+function startQuiz(mode, topics, minutes, count) {
+ quizMode = mode;
+ showScreen(loadingScreen);
+ setTimeout(() => {
+  let filtered = QUESTIONS.filter(q => topics.includes(q.sec));
+  if (filtered.length === 0) filtered = [...QUESTIONS];
+  filtered = shuffle(filtered).map(randomizeOptions);
+  if (count < filtered.length) {
+   filtered = filtered.slice(0, count);
+  }
+  activeQuestions = filtered;
+  userAnswers = new Array(activeQuestions.length).fill(null);
+  currentQ = 0;
+  timeRemaining = minutes * 60;
+  isPaused = false;
+  leaveCount = 0;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') {
+   pauseBtn.classList.remove('hidden');
+  } else {
+   pauseBtn.classList.add('hidden');
+  }
+  timerBox.classList.remove('hidden');
+
+  startTimer();
+  renderQuestion();
+  saveState();
+ }, 600);
+}
+
+function showScreen(sc) {
+ [homeScreen, configScreen, loadingScreen, quizScreen, resultScreen].forEach(s => s.classList.add('hidden'));
+ sc.classList.remove('hidden');
+ if (sc === quizScreen) {
+  closeMobileNav();
+  hamburgerBtn.classList.add('hidden');
+ } else {
+  hamburgerBtn.classList.remove('hidden');
+ }
+}
+
+/* TIMER */
+function startTimer() {
+ clearInterval(timerInterval);
+ updateTimerDisplay();
+ timerInterval = setInterval(() => {
+  if (!isPaused) {
+   timeRemaining--;
+   updateTimerDisplay();
+   if (timeRemaining <= 0) {
+    clearInterval(timerInterval);
+    alert('Time is up! Submitting your answers.');
+    finishQuiz();
+   }
+  }
+ }, 1000);
+}
+
+function updateTimerDisplay() {
+ const m = Math.floor(Math.max(0, timeRemaining) / 60);
+ const s = Math.max(0, timeRemaining) % 60;
+ timerText.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+ if (timeRemaining < 300) {
+  timerBox.classList.add('warn');
+ } else {
+  timerBox.classList.remove('warn');
+ }
+}
+
+/* PAUSE ENGINE */
+pauseBtn.addEventListener('click', togglePause);
+resumeFromPauseBtn.addEventListener('click', togglePause);
+
+function togglePause() {
+ if (quizMode !== 'auto') return;
+ isPaused = !isPaused;
+ if (isPaused) {
+  pauseOverlay.classList.remove('hidden');
+ } else {
+  pauseOverlay.classList.add('hidden');
+ }
+}
+
+/* RENDER QUESTION */
+function renderQuestion() {
+ const q = activeQuestions[currentQ];
+ sectionTag.innerHTML = `<i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec}`;
+ qCounter.textContent = `Question ${currentQ + 1} of ${activeQuestions.length}`;
+ qText.innerHTML = renderMath(q.q);
+
+ optsWrap.innerHTML = '';
+ inlineExplain.className = 'inline-explain';
+ inlineExplain.innerHTML = '';
+
+ const answered = userAnswers[currentQ] !== null;
+
+ q.opts.forEach((optStr, idx) => {
+  const optDiv = document.createElement('div');
+  optDiv.className = 'opt';
+  const letter = String.fromCharCode(65 + idx);
+
+  if (answered) {
+   optDiv.classList.add('locked');
+   if (quizMode === 'auto') {
+    if (idx === q.ans) optDiv.classList.add('correct');
+    if (userAnswers[currentQ] === idx && idx !== q.ans) optDiv.classList.add('wrong');
+   } else {
+    if (userAnswers[currentQ] === idx) optDiv.classList.add('selected');
+   }
+  }
+
+  optDiv.innerHTML = `<div class="opt-letter">${letter}</div><div class="opt-text">${renderMath(optStr)}</div>`;
+  optDiv.addEventListener('click', () => handleSelectOption(idx));
+  optsWrap.appendChild(optDiv);
+ });
+
+ if (answered && quizMode === 'auto') {
+  const isRight = userAnswers[currentQ] === q.ans;
+  inlineExplain.classList.add('show', isRight ? 'right' : 'wrong');
+  inlineExplain.innerHTML = `
+   <div class="ie-label">${isRight ? '<i class="fa-solid fa-circle-check"></i> Correct!' : '<i class="fa-solid fa-circle-xmark"></i> Incorrect'}</div>
+   <div>${renderMath(q.ex)}</div>
+  `;
+ }
+
+ // Navigation buttons state
+ backBtn.disabled = currentQ === 0;
+ if (currentQ === activeQuestions.length - 1) {
+  nextBtn.classList.add('hidden');
+  finishBtn.classList.remove('hidden');
+ } else {
+  nextBtn.classList.remove('hidden');
+  finishBtn.classList.add('hidden');
+ }
+
+ renderProgress();
+}
+
+function renderProgress() {
+ const pct = ((currentQ + 1) / activeQuestions.length) * 100;
+ progressFill.style.width = `${pct}%`;
+
+ dotsRow.innerHTML = '';
+ activeQuestions.forEach((q, idx) => {
+  const dot = document.createElement('div');
+  dot.className = 'dot';
+  if (idx === currentQ) dot.classList.add('current');
+
+  if (userAnswers[idx] !== null) {
+   if (quizMode === 'auto') {
+    if (userAnswers[idx] === q.ans) dot.classList.add('correct');
+    else dot.classList.add('wrong');
+   } else {
+    dot.classList.add('answered');
+   }
+  }
+  dot.addEventListener('click', () => {
+   currentQ = idx;
+   renderQuestion();
+  });
+  dotsRow.appendChild(dot);
+ });
+}
+
+/* OPTION SELECTION */
+function handleSelectOption(idx) {
+ if (userAnswers[currentQ] !== null && quizMode === 'auto') return; // locked in auto mode once picked
+
+ const prevAns = userAnswers[currentQ];
+ userAnswers[currentQ] = idx;
+
+ if (quizMode === 'auto' && prevAns === null) {
+  if (idx === activeQuestions[currentQ].ans) {
+   SoundEngine.playCorrect();
+  } else {
+   SoundEngine.playWrong();
+  }
+ }
+
+ renderQuestion();
+ saveState();
+}
+
+nextBtn.addEventListener('click', () => {
+ if (currentQ < activeQuestions.length - 1) {
+  currentQ++;
+  renderQuestion();
+ }
+});
+backBtn.addEventListener('click', () => {
+ if (currentQ > 0) {
+  currentQ--;
+  renderQuestion();
+ }
+});
+finishBtn.addEventListener('click', () => {
+ const answeredCount = userAnswers.filter(a => a !== null).length;
+ if (quizMode === 'auto' && answeredCount < Math.min(30, activeQuestions.length)) {
+  alert(`Please answer at least ${Math.min(30, activeQuestions.length)} questions before submitting.`);
+  return;
+ }
+ if (confirm('Are you sure you want to submit your quiz?')) {
+  finishQuiz();
+ }
+});
+
+/* KEYBOARD NAVIGATION */
+document.addEventListener('keydown', (e) => {
+ if (quizScreen.classList.contains('hidden')) return;
+ if (e.key === 'ArrowLeft' && currentQ > 0) {
+  currentQ--; renderQuestion();
+ } else if (e.key === 'ArrowRight' && currentQ < activeQuestions.length - 1) {
+  currentQ++; renderQuestion();
+ } else if (['1','2','3','4'].includes(e.key)) {
+  const idx = parseInt(e.key, 10) - 1;
+  if (idx < activeQuestions[currentQ].opts.length) {
+   handleSelectOption(idx);
+  }
+ }
+});
+
+/* FINISH QUIZ */
+function finishQuiz() {
+ clearInterval(timerInterval);
+ clearSavedState();
+ quizTools.classList.add('hidden');
+ timerBox.classList.add('hidden');
+
+ let correctCount = 0;
+ const breakdown = {};
+
+ activeQuestions.forEach((q, i) => {
+  if (!breakdown[q.sec]) breakdown[q.sec] = { correct: 0, total: 0 };
+  breakdown[q.sec].total++;
+
+  if (userAnswers[i] === q.ans) {
+   correctCount++;
+   breakdown[q.sec].correct++;
+  }
+ });
+
+ const total = activeQuestions.length;
+ const pct = Math.round((correctCount / total) * 100);
+
+ document.getElementById('resultScore').textContent = correctCount;
+ document.getElementById('resultOf').textContent = `/ ${total}`;
+ document.getElementById('resultPct').textContent = `${pct}% Overall Score`;
+
+ let msg = '';
+ if (pct >= 80) msg = '<i class="fa-solid fa-award" style="color:#facc15;"></i> Excellent Mastery! Outstanding Performance.';
+ else if (pct >= 60) msg = '<i class="fa-solid fa-thumbs-up" style="color:var(--accent);"></i> Good Job! Keep reviewing difficult topics.';
+ else msg = '<i class="fa-solid fa-book-open" style="color:var(--red);"></i> Keep Practicing! Review the explanations below.';
+ document.getElementById('resultMsg').innerHTML = msg;
+
+ document.getElementById('bestBadge').innerHTML = '';
+ (async () => {
+  const oldBestRaw = await storageGet(BEST_SCORE_KEY);
+  const oldBest = oldBestRaw ? parseInt(oldBestRaw, 10) : 0;
+  if (pct > oldBest) {
+   await storageSet(BEST_SCORE_KEY, String(pct));
+   document.getElementById('bestBadge').innerHTML = `<div class="best-badge"><i class="fa-solid fa-star"></i> New Personal Best!</div>`;
+  }
+ })();
+
+ // Render breakdown grid
+ const breakdownGrid = document.getElementById('breakdownGrid');
+ breakdownGrid.innerHTML = '';
+ Object.keys(breakdown).forEach(sec => {
+  const item = breakdown[sec];
+  const bdCard = document.createElement('div');
+  bdCard.className = 'bd-card';
+  bdCard.innerHTML = `
+   <div class="bd-name"><i class="fa-solid ${sectionIcon(sec)}"></i> ${sec}</div>
+   <div class="bd-score">${item.correct} <span class="bd-total">/ ${item.total}</span></div>
+  `;
+  breakdownGrid.appendChild(bdCard);
+ });
+
+ // Render question review list
+ const reviewList = document.getElementById('reviewList');
+ reviewList.innerHTML = '';
+ activeQuestions.forEach((q, i) => {
+  const uAns = userAnswers[i];
+  const isRight = uAns === q.ans;
+  const revItem = document.createElement('div');
+  revItem.className = `review-item ${isRight ? 'right' : 'miss'}`;
+
+  const uAnsText = uAns !== null ? `${String.fromCharCode(65 + uAns)}) ${renderMath(q.opts[uAns])}` : 'Not Answered';
+  const cAnsText = `${String.fromCharCode(65 + q.ans)}) ${renderMath(q.opts[q.ans])}`;
+
+  revItem.innerHTML = `
+   <div class="ri-section"><i class="fa-solid ${sectionIcon(q.sec)}"></i> ${q.sec} · Q${i + 1}</div>
+   <div class="ri-q"><strong>${renderMath(q.q)}</strong></div>
+   <div class="ri-ans ${isRight ? 'right' : 'wrong'}">
+    <i class="fa-solid ${isRight ? 'fa-check' : 'fa-xmark'}"></i>
+    <span><strong>Your Answer:</strong> ${uAnsText}</span>
+   </div>
+   ${!isRight ? `<div class="ri-ans correct-reveal"><i class="fa-solid fa-bullseye"></i> <span><strong>Correct Answer:</strong> ${cAnsText}</span></div>` : ''}
+   <div class="ri-exp"><strong>Explanation:</strong> ${renderMath(q.ex)}</div>
+  `;
+  reviewList.appendChild(revItem);
+ });
+
+ showScreen(resultScreen);
+ updateHomeStats();
+}
+
+document.getElementById('homeBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('retryBtn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+/* AUTOSAVE ENGINE (persistent artifact storage) */
+function saveState() {
+ const state = { quizMode, activeQuestions, userAnswers, currentQ, timeRemaining };
+ storageSet(STORAGE_KEY, JSON.stringify(state));
+}
+
+function clearSavedState() {
+ storageDelete(STORAGE_KEY);
+}
+
+async function checkSavedState() {
+ const raw = await storageGet(STORAGE_KEY);
+ if (!raw) return;
+ let data;
+ try {
+  data = JSON.parse(raw);
+ } catch (e) {
+  return;
+ }
+ if (!data || !data.activeQuestions || data.activeQuestions.length === 0) return;
+
+ resumeInfo.textContent = `${data.activeQuestions.length} Questions (${data.quizMode.toUpperCase()} Mode)`;
+ resumeModal.classList.remove('hidden');
+
+ resumeYes.onclick = () => {
+  resumeModal.classList.add('hidden');
+  quizMode = data.quizMode;
+  activeQuestions = data.activeQuestions;
+  userAnswers = data.userAnswers;
+  currentQ = data.currentQ;
+  timeRemaining = data.timeRemaining;
+
+  showScreen(quizScreen);
+  quizTools.classList.remove('hidden');
+  if (quizMode === 'auto') pauseBtn.classList.remove('hidden'); else pauseBtn.classList.add('hidden');
+  timerBox.classList.remove('hidden');
+  startTimer();
+  renderQuestion();
+ };
+
+ resumeNo.onclick = () => {
+  resumeModal.classList.add('hidden');
+  clearSavedState();
+ };
+}
+
+/* TAB SWITCH GUARDRAIL */
+document.addEventListener('visibilitychange', () => {
+ if (!quizScreen.classList.contains('hidden') && document.hidden) {
+  leaveCount++;
+  if (leaveCount >= 3) {
+   alert('You have left the quiz tab 3 times. The quiz will now reset.');
+   clearSavedState();
+   location.reload();
+  } else {
+   leaveWarnText.textContent = `You switched away from the quiz tab. Warning ${leaveCount} of 3. Leaving 3 times will reset your quiz.`;
+   leaveWarningModal.classList.remove('hidden');
+  }
+ }
+});
+leaveWarnOk.addEventListener('click', () => leaveWarningModal.classList.add('hidden'));
+
+/* SCIENTIFIC CALCULATOR ENGINE */
+(function setupCalculator(){
+ const calcFab = document.getElementById('calcFab');
+ const calcBackdrop = document.getElementById('calcBackdrop');
+ const calcPanel = document.getElementById('calcPanel');
+ const calcClose = document.getElementById('calcClose');
+ const calcExpr = document.getElementById('calcExpr');
+ const calcResult = document.getElementById('calcResult');
+ const calcGrid = document.getElementById('calcGrid');
+ const calcHeader = document.getElementById('calcHeader');
+ const calcModeDeg = document.getElementById('calcModeDeg');
+ const calcModeRad = document.getElementById('calcModeRad');
+
+ let expr = '';
+ let isRad = false;
+
+ function resetPanelPosition() {
+  // Clear any position left over from a previous drag so the calculator
+  // reopens centered instead of wherever it was last left/jumped to.
+  calcPanel.classList.remove('dragged');
+  calcPanel.style.left = '';
+  calcPanel.style.top = '';
+ }
+
+ calcFab.addEventListener('click', () => {
+  resetPanelPosition();
+  calcBackdrop.classList.remove('hidden');
+  calcPanel.classList.remove('hidden');
+ });
+ calcClose.addEventListener('click', closeCalc);
+ calcBackdrop.addEventListener('click', closeCalc);
+
+ function closeCalc(){
+  calcBackdrop.classList.add('hidden');
+  calcPanel.classList.add('hidden');
+ }
+
+ calcModeDeg.addEventListener('click', () => {
+  isRad = false;
+  calcModeDeg.classList.add('active'); calcModeRad.classList.remove('active');
+ });
+ calcModeRad.addEventListener('click', () => {
+  isRad = true;
+  calcModeRad.classList.add('active'); calcModeDeg.classList.remove('active');
+ });
+
+ const buttons = [
+  { label: 'C', cls: 'clear', action: 'clear' },
+  { label: '(', cls: 'op', action: 'append', val: '(' },
+  { label: ')', cls: 'op', action: 'append', val: ')' },
+  { label: '÷', cls: 'op', action: 'append', val: '/' },
+
+  { label: 'sin', cls: 'fn', action: 'fn', fn: 'sin' },
+  { label: '7', action: 'append', val: '7' },
+  { label: '8', action: 'append', val: '8' },
+  { label: '9', action: 'append', val: '9' },
+
+  { label: 'cos', cls: 'fn', action: 'fn', fn: 'cos' },
+  { label: '4', action: 'append', val: '4' },
+  { label: '5', action: 'append', val: '5' },
+  { label: '6', action: 'append', val: '6' },
+
+  { label: 'tan', cls: 'fn', action: 'fn', fn: 'tan' },
+  { label: '1', action: 'append', val: '1' },
+  { label: '2', action: 'append', val: '2' },
+  { label: '3', action: 'append', val: '3' },
+
+  { label: '√', cls: 'fn', action: 'fn', fn: 'sqrt' },
+  { label: '0', action: 'append', val: '0' },
+  { label: '.', action: 'append', val: '.' },
+  { label: '×', cls: 'op', action: 'append', val: '*' },
+
+  { label: 'ln', cls: 'fn', action: 'fn', fn: 'ln' },
+  { label: 'log', cls: 'fn', action: 'fn', fn: 'log10' },
+  { label: '^', cls: 'op', action: 'append', val: '**' },
+  { label: '-', cls: 'op', action: 'append', val: '-' },
+
+  { label: 'π', cls: 'fn', action: 'append', val: 'π' },
+  { label: 'e', cls: 'fn', action: 'append', val: 'e' },
+  { label: '+', cls: 'op', action: 'append', val: '+' },
+  { label: '=', cls: 'equals', action: 'calc' }
+ ];
+
+ calcGrid.innerHTML = '';
+ buttons.forEach(b => {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = `calc-btn ${b.cls || ''}`;
+  btn.textContent = b.label;
+  btn.addEventListener('click', () => handleCalc(b));
+  calcGrid.appendChild(btn);
+ });
+
+ function handleCalc(b) {
+  if (b.action === 'clear') {
+   expr = '';
+   calcExpr.innerHTML = '&nbsp;';
+   calcResult.textContent = '0';
+   calcResult.classList.remove('err');
+  } else if (b.action === 'append') {
+   expr += b.val;
+   calcExpr.textContent = expr;
+  } else if (b.action === 'fn') {
+   expr += `${b.fn}(`;
+   calcExpr.textContent = expr;
+  } else if (b.action === 'calc') {
+   try {
+    // Substitute π and standalone "e" for the constants passed into the
+    // evaluator scope. Using named helper functions (rather than a
+    // regex-based degree/radian post-process) avoids breaking on nested
+    // parentheses, e.g. sin(sqrt(4)).
+    const safeExpr = expr.replace(/π/g, 'PI').replace(/\be\b/g, 'E');
+
+    const sinFn = x => isRad ? Math.sin(x) : Math.sin(x * Math.PI / 180);
+    const cosFn = x => isRad ? Math.cos(x) : Math.cos(x * Math.PI / 180);
+    const tanFn = x => isRad ? Math.tan(x) : Math.tan(x * Math.PI / 180);
+
+    const evaluator = new Function(
+     'sin', 'cos', 'tan', 'sqrt', 'ln', 'log10', 'PI', 'E',
+     `"use strict"; return (${safeExpr});`
+    );
+    const res = evaluator(sinFn, cosFn, tanFn, Math.sqrt, Math.log, Math.log10, Math.PI, Math.E);
+
+    calcResult.textContent = Number.isFinite(res) ? +res.toFixed(6) : 'Error';
+    calcResult.classList.remove('err');
+   } catch(e) {
+    calcResult.textContent = 'Error';
+    calcResult.classList.add('err');
+   }
+  }
+ }
+
+ // Draggable window logic
+ let isDragging = false, startX, startY, initialX, initialY;
+ calcHeader.addEventListener('mousedown', (e) => {
+  // Ignore drags started on the header's own controls (DEG/RAD toggle,
+  // close button) so clicking them doesn't also kick off a "drag" that
+  // relocates the panel.
+  if (e.target.closest('button')) return;
+
+  // Capture the panel's current on-screen position *before* switching it
+  // from the centered (transform-based) anchor to an absolute left/top
+  // anchor. Writing that position back immediately means the removal of
+  // the centering transform (via the .dragged class) doesn't cause the
+  // panel to visually jump.
+  const rect = calcPanel.getBoundingClientRect();
+  initialX = rect.left; initialY = rect.top;
+  calcPanel.style.left = `${initialX}px`;
+  calcPanel.style.top = `${initialY}px`;
+  calcPanel.classList.add('dragged');
+
+  isDragging = true;
+  startX = e.clientX; startY = e.clientY;
+ });
+ document.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  const dx = e.clientX - startX;
+  const dy = e.clientY - startY;
+  calcPanel.style.left = `${initialX + dx}px`;
+  calcPanel.style.top = `${initialY + dy}px`;
+ });
+ document.addEventListener('mouseup', () => { isDragging = false; });
+})();
+</script>
+</body>
+</html>
