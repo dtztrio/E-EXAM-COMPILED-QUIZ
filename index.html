@@ -132,6 +132,23 @@ main{flex:1;display:flex;justify-content:center;padding:28px 16px 110px;}
 footer{text-align:center;font-size:.72rem;color:var(--muted);padding:14px;letter-spacing:.5px;}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important;}}
 @media(max-width:480px){.dash-head{padding:24px 20px;} .page-title{font-size:1.5rem;} .dash-stats{gap:20px;}}
+
+/* ===== Congratulations / Level-Up Popup ===== */
+.level-modal-overlay{position:fixed;inset:0;z-index:999;background:rgba(5,8,18,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s ease;}
+.level-modal-overlay.show{opacity:1;pointer-events:auto;}
+.level-modal{position:relative;max-width:440px;width:100%;background:linear-gradient(160deg, var(--panel2), var(--panel));border:1px solid var(--accent-dim);border-radius:20px;padding:34px 30px 28px;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.5);transform:scale(.9) translateY(10px);transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+.level-modal-overlay.show .level-modal{transform:scale(1) translateY(0);}
+.level-modal .lm-icon{width:68px;height:68px;margin:0 auto 18px;border-radius:50%;background:rgba(var(--good-rgb),.15);border:1px solid var(--good);color:var(--good);display:flex;align-items:center;justify-content:center;font-size:1.7rem;animation:lmPulse 1.6s ease-in-out infinite;}
+@keyframes lmPulse{0%,100%{box-shadow:0 0 0 0 rgba(var(--good-rgb),.35);}50%{box-shadow:0 0 0 14px rgba(var(--good-rgb),0);}}
+.level-modal .lm-eyebrow{font-family:var(--font-mono);font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:8px;}
+.level-modal h2{font-size:1.5rem;font-weight:800;margin:0 0 12px;background:linear-gradient(90deg,var(--good),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.level-modal p{color:var(--sub-ink);font-size:.92rem;line-height:1.7;margin:0 0 14px;}
+.level-modal p:last-of-type{margin-bottom:24px;}
+.level-modal .lm-badges{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
+.level-modal .lm-badge{display:flex;align-items:center;gap:6px;font-size:.72rem;font-weight:700;padding:6px 12px;border-radius:20px;background:rgba(var(--accent-rgb),.14);border:1px solid var(--accent-dim);color:var(--accent);font-family:var(--font-mono);letter-spacing:.4px;}
+.level-modal .lm-badge i{font-size:.7rem;}
+.level-modal button{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:13px 30px;font-weight:700;font-size:.9rem;cursor:pointer;transition:background var(--transition-fast),transform var(--transition-fast);font-family:var(--font-body);}
+.level-modal button:hover{background:var(--accent2);transform:translateY(-1px);}
 </style>
 </head>
 <body>
@@ -191,6 +208,23 @@ footer{text-align:center;font-size:.72rem;color:var(--muted);padding:14px;letter
 </main>
 
 <footer>DTZ TRIO &middot; Course Library</footer>
+
+<!-- Congratulations / Level-Up Popup -->
+<div class="level-modal-overlay" id="levelModal">
+  <div class="level-modal">
+    <div class="lm-icon"><i class="fa-solid fa-trophy"></i></div>
+    <span class="lm-eyebrow">Level Up</span>
+    <h2>Congratulations! 🎉</h2>
+    <p>You're moving to the next level. Every quiz you've completed and every course you've explored has been building toward this moment and it shows.</p>
+    <p>Enjoy your holidays <br> From DTZ TRIO</p>
+    <div class="lm-badges">
+      <span class="lm-badge"><i class="fa-solid fa-bolt"></i>
+      Last quiz</span>
+      <span class="lm-badge"><i class="fa-solid fa-star"></i>Make it count</span>
+    </div>
+    <button id="levelModalClose">Let's Go</button>
+  </div>
+</div>
 
 <script>
 const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -272,6 +306,16 @@ function renderGrid(){
 renderFilters();
 renderStats();
 renderGrid();
+
+// Congratulations / Level-Up popup logic
+const levelModal = document.getElementById('levelModal');
+const levelModalClose = document.getElementById('levelModalClose');
+function openLevelModal(){levelModal.classList.add('show');}
+function closeLevelModal(){levelModal.classList.remove('show');}
+window.addEventListener('load', ()=>{ setTimeout(openLevelModal, 300); });
+levelModalClose.addEventListener('click', closeLevelModal);
+levelModal.addEventListener('click', (e)=>{ if(e.target === levelModal) closeLevelModal(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeLevelModal(); });
 </script>
 </body>
 </html>
